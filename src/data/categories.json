@@ -1,0 +1,6 @@
+[
+  { "id": "1", "name": "Áo", "image": "https://via.placeholder.com/100?text=Ao" },
+  { "id": "2", "name": "Quần", "image": "https://via.placeholder.com/100?text=Quan" },
+  { "id": "3", "name": "Giày", "image": "https://via.placeholder.com/100?text=Giay" },
+  { "id": "4", "name": "Phụ kiện", "image": "https://via.placeholder.com/100?text=Phu+Kien" }
+]
