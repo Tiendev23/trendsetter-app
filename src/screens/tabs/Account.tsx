@@ -19,6 +19,7 @@ export default function Account() {
                     {user.email}
                 </Text>
             </View>
+            <Text></Text>
             <ScrollView>
                 <View style={styles.menu}>
                     <TouchableOpacity style={styles.section}>
