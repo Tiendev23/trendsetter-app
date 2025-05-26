@@ -1,16 +1,16 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 
 const WinterBanner = () => {
     return (
         <View>
-            <View style={styles.container}>
+            <TouchableOpacity style={styles.container}>
                 <View style={styles.textContainer}>
                     <Text style={styles.smallText}>Get Winter Discount</Text>
                     <Text style={styles.bigText}>20% Off</Text>
                     <Text style={styles.smallText}>For Children</Text>
                 </View>
-            </View >
+            </TouchableOpacity >
 
             <View style={styles.dotsContainer}>
                 <View style={[styles.dot, styles.inactiveDot]} />
