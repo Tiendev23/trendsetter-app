@@ -60,7 +60,7 @@ export default function SignUpScreen({ navigation }: any) {
 
 const styles = StyleSheet.create({
   container: { padding: 20, flex: 1, justifyContent: 'center',backgroundColor: '#fff'  },
-  title: { fontSize: 28, fontWeight: '700', marginBottom: 20, textAlign: 'center' },
+  title: { fontSize: 28, fontWeight: '700', marginBottom: 20, textAlign: 'left' },
   link: { color: '#006340', marginTop: 10, textAlign: 'center' },
   textLogin: { marginVertical: 30, textAlign: 'center' },
 });
