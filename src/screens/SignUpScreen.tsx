@@ -54,7 +54,7 @@ export default function SignUpScreen({ navigation }: any) {
           Đăng nhập ngay
         </Text>
       </Text>
-        <View style={{flexDirection:'row'}}>
+        <View style={{flexDirection:'row', alignSelf:'center'}}>
       <TouchableOpacity style={styles.button} onPress={() => console.log('Login with Facebook')}>
         <Image source={require('../image/fb.png')} style={styles.icon} />
       </TouchableOpacity>
@@ -72,7 +72,6 @@ const styles = StyleSheet.create({
   link: { color: '#006340', marginTop: 10, textAlign: 'center' },
   textLogin: { marginVertical: 30, textAlign: 'center' },
   button: {
-    flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 10,
     paddingHorizontal: 20,
@@ -80,8 +79,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   icon: {
-    width: 24,
-    height: 24,
+    width: 30,
+    height: 30,
     marginRight: 12,
     resizeMode: 'contain',
   },

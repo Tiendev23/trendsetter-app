@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { View, Text, Alert, StyleSheet } from 'react-native';
+import { View, Text, Alert, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { AuthContext } from '../contexts/AuthContext';
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
@@ -47,14 +47,20 @@ export default function LoginScreen({ navigation }: any) {
       </Text>
         <CustomButton title="Đăng nhập" onPress={onLogin} />
       
-      
-      
-      <Text style={styles.textRegister}>
+       <Text style={styles.textRegister}>
         Bạn chưa có tài khoản?{' '}
         <Text style={styles.link} onPress={() => navigation.navigate('SignUp')}>
           Đăng ký ngay
         </Text>
       </Text>
+      <View style={{flexDirection:'row', alignSelf:'center'}}>
+            <TouchableOpacity style={styles.button} onPress={() => console.log('Login with Facebook')}>
+              <Image source={require('../image/fb.png')} style={styles.icon} />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={() => console.log('Login with Facebook')}>
+              <Image source={require('../image/search.png')} style={styles.icon} />
+            </TouchableOpacity>
+              </View>
     </View>
   );
 }
@@ -63,5 +69,18 @@ const styles = StyleSheet.create({
   container: { padding: 20, flex: 1, justifyContent: 'center',backgroundColor: '#fff' },
   title: { fontSize: 28, fontWeight: '700', marginBottom: 20, textAlign: 'left' },
   link: { color: '#006340', marginVertical: 10, textAlign: 'center' },
-  textRegister: { marginTop: 30, textAlign: 'center' },
+  textRegister: { marginVertical: 30, textAlign: 'center' },
+  button: {
+    alignItems: 'center',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    marginBottom: 12,
+    backgroundColor: '#fff',
+  },
+  icon: {
+    width: 30,
+    height: 30,
+    marginRight: 12,
+    resizeMode: 'contain',
+  },
 });
