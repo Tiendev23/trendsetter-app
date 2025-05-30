@@ -9,11 +9,11 @@ import { Text } from 'react-native';
 
 export default function App() {
   return (
-    // <NavigationContainer>
-    //   <AuthNavigator />
-    // </NavigationContainer>
-    <SafeAreaView style={{ flex: 1 }}>
-      <LoginScreen />
-    </SafeAreaView>
+    <NavigationContainer>
+      <AppNavigator />
+    </NavigationContainer>
+    // <SafeAreaView style={{ flex: 1 }}>
+    //   <LoginScreen />
+    // </SafeAreaView>
   );
 }
