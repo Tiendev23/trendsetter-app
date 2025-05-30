@@ -9,8 +9,8 @@ export default function SignUpScreen({ navigation }: any) {
   const auth = useContext(AuthContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-  if (!auth) return null;
+  const [name, setName] = useState('');
+  // if (!auth) return null;
 
   const onSignUp = () => {
     if (!validateEmail(email)) {
@@ -32,6 +32,7 @@ export default function SignUpScreen({ navigation }: any) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Đăng ký</Text>
+
       <CustomInput placeholder="Email" value={email} onChangeText={setEmail} />
       <CustomInput
         placeholder="Mật khẩu"
@@ -39,6 +40,13 @@ export default function SignUpScreen({ navigation }: any) {
         onChangeText={setPassword}
         secureTextEntry
       />
+      <CustomInput
+        placeholder="Xác nhận mật khẩu"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+      />
+      <Text style={{marginVertical:20, color:'#6A6A6A'}}>Atleast 8 charaters, 1 uppercase letter, 1 number & 1 symbol</Text>
       <CustomButton title="Đăng ký" onPress={onSignUp} />
       <Text style={styles.textLogin}>
         Bạn đã có tài khoản?{' '}
@@ -51,8 +59,8 @@ export default function SignUpScreen({ navigation }: any) {
 }
 
 const styles = StyleSheet.create({
-  container: { padding: 20, flex: 1, justifyContent: 'center' },
+  container: { padding: 20, flex: 1, justifyContent: 'center',backgroundColor: '#fff'  },
   title: { fontSize: 28, fontWeight: '700', marginBottom: 20, textAlign: 'center' },
-  link: { color: 'blue', marginTop: 10, textAlign: 'center' },
-  textLogin: { marginTop: 30, textAlign: 'center' },
+  link: { color: '#006340', marginTop: 10, textAlign: 'center' },
+  textLogin: { marginVertical: 30, textAlign: 'center' },
 });

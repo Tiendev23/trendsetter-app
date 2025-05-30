@@ -39,16 +39,16 @@ export default function LoginScreen({ navigation }: any) {
         onChangeText={setPassword}
         secureTextEntry
       />
-      <View > 
-        <CustomButton title="Đăng nhập" onPress={onLogin} />
-      </View>
-      
       <Text
         style={styles.link}
         onPress={() => navigation.navigate('ForgotPassword')}
       >
         Quên mật khẩu?
       </Text>
+        <CustomButton title="Đăng nhập" onPress={onLogin} />
+      
+      
+      
       <Text style={styles.textRegister}>
         Bạn chưa có tài khoản?{' '}
         <Text style={styles.link} onPress={() => navigation.navigate('SignUp')}>
@@ -61,7 +61,7 @@ export default function LoginScreen({ navigation }: any) {
 
 const styles = StyleSheet.create({
   container: { padding: 20, flex: 1, justifyContent: 'center',backgroundColor: '#fff' },
-  title: { fontSize: 28, fontWeight: '700', marginBottom: 20, textAlign: 'center' },
-  link: { color: 'blue', marginTop: 10, textAlign: 'center' },
+  title: { fontSize: 28, fontWeight: '700', marginBottom: 20, textAlign: 'left' },
+  link: { color: '#006340', marginVertical: 10, textAlign: 'center' },
   textRegister: { marginTop: 30, textAlign: 'center' },
 });

@@ -29,5 +29,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 12,
     marginVertical: 8,
+    height:'6%',
+    backgroundColor:'#F7F7F9'
   },
 });
