@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, Text, TextInput, View ,ScrollView} from 'react-native'
+import { FlatList, StyleSheet, Text, TextInput, View, ScrollView, TouchableOpacity } from 'react-native'
 import React, { useContext } from 'react'
 import SearchBar from '../components/SearchBar'
 import Menubar from '../components/Menubar'
@@ -10,38 +10,46 @@ export default function HomeScreen() {
     <View style={styles.container}>
       <SearchBar />
       <Menubar />
-      <ScrollView showsHorizontalScrollIndicator = {false}>
-      <WinterBanner />
-      <View style={styles.recomment}>
-        <Text style={styles.txtRecommen}>Recommended for you</Text>
-        <Text style={styles.txtRecommen}>See all</Text>
-      </View>
-      {/* Flatlist Product */}
-      <ProductItem/>
-      <View style={styles.recomment}>
-        <Text style={styles.txtRecommen}>Shop By Category</Text>
-      </View>
-      <ProductItem/>
-      <View style={styles.recomment}>
-        <Text style={styles.txtRecommen}>Most Popular</Text>
-        <Text style={styles.txtRecommen}>See all</Text>
-      </View>
-      <ProductItem/>
-      <View style={styles.recomment}>
-        <Text style={styles.txtRecommen}>Featured Appareal</Text>
-        <Text style={styles.txtRecommen}>See all</Text>
-      </View>
-      <ProductItem/>
-      <WinterBanner />
-      <View style={styles.recomment}>
-        <Text style={styles.txtRecommen}>Featured Appareal</Text>
-        <Text style={styles.txtRecommen}>See all</Text>
-      </View>
-      <ProductItem/>
-      <View style={{ height: 120 }} />
+      <ScrollView showsHorizontalScrollIndicator={false}>
+        <WinterBanner />
+        <View style={styles.recomment}>
+          <Text style={styles.txtRecommen}>Recommended for you</Text>
+          <TouchableOpacity>
+            <Text style={styles.txtRecommen}>See all</Text>
+          </TouchableOpacity>
+        </View>
+        {/* Flatlist Product */}
+        <ProductItem />
+        <View style={styles.recomment}>
+          <Text style={styles.txtRecommen}>Shop By Category</Text>
+        </View>
+        <ProductItem />
+        <View style={styles.recomment}>
+          <Text style={styles.txtRecommen}>Most Popular</Text>
+          <TouchableOpacity>
+            <Text style={styles.txtRecommen}>See all</Text>
+          </TouchableOpacity>
+        </View>
+        <ProductItem />
+        <View style={styles.recomment}>
+          <Text style={styles.txtRecommen}>Featured Appareal</Text>
+          <TouchableOpacity>
+            <Text style={styles.txtRecommen}>See all</Text>
+          </TouchableOpacity>
+        </View>
+        <ProductItem />
+        <WinterBanner />
+        <View style={styles.recomment}>
+          <Text style={styles.txtRecommen}>Featured Appareal</Text>
+          <TouchableOpacity>
+            <Text style={styles.txtRecommen}>See all</Text>
+          </TouchableOpacity>
+        </View>
+        <ProductItem />
+        <View style={{ height: 120 }} />
 
       </ScrollView>
-      
+
 
     </View>
   )
