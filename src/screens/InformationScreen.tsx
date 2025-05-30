@@ -12,12 +12,15 @@ export default function InformationScreen() {
       </Text>
       <Image source={require('../image/chart.png')} style={styles.image} /> 
       <View style={styles.button}>
+
         <TouchableOpacity style={styles.login}>
           <Text style={styles.loginText}>Login</Text>
         </TouchableOpacity>
+
         <TouchableOpacity style={styles.signup}>
           <Text style={styles.signupText}>Sign Up</Text>
         </TouchableOpacity>
+        
       </View>
     </ScrollView>
     </View>
@@ -45,7 +48,7 @@ const styles = StyleSheet.create({
   },
   button: {
     flexDirection: 'row',
-    marginVertical: 351,
+    marginVertical: 35,
     justifyContent: 'space-around'
   },
   login: {
