@@ -10,7 +10,7 @@ export default function LoginScreen({ navigation }: any) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  if (!auth) return null;
+  // if (!auth) return null;
 
   const onLogin = () => {
     if (!validateEmail(email)) {
@@ -57,8 +57,24 @@ export default function LoginScreen({ navigation }: any) {
 }
 
 const styles = StyleSheet.create({
-  container: { padding: 20, flex: 1, justifyContent: 'center' },
-  title: { fontSize: 28, fontWeight: '700', marginBottom: 20, textAlign: 'center' },
-  link: { color: 'blue', marginTop: 10, textAlign: 'center' },
-  textRegister: { marginTop: 30, textAlign: 'center' },
+  container: {
+    padding: 20,
+    flex: 1,
+    justifyContent: 'center',
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: '700',
+    marginBottom: 20,
+    textAlign: 'center'
+  },
+  link: {
+    color: 'blue',
+    marginTop: 10,
+    textAlign: 'center'
+  },
+  textRegister: {
+    marginTop: 30,
+    textAlign: 'center'
+  },
 });
