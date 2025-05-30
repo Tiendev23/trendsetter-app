@@ -1,15 +1,77 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 
 export default function InformationScreen() {
+  
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Thông tin</Text>
+      <ScrollView style={styles.scroll}>
+      <Text style={styles.title}>Want More?</Text>
+      <Text style={styles.subtitle}>
+        Login or sign up to get notifications about your orders and products you're following.
+      </Text>
+
+      <View style={styles.button}>
+        <TouchableOpacity style={styles.login}>
+          <Text style={styles.loginText}>Login</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.signup}>
+          <Text style={styles.signupText}>Sign Up</Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex:1, justifyContent:'center', alignItems:'center' },
+  container: {
+    flex: 1,
+  },
+  scroll: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: '#ffffff',
+  },
   text: { fontSize: 24, fontWeight: 'bold' },
+  title: {
+    fontSize: 22,
+    fontWeight: '600',
+    marginBottom: 10,
+  },
+  subtitle: {
+    fontSize: 14,
+    color: '#555',
+    marginBottom: 20,
+  },
+  button: {
+    flexDirection: 'row',
+    marginBottom: 30,
+    justifyContent: 'space-around'
+  },
+  login: {
+    borderWidth: 1,
+    borderColor: '#006340',
+    borderRadius: 10,
+    width: 180,
+    height:50,
+    justifyContent: 'center',
+    alignItems: 'center', 
+  },
+  loginText: {
+    fontWeight: '600',
+    color: '#006340',
+  },
+  signup: {
+    backgroundColor: '#006340',
+    borderRadius: 10,
+    width: 180,
+    height:50,
+    justifyContent: 'center',
+    alignItems: 'center', 
+  },
+  signupText: {
+    color: 'white',
+    fontWeight: '600',
+  },
 });
