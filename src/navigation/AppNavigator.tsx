@@ -11,6 +11,7 @@ const Tab = createBottomTabNavigator();
 
 export default function AppNavigator() {
   return (
+    
     <Tab.Navigator
       id={undefined}
       initialRouteName="Home"

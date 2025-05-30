@@ -16,14 +16,15 @@ export default function CustomButton({ title, onPress }: Props) {
 
 const styles = StyleSheet.create({
   btn: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#006340',
     paddingVertical: 14,
     borderRadius: 6,
     alignItems: 'center',
     marginVertical: 10,
+    width: '90%'
   },
   text: {
-    color: '#fff',
+    color: 'white',
     fontWeight: '600',
     fontSize: 16,
   },

@@ -1,8 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, } from 'react-native';
 
-export default function InformationScreen() {
-  
+export default function InformationScreen({props}) {
+   const {navigation} = props
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scroll}>
@@ -13,7 +13,7 @@ export default function InformationScreen() {
       <Image source={require('../image/chart.png')} style={styles.image} /> 
       <View style={styles.button}>
 
-        <TouchableOpacity style={styles.login}>
+        <TouchableOpacity style={styles.login} onPress={() => navigation.navigate('Login')}>
           <Text style={styles.loginText}>Login</Text>
         </TouchableOpacity>
 
