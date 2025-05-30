@@ -9,7 +9,7 @@ export default function ForgotPasswordScreen({ navigation }: any) {
   const auth = useContext(AuthContext);
   const [email, setEmail] = useState('');
 
-  if (!auth) return null;
+  // if (!auth) return null;
 
   const onReset = () => {
     if (!validateEmail(email)) {

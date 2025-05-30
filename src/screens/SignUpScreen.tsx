@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { View, Text, Alert, StyleSheet } from 'react-native';
+import { View, Text, Alert, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { AuthContext } from '../contexts/AuthContext';
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
@@ -54,6 +54,14 @@ export default function SignUpScreen({ navigation }: any) {
           Đăng nhập ngay
         </Text>
       </Text>
+        <View style={{flexDirection:'row'}}>
+      <TouchableOpacity style={styles.button} onPress={() => console.log('Login with Facebook')}>
+        <Image source={require('../image/fb.png')} style={styles.icon} />
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={() => console.log('Login with Facebook')}>
+        <Image source={require('../image/search.png')} style={styles.icon} />
+      </TouchableOpacity>
+        </View>
     </View>
   );
 }
@@ -63,4 +71,18 @@ const styles = StyleSheet.create({
   title: { fontSize: 28, fontWeight: '700', marginBottom: 20, textAlign: 'left' },
   link: { color: '#006340', marginTop: 10, textAlign: 'center' },
   textLogin: { marginVertical: 30, textAlign: 'center' },
+  button: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    marginBottom: 12,
+    backgroundColor: '#fff',
+  },
+  icon: {
+    width: 24,
+    height: 24,
+    marginRight: 12,
+    resizeMode: 'contain',
+  },
 });
