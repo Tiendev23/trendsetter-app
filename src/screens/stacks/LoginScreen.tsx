@@ -1,33 +1,33 @@
 import React, { useState, useContext } from 'react';
 import { View, Text, Alert, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import { AuthContext } from '../contexts/AuthContext';
-import CustomInput from '../components/CustomInput';
-import CustomButton from '../components/CustomButton';
-import { validateEmail, validatePassword } from '../utils/validation';
+// import { AuthContext } from '../contexts/AuthContext';
+import CustomInput from '../../components/CustomInput';
+import CustomButton from '../../components/CustomButton';
+import { validateEmail, validatePassword } from '../../utils/validation';
 
 export default function LoginScreen({ navigation }: any) {
-  const auth = useContext(AuthContext);
+  // const auth = useContext(AuthContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   // // if (!auth) return null;
 
-  const onLogin = () => {
-    if (!validateEmail(email)) {
-      Alert.alert('Lỗi', 'Email không hợp lệ');
-      return;
-    }
-    if (!validatePassword(password)) {
-      Alert.alert('Lỗi', 'Mật khẩu phải từ 6 ký tự trở lên');
-      return;
-    }
-    if (auth.login(email, password)) {
-      Alert.alert('Thành công', 'Đăng nhập thành công!');
-      // Chuyển màn hình sau đăng nhập ở đây
-    } else {
-      Alert.alert('Lỗi', 'Email hoặc mật khẩu không đúng');
-    }
-  };
+  // const onLogin = () => {
+  //   if (!validateEmail(email)) {
+  //     Alert.alert('Lỗi', 'Email không hợp lệ');
+  //     return;
+  //   }
+  //   if (!validatePassword(password)) {
+  //     Alert.alert('Lỗi', 'Mật khẩu phải từ 6 ký tự trở lên');
+  //     return;
+  //   }
+  //   if (auth.login(email, password)) {
+  //     Alert.alert('Thành công', 'Đăng nhập thành công!');
+  //     // Chuyển màn hình sau đăng nhập ở đây
+  //   } else {
+  //     Alert.alert('Lỗi', 'Email hoặc mật khẩu không đúng');
+  //   }
+  // };
 
   return (
     <View style={styles.container}>
@@ -45,7 +45,7 @@ export default function LoginScreen({ navigation }: any) {
       >
         Quên mật khẩu?
       </Text>
-      <CustomButton title="Đăng nhập" onPress={onLogin} />
+      <CustomButton title="Đăng nhập" onPress={null} />
 
       <Text style={styles.textRegister}>
         Bạn chưa có tài khoản?{' '}
@@ -55,10 +55,10 @@ export default function LoginScreen({ navigation }: any) {
       </Text>
       <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
         <TouchableOpacity style={styles.button} onPress={() => console.log('Login with Facebook')}>
-          <Image source={require('../image/fb.png')} style={styles.icon} />
+          <Image source={require('../../../assets/images/fb.png')} style={styles.icon} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={() => console.log('Login with Facebook')}>
-          <Image source={require('../image/search.png')} style={styles.icon} />
+          <Image source={require('../../../assets/images/search.png')} style={styles.icon} />
         </TouchableOpacity>
       </View>
     </View>

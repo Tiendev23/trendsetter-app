@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, Button, FlatList, TouchableOpacity, StyleSheet, Image, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, ScrollView } from 'react-native';
 
-export default function Account() {
+export default function AccountScreen() {
     const [user, setUser] = useState({
         name: 'Nguyen VAN a',
         email: 'example@example.com'
