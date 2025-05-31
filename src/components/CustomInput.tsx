@@ -25,9 +25,11 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: 1,
     borderColor: '#ccc',
-    borderRadius: 6,
+    borderRadius: 14,
     paddingHorizontal: 10,
     paddingVertical: 12,
     marginVertical: 8,
+    height:'6%',
+    backgroundColor:'#F7F7F9'
   },
 });

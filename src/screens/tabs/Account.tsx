@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image, ScrollView } from 'react-native';
+import { View, Text, Button, FlatList, TouchableOpacity, StyleSheet, Image, ScrollView } from 'react-native';
 
-export default function AccountScreen() {
+export default function Account() {
     const [user, setUser] = useState({
         name: 'Nguyen VAN a',
         email: 'example@example.com'
@@ -25,7 +25,7 @@ export default function AccountScreen() {
                         <View style={styles.itemContainer}>
                             <View>
                                 <Image
-                                    source={require('../../assets/icons/profile_icon.png')}
+                                    source={require('../../../assets/icons/profile_icon.png')}
                                     style={styles.itemIcon}
                                     width={20} height={20}
                                 />
@@ -40,7 +40,7 @@ export default function AccountScreen() {
                         </View>
                         <View>
                             <Image
-                                source={require('../../assets/icons/open_icon.png')}
+                                source={require('../../../assets/icons/open_icon.png')}
                                 style={styles.openIcon}
                                 width={28} height={28}
                             />
@@ -50,7 +50,7 @@ export default function AccountScreen() {
                         <View style={styles.itemContainer}>
                             <View>
                                 <Image
-                                    source={require('../../assets/icons/buying_icon.png')}
+                                    source={require('../../../assets/icons/buying_icon.png')}
                                     style={styles.itemIcon}
                                     width={20} height={20}
                                 />
@@ -67,7 +67,7 @@ export default function AccountScreen() {
                         </View>
                         <View>
                             <Image
-                                source={require('../../assets/icons/open_icon.png')}
+                                source={require('../../../assets/icons/open_icon.png')}
                                 style={styles.openIcon}
                                 width={28} height={28}
                             />
@@ -77,7 +77,7 @@ export default function AccountScreen() {
                         <View style={styles.itemContainer}>
                             <View>
                                 <Image
-                                    source={require('../../assets/icons/selling_icon.png')}
+                                    source={require('../../../assets/icons/selling_icon.png')}
                                     style={styles.itemIcon}
                                     width={20} height={13}
                                 />
@@ -94,7 +94,7 @@ export default function AccountScreen() {
                         </View>
                         <View>
                             <Image
-                                source={require('../../assets/icons/open_icon.png')}
+                                source={require('../../../assets/icons/open_icon.png')}
                                 style={styles.openIcon}
                                 width={28} height={28}
                             />
@@ -104,7 +104,7 @@ export default function AccountScreen() {
                         <View style={styles.itemContainer}>
                             <View>
                                 <Image
-                                    source={require('../../assets/icons/favorite_icon.png')}
+                                    source={require('../../../assets/icons/favorite_icon.png')}
                                     style={styles.itemIcon}
                                     width={20} height={17}
                                 />
@@ -121,7 +121,7 @@ export default function AccountScreen() {
                         </View>
                         <View>
                             <Image
-                                source={require('../../assets/icons/open_icon.png')}
+                                source={require('../../../assets/icons/open_icon.png')}
                                 style={styles.openIcon}
                                 width={28} height={28}
                             />
@@ -131,7 +131,7 @@ export default function AccountScreen() {
                         <View style={styles.itemContainer}>
                             <View>
                                 <Image
-                                    source={require('../../assets/icons/portfolio_icon.png')}
+                                    source={require('../../../assets/icons/portfolio_icon.png')}
                                     style={styles.itemIcon}
                                     width={20} height={20}
                                 />
@@ -148,7 +148,7 @@ export default function AccountScreen() {
                         </View>
                         <View>
                             <Image
-                                source={require('../../assets/icons/open_icon.png')}
+                                source={require('../../../assets/icons/open_icon.png')}
                                 style={styles.openIcon}
                                 width={28} height={28}
                             />
@@ -158,7 +158,7 @@ export default function AccountScreen() {
                         <View style={styles.itemContainer}>
                             <View>
                                 <Image
-                                    source={require('../../assets/icons/wallet_icon.png')}
+                                    source={require('../../../assets/icons/wallet_icon.png')}
                                     style={styles.itemIcon}
                                     width={20} height={14}
                                 />
@@ -175,7 +175,7 @@ export default function AccountScreen() {
                         </View>
                         <View>
                             <Image
-                                source={require('../../assets/icons/open_icon.png')}
+                                source={require('../../../assets/icons/open_icon.png')}
                                 style={styles.openIcon}
                                 width={28} height={28}
                             />
@@ -185,7 +185,7 @@ export default function AccountScreen() {
                         <View style={styles.itemContainer}>
                             <View>
                                 <Image
-                                    source={require('../../assets/icons/setting_icon.png')}
+                                    source={require('../../../assets/icons/setting_icon.png')}
                                     style={styles.itemIcon}
                                     width={20} height={20}
                                 />
@@ -202,7 +202,7 @@ export default function AccountScreen() {
                         </View>
                         <View>
                             <Image
-                                source={require('../../assets/icons/open_icon.png')}
+                                source={require('../../../assets/icons/open_icon.png')}
                                 style={styles.openIcon}
                                 width={28} height={28}
                             />
@@ -212,7 +212,7 @@ export default function AccountScreen() {
                         <View style={styles.itemContainer}>
                             <View>
                                 <Image
-                                    source={require('../../assets/icons/currency_icon.png')}
+                                    source={require('../../../assets/icons/currency_icon.png')}
                                     style={styles.itemIcon}
                                     width={20} height={20}
                                 />
@@ -226,7 +226,7 @@ export default function AccountScreen() {
                         <View style={styles.itemContainer}>
                             <View>
                                 <Image
-                                    source={require('../../assets/icons/signout_icon.png')}
+                                    source={require('../../../assets/icons/signout_icon.png')}
                                     style={styles.itemIcon}
                                     width={20} height={20}
                                 />
