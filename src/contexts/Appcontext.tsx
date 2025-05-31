@@ -1,39 +1,38 @@
 import React, { createContext, useState, ReactNode } from 'react';
 
-// Kiểu dữ liệu cho từng Brand
+// Định nghĩa kiểu cho Brand
 type Brand = {
   id: number;
   name: string;
 };
 
-// Kiểu dữ liệu cho sản phẩm
+// Định nghĩa kiểu cho Product
 type Product = {
   id: string;
   name: string;
   price: number;
-  image: any; // bạn có thể dùng `ImageSourcePropType` nếu dùng với React Native
+  image: any; // Nếu React Native thì dùng ImageSourcePropType thay thế
 };
 
-// Kiểu cho context
+// Định nghĩa kiểu cho Context
 type AppContextType = {
-  selectedCategory: number;
-  setSelectedCategory: (value: number) => void;
   listbrand: Brand[];
+  selectedCategory: number;
+  setSelectedCategory: React.Dispatch<React.SetStateAction<number>>;
   DataPr: Product[];
 };
 
-// Giá trị mặc định (dummy)
+// Giá trị mặc định cho Context (để TS không báo lỗi)
 const defaultValue: AppContextType = {
-  selectedCategory: 1,
-  setSelectedCategory: () => {},
   listbrand: [],
+  selectedCategory: 1,
+  setSelectedCategory: () => {}, // hàm rỗng tạm thời
   DataPr: [],
 };
 
-// Tạo Context có kiểu dữ liệu rõ ràng
+// Tạo Context với giá trị mặc định
 const AppContext = createContext<AppContextType>(defaultValue);
 
-// Props cho AppProvider
 type AppProviderProps = {
   children: ReactNode;
 };
@@ -92,12 +91,7 @@ const AppProvider = ({ children }: AppProviderProps) => {
 
   return (
     <AppContext.Provider
-      value={{
-        listbrand,
-        selectedCategory,
-        setSelectedCategory,
-        DataPr,
-      }}
+      value={{ listbrand, selectedCategory, setSelectedCategory, DataPr }}
     >
       {children}
     </AppContext.Provider>
