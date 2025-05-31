@@ -15,6 +15,7 @@ export default function AppNavigator() {
       id={undefined}
       initialRouteName="Home"
       screenOptions={({ route }) => ({
+        headerShown: false,
         tabBarIcon: ({ focused, color, size }) => {
           let iconName = '';
 
@@ -34,7 +35,7 @@ export default function AppNavigator() {
         tabBarInactiveTintColor: 'gray',    // Màu khi tab không chọn
       })}
     >
-      <Tab.Screen name="Home" component={HomeScreen} options={{ title: 'Trang chủ' }} />
+      <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Search" component={SearchScreen} options={{ title: 'Tìm kiếm' }} />
       <Tab.Screen name="Information" component={InformationScreen} options={{ title: 'Thông tin' }} />
       <Tab.Screen name="Account" component={AccountScreen} options={{ title: 'Tài khoản' }} />
