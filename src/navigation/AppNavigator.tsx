@@ -6,11 +6,13 @@ import HomeScreen from '../screens/HomeScreen';
 import SearchScreen from '../screens/SearchScreen';
 import InformationScreen from '../screens/InformationScreen';
 import AccountScreen from '../screens/AccountScreen';
+import LoginScreen from '../screens/LoginScreen';
 
 const Tab = createBottomTabNavigator();
 
 export default function AppNavigator() {
   return (
+    
     <Tab.Navigator
       id={undefined}
       initialRouteName="Home"
