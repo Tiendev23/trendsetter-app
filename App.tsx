@@ -7,7 +7,6 @@ import StackNavigator from './src/navigation/StackNavigator';
 export default function App() {
   return (
     <SafeAreaProvider>
-
       <AppProvider>
         <SafeAreaView style={{ flex: 1 }} edges={['top']}>
           <NavigationContainer>
