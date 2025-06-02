@@ -7,7 +7,7 @@ type Props = {
   onPress: () => void;
 };
 
-export default function CustomButton({ title, outlineStyle = false, onPress }: Props) {
+export default function CustomButton({ title, outlineStyle, onPress }: Props) {
   return (
     <TouchableOpacity
       style={[styles.btn, { backgroundColor: outlineStyle ? 'white' : '#006340' }]}
@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
   btn: {
     paddingVertical: 15,
     borderRadius: 15,
-    width: '90%',
+    width: '100%',
     alignItems: 'center',
     alignSelf: 'center',
     borderColor: '#006340',

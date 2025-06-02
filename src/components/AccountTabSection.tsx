@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, Image, View, ImageSourcePropType } from 'react-native';
+import CustomDirectionButton from './CustomDirectionButton';
 
 type Props = {
     title: string;
@@ -35,7 +36,10 @@ export default function AccountTabSection({ title, onPress }: Props) {
             </View>
             {
                 title === 'Sign Out' ? null :
-                    <Ionicons name="chevron-forward" size={24} color="#2B2B2B" />
+                    <CustomDirectionButton
+                        direction='forward'
+                        onPress={onPress}
+                    />
             }
         </TouchableOpacity>
     );
@@ -43,7 +47,7 @@ export default function AccountTabSection({ title, onPress }: Props) {
 
 const styles = StyleSheet.create({
     container: {
-        paddingVertical: 18,
+        paddingVertical: 8,
         paddingHorizontal: 14,
         flexDirection: 'row',
         alignItems: 'center',
