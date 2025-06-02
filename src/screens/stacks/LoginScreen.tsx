@@ -83,7 +83,7 @@ export default function LoginScreen({ navigation }: any) {
                 <Text style={styles.textRegister}>
                     Bạn chưa có tài khoản?{' '}
                     <Text style={styles.link} onPress={() => navigation.navigate('SignUp')}>
-                        Đăng ký ngay
+                        Đăng ký
                     </Text>
                 </Text>
             </View>
@@ -113,7 +113,10 @@ const styles = StyleSheet.create({
         color: '#006340',
     },
     textRegister: {
-        textAlign: 'center'
+        textAlign: 'center',
+        fontFamily: 'Raleway',
+        fontWeight: 'medium',
+        color: '#6A6A6A'
     },
     buttonWrapper: {
         marginVertical: 12,
