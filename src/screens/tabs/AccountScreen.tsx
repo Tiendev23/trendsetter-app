@@ -10,73 +10,74 @@ export default function AccountScreen({ navigation }) {
 
     return (
         <View style={styles.screenContainer}>
-            {user ?
-                <>
-                    <View style={styles.userSection}>
-                        <Image
-                            source={{ uri: user.avatar }}
-                            height={100}
-                            style={styles.userAvatar}
-                        />
-                        <Text style={styles.userName}>
-                            {user.name.toLowerCase()}
-                        </Text>
-                    </View>
-                    <ScrollView scrollEnabled={contentHeight > height}>
-                        <View
-                            style={styles.menuContainer}
-                            onLayout={(event) => setContentHeight(event.nativeEvent.layout.height)}
-                        >
-                            <View style={styles.menuWrapper}>
-                                <AccountTabSection
-                                    title='Profile'
-                                    onPress={null}
-                                />
-                                <AccountTabSection
-                                    title='My Cart'
-                                    onPress={null}
-                                />
-                                <AccountTabSection
-                                    title='Favorite'
-                                    onPress={null}
-                                />
-                                <AccountTabSection
-                                    title='Orders'
-                                    onPress={null}
-                                />
-                                <AccountTabSection
-                                    title='Wallet'
-                                    onPress={null}
-                                />
-                                <AccountTabSection
-                                    title='Settings'
-                                    onPress={null}
-                                />
-                            </View>
-                            <View style={styles.separatorLine} />
-                            <View style={styles.menuWrapper}>
-                                <AccountTabSection
-                                    title='Sign Out'
-                                    onPress={null}
-                                />
-                            </View>
+            {
+                user ?
+                    <>
+                        <View style={styles.userSection}>
+                            <Image
+                                source={{ uri: user.avatar }}
+                                height={100}
+                                style={styles.userAvatar}
+                            />
+                            <Text style={styles.userName}>
+                                {user.name.toLowerCase()}
+                            </Text>
                         </View>
-                    </ScrollView>
-                </>
-                :
-                <>
-                    <View style={styles.authContainer}>
-                        <Image
-                            source={require('../../../assets/images/trendsetter.png')}
-                        />
-                        <Text style={styles.descriptionText}>
-                            Đăng nhập hoặc Tạo tài khoản để Mua, Bán, và{'\n'}Xem Dữ liệu Thị trường.
-                        </Text>
+                        <ScrollView scrollEnabled={contentHeight > height}>
+                            <View
+                                style={styles.menuContainer}
+                                onLayout={(event) => setContentHeight(event.nativeEvent.layout.height)}
+                            >
+                                <View style={styles.menuWrapper}>
+                                    <AccountTabSection
+                                        title='Profile'
+                                        onPress={null}
+                                    />
+                                    <AccountTabSection
+                                        title='My Cart'
+                                        onPress={null}
+                                    />
+                                    <AccountTabSection
+                                        title='Favorite'
+                                        onPress={null}
+                                    />
+                                    <AccountTabSection
+                                        title='Orders'
+                                        onPress={null}
+                                    />
+                                    <AccountTabSection
+                                        title='Wallet'
+                                        onPress={null}
+                                    />
+                                    <AccountTabSection
+                                        title='Settings'
+                                        onPress={null}
+                                    />
+                                </View>
+                                <View style={styles.separatorLine} />
+                                <View style={styles.menuWrapper}>
+                                    <AccountTabSection
+                                        title='Sign Out'
+                                        onPress={null}
+                                    />
+                                </View>
+                            </View>
+                        </ScrollView>
+                    </>
+                    :
+                    <>
+                        <View style={styles.authContainer}>
+                            <Image
+                                source={require('../../../assets/images/trendsetter.png')}
+                            />
+                            <Text style={styles.descriptionText}>
+                                Đăng nhập hoặc Tạo tài khoản để Mua, Bán, và{'\n'}Xem Dữ liệu Thị trường.
+                            </Text>
 
-                        <CustomButton title='Đăng ký' onPress={() => navigation.navigate('SignUp')} />
-                        <CustomButton title='Đăng nhập' outlineStyle onPress={() => navigation.navigate('Login')} />
-                    </View>
-                </>
+                            <CustomButton title='Đăng ký' onPress={() => navigation.navigate('SignUp')} />
+                            <CustomButton title='Đăng nhập' outlineStyle onPress={() => navigation.navigate('Login')} />
+                        </View>
+                    </>
             }
         </View>
     );
@@ -124,6 +125,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         gap: 20,
+        paddingHorizontal: 18,
     },
     descriptionText: {
         textAlign: 'center',
