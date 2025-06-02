@@ -11,7 +11,9 @@ export default function HomeScreen() {
         <View style={styles.container}>
             <SearchBar />
             <Menubar />
-            <ScrollView showsHorizontalScrollIndicator={false}>
+            <ScrollView showsHorizontalScrollIndicator={false}
+                showsVerticalScrollIndicator={false}
+            >
                 <WinterBanner />
                 <View style={styles.recomment}>
                     <Text style={styles.txtRecommen}>Recommended for you</Text>
@@ -39,7 +41,7 @@ export default function HomeScreen() {
                     <Text style={styles.txtRecommen}>See all</Text>
                 </View>
                 <ProductItem />
-                <View style={{ height: 120 }} />
+
 
             </ScrollView>
 
@@ -52,7 +54,11 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        boxSizing: 'border-box',
         padding: 10,
+        backgroundColor:'#fff'
     },
     input: {
         height: 40,
