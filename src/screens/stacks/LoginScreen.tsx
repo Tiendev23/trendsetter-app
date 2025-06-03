@@ -1,42 +1,43 @@
-import React, { useState, useContext } from 'react';
-import { View, Text, Alert, StyleSheet, TouchableOpacity, Image } from 'react-native';
-// import { AuthContext } from '../contexts/AuthContext';
+import React, { useState, useContext, useEffect } from 'react';
+import { View, Text, Alert, StyleSheet, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
-import { validateEmail, validatePassword } from '../../utils/validation';
-import CustomDirectionButton from '../../components/CustomDirectionButton';
 import AuthScreenHeader from '../../components/AuthScreenHeader';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import { useDispatch, useSelector } from 'react-redux';
+import { login, logout } from '../../redux/slices/userSlice';
+import { AppDispatch, RootState } from '../../redux/store';
+import { AppContext } from '../../contexts/Appcontext';
 
 export default function LoginScreen({ navigation }: any) {
-    // const auth = useContext(AuthContext);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const { setUser } = useContext(AppContext);
+    const dispatch = useDispatch<AppDispatch>();
+    const { user, status, error } = useSelector((state: RootState) => state.userActions)
 
-    // // if (!auth) return null;
+    const handleLogin = () => {
+        console.log('email', email, '\npassword', password);
+        dispatch(login({ email, password }));
+    }
 
-    // const onLogin = () => {
-    //   if (!validateEmail(email)) {
-    //     Alert.alert('Lỗi', 'Email không hợp lệ');
-    //     return;
-    //   }
-    //   if (!validatePassword(password)) {
-    //     Alert.alert('Lỗi', 'Mật khẩu phải từ 6 ký tự trở lên');
-    //     return;
-    //   }
-    //   if (auth.login(email, password)) {
-    //     Alert.alert('Thành công', 'Đăng nhập thành công!');
-    //     // Chuyển màn hình sau đăng nhập ở đây
-    //   } else {
-    //     Alert.alert('Lỗi', 'Email hoặc mật khẩu không đúng');
-    //   }
-    // };
+    useEffect(() => {
+        if (status === 'succeeded') {
+            setUser(user);
+            navigation.navigate('Tabs');
+        };
+        if (status === 'failed') {
+            console.log('Đăng nhập thất bại:', error);
+            setTimeout(() => {
+                dispatch(logout());
+            }, 3000);
+        }
+    }, [status])
 
     return (
         <View style={styles.screenContainer}>
             <AuthScreenHeader />
-
             <View style={styles.contentContainer}>
                 <Text style={styles.title}>Đăng nhập</Text>
                 <CustomInput placeholder="Địa chỉ email" value={email} onChangeText={setEmail} />
@@ -54,7 +55,7 @@ export default function LoginScreen({ navigation }: any) {
                     Quên mật khẩu?
                 </Text>
                 <View style={styles.buttonWrapper}>
-                    <CustomButton title="Đăng nhập" onPress={null} />
+                    <CustomButton title="Đăng nhập" onPress={handleLogin} />
                 </View>
 
                 <View style={styles.socialContainer}>

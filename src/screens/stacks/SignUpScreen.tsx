@@ -11,9 +11,10 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 
 export default function SignUpScreen({ navigation }: any) {
     // const auth = useContext(AuthContext);
+    const [firstName, setFirstName] = useState('')
+    const [lastName, setLastName] = useState('')
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [name, setName] = useState('');
     // if (!auth) return null;
 
     // const onSignUp = () => {
@@ -39,8 +40,8 @@ export default function SignUpScreen({ navigation }: any) {
 
             <View style={styles.contentContainer}>
                 <Text style={styles.title}>Đăng ký</Text>
-                <CustomInput placeholder="Tên" value={email} onChangeText={setEmail} />
-                <CustomInput placeholder="Họ" value={email} onChangeText={setEmail} />
+                <CustomInput placeholder="Tên" value={firstName} onChangeText={setFirstName} />
+                <CustomInput placeholder="Họ" value={lastName} onChangeText={setLastName} />
                 <CustomInput placeholder="Địa chỉ email" value={email} onChangeText={setEmail} />
                 <CustomInput
                     placeholder="Mật khẩu"

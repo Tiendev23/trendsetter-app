@@ -22,7 +22,7 @@ export default function CustomInput({ placeholder, value, onChangeText, type = '
                 placeholderTextColor={'#A0A0A0'}
                 value={value}
                 onChangeText={onChangeText}
-                secureTextEntry={isSecure}
+                secureTextEntry={type === 'password' && isSecure}
                 autoCapitalize="none"
             />
             {
