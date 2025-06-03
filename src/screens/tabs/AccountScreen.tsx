@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, ScrollView, useWindowDimensions } from 'react-native';
 import AccountTabSection from '../../components/AccountTabSection';
 import CustomButton from '../../components/CustomButton';
+import { AppContext } from '../../contexts/Appcontext';
 
 export default function AccountScreen({ navigation }) {
-    const [user, setUser] = useState(null)
+    const { user } = useContext(AppContext);
     const { height } = useWindowDimensions();
     const [contentHeight, setContentHeight] = useState(0);
 
@@ -15,12 +16,12 @@ export default function AccountScreen({ navigation }) {
                     <>
                         <View style={styles.userSection}>
                             <Image
-                                source={{ uri: user.avatar }}
+                                source={{ uri: '' }} // avatar
                                 height={100}
                                 style={styles.userAvatar}
                             />
                             <Text style={styles.userName}>
-                                {user.name.toLowerCase()}
+                                {user.fullname.toLowerCase()}
                             </Text>
                         </View>
                         <ScrollView scrollEnabled={contentHeight > height}>
