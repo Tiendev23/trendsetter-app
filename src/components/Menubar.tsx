@@ -10,6 +10,7 @@ const Menubar = () => {
 
     return (
       <TouchableOpacity
+        activeOpacity={0.8}
         style={[styles.menuItem, isSelected && styles.selectedItem]}
         onPress={() => setSelectedCategory(item.id)}
       >
@@ -28,6 +29,8 @@ const Menubar = () => {
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderItem}
         showsHorizontalScrollIndicator={false}
+        ItemSeparatorComponent={() => <View style={{ width: 15 }} />}
+
       />
     </View>
   );
@@ -37,24 +40,40 @@ export default Menubar;
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 20,
-    paddingLeft: 10,
+    height: 55,
+    marginTop: 10,
+    marginBottom: 5,
+    // borderTopColor: '#ddd',
+    // borderTopWidth: 1,
+    // borderBottomColor: '#ddd',
+    // borderBottomWidth: 1,
+    paddingVertical: 5,
   },
   menuItem: {
-    backgroundColor: '#e0f7fa',
     paddingVertical: 10,
-    paddingHorizontal: 16,
-    borderRadius: 20,
-    marginRight: 10,
+    paddingHorizontal: 22,
+    borderRadius: 30,
+    borderWidth: 1,
+    borderColor: '#c1c1c1',
   },
   selectedItem: {
-    backgroundColor: '#00796b',
+    backgroundColor: 'rgba(195, 185, 185, 0.2)',
+    borderColor: 'rgba(133, 223, 6, 0.7)',
+
   },
   menuText: {
-    fontSize: 16,
-    color: '#00796b',
+    fontSize: 18,
+    color: '#555',
+    fontWeight: '600',
+    textShadowColor: 'rgba(255,255,255,0.7)', // tạo hiệu ứng sáng nhẹ cho chữ
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 1,
   },
   selectedText: {
-    color: '#fff',
+    color: 'white',
+    fontWeight: 'bold',
+    textShadowColor: 'rgba(0,0,0,0.4)',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 2,
   },
 });

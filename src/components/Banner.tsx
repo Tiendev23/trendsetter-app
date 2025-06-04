@@ -1,44 +1,52 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, Button, TouchableOpacity } from 'react-native';
 
-const WinterBanner = () => {
+const WinterBanner = ({
+    title = "Get Winter Discount",
+    discount = "20% Off",
+    subtitle = "For Children",
+    backgroundColor = "#6B5BFF",
+    buttonText = "Shop Now",
+}) => {
     return (
-        <View>
-            <View style={styles.container}>
+        <View style={[styles.container, { backgroundColor }]}>
+            <View style={styles.bannerContainer}>
                 <View style={styles.textContainer}>
-                    <Text style={styles.smallText}>Get Winter Discount</Text>
-                    <Text style={styles.bigText}>20% Off</Text>
-                    <Text style={styles.smallText}>For Children</Text>
+                    <Text style={styles.smallText}>{title}</Text>
+                    <Text style={styles.bigText}>{discount}</Text>
+                    <Text style={styles.smallText}>{subtitle}</Text>
                 </View>
-            </View >
-
-            <View style={styles.dotsContainer}>
-                <View style={[styles.dot, styles.inactiveDot]} />
-                <View style={[styles.dot, styles.activeDot]} />
-                <View style={[styles.dot, styles.inactiveDot]} />
-                <View style={[styles.dot, styles.inactiveDot]} />
             </View>
+
+
+            <TouchableOpacity style={styles.button} >
+                <Text style={styles.buttonText}>{buttonText}</Text>
+            </TouchableOpacity>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
+
     container: {
         flexDirection: 'row',
-        backgroundColor: '#6B5BFF',
         borderRadius: 12,
         padding: 16,
         alignItems: 'center',
         justifyContent: 'space-between',
-        marginVertical: 10
+        marginVertical: 10,
+    },
+    bannerContainer: {
+        marginLeft: 10,
     },
     textContainer: {
-        flex: 1,
+        alignItems: 'center',
     },
     smallText: {
         color: '#fff',
-        fontSize: 14,
+        fontSize: 18,
         marginBottom: 4,
+
     },
     bigText: {
         color: '#fff',
@@ -46,23 +54,16 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 4,
     },
-    dotsContainer: {
-        flexDirection: 'row',
-        marginTop: 10,
-        justifyContent: 'center',
-        alignItems:'center'
+    button: {
+        backgroundColor: '#fff',
+        paddingHorizontal: 12,
+        paddingVertical: 8,
+        borderRadius: 8,
     },
-    dot: {
-        width: 10,
-        height: 10,
-        borderRadius: 5,
-        marginHorizontal: 5,
-    },
-    activeDot: {
-        backgroundColor: '#6B5BFF',
-    },
-    inactiveDot: {
-        backgroundColor: '#C0C0C0',
+    buttonText: {
+        color: '#6B5BFF',
+        fontWeight: 'bold',
+        fontSize: 20
     },
 });
 

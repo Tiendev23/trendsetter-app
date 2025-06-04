@@ -9,7 +9,7 @@ const ProductItem = () => {
     const renderProduct = ({ item }) => {
 
         return (
-            <View style={styles.card}>
+            <TouchableOpacity style={styles.card}>
                 <Image source={item.image} style={styles.image} />
                 <TouchableOpacity style={styles.heartIcon}>
                     <Ionicons name="heart-outline" size={24} color="white" />
@@ -26,7 +26,7 @@ const ProductItem = () => {
                     </View>
 
                 </View>
-            </View>
+            </TouchableOpacity>
         )
     }
 
@@ -53,10 +53,12 @@ const styles = StyleSheet.create({
         marginRight: 12,
         overflow: 'hidden',
         position: 'relative',
+        boxSizing: 'border-box',
+        height : 200,
     },
     image: {
         width: '100%',
-        height: 120,
+        height: 140,
         borderTopLeftRadius: 10,
         borderTopRightRadius: 10,
     },

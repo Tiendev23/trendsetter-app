@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 const SearchBar = () => {
     return (
-        <View>
+        <View >
             <View style={styles.searchSection}>
                 <Ionicons name="search" size={20} color="#888" style={styles.icon} />
                 <TextInput
@@ -24,9 +24,10 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        boxSizing: 'border-box',
     },
     searchSection: {
-        width: 380,
+        width: 400,
         height: 48,
         flexDirection: 'row',
         alignItems: 'center',
