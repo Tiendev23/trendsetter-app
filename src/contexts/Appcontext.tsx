@@ -2,16 +2,16 @@ import React, { createContext, useState, ReactNode } from 'react';
 
 // Định nghĩa kiểu cho User
 type User = {
-    _id: string;
-    username: string;
-    password: string;
-    email: string;
-    fullname: string;
-    role: string;
-    favorites: Array<Product>;
-    createdAt: string;
-    updatedAt: string;
     __v: number;
+    _id: string;
+    createdAt: string;
+    email: string;
+    favorites: Array<Product>;
+    fullName: string;
+    password: string;
+    role: string;
+    updatedAt: string;
+    username: string;
 };
 // Định nghĩa kiểu cho Brand
 type Brand = {
@@ -29,7 +29,7 @@ type Product = {
 
 // Định nghĩa kiểu cho Context
 type AppContextType = {
-    user: User;
+    user: User | null;
     setUser: React.Dispatch<React.SetStateAction<User>>;
     listbrand: Brand[];
     selectedCategory: number;
