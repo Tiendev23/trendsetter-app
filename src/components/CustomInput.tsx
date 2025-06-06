@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextInput, StyleSheet, View, TouchableOpacity } from 'react-native';
+import { TextInput, StyleSheet, View, TouchableOpacity, Text } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 type Props = {
@@ -7,43 +7,53 @@ type Props = {
     value: string;
     onChangeText: (text: string) => void;
     type?: 'text' | 'password';
-    secureTextEntry?: boolean;
+    infoText?: string;
 };
 
-export default function CustomInput({ placeholder, value, onChangeText, type = 'text' }: Props) {
-    const [isSecure, setSecure] = useState(true)
-    const [name, setName] = useState('eye-off-outline')
+export default function CustomInput({ placeholder, value, onChangeText, type = 'text', infoText }: Props) {
+    const [isSecure, setSecure] = useState(true);
+    const [name, setName] = useState('eye-off-outline');
+    const [isFocused, setFocused] = useState(false);
 
     return (
         <View>
-            <TextInput
-                style={styles.input}
-                placeholder={placeholder}
-                placeholderTextColor={'#A0A0A0'}
-                value={value}
-                onChangeText={onChangeText}
-                secureTextEntry={type === 'password' && isSecure}
-                autoCapitalize="none"
-            />
-            {
-                type === 'password' &&
-                <Ionicons name={name as any} size={24} color="#A0A0A0"
-                    style={styles.secureIcon}
-                    onPress={() => {
-                        setSecure(!isSecure)
-                        setName(isSecure ? 'eye' : 'eye-off-outline');
-                    }}
+            <View>
+                <TextInput
+                    style={[styles.input, type === 'password' && { paddingRight: 60 }]}
+                    placeholder={placeholder}
+                    placeholderTextColor={'#A0A0A0'}
+                    value={value}
+                    onChangeText={onChangeText}
+                    secureTextEntry={type === 'password' && isSecure}
+                    autoCapitalize="none"
+                    onFocus={() => setFocused(true)}
+                    onBlur={() => setFocused(false)}
                 />
+                {
+                    type === 'password' &&
+                    <Ionicons name={name as any} size={24} color="#A0A0A0"
+                        style={styles.secureIcon}
+                        onPress={() => {
+                            setSecure(!isSecure)
+                            setName(isSecure ? 'eye' : 'eye-off-outline');
+                        }}
+                    />
+                }
+            </View >
+            {
+                isFocused && infoText &&
+                <Text style={styles.infoText}>
+                    {infoText}
+                </Text>
             }
-        </View >
+        </View>
     );
 }
 
 const styles = StyleSheet.create({
     input: {
         borderRadius: 15,
-        paddingLeft: 14,
-        paddingRight: 40,
+        paddingHorizontal: 14,
         paddingVertical: 16,
         backgroundColor: '#F7F7F9',
     },
@@ -53,6 +63,12 @@ const styles = StyleSheet.create({
         height: '100%',
         verticalAlign: 'middle',
         paddingHorizontal: 4,
-
-    }
+    },
+    infoText: {
+        marginTop: 6,
+        textAlign: 'center',
+        fontFamily: 'Raleway',
+        fontWeight: 'medium',
+        color: '#A0A0A0'
+    },
 });
