@@ -3,7 +3,6 @@ import React, { useContext } from 'react'
 import SearchBar from '../../components/SearchBar'
 import Menubar from '../../components/Menubar'
 import WinterBanner from '../../components/Banner'
-import { AppContext } from '../../contexts/Appcontext'
 import ProductItem from '../../components/ProductItems'
 
 export default function HomeScreen() {
@@ -15,30 +14,30 @@ export default function HomeScreen() {
                 showsVerticalScrollIndicator={false}
             >
                 <WinterBanner />
-                <View style={styles.recomment}>
-                    <Text style={styles.txtRecommen}>Recommended for you</Text>
-                    <Text style={styles.txtRecommen}>See all</Text>
+                <View style={styles.recommend}>
+                    <Text style={styles.textRecommend}>Recommended for you</Text>
+                    <Text style={styles.textRecommend}>See all</Text>
                 </View>
                 {/* Flatlist Product */}
                 <ProductItem />
-                <View style={styles.recomment}>
-                    <Text style={styles.txtRecommen}>Shop By Category</Text>
+                <View style={styles.recommend}>
+                    <Text style={styles.textRecommend}>Shop By Category</Text>
                 </View>
                 <ProductItem />
-                <View style={styles.recomment}>
-                    <Text style={styles.txtRecommen}>Most Popular</Text>
-                    <Text style={styles.txtRecommen}>See all</Text>
+                <View style={styles.recommend}>
+                    <Text style={styles.textRecommend}>Most Popular</Text>
+                    <Text style={styles.textRecommend}>See all</Text>
                 </View>
                 <ProductItem />
-                <View style={styles.recomment}>
-                    <Text style={styles.txtRecommen}>Featured Appareal</Text>
-                    <Text style={styles.txtRecommen}>See all</Text>
+                <View style={styles.recommend}>
+                    <Text style={styles.textRecommend}>Featured Appareal</Text>
+                    <Text style={styles.textRecommend}>See all</Text>
                 </View>
                 <ProductItem />
                 <WinterBanner />
-                <View style={styles.recomment}>
-                    <Text style={styles.txtRecommen}>Featured Appareal</Text>
-                    <Text style={styles.txtRecommen}>See all</Text>
+                <View style={styles.recommend}>
+                    <Text style={styles.textRecommend}>Featured Appareal</Text>
+                    <Text style={styles.textRecommend}>See all</Text>
                 </View>
                 <ProductItem />
 
@@ -58,7 +57,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         boxSizing: 'border-box',
         padding: 10,
-        backgroundColor:'#fff'
+        backgroundColor: '#fff'
     },
     input: {
         height: 40,
@@ -73,14 +72,14 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: '#ccc'
     },
-    recomment: {
+    recommend: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginHorizontal: 10,
         marginTop: 10
 
     },
-    txtRecommen: {
+    textRecommend: {
         fontSize: 16,
         fontWeight: 'bold',
         color: 'Black',

@@ -1,61 +1,44 @@
 import React, { createContext, useState, ReactNode } from 'react';
 
-// Định nghĩa kiểu cho User
-type User = {
-    __v: number;
-    _id: string;
-    createdAt: string;
-    email: string;
-    favorites: Array<Product>;
-    fullName: string;
-    password: string;
-    role: string;
-    updatedAt: string;
-    username: string;
-};
-// Định nghĩa kiểu cho Brand
+// Kiểu dữ liệu cho từng Brand
 type Brand = {
     id: number;
     name: string;
 };
 
-// Định nghĩa kiểu cho Product
+// Kiểu dữ liệu cho sản phẩm
 type Product = {
     id: string;
     name: string;
     price: number;
-    image: any; // Nếu React Native thì dùng ImageSourcePropType thay thế
+    image: any; // bạn có thể dùng `ImageSourcePropType` nếu dùng với React Native
 };
 
-// Định nghĩa kiểu cho Context
+// Kiểu cho context
 type AppContextType = {
-    user: User | null;
-    setUser: React.Dispatch<React.SetStateAction<User>>;
-    listbrand: Brand[];
     selectedCategory: number;
-    setSelectedCategory: React.Dispatch<React.SetStateAction<number>>;
+    setSelectedCategory: (value: number) => void;
+    listbrand: Brand[];
     DataPr: Product[];
 };
 
-// Giá trị mặc định cho Context (để TS không báo lỗi)
+// Giá trị mặc định (dummy)
 const defaultValue: AppContextType = {
-    user: null,
-    setUser: () => { },
-    listbrand: [],
     selectedCategory: 1,
-    setSelectedCategory: () => { }, // hàm rỗng tạm thời
+    setSelectedCategory: () => { },
+    listbrand: [],
     DataPr: [],
 };
 
-// Tạo Context với giá trị mặc định
-const AppContext = createContext<AppContextType>(defaultValue);
+// Tạo Context có kiểu dữ liệu rõ ràng
+const DataContext = createContext<AppContextType>(defaultValue);
 
+// Props cho AppProvider
 type AppProviderProps = {
     children: ReactNode;
 };
 
-const AppProvider = ({ children }: AppProviderProps) => {
-    const [user, setUser] = useState(null);
+const DataProvider = ({ children }: AppProviderProps) => {
     const [selectedCategory, setSelectedCategory] = useState<number>(1);
 
     const listbrand: Brand[] = [
@@ -108,12 +91,17 @@ const AppProvider = ({ children }: AppProviderProps) => {
     ];
 
     return (
-        <AppContext.Provider
-            value={{ user, setUser, listbrand, selectedCategory, setSelectedCategory, DataPr }}
+        <DataContext.Provider
+            value={{
+                listbrand,
+                selectedCategory,
+                setSelectedCategory,
+                DataPr,
+            }}
         >
             {children}
-        </AppContext.Provider>
+        </DataContext.Provider>
     );
 };
 
-export { AppProvider, AppContext };
+export { DataProvider, DataContext };

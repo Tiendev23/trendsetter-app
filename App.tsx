@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { AppProvider } from './src/contexts/AuthContext';
+import { AppProviders as ContextProvider } from './src/contexts';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { default as AppNavigation } from './src/navigation/StackNavigator';
 import { Provider } from 'react-redux';
@@ -10,13 +10,13 @@ export default function App() {
     return (
         <SafeAreaProvider>
             <Provider store={store}>
-                <AppProvider>
+                <ContextProvider>
                     <SafeAreaView style={{ flex: 1 }} edges={['top']}>
                         <NavigationContainer>
                             <AppNavigation />
                         </NavigationContainer>
                     </SafeAreaView>
-                </AppProvider>
+                </ContextProvider>
             </Provider>
         </SafeAreaProvider>
     );

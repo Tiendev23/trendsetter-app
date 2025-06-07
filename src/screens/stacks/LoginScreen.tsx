@@ -8,7 +8,7 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, refresh } from '../../redux/slices/userSlice';
 import { AppDispatch, RootState } from '../../redux/store';
-import { AppContext } from '../../contexts/Appcontext';
+import { Context } from '../../contexts/AuthContext';
 import { LoginNav, LoginRoute } from '../../navigation/NavigationTypes';
 import ErrorWarnBox from '../../components/ErrorWarnBox';
 
@@ -18,7 +18,7 @@ export default function LoginScreen({ navigation, route }: { navigation: LoginNa
     const [password, setPassword] = useState('');
     const [errorMess, setErrorMess] = useState('');
 
-    const { setUser } = useContext(AppContext);
+    const context = useContext(Context);
     const dispatch = useDispatch<AppDispatch>();
     const { data, status, error } = useSelector((state: RootState) => state.userActions);
 
@@ -28,11 +28,10 @@ export default function LoginScreen({ navigation, route }: { navigation: LoginNa
     }
 
     useEffect(() => {
-        
+
         if (status === 'succeeded') {
             console.log('data', data);
-            
-            setUser(data);
+            context.login(data);
 
             navigation.reset({
                 index: 0,

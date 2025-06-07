@@ -1,11 +1,11 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useContext } from 'react';
-import { AppContext } from '../contexts/AuthContext';
+import { DataContext } from '../contexts/DataContext';
 
 const ProductItem = () => {
 
-    const { DataPr } = useContext(AppContext);
+    const { DataPr } = useContext(DataContext);
     const renderProduct = ({ item }) => {
 
         return (
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         position: 'relative',
         boxSizing: 'border-box',
-        height : 200,
+        height: 200,
     },
     image: {
         width: '100%',
@@ -68,8 +68,8 @@ const styles = StyleSheet.create({
         right: 8,
         padding: 5,
         borderRadius: 20,
-        borderWidth:1,
-        backgroundColor:"#E0E0E0"
+        borderWidth: 1,
+        backgroundColor: "#E0E0E0"
     },
     infoContainer: {
         padding: 8,

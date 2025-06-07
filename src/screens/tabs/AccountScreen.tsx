@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, ScrollView, useWindowDimensions } from 'react-native';
 import AccountTabSection from '../../components/AccountTabSection';
 import CustomButton from '../../components/CustomButton';
-import { AppContext } from '../../contexts/Appcontext';
+import { AppContext } from '../../contexts';
 
 export default function AccountScreen({ navigation }) {
     const { user, setUser } = useContext(AppContext);
@@ -12,7 +12,7 @@ export default function AccountScreen({ navigation }) {
         console.log('user tu context', user);
     }, [user])
 
-    
+
     return (
         <View style={styles.screenContainer}>
             {
