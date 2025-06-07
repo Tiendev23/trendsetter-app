@@ -17,7 +17,7 @@ export default function NotificationScreen({ navigation }) {
             <Text style={styles.loginText}>Login</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.signup}>
+          <TouchableOpacity style={styles.signup} onPress={() => navigation.navigate('SignUp')}>
             <Text style={styles.signupText}>Sign Up</Text>
           </TouchableOpacity>
 
