@@ -10,7 +10,7 @@ export default function TabNavigator() {
   return (
     <Tab.Navigator
       id={undefined}
-      initialRouteName="Home"
+      initialRouteName="Notifications"
       screenOptions={({ route }) => ({
         headerShown: false,
         tabBarShowLabel: false,

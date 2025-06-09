@@ -5,6 +5,7 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { default as AppNavigation } from './src/navigation/StackNavigator';
 import { Provider } from 'react-redux';
 import store from './src/redux/store';
+import NotificationLogin from './src/screens/tabs/NotificationLogin';
 
 export default function App() {
     return (
@@ -19,5 +20,8 @@ export default function App() {
                 </AppProvider>
             </Provider>
         </SafeAreaProvider>
+
+        
+    
     );
 }

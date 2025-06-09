@@ -8,7 +8,7 @@ type User = {
     email: string;
     fullname: string;
     role: string;
-    favorites: Array<Product>;
+    favorites:string[];
     createdAt: string;
     updatedAt: string;
     __v: number;
@@ -39,7 +39,18 @@ type AppContextType = {
 
 // Giá trị mặc định cho Context (để TS không báo lỗi)
 const defaultValue: AppContextType = {
-    user: null,
+    user: {
+    _id: 'string',
+    username: "string",
+    password: "string",
+    email: "string",
+    fullname: "string",
+    role: "string",
+    favorites: [],
+    createdAt: "string",
+    updatedAt: "string",
+    __v: 0
+},
     setUser: () => { },
     listbrand: [],
     selectedCategory: 1,
