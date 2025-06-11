@@ -2,15 +2,16 @@ import React, { useState, useContext, useEffect } from 'react';
 import { View, Text, Alert, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
-import { validateEmail, validateFullName, validatePassword, validateUsername } from '../../utils/Validation';
 import AuthScreenHeader from '../../components/AuthScreenHeader';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../redux/store';
-import { refresh, register } from '../../redux/slices/userSlice';
+import { refresh, register } from '../../redux/features/auth/registerSlice';
 import { SignUpNav } from '../../navigation/NavigationTypes';
 import ErrorWarnBox from '../../components/ErrorWarnBox';
+import { validateEmail, validateFullName, validatePassword, validateUsername } from '../../utils/validation';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 
 export default function SignUpScreen({ navigation }: { navigation: SignUpNav }) {
     const [username, setUsername] = useState('');
@@ -19,9 +20,9 @@ export default function SignUpScreen({ navigation }: { navigation: SignUpNav }) 
     const [password, setPassword] = useState('');
     const [errorMess, setErrorMess] = useState('');
 
-    const dispatch = useDispatch<AppDispatch>();
-    const { data, status, error } = useSelector((state: RootState) => state.userActions);
-
+    const dispatch = useAppDispatch();
+    const { data, status, error } = useAppSelector(state => state.register);
+    console.log('>>>>>>>>>>>>\n', navigation.getState().routes);
     const handleRegister = () => {
         if (!validateFullName(fullName)) {
             setErrorMess('Họ và tên không hợp lệ');
@@ -47,11 +48,14 @@ export default function SignUpScreen({ navigation }: { navigation: SignUpNav }) 
 
     useEffect(() => {
         if (status === 'succeeded') {
-            console.log('data', data);
+            console.log('data SignUp', data);
             navigation.reset({
-                index: 0,
-                routes: [{ name: 'Login', params: { email: data.email } }],
+                routes: [{
+                    name: 'Login',
+                    params: { email: data.email }
+                }],
             });
+            // navigation.navigate({ name: 'Login', params: { email: data.email } });
         }
         if (status === 'failed') {
             console.log('Đăng ký thất bại:', error);
@@ -133,7 +137,6 @@ export default function SignUpScreen({ navigation }: { navigation: SignUpNav }) 
                     <Text style={styles.link}
                         onPress={() => {
                             navigation.reset({
-                                index: 0,
                                 routes: [{ name: 'Login' }],
                             });
                         }}

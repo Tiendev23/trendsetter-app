@@ -12,6 +12,7 @@ export default function StackNavigator() {
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="SignUp" component={SignUpScreen} />
             <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
+            <Stack.Screen name="ProductDetail" component={ForgotPasswordScreen} />
         </Stack.Navigator>
     );
 }

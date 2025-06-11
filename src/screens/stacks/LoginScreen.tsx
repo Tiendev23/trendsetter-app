@@ -1,16 +1,15 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { View, Text, Alert, StyleSheet, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import AuthScreenHeader from '../../components/AuthScreenHeader';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import { useDispatch, useSelector } from 'react-redux';
-import { login, refresh } from '../../redux/slices/userSlice';
-import { AppDispatch, RootState } from '../../redux/store';
+import { login, refresh } from '../../redux/features/auth/loginSlice';
 import { Context } from '../../contexts/AuthContext';
 import { LoginNav, LoginRoute } from '../../navigation/NavigationTypes';
 import ErrorWarnBox from '../../components/ErrorWarnBox';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 
 export default function LoginScreen({ navigation, route }: { navigation: LoginNav; route: LoginRoute }) {
 
@@ -19,19 +18,17 @@ export default function LoginScreen({ navigation, route }: { navigation: LoginNa
     const [errorMess, setErrorMess] = useState('');
 
     const context = useContext(Context);
-    const dispatch = useDispatch<AppDispatch>();
-    const { data, status, error } = useSelector((state: RootState) => state.userActions);
+    const dispatch = useAppDispatch();
+    const { data, status, error } = useAppSelector(state => state.auth);
 
     const handleLogin = () => {
-        console.log('email', inputValue);
         dispatch(login({ emailOrUsername: inputValue, password: password }));
     }
 
     useEffect(() => {
-
         if (status === 'succeeded') {
-            console.log('data', data);
-            context.login(data);
+            console.log('data Login', data);
+            context.login(data.user, data.token);
 
             navigation.reset({
                 index: 0,
