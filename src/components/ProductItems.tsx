@@ -16,7 +16,7 @@ const ProductItem = () => {
                 </TouchableOpacity>
 
                 <View style={styles.infoContainer}>
-                    <Text style={styles.name}>{item.name}</Text>
+                    <Text numberOfLines={1} style={styles.name}>{item.name}</Text>
                     <View style={styles.priceContainer}>
                         <Text style={styles.price}>${item.price}</Text>
                         <View style={styles.shipTag}>
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         position: 'relative',
         boxSizing: 'border-box',
-        height : 200,
+        height: 200,
     },
     image: {
         width: '100%',
@@ -68,8 +68,8 @@ const styles = StyleSheet.create({
         right: 8,
         padding: 5,
         borderRadius: 20,
-        borderWidth:1,
-        backgroundColor:"#E0E0E0"
+        borderWidth: 1,
+        backgroundColor: "#E0E0E0"
     },
     infoContainer: {
         padding: 8,
@@ -78,11 +78,13 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: '500',
         color: '#333',
+        width:100,
+        
     },
     price: {
         fontSize: 14,
         fontWeight: 'bold',
-        color: '#7C4DFF',
+        color: '#006340',
         marginVertical: 4,
     },
     shipTag: {
@@ -90,7 +92,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#fff',
         borderWidth: 1,
-        borderColor: '#999',
+        borderColor: '#006340',
         paddingHorizontal: 6,
         paddingVertical: 2,
         borderRadius: 5,
@@ -99,6 +101,8 @@ const styles = StyleSheet.create({
     shipText: {
         marginLeft: 4,
         fontSize: 12,
+        color: '#006340'
+
     },
     priceContainer: {
         flexDirection: 'row',

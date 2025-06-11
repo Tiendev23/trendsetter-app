@@ -54,7 +54,7 @@ const AppProvider = ({ children }: AppProviderProps) => {
     const DataPr: Product[] = [
         {
             id: '1',
-            name: 'Watch',
+            name: 'Watch arigatoasaki',
             price: 40,
             image: require('../../assets/banner-quang-cao-giay-1.webp'),
         },

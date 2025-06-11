@@ -41,13 +41,14 @@ export default Menubar;
 const styles = StyleSheet.create({
   container: {
     height: 55,
-    marginTop: 10,
     marginBottom: 5,
     // borderTopColor: '#ddd',
     // borderTopWidth: 1,
     // borderBottomColor: '#ddd',
     // borderBottomWidth: 1,
-    paddingVertical: 5,
+    flexDirection: 'row',
+    alignItems: 'center',
+
   },
   menuItem: {
     paddingVertical: 10,
@@ -57,7 +58,7 @@ const styles = StyleSheet.create({
     borderColor: '#c1c1c1',
   },
   selectedItem: {
-    backgroundColor: 'rgba(195, 185, 185, 0.2)',
+    backgroundColor: 'rgba(186, 195, 185, 0.2)',
     borderColor: 'rgba(133, 223, 6, 0.7)',
 
   },
@@ -65,15 +66,14 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#555',
     fontWeight: '600',
-    textShadowColor: 'rgba(255,255,255,0.7)', // tạo hiệu ứng sáng nhẹ cho chữ
+    textShadowColor: '#006340)', // tạo hiệu ứng sáng nhẹ cho chữ
     textShadowOffset: { width: 1, height: 1 },
     textShadowRadius: 1,
   },
   selectedText: {
-    color: 'white',
-    fontWeight: 'bold',
+    color: '#006340',
     textShadowColor: 'rgba(0,0,0,0.4)',
-    textShadowOffset: { width: 1, height: 1 },
-    textShadowRadius: 2,
+    textShadowOffset: { width: 1, height: 2 },
+    textShadowRadius: 1,
   },
 });

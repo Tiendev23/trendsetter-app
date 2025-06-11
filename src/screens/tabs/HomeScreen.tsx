@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, Text, TextInput, View, ScrollView } from 'react-native'
+import { FlatList, StyleSheet, Text, TextInput, View, ScrollView, TouchableOpacity, Image } from 'react-native'
 import React, { useContext } from 'react'
 import SearchBar from '../../components/SearchBar'
 import Menubar from '../../components/Menubar'
@@ -7,9 +7,21 @@ import { AppContext } from '../../contexts/Appcontext'
 import ProductItem from '../../components/ProductItems'
 
 export default function HomeScreen() {
+
+    const btnSeeall = () => {
+        return (
+            <TouchableOpacity>
+                <Text style={styles.txtRecommen}>See all</Text>
+            </TouchableOpacity>
+        )
+    }
     return (
         <View style={styles.container}>
-            <SearchBar />
+            <View style={styles.header}>
+                <TouchableOpacity><Image source={require('../../../assets/images/fb.png')} style={styles.logo} resizeMode='contain' /></TouchableOpacity>
+                <Text style={styles.txtTitle}>Trendsetter</Text>
+                <TouchableOpacity><Image source={require('../../../assets/icons/cart_icon.png')} style={styles.cart} resizeMode='contain' /></TouchableOpacity>
+            </View>
             <Menubar />
             <ScrollView showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
@@ -17,7 +29,7 @@ export default function HomeScreen() {
                 <WinterBanner />
                 <View style={styles.recomment}>
                     <Text style={styles.txtRecommen}>Recommended for you</Text>
-                    <Text style={styles.txtRecommen}>See all</Text>
+                    {btnSeeall()}
                 </View>
                 {/* Flatlist Product */}
                 <ProductItem />
@@ -27,18 +39,18 @@ export default function HomeScreen() {
                 <ProductItem />
                 <View style={styles.recomment}>
                     <Text style={styles.txtRecommen}>Most Popular</Text>
-                    <Text style={styles.txtRecommen}>See all</Text>
+                    {btnSeeall()}
                 </View>
                 <ProductItem />
                 <View style={styles.recomment}>
                     <Text style={styles.txtRecommen}>Featured Appareal</Text>
-                    <Text style={styles.txtRecommen}>See all</Text>
+                    {btnSeeall()}
                 </View>
                 <ProductItem />
                 <WinterBanner />
                 <View style={styles.recomment}>
                     <Text style={styles.txtRecommen}>Featured Appareal</Text>
-                    <Text style={styles.txtRecommen}>See all</Text>
+                    {btnSeeall()}
                 </View>
                 <ProductItem />
 
@@ -54,11 +66,31 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
         boxSizing: 'border-box',
         padding: 10,
-        backgroundColor:'#fff'
+        backgroundColor: '#fff'
+    },
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: "center",
+        height: 40,
+        marginBottom:5,
+    },
+    txtTitle: {
+        fontSize: 24,
+        color: '#006340',
+        fontWeight: 'bold',
+        fontStyle: 'italic',
+    },
+    logo: {
+        height: 35,
+        width: 50,
+
+    },
+    cart: {
+        height: 35,
+        width: 50,
     },
     input: {
         height: 40,
@@ -77,12 +109,14 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginHorizontal: 10,
-        marginTop: 10
+        marginTop: 10,
 
     },
     txtRecommen: {
         fontSize: 16,
         fontWeight: 'bold',
-        color: 'Black',
+        color: '#006340',
+        
+
     }
 });
