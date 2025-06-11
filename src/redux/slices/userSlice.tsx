@@ -2,35 +2,41 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import apiClient from '../../api/apiClient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-interface Account {
-    email: string;
-    password: string;
-}
-
-export const login = createAsyncThunk('account/login', async ({ email, password }: Account, { rejectWithValue }) => {
+export const login = createAsyncThunk('account/login', async (body: any, { rejectWithValue }) => {
     try {
-        const response = await apiClient.post('/users/login', { email, password });
+        const response = await apiClient.post('/users/login', body);
         console.log('response.data:', response.data);
 
         await AsyncStorage.setItem('token', response.data.token);
         return response.data.user;
     } catch (error) {
         console.log('error', error);
-        return rejectWithValue(error.message);
+        return rejectWithValue(error.response.data.message);
     }
 });
+
+export const register = createAsyncThunk('account/register', async (body: any, { rejectWithValue }) => {
+    try {
+        const response = await apiClient.post('/users', body);
+        console.log('response.data:', response.data);
+
+        return response.data;
+    } catch (error) {
+        console.log('error', error);
+        return rejectWithValue(error.response.data.message);
+    }
+})
 
 const userSlice = createSlice({
     name: 'userActions',
     initialState: {
-        user: null,
+        data: null,
         status: 'idle',
         error: null
     },
     reducers: {
-        logout: (state) => {
-            AsyncStorage.removeItem('token'); // Xóa token khi logout
-            state.user = null;
+        refresh: (state) => {
+            state.data = null;
             state.status = 'idle';
             state.error = null
         },
@@ -42,15 +48,26 @@ const userSlice = createSlice({
             })
             .addCase(login.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                state.user = action.payload;
-                state.error = null;
+                state.data = action.payload;
             })
             .addCase(login.rejected, (state, action) => {
+                state.status = 'failed';                
+                state.error = action.payload || 'Đã xảy ra lỗi';
+            })
+
+            .addCase(register.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(register.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.data = action.payload;
+            })
+            .addCase(register.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.payload || 'Đã xảy ra lỗi';
             });
     },
 });
 
-export const { logout } = userSlice.actions;
+export const { refresh } = userSlice.actions;
 export default userSlice.reducer;

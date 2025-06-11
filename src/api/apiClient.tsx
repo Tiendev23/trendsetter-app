@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
-const API_URL = 'http://192.168.94.138:5000/api';
+const API_URL = 'https://trendsetter-backend.onrender.com/api';
 
 const apiClient = axios.create({
     baseURL: API_URL,

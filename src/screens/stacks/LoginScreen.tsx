@@ -6,47 +6,66 @@ import AuthScreenHeader from '../../components/AuthScreenHeader';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { useDispatch, useSelector } from 'react-redux';
-import { login, logout } from '../../redux/slices/userSlice';
+import { login, refresh } from '../../redux/slices/userSlice';
 import { AppDispatch, RootState } from '../../redux/store';
-import { AppContext } from '../../contexts/Appcontext';
+import { Context } from '../../contexts/AuthContext';
+import { LoginNav, LoginRoute } from '../../navigation/NavigationTypes';
+import ErrorWarnBox from '../../components/ErrorWarnBox';
 
-export default function LoginScreen({ navigation }: any) {
-    const [email, setEmail] = useState('');
+export default function LoginScreen({ navigation, route }: { navigation: LoginNav; route: LoginRoute }) {
+
+    const [inputValue, setInputValue] = useState(route.params?.email || '');
     const [password, setPassword] = useState('');
-    const { setUser } = useContext(AppContext);
+    const [errorMess, setErrorMess] = useState('');
+
+    const context = useContext(Context);
     const dispatch = useDispatch<AppDispatch>();
-    const { user, status, error } = useSelector((state: RootState) => state.userActions)
+    const { data, status, error } = useSelector((state: RootState) => state.userActions);
 
     const handleLogin = () => {
-        console.log('email', email, '\npassword', password);
-        dispatch(login({ email, password }));
+        console.log('email', inputValue);
+        dispatch(login({ emailOrUsername: inputValue, password: password }));
     }
 
     useEffect(() => {
+
         if (status === 'succeeded') {
-            setUser(user);
-            navigation.navigate('Tabs');
+            console.log('data', data);
+            context.login(data);
+
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'Tabs' }],
+            });
         };
         if (status === 'failed') {
             console.log('Đăng nhập thất bại:', error);
+            setErrorMess(error)
             setTimeout(() => {
-                dispatch(logout());
-            }, 3000);
+                setErrorMess('');
+                dispatch(refresh());
+            }, 5000);
         }
     }, [status])
 
     return (
         <View style={styles.screenContainer}>
             <AuthScreenHeader />
+
             <View style={styles.contentContainer}>
+                <ErrorWarnBox content={errorMess} />
+
                 <Text style={styles.title}>Đăng nhập</Text>
-                <CustomInput placeholder="Địa chỉ email" value={email} onChangeText={setEmail} />
+                <CustomInput
+                    placeholder="Địa chỉ email / Tên đăng nhập"
+                    value={inputValue}
+                    onChangeText={setInputValue}
+                />
                 <CustomInput
                     placeholder="Mật khẩu"
                     value={password}
                     onChangeText={setPassword}
                     type='password'
-                    secureTextEntry
                 />
                 <Text
                     style={styles.link}
@@ -83,7 +102,11 @@ export default function LoginScreen({ navigation }: any) {
                 </View>
                 <Text style={styles.textRegister}>
                     Bạn chưa có tài khoản?{' '}
-                    <Text style={styles.link} onPress={() => navigation.navigate('SignUp')}>
+                    <Text style={styles.link}
+                        onPress={() => {
+                            navigation.navigate('SignUp')
+                        }}
+                    >
                         Đăng ký
                     </Text>
                 </Text>
@@ -99,13 +122,13 @@ const styles = StyleSheet.create({
     },
     contentContainer: {
         flex: 1,
-        paddingHorizontal: '8%',
+        paddingHorizontal: 30,
         paddingTop: 10,
         gap: 18
     },
     title: {
         fontFamily: 'Raleway',
-        fontWeight: 'medium',
+        fontWeight: '700',
         fontSize: 16,
         color: '#1A2530',
     },

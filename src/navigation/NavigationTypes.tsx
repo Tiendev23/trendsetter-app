@@ -1,0 +1,17 @@
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RouteProp } from '@react-navigation/native';
+
+// Danh sách màn hình
+export type AuthStackParamList = {
+    Tabs: undefined;
+    Login: { email?: string }; // Có thể nhận email từ bất kỳ màn hình nào
+    SignUp: undefined;
+    ForgotPassword: undefined;
+};
+
+// Định nghĩa kiểu navigation, route cho từng màn hình
+export type TabsNav = NativeStackNavigationProp<AuthStackParamList, 'Tabs'>;
+export type LoginNav = NativeStackNavigationProp<AuthStackParamList, 'Login'>;
+export type LoginRoute = RouteProp<AuthStackParamList, 'Login'>;
+export type SignUpNav = NativeStackNavigationProp<AuthStackParamList, 'SignUp'>;
+export type ForgotPassNav = NativeStackNavigationProp<AuthStackParamList, 'ForgotPassword'>;

@@ -1,85 +1,95 @@
-import React, { useRef, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, Dimensions, Animated } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  FlatList,
+  Dimensions,
+  Animated,
+  ImageBackground,
+  ActivityIndicator,
+} from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllProducts } from '../redux/slices/productSlice';
+import { RootState, AppDispatch } from '../redux/store';
 
-// Lấy width màn hình
 const { width } = Dimensions.get('window');
 
-// Component: 1 banner
+// Component hiển thị từng item banner với ảnh nền
 const BannerItem = ({ item }) => {
   return (
-    <View style={[styles.bannerItem, { backgroundColor: item.backgroundColor }]}>
+    <ImageBackground
+      source={{ uri: item.banner }}
+      style={styles.bannerItem}
+      imageStyle={{ borderRadius: 12 }}
+    >
       <View style={styles.textContainer}>
-        <Text style={styles.smallText} numberOfLines={1}>{item.title}</Text>
-        <Text style={styles.bigText} numberOfLines={1}>{item.discount}</Text>
-        <Text style={styles.smallText} numberOfLines={1}>{item.subtitle}</Text>
+        <Text style={styles.smallText} numberOfLines={1}>{item.name}</Text>
+        <Text style={styles.bigText} numberOfLines={1}>{item.price} đ</Text>
+        <Text style={styles.smallText} numberOfLines={1}>{item.description}</Text>
       </View>
 
       <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>{item.buttonText}</Text>
+        <Text style={styles.buttonText}>Xem ngay</Text>
       </TouchableOpacity>
-    </View>
+    </ImageBackground>
   );
 };
 
-// Component: Banner + pagination
 const WinterBanner = () => {
-  const bannerData = [
-    {
-      id: '1',
-      title: 'Get Winter Discount',
-      discount: '20% Off',
-      subtitle: 'For Children',
-      backgroundColor: '#006340',
-      buttonText: 'Shop Now',
-    },
-    {
-      id: '2',
-      title: 'Summer Sale',
-      discount: '50% Off',
-      subtitle: 'For Everyone',
-      backgroundColor: '#FF5733',
-      buttonText: 'Explore Now',
-    },
-    {
-      id: '3',
-      title: 'Autumn Special',
-      discount: '30% Off',
-      subtitle: 'Limited Time',
-      backgroundColor: '#8E44AD',
-      buttonText: 'Buy Now',
-    },
-  ];
+  const dispatch = useDispatch<AppDispatch>();
+  const { items, loading, error } = useSelector((state: RootState) => state.products);
+
+  useEffect(() => {
+    dispatch(getAllProducts());
+  }, [dispatch]);
 
   const scrollX = useRef(new Animated.Value(0)).current;
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Bắt sự kiện scroll xong để update index (cho dot)
   const handleMomentumScrollEnd = (event) => {
     const index = Math.round(event.nativeEvent.contentOffset.x / width);
     setCurrentIndex(index);
   };
 
-  const renderItem = ({ item }) => <BannerItem item={item} />;
+   // const renderItem = ({ item }) => <BannerItem item={item} />;
 
+if (loading === 'loading') {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color="#006340" />
+        <Text>Đang tải sản phẩm...</Text>
+      </View>
+    );
+  }
+
+  if (loading === 'failed') {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text style={{ color: 'red' }}>Lỗi: {error}</Text>
+      </View>
+    );
+  }
   return (
     <View style={styles.listContainer}>
       <Animated.FlatList
-        data={bannerData}
-        keyExtractor={(item) => item.id}
-        renderItem={renderItem}
+        data={items}
+        keyExtractor={(item) => item._id}
+        renderItem={BannerItem}
         horizontal
         pagingEnabled
         showsHorizontalScrollIndicator={false}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-          { useNativeDriver: false } // không dùng listener ở đây
+          { useNativeDriver: false }
         )}
-        onMomentumScrollEnd={handleMomentumScrollEnd} // dùng để update currentIndex
+        onMomentumScrollEnd={handleMomentumScrollEnd}
       />
 
-      {/* Pagination dots */}
+      {/* Dots */}
       <View style={styles.pagination}>
-        {bannerData.map((_, index) => (
+        {items.map((_, index) => (
           <View
             key={index}
             style={[
@@ -98,7 +108,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   bannerItem: {
-    width: 395,
+    width: 397,
     height: 140,
     flexDirection: 'row',
     borderRadius: 12,
@@ -106,6 +116,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginHorizontal: 5,
+    backgroundColor:'blue'
   },
   textContainer: {
     flex: 1,
@@ -113,12 +124,12 @@ const styles = StyleSheet.create({
   },
   smallText: {
     color: '#fff',
-    fontSize: 18,
+    fontSize: 16,
     marginBottom: 4,
   },
   bigText: {
     color: '#fff',
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: 'bold',
     marginBottom: 4,
   },

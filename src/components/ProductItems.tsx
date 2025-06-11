@@ -1,16 +1,41 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList,ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import React, { useContext } from 'react';
-import { AppContext } from '../contexts/AuthContext';
+import React, { useContext, useEffect } from 'react';
+import { DataContext } from '../contexts/DataContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllProducts } from '../redux/slices/productSlice';
+import { RootState, AppDispatch } from '../redux/store';
 
 const ProductItem = () => {
+const dispatch = useDispatch<AppDispatch>();
+  const { items, loading, error } = useSelector((state: RootState) => state.products);
+ 
+  useEffect(() => {
+    dispatch(getAllProducts());
+  }, [dispatch]);
 
-    const { DataPr } = useContext(AppContext);
+  if (loading === 'loading') {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color="#006340" />
+        <Text>Đang tải sản phẩm...</Text>
+      </View>
+    );
+  }
+
+  if (loading === 'failed') {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text style={{ color: 'red' }}>Lỗi: {error}</Text>
+      </View>
+    );
+  }
+    const { DataPr } = useContext(DataContext);
     const renderProduct = ({ item }) => {
 
         return (
             <TouchableOpacity style={styles.card}>
-                <Image source={item.image} style={styles.image} />
+                <Image source={{uri:item.image}} style={styles.image} />
                 <TouchableOpacity style={styles.heartIcon}>
                     <Ionicons name="heart-outline" size={24} color="white" />
                 </TouchableOpacity>
@@ -27,15 +52,17 @@ const ProductItem = () => {
 
                 </View>
             </TouchableOpacity>
+            
         )
     }
 
     return (
         <View style={styles.product}>
             <FlatList
-                data={DataPr}
+                data={items}
                 renderItem={renderProduct}
-                keyExtractor={(item) => item.id}
+                keyExtractor={(item) => item._id}
+                
                 horizontal
                 showsHorizontalScrollIndicator={false}
             />
@@ -48,13 +75,14 @@ export default ProductItem;
 const styles = StyleSheet.create({
     card: {
         width: 160,
+        height: 215,
         backgroundColor: '#f9f9f9',
         borderRadius: 10,
         marginRight: 12,
         overflow: 'hidden',
         position: 'relative',
         boxSizing: 'border-box',
-        height: 200,
+        
     },
     image: {
         width: '100%',
@@ -105,7 +133,7 @@ const styles = StyleSheet.create({
 
     },
     priceContainer: {
-        flexDirection: 'row',
+        flexDirection: 'column',
         justifyContent: 'space-between',
     },
     product: {

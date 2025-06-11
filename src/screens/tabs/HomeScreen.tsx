@@ -3,14 +3,17 @@ import React, { useContext } from 'react'
 import SearchBar from '../../components/SearchBar'
 import Menubar from '../../components/Menubar'
 import WinterBanner from '../../components/Banner'
-import { AppContext } from '../../contexts/Appcontext'
 import ProductItem from '../../components/ProductItems'
 
-export default function HomeScreen() {
+export default function HomeScreen({navigation}) {
 
     const btnSeeall = () => {
         return (
-            <TouchableOpacity>
+            <TouchableOpacity
+                onPress={() => {
+                    navigation.navigate('Search')
+                }}
+            >
                 <Text style={styles.txtRecommen}>See all</Text>
             </TouchableOpacity>
         )
@@ -22,7 +25,6 @@ export default function HomeScreen() {
                 <Text style={styles.txtTitle}>Trendsetter</Text>
                 <TouchableOpacity><Image source={require('../../../assets/icons/cart_icon.png')} style={styles.cart} resizeMode='contain' /></TouchableOpacity>
             </View>
-            <Menubar />
             <ScrollView showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
             >
@@ -30,13 +32,14 @@ export default function HomeScreen() {
                 <View style={styles.recomment}>
                     <Text style={styles.txtRecommen}>Recommended for you</Text>
                     {btnSeeall()}
+
                 </View>
                 {/* Flatlist Product */}
                 <ProductItem />
                 <View style={styles.recomment}>
                     <Text style={styles.txtRecommen}>Shop By Category</Text>
                 </View>
-                <ProductItem />
+                <Menubar />
                 <View style={styles.recomment}>
                     <Text style={styles.txtRecommen}>Most Popular</Text>
                     {btnSeeall()}
@@ -51,6 +54,7 @@ export default function HomeScreen() {
                 <View style={styles.recomment}>
                     <Text style={styles.txtRecommen}>Featured Appareal</Text>
                     {btnSeeall()}
+
                 </View>
                 <ProductItem />
 
@@ -75,7 +79,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: "center",
         height: 40,
-        marginBottom:5,
+        marginBottom: 5,
     },
     txtTitle: {
         fontSize: 24,
@@ -91,6 +95,7 @@ const styles = StyleSheet.create({
     cart: {
         height: 35,
         width: 50,
+
     },
     input: {
         height: 40,
@@ -116,7 +121,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
         color: '#006340',
-        
+
 
     }
 });
