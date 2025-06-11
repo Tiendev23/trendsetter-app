@@ -1,23 +1,11 @@
 import { createContext, useState, ReactNode } from "react";
-
-// Định nghĩa kiểu dữ liệu cho User
-type User = {
-    __v: number,
-    _id: string;
-    createdAt: string;
-    email: string;
-    favorites: string[],
-    fullName: string;
-    password: string;
-    role: string;
-    updatedAt: string;
-    username: string;
-};
+import { User } from "../types";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Định nghĩa kiểu cho Context
 type AuthContextType = {
     user: User | null;
-    login: (userData: User) => void;
+    login: (userData: User, token: string) => void;
     logout: () => void;
 };
 
@@ -29,13 +17,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
 
     // Hàm đăng nhập
-    const login = (userData: User) => {
+    const login = async (userData: User, token: string) => {
         setUser(userData);
+        await AsyncStorage.setItem("token", token);
     };
 
     // Hàm đăng xuất
-    const logout = () => {
+    const logout = async () => {
         setUser(null);
+        await AsyncStorage.removeItem("token");
     };
 
     return (

@@ -1,17 +1,16 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image, ScrollView, useWindowDimensions } from 'react-native';
+import React, { useContext, useState } from 'react';
+import { View, Text, StyleSheet, Image, ScrollView, useWindowDimensions } from 'react-native';
 import AccountTabSection from '../../components/AccountTabSection';
 import CustomButton from '../../components/CustomButton';
-import { AppContext } from '../../contexts';
+import { Context } from '../../contexts/AuthContext';
+import { useAppDispatch } from '../../redux/hooks';
+import { refresh } from '../../redux/features/auth/loginSlice';
 
 export default function AccountScreen({ navigation }) {
-    const { user, setUser } = useContext(AppContext);
+    const { user, logout } = useContext(Context);
     const { height } = useWindowDimensions();
     const [contentHeight, setContentHeight] = useState(0);
-    useEffect(() => {
-        console.log('user tu context', user);
-    }, [user])
-
+    const dispatch = useAppDispatch();
 
     return (
         <View style={styles.screenContainer}>
@@ -20,7 +19,7 @@ export default function AccountScreen({ navigation }) {
                     <>
                         <View style={styles.userSection}>
                             <Image
-                                source={{ uri: '' }} // avatar
+                                source={{ uri: 'https://images-na.ssl-images-amazon.com/images/I/610Y2DFPlBL._RI_.jpg' }} // avatar
                                 height={100}
                                 style={styles.userAvatar}
                             />
@@ -63,7 +62,11 @@ export default function AccountScreen({ navigation }) {
                                 <View style={styles.menuWrapper}>
                                     <AccountTabSection
                                         title='Sign Out'
-                                        onPress={null}
+                                        onPress={() => {
+                                            dispatch(refresh());
+                                            logout();
+
+                                        }}
                                     />
                                 </View>
                             </View>
