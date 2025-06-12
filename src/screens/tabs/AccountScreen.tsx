@@ -34,38 +34,44 @@ export default function AccountScreen({ navigation }) {
                             >
                                 <View style={styles.menuWrapper}>
                                     <AccountTabSection
-                                        title='Profile'
+                                        title='Hồ sơ'
+                                        label='Profile'
                                         onPress={null}
                                     />
                                     <AccountTabSection
-                                        title='My Cart'
+                                        title='Giỏ hàng'
+                                        label='My Cart'
                                         onPress={null}
                                     />
                                     <AccountTabSection
-                                        title='Favorite'
+                                        title='Yêu thích'
+                                        label='Favorite'
                                         onPress={null}
                                     />
                                     <AccountTabSection
-                                        title='Orders'
+                                        title='Đơn hàng'
+                                        label='Orders'
                                         onPress={null}
                                     />
                                     <AccountTabSection
-                                        title='Wallet'
+                                        title='Ví'
+                                        label='Wallet'
                                         onPress={null}
                                     />
                                     <AccountTabSection
-                                        title='Settings'
+                                        title='Cài đặt'
+                                        label='Settings'
                                         onPress={null}
                                     />
                                 </View>
                                 <View style={styles.separatorLine} />
                                 <View style={styles.menuWrapper}>
                                     <AccountTabSection
-                                        title='Sign Out'
+                                        title='Đăng xuất'
+                                        label='Sign Out'
                                         onPress={() => {
                                             dispatch(refresh());
                                             logout();
-
                                         }}
                                     />
                                 </View>

@@ -27,7 +27,6 @@ export default function LoginScreen({ navigation, route }: { navigation: LoginNa
 
     useEffect(() => {
         if (status === 'succeeded') {
-            console.log('data Login', data);
             context.login(data.user, data.token);
 
             navigation.reset({
