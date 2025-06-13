@@ -5,13 +5,11 @@ import CustomButton from '../../components/CustomButton';
 import AuthScreenHeader from '../../components/AuthScreenHeader';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../redux/store';
 import { refresh, register } from '../../redux/features/auth/registerSlice';
 import { SignUpNav } from '../../navigation/NavigationTypes';
 import ErrorWarnBox from '../../components/ErrorWarnBox';
-import { validateEmail, validateFullName, validatePassword, validateUsername } from '../../utils/validation';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { validateEmail, validateFullName, validatePassword, validateUsername } from '../../utils/validation';
 
 export default function SignUpScreen({ navigation }: { navigation: SignUpNav }) {
     const [username, setUsername] = useState('');
