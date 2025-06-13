@@ -60,8 +60,7 @@ const styles = StyleSheet.create({
     secureIcon: {
         position: 'absolute',
         right: 14,
-        height: '100%',
-        verticalAlign: 'middle',
+        top: '25%',
         paddingHorizontal: 4,
     },
     infoText: {

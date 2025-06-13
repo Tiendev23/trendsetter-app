@@ -1,6 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, View } from 'react-native';
-import CustomDirectionButton from './CustomDirectionButton';
+import CustomDirectionButton from './DirectionButton';
 import { useNavigation } from '@react-navigation/native';
 
 export default function AuthScreenHeader() {
@@ -21,16 +21,19 @@ export default function AuthScreenHeader() {
 
 const styles = StyleSheet.create({
     headerContainer: {
-        gap: 15,
-        paddingVertical: 20,
+        marginBottom: 10,
+        backgroundColor: 'gray'
     },
     titleWrapper: {
         position: 'relative',
         alignItems: 'center',
+        paddingVertical: 15,
     },
     backButtonWrapper: {
         position: 'absolute',
         left: 18,
+        top: '50%',
+        transform: [{ translateY: -7 }],
     },
     titleText: {
         fontFamily: 'Raleway',

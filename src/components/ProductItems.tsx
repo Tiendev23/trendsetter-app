@@ -98,6 +98,8 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         borderWidth: 1,
         backgroundColor: "#E0E0E0"
+        borderWidth: 1,
+        backgroundColor: "#E0E0E0"
     },
     infoContainer: {
         padding: 8,

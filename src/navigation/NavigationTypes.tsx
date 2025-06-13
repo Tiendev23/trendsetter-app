@@ -1,5 +1,6 @@
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteProp } from '@react-navigation/native';
+import { Product } from '../types';
 
 // Danh sách màn hình
 export type AuthStackParamList = {
@@ -7,6 +8,7 @@ export type AuthStackParamList = {
     Login: { email?: string }; // Có thể nhận email từ bất kỳ màn hình nào
     SignUp: undefined;
     ForgotPassword: undefined;
+    ProductDetail: { product?: Product }
 };
 
 // Định nghĩa kiểu navigation, route cho từng màn hình
@@ -15,3 +17,5 @@ export type LoginNav = NativeStackNavigationProp<AuthStackParamList, 'Login'>;
 export type LoginRoute = RouteProp<AuthStackParamList, 'Login'>;
 export type SignUpNav = NativeStackNavigationProp<AuthStackParamList, 'SignUp'>;
 export type ForgotPassNav = NativeStackNavigationProp<AuthStackParamList, 'ForgotPassword'>;
+export type ProDetailNav = NativeStackNavigationProp<AuthStackParamList, 'ProductDetail'>;
+export type ProDetailRoute = RouteProp<AuthStackParamList, 'ProductDetail'>;
