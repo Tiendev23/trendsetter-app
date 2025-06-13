@@ -7,17 +7,17 @@ import ProductItem from '../../components/ProductItems'
 
 export default function HomeScreen({ navigation }) {
 
-    const btnSeeall = () => {
-        return (
-            <TouchableOpacity
-                onPress={() => {
-                    navigation.navigate('Search')
-                }}
-            >
-                <Text style={styles.txtRecommen}>See all</Text>
-            </TouchableOpacity>
-        )
-    }
+    // const btnSeeall = () => {
+    //     return (
+    //         <TouchableOpacity
+    //             onPress={() => {
+    //                 navigation.navigate('Search')
+    //             }}
+    //         >
+    //             <Text style={styles.txtRecommen}>See all</Text>
+    //         </TouchableOpacity>
+    //     )
+    // }
     return (
         <View style={styles.container}>
             <View style={styles.header}>

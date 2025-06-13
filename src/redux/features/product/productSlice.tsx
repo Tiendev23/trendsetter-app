@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import apiClient from '../../api/apiClient';
+import apiClient from '../../../api/apiClient';
 
 export const getAllProducts = createAsyncThunk(
     'products/getAll',
@@ -30,7 +30,7 @@ const productSlice = createSlice({
         items: [],
         loading: "idle",
         error: null,
-        brands:[],
+        brands: [],
         brandLoading: 'idle',
     },
     reducers: {}, // nếu cần xử lý thêm (xóa sp, v.v.)
@@ -46,7 +46,7 @@ const productSlice = createSlice({
             })
             .addCase(getAllProducts.rejected, (state, action) => {
                 state.loading = 'failed';
-                state.error = action.payload|| 'Đã xảy ra lỗi';
+                state.error = action.payload || 'Đã xảy ra lỗi';
             });
         builder
             .addCase(getBrand.pending, (state) => {
@@ -58,7 +58,7 @@ const productSlice = createSlice({
             })
             .addCase(getBrand.rejected, (state, action) => {
                 state.brandLoading = 'failed';
-                state.error = action.payload|| 'Đã xảy ra lỗi';
+                state.error = action.payload || 'Đã xảy ra lỗi';
             });
     },
 });
