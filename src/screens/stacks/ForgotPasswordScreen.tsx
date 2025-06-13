@@ -3,7 +3,7 @@ import { View, Text, Alert, StyleSheet } from 'react-native';
 // import { AuthContext } from '../../contexts/AuthContext';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
-import { validateEmail } from '../../utils/Validation';
+import { validateEmail } from '../../utils/validation';
 
 export default function ForgotPasswordScreen({ navigation }: any) {
     // const auth = useContext(AuthContext);

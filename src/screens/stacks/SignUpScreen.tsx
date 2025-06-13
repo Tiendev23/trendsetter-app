@@ -8,8 +8,8 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { refresh, register } from '../../redux/features/auth/registerSlice';
 import { SignUpNav } from '../../navigation/NavigationTypes';
 import ErrorWarnBox from '../../components/ErrorWarnBox';
-import { validateEmail, validateFullName, validatePassword, validateUsername } from '../../utils/Validation';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { validateEmail, validateFullName, validatePassword, validateUsername } from '../../utils/validation';
 
 export default function SignUpScreen({ navigation }: { navigation: SignUpNav }) {
     const [username, setUsername] = useState('');
