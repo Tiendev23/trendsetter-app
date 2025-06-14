@@ -17,30 +17,36 @@ export default function NotificationScreen({ navigation }) {
     <View style={styles.container}>
       {user ? (
         <ScrollView style={styles.container}>
-          <TouchableOpacity style={styles.tag}>
-            <View>
-              <Image
-                source={require("../../../assets/banner-quang-cao-giay-1.webp")}
-                style={{ width: 60, height: 60 }}
-              />
-            </View>
+          <View style={styles.divider2} />
 
-            <View style={styles.content}>
-              <Text style={styles.tieude}>
-                Introducing the New Message Center
-              </Text>
-              <Text
-                style={styles.message}
-                numberOfLines={expanded ? undefined : 2}
-                ellipsizeMode="tail"
-              >
-                Every StockX order status, release update, market change, and
+          {list.map((item, index) => (
+            <View key={index}>
+            <TouchableOpacity style={styles.tag} >
+              <View>
+                <Image source={item.img} style={{ width: 60, height: 60 }} />
+              </View>
+
+              <View style={styles.content}>
+                <Text style={styles.tieude}>
+                  {item.title}
+                  {/* Introducing the New Message Center */}
+                </Text>
+                <Text
+                  style={styles.message}
+                  numberOfLines={expanded ? undefined : 2}
+                  ellipsizeMode="tail"
+                >
+                  {item.nd}
+                  {/* Every StockX order status, release update, market change, and
                 more would be righ
-                you.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-              </Text>
+                you.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa */}
+                </Text>
+              </View>
+            </TouchableOpacity>
+            <View style={styles.divider} />
             </View>
-          </TouchableOpacity>
-          <View style={styles.divider} />
+          ))}
+          
         </ScrollView>
       ) : (
         <ScrollView style={styles.scroll}>
@@ -159,8 +165,23 @@ const styles = StyleSheet.create({
     color: "#999",
   },
   divider: {
+    marginHorizontal:35,
+    height: 1,
+    backgroundColor: "gray",
+  },
+  divider2: {
     height: 2,
     backgroundColor: "gray",
-    marginLeft: 60, // để căn lề giống như phần icon
   },
 });
+
+const list = [
+  { img: require('../../../assets/images/anh2.png'), 
+    title: 'Trung tâm thông báo', 
+    nd: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" },
+    { img: require('../../../assets/images/anh2.png'), 
+    title: 'Trung tâm thông báo', 
+    nd: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" },
+  
+  
+];
