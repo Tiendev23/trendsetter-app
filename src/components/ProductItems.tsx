@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '../redux/store';
 import { getAllProducts } from '../redux/features/product/productSlice';
 import { TabsNav } from '../navigation/NavigationTypes';
+import { formatCurrency } from '../utils/formatForm';
 
 const ProductItem = ({ navigation }) => {
     const dispatch = useDispatch<AppDispatch>();
@@ -48,7 +49,7 @@ const ProductItem = ({ navigation }) => {
                 <View style={styles.infoContainer}>
                     <Text numberOfLines={1} style={styles.name}>{item.name}</Text>
                     <View style={styles.priceContainer}>
-                        <Text style={styles.price}>${item.price}</Text>
+                        <Text style={styles.price}>{formatCurrency(item.price)}</Text>
                         <View style={styles.shipTag}>
                             <Ionicons name="rocket-outline" size={14} color="#000" />
                             <Text style={styles.shipText}>Xpress Ship</Text>
