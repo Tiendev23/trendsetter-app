@@ -1,6 +1,19 @@
 import React, { createContext, useState, ReactNode } from 'react';
 
-// Kiểu dữ liệu cho từng Brand
+// Định nghĩa kiểu cho User
+type User = {
+    _id: string;
+    username: string;
+    password: string;
+    email: string;
+    fullname: string;
+    role: string;
+    favorites:string[];
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
+};
+// Định nghĩa kiểu cho Brand
 type Brand = {
     id: number;
     name: string;
@@ -24,6 +37,7 @@ type AppContextType = {
 
 // Giá trị mặc định (dummy)
 const defaultValue: AppContextType = {
+    listbrand: [],
     selectedCategory: 1,
     setSelectedCategory: () => { },
     listbrand: [],
