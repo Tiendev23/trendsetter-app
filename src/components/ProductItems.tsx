@@ -1,41 +1,42 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList,ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useContext, useEffect } from 'react';
 import { DataContext } from '../contexts/DataContext';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllProducts } from '../redux/slices/productSlice';
+// import { getAllProducts } from '../redux/slices/productSlice';
 import { RootState, AppDispatch } from '../redux/store';
+import { getAllProducts } from '../redux/features/product/productSlice';
 
 const ProductItem = () => {
-const dispatch = useDispatch<AppDispatch>();
-  const { items, loading, error } = useSelector((state: RootState) => state.products);
- 
-  useEffect(() => {
-    dispatch(getAllProducts());
-  }, [dispatch]);
+    const dispatch = useDispatch<AppDispatch>();
+    const { items, loading, error } = useSelector((state: RootState) => state.products);
 
-  if (loading === 'loading') {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" color="#006340" />
-        <Text>Đang tải sản phẩm...</Text>
-      </View>
-    );
-  }
+    useEffect(() => {
+        dispatch(getAllProducts());
+    }, [dispatch]);
 
-  if (loading === 'failed') {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text style={{ color: 'red' }}>Lỗi: {error}</Text>
-      </View>
-    );
-  }
+    if (loading === 'loading') {
+        return (
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <ActivityIndicator size="large" color="#006340" />
+                <Text>Đang tải sản phẩm...</Text>
+            </View>
+        );
+    }
+
+    if (loading === 'failed') {
+        return (
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <Text style={{ color: 'red' }}>Lỗi: {error}</Text>
+            </View>
+        );
+    }
     const { DataPr } = useContext(DataContext);
     const renderProduct = ({ item }) => {
 
         return (
             <TouchableOpacity style={styles.card}>
-                <Image source={{uri:item.image}} style={styles.image} />
+                <Image source={{ uri: item.image }} style={styles.image} />
                 <TouchableOpacity style={styles.heartIcon}>
                     <Ionicons name="heart-outline" size={24} color="white" />
                 </TouchableOpacity>
@@ -52,7 +53,7 @@ const dispatch = useDispatch<AppDispatch>();
 
                 </View>
             </TouchableOpacity>
-            
+
         )
     }
 
@@ -62,7 +63,7 @@ const dispatch = useDispatch<AppDispatch>();
                 data={items}
                 renderItem={renderProduct}
                 keyExtractor={(item) => item._id}
-                
+
                 horizontal
                 showsHorizontalScrollIndicator={false}
             />
@@ -82,7 +83,7 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         position: 'relative',
         boxSizing: 'border-box',
-        
+
     },
     image: {
         width: '100%',
@@ -106,8 +107,8 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: '500',
         color: '#333',
-        width:100,
-        
+        width: 100,
+
     },
     price: {
         fontSize: 14,
