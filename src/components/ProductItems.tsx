@@ -6,8 +6,9 @@ import { useDispatch, useSelector } from 'react-redux';
 // import { getAllProducts } from '../redux/slices/productSlice';
 import { RootState, AppDispatch } from '../redux/store';
 import { getAllProducts } from '../redux/features/product/productSlice';
+import { TabsNav } from '../navigation/NavigationTypes';
 
-const ProductItem = () => {
+const ProductItem = ({ navigation }) => {
     const dispatch = useDispatch<AppDispatch>();
     const { items, loading, error } = useSelector((state: RootState) => state.products);
 
@@ -35,7 +36,10 @@ const ProductItem = () => {
     const renderProduct = ({ item }) => {
 
         return (
-            <TouchableOpacity style={styles.card}>
+            <TouchableOpacity
+                style={styles.card}
+                onPress={() => navigation.navigate('ProductDetail', { item })}
+            >
                 <Image source={{ uri: item.image }} style={styles.image} />
                 <TouchableOpacity style={styles.heartIcon}>
                     <Ionicons name="heart-outline" size={24} color="white" />

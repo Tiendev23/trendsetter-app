@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, Image, View, ImageSourcePropType } from 'react-native';
-import CustomDirectionButton from './DirectionButton';
+import CustomDirectionButton from './ChevronButton';
 
 type Props = {
     title: string;

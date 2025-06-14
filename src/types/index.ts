@@ -1,2 +1,4 @@
 export * from "./user";
-export * from "./Product"
+export * from "./category";
+export * from "./brand";
+export * from "./product";
