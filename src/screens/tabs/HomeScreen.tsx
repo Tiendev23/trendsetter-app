@@ -7,7 +7,7 @@ import ProductItem from '../../components/ProductItems'
 import { HomeNav, TabsNav } from '../../navigation/NavigationTypes'
 import { useNavigation } from '@react-navigation/native'
 
-export default function HomeScreen() {
+export default function HomeScreen({navigation}) {
     const tabNav = useNavigation<HomeNav>();
     const stackNav = useNavigation<TabsNav>();
 
@@ -27,7 +27,11 @@ export default function HomeScreen() {
             <View style={styles.header}>
                 <TouchableOpacity><Image source={require('../../../assets/images/fb.png')} style={styles.logo} resizeMode='contain' /></TouchableOpacity>
                 <Text style={styles.txtTitle}>Trendsetter</Text>
-                <TouchableOpacity><Image source={require('../../../assets/icons/cart_icon.png')} style={styles.cart} resizeMode='contain' /></TouchableOpacity>
+                <TouchableOpacity
+                onPress={()=>{
+                    navigation.navigate('Cart')
+                }}
+                ><Image source={require('../../../assets/icons/cart_icon.png')} style={styles.cart} resizeMode='contain' /></TouchableOpacity>
             </View>
             <ScrollView showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
@@ -49,7 +53,7 @@ export default function HomeScreen() {
                 <View style={styles.recommend}>
                     <Text style={styles.textRecommend}>Shop By Category</Text>
                 </View>
-                <ProductItem navigation={stackNav} />
+                <Menubar />
                 <View style={styles.recommend}>
                     <Text style={styles.textRecommend}>Most Popular</Text>
                     <TouchableOpacity
