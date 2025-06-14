@@ -7,7 +7,7 @@ import ProductItem from '../../components/ProductItems'
 import { HomeNav, TabsNav } from '../../navigation/NavigationTypes'
 import { useNavigation } from '@react-navigation/native'
 
-export default function HomeScreen() {
+export default function HomeScreen({navigation}) {
     const tabNav = useNavigation<HomeNav>();
     const stackNav = useNavigation<TabsNav>();
 
@@ -53,7 +53,7 @@ export default function HomeScreen() {
                 <View style={styles.recommend}>
                     <Text style={styles.textRecommend}>Shop By Category</Text>
                 </View>
-                <ProductItem navigation={stackNav} />
+                <Menubar />
                 <View style={styles.recommend}>
                     <Text style={styles.textRecommend}>Most Popular</Text>
                     <TouchableOpacity
