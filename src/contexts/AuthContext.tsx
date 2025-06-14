@@ -1,107 +1,36 @@
-import React, { createContext, useState, ReactNode } from 'react';
+import { createContext, useState, ReactNode } from "react";
+import { User } from "../types";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-// Kiểu dữ liệu cho từng Brand
-type Brand = {
-    id: number;
-    name: string;
+// Định nghĩa kiểu cho Context
+type AuthContextType = {
+    user: User | null;
+    login: (userData: User, token: string) => void;
+    logout: () => void;
 };
 
-// Kiểu dữ liệu cho sản phẩm
-type Product = {
-    id: string;
-    name: string;
-    price: number;
-    image: any; // bạn có thể dùng `ImageSourcePropType` nếu dùng với React Native
-};
+// Khởi tạo Context
+export const Context = createContext<AuthContextType | undefined>(undefined);
 
-// Kiểu cho context
-type AppContextType = {
-    selectedCategory: number;
-    setSelectedCategory: (value: number) => void;
-    listbrand: Brand[];
-    DataPr: Product[];
-};
+// Component Provider
+export function AuthProvider({ children }: { children: ReactNode }) {
+    const [user, setUser] = useState<User | null>(null);
 
-// Giá trị mặc định (dummy)
-const defaultValue: AppContextType = {
-    selectedCategory: 1,
-    setSelectedCategory: () => { },
-    listbrand: [],
-    DataPr: [],
-};
+    // Hàm đăng nhập
+    const login = async (userData: User, token: string) => {
+        setUser(userData);
+        await AsyncStorage.setItem("token", token);
+    };
 
-// Tạo Context có kiểu dữ liệu rõ ràng
-const AppContext = createContext<AppContextType>(defaultValue);
-
-// Props cho AppProvider
-type AppProviderProps = {
-    children: ReactNode;
-};
-
-const AppProvider = ({ children }: AppProviderProps) => {
-    const [selectedCategory, setSelectedCategory] = useState<number>(1);
-
-    const listbrand: Brand[] = [
-        { id: 1, name: 'Apple' },
-        { id: 2, name: 'Samsung' },
-        { id: 3, name: 'Xiaomi' },
-        { id: 4, name: 'Huawei' },
-        { id: 5, name: 'Oppo' },
-        { id: 6, name: 'Vivo' },
-        { id: 7, name: 'Google' },
-    ];
-
-    const DataPr: Product[] = [
-        {
-            id: '1',
-            name: 'Watch',
-            price: 40,
-            image: require('../../assets/banner-quang-cao-giay-1.webp'),
-        },
-        {
-            id: '2',
-            name: 'Sneaker',
-            price: 60,
-            image: require('../../assets/banner-quang-cao-giay-1.webp'),
-        },
-        {
-            id: '3',
-            name: 'Phone',
-            price: 80,
-            image: require('../../assets/banner-quang-cao-giay-1.webp'),
-        },
-        {
-            id: '4',
-            name: 'Phone',
-            price: 80,
-            image: require('../../assets/banner-quang-cao-giay-1.webp'),
-        },
-        {
-            id: '5',
-            name: 'Phone',
-            price: 80,
-            image: require('../../assets/banner-quang-cao-giay-1.webp'),
-        },
-        {
-            id: '6',
-            name: 'Phone',
-            price: 80,
-            image: require('../../assets/banner-quang-cao-giay-1.webp'),
-        },
-    ];
+    // Hàm đăng xuất
+    const logout = async () => {
+        setUser(null);
+        await AsyncStorage.removeItem("token");
+    };
 
     return (
-        <AppContext.Provider
-            value={{
-                listbrand,
-                selectedCategory,
-                setSelectedCategory,
-                DataPr,
-            }}
-        >
+        <Context.Provider value={{ user, login, logout }}>
             {children}
-        </AppContext.Provider>
+        </Context.Provider>
     );
-};
-
-export { AppProvider, AppContext };
+}

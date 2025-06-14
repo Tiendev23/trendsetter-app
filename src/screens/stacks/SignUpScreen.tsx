@@ -1,60 +1,110 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { View, Text, Alert, StyleSheet, TouchableOpacity, Image } from 'react-native';
-// import { AuthContext } from '../contexts/AuthContext';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
-import { validateEmail, validatePassword } from '../../utils/validation';
-import CustomDirectionButton from '../../components/CustomDirectionButton';
 import AuthScreenHeader from '../../components/AuthScreenHeader';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import { refresh, register } from '../../redux/features/auth/registerSlice';
+import { SignUpNav } from '../../navigation/NavigationTypes';
+import ErrorWarnBox from '../../components/ErrorWarnBox';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { validateEmail, validateFullName, validatePassword, validateUsername } from '../../utils/validation';
 
-export default function SignUpScreen({ navigation }: any) {
-    // const auth = useContext(AuthContext);
-    const [firstName, setFirstName] = useState('')
-    const [lastName, setLastName] = useState('')
+export default function SignUpScreen({ navigation }: { navigation: SignUpNav }) {
+    const [username, setUsername] = useState('');
+    const [fullName, setFullName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    // if (!auth) return null;
+    const [errorMess, setErrorMess] = useState('');
 
-    // const onSignUp = () => {
-    //   if (!validateEmail(email)) {
-    //     Alert.alert('Lỗi', 'Email không hợp lệ');
-    //     return;
-    //   }
-    //   if (!validatePassword(password)) {
-    //     Alert.alert('Lỗi', 'Mật khẩu phải từ 6 ký tự trở lên');
-    //     return;
-    //   }
-    //   if (auth.register(email, password)) {
-    //     Alert.alert('Thành công', 'Đăng ký thành công!');
-    //     navigation.navigate('Login');
-    //   } else {
-    //     Alert.alert('Lỗi', 'Email đã được đăng ký');
-    //   }
-    // };
+    const dispatch = useAppDispatch();
+    const { data, status, error } = useAppSelector(state => state.register);
+    console.log('>>>>>>>>>>>>\n', navigation.getState().routes);
+    const handleRegister = () => {
+        if (!validateFullName(fullName)) {
+            setErrorMess('Họ và tên không hợp lệ');
+            return;
+        }
+        if (!validateUsername(username)) {
+            setErrorMess('Tên đăng nhập không hợp lệ');
+            return;
+        }
+        if (!validateEmail(email)) {
+            setErrorMess('Email không đúng định dạng');
+            return;
+        }
+        if (!validatePassword(password)) {
+            setErrorMess('Mật khẩu không hợp lệ');
+            return;
+        }
+
+        dispatch(register({
+            username, password, email, fullName, role: 'customer'
+        }))
+    }
+
+    useEffect(() => {
+        if (status === 'succeeded') {
+            console.log('data SignUp', data);
+            navigation.reset({
+                routes: [{
+                    name: 'Login',
+                    params: { email: data.email }
+                }],
+            });
+            // navigation.navigate({ name: 'Login', params: { email: data.email } });
+        }
+        if (status === 'failed') {
+            console.log('Đăng ký thất bại:', error);
+            setTimeout(() => {
+                setErrorMess('');
+                dispatch(refresh());
+            }, 5000);
+        }
+    }, [status])
 
     return (
         <View style={styles.screenContainer}>
             <AuthScreenHeader />
 
             <View style={styles.contentContainer}>
-                <Text style={styles.title}>Đăng ký</Text>
-                <CustomInput placeholder="Tên" value={firstName} onChangeText={setFirstName} />
-                <CustomInput placeholder="Họ" value={lastName} onChangeText={setLastName} />
-                <CustomInput placeholder="Địa chỉ email" value={email} onChangeText={setEmail} />
-                <CustomInput
-                    placeholder="Mật khẩu"
-                    value={password}
-                    onChangeText={setPassword}
-                    type='password'
-                    secureTextEntry
-                />
-                <Text style={styles.textDescription}>
-                    Ít nhất 8 ký tự, 1 chữ cái viết hoa, 1 số và 1 ký hiệu
-                </Text>
+                <ErrorWarnBox content={errorMess} />
+
+                <Text style={styles.title}>Đăng Ký</Text>
+                <View>
+                    <CustomInput
+                        placeholder="Họ và tên"
+                        value={fullName}
+                        onChangeText={setFullName}
+                    />
+                </View>
+                <View>
+                    <CustomInput
+                        placeholder="Tên đăng nhập"
+                        value={username}
+                        onChangeText={setUsername}
+                        infoText='ít nhất 3 ký tự, không chứa ký tự đặc biệt'
+                    />
+                </View>
+                <View>
+                    <CustomInput
+                        placeholder="Địa chỉ email"
+                        value={email}
+                        onChangeText={setEmail}
+                    />
+                </View>
+                <View>
+                    <CustomInput
+                        placeholder="Mật khẩu"
+                        value={password}
+                        onChangeText={setPassword}
+                        type='password'
+                        infoText={"Tối thiểu 8 kí tự,\ngồm chữ thường, chữ hoa, số và ký tự đặc biệt"}
+                    />
+                </View>
                 <View style={styles.buttonWrapper}>
-                    <CustomButton title="Đăng ký" onPress={null} />
+                    <CustomButton title="Đăng ký" onPress={handleRegister} />
                 </View>
 
                 <View style={styles.socialContainer}>
@@ -82,7 +132,13 @@ export default function SignUpScreen({ navigation }: any) {
                 </View>
                 <Text style={styles.textDescription}>
                     Bạn đã có tài khoản?{' '}
-                    <Text style={styles.link} onPress={() => navigation.navigate('Login')}>
+                    <Text style={styles.link}
+                        onPress={() => {
+                            navigation.reset({
+                                routes: [{ name: 'Login' }],
+                            });
+                        }}
+                    >
                         Đăng nhập
                     </Text>
                 </Text>
@@ -98,13 +154,13 @@ const styles = StyleSheet.create({
     },
     contentContainer: {
         flex: 1,
-        paddingHorizontal: '8%',
+        paddingHorizontal: 30,
         paddingTop: 10,
         gap: 18
     },
     title: {
         fontFamily: 'Raleway',
-        fontWeight: 'medium',
+        fontWeight: '700',
         fontSize: 16,
         color: '#1A2530',
     },

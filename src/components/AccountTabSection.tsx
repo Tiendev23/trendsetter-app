@@ -1,14 +1,15 @@
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, Image, View, ImageSourcePropType } from 'react-native';
-import CustomDirectionButton from './CustomDirectionButton';
+import CustomDirectionButton from './ChevronButton';
 
 type Props = {
     title: string;
+    label: string;
     onPress: () => void;
 };
 
-export default function AccountTabSection({ title, onPress }: Props) {
+export default function AccountTabSection({ title, label, onPress }: Props) {
 
     const iconMap: Record<string, ImageSourcePropType> = {
         profile: require('../../assets/icons/profile_icon.png'),
@@ -31,11 +32,11 @@ export default function AccountTabSection({ title, onPress }: Props) {
             onPress={onPress}
         >
             <View style={styles.wrapper}>
-                <Image source={getImageSource(title)} style={styles.icon} />
+                <Image source={getImageSource(label)} style={styles.icon} />
                 <Text style={styles.title}>{title}</Text>
             </View>
             {
-                title === 'Sign Out' ? null :
+                label === 'Sign Out' ? null :
                     <CustomDirectionButton
                         direction='forward'
                         onPress={onPress}
