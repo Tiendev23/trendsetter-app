@@ -21,32 +21,31 @@ export default function NotificationScreen({ navigation }) {
 
           {list.map((item, index) => (
             <View key={index}>
-            <TouchableOpacity style={styles.tag} >
-              <View>
-                <Image source={item.img} style={{ width: 60, height: 60 }} />
-              </View>
+              <TouchableOpacity style={styles.tag}>
+                <View>
+                  <Image source={item.img} style={{ width: 60, height: 60 }} />
+                </View>
 
-              <View style={styles.content}>
-                <Text style={styles.tieude}>
-                  {item.title}
-                  {/* Introducing the New Message Center */}
-                </Text>
-                <Text
-                  style={styles.message}
-                  numberOfLines={expanded ? undefined : 2}
-                  ellipsizeMode="tail"
-                >
-                  {item.nd}
-                  {/* Every StockX order status, release update, market change, and
+                <View style={styles.content}>
+                  <Text style={styles.tieude}>
+                    {item.title}
+                    {/* Introducing the New Message Center */}
+                  </Text>
+                  <Text
+                    style={styles.message}
+                    numberOfLines={expanded ? undefined : 2}
+                    ellipsizeMode="tail"
+                  >
+                    {item.nd}
+                    {/* Every StockX order status, release update, market change, and
                 more would be righ
                 you.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa */}
-                </Text>
-              </View>
-            </TouchableOpacity>
-            <View style={styles.divider} />
+                  </Text>
+                </View>
+              </TouchableOpacity>
+              <View style={styles.divider} />
             </View>
           ))}
-          
         </ScrollView>
       ) : (
         <ScrollView style={styles.scroll}>
@@ -67,7 +66,10 @@ export default function NotificationScreen({ navigation }) {
               <Text style={styles.loginText}>Login</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.signup}>
+            <TouchableOpacity
+              style={styles.signup}
+              onPress={() => navigation.navigate("SignUp")}
+            >
               <Text style={styles.signupText}>Sign Up</Text>
             </TouchableOpacity>
           </View>
@@ -165,7 +167,7 @@ const styles = StyleSheet.create({
     color: "#999",
   },
   divider: {
-    marginHorizontal:35,
+    marginHorizontal: 35,
     height: 1,
     backgroundColor: "gray",
   },
