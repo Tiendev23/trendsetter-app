@@ -1,52 +1,99 @@
-import { FlatList, StyleSheet, Text, TextInput, View, ScrollView } from 'react-native'
+import { FlatList, StyleSheet, Text, TextInput, View, ScrollView, TouchableOpacity, Image } from 'react-native'
 import React, { useContext } from 'react'
 import SearchBar from '../../components/SearchBar'
 import Menubar from '../../components/Menubar'
 import WinterBanner from '../../components/Banner'
-import { AppContext } from '../../contexts/Appcontext'
 import ProductItem from '../../components/ProductItems'
+import { HomeNav, TabsNav } from '../../navigation/NavigationTypes'
+import { useNavigation } from '@react-navigation/native'
 
-export default function HomeScreen() {
+export default function HomeScreen({navigation}) {
+    const tabNav = useNavigation<HomeNav>();
+    const stackNav = useNavigation<TabsNav>();
+
+    // const btnSeeall = () => {
+    //     return (
+    //         <TouchableOpacity
+    //             onPress={() => {
+    //                 navigation.navigate('Search')
+    //             }}
+    //         >
+    //             <Text style={styles.txtRecommen}>See all</Text>
+    //         </TouchableOpacity>
+    //     )
+    // }
     return (
         <View style={styles.container}>
-            <SearchBar />
-            <Menubar />
+            <View style={styles.header}>
+                <TouchableOpacity><Image source={require('../../../assets/images/fb.png')} style={styles.logo} resizeMode='contain' /></TouchableOpacity>
+                <Text style={styles.txtTitle}>Trendsetter</Text>
+                <TouchableOpacity
+                onPress={()=>{
+                    navigation.navigate('Cart')
+                }}
+                ><Image source={require('../../../assets/icons/cart_icon.png')} style={styles.cart} resizeMode='contain' /></TouchableOpacity>
+            </View>
             <ScrollView showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
             >
                 <WinterBanner />
-                <View style={styles.recomment}>
-                    <Text style={styles.txtRecommen}>Recommended for you</Text>
-                    <Text style={styles.txtRecommen}>See all</Text>
+                <View style={styles.recommend}>
+                    <Text style={styles.textRecommend}>Recommended for you</Text>
+                    <TouchableOpacity
+                        onPress={() => {
+                            tabNav.navigate('Search')
+                        }}
+                    >
+                        <Text style={styles.textRecommend}>See all</Text>
+                    </TouchableOpacity>
                 </View>
                 {/* Flatlist Product */}
-                <ProductItem />
-                <View style={styles.recomment}>
-                    <Text style={styles.txtRecommen}>Shop By Category</Text>
+                <ProductItem navigation={stackNav} />
+
+                <View style={styles.recommend}>
+                    <Text style={styles.textRecommend}>Shop By Category</Text>
                 </View>
-                <ProductItem />
-                <View style={styles.recomment}>
-                    <Text style={styles.txtRecommen}>Most Popular</Text>
-                    <Text style={styles.txtRecommen}>See all</Text>
+                <Menubar />
+                <View style={styles.recommend}>
+                    <Text style={styles.textRecommend}>Most Popular</Text>
+                    <TouchableOpacity
+                        onPress={() => {
+                            tabNav.navigate('Search')
+                        }}
+                    >
+                        <Text style={styles.textRecommend}>See all</Text>
+                    </TouchableOpacity>
                 </View>
-                <ProductItem />
-                <View style={styles.recomment}>
-                    <Text style={styles.txtRecommen}>Featured Appareal</Text>
-                    <Text style={styles.txtRecommen}>See all</Text>
+                <ProductItem navigation={stackNav} />
+                <View style={styles.recommend}>
+                    <Text style={styles.textRecommend}>Featured Appareal</Text>
+                    <TouchableOpacity
+                        onPress={() => {
+                            tabNav.navigate('Search')
+                        }}
+                    >
+                        <Text style={styles.textRecommend}>See all</Text>
+                    </TouchableOpacity>
                 </View>
-                <ProductItem />
+                <ProductItem navigation={stackNav} />
                 <WinterBanner />
-                <View style={styles.recomment}>
-                    <Text style={styles.txtRecommen}>Featured Appareal</Text>
-                    <Text style={styles.txtRecommen}>See all</Text>
+                <View style={styles.recommend}>
+                    <Text style={styles.textRecommend}>Featured Appareal</Text>
+                    <TouchableOpacity
+                        onPress={() => {
+                            tabNav.navigate('Search')
+                        }}
+                    >
+                        <Text style={styles.textRecommend}>See all</Text>
+                    </TouchableOpacity>
                 </View>
-                <ProductItem />
+                <ProductItem navigation={stackNav} />
 
 
-            </ScrollView>
+            </ScrollView >
 
 
-        </View>
+        </View >
     )
 }
 
@@ -54,11 +101,30 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
         boxSizing: 'border-box',
         padding: 10,
-        backgroundColor:'#fff'
+        backgroundColor: '#fff'
+    },
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: "center",
+        height: 40,
+        marginBottom: 5,
+    },
+    txtTitle: {
+        fontSize: 24,
+        color: '#006340',
+        fontWeight: 'bold',
+        fontStyle: 'italic',
+    },
+    logo: {
+        height: 35,
+        width: 50,
+    },
+    cart: {
+        height: 35,
+        width: 50,
     },
     input: {
         height: 40,
@@ -73,16 +139,15 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: '#ccc'
     },
-    recomment: {
+    recommend: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginHorizontal: 10,
-        marginTop: 10
-
+        marginTop: 10,
     },
-    txtRecommen: {
+    textRecommend: {
         fontSize: 16,
         fontWeight: 'bold',
-        color: 'Black',
+        color: '#006340',
     }
 });
