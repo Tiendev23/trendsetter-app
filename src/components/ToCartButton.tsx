@@ -1,12 +1,12 @@
 import React, { useContext } from 'react';
 import { TouchableOpacity, Text, StyleSheet, View } from 'react-native';
 import Feather from '@expo/vector-icons/Feather';
-import { Context } from '../contexts/AuthContext';
+import { AuthContext } from '../contexts/AuthContext';
 
 
 export default function ToCartButton({ navigation }) {
 
-    const { user } = useContext(Context)
+    const { user } = useContext(AuthContext)
     return (
         <TouchableOpacity
             style={{

@@ -2,12 +2,12 @@ import React, { useContext, useState } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, useWindowDimensions } from 'react-native';
 import AccountTabSection from '../../components/AccountTabSection';
 import CustomButton from '../../components/CustomButton';
-import { Context } from '../../contexts/AuthContext';
+import { AuthContext } from '../../contexts/AuthContext';
 import { useAppDispatch } from '../../redux/hooks';
 import { refresh } from '../../redux/features/auth/loginSlice';
 
 export default function AccountScreen({ navigation }) {
-    const { user, logout } = useContext(Context);
+    const { user, logout } = useContext(AuthContext);
     const { height } = useWindowDimensions();
     const [contentHeight, setContentHeight] = useState(0);
     const dispatch = useAppDispatch();

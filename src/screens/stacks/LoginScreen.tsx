@@ -6,7 +6,7 @@ import AuthScreenHeader from '../../components/AuthScreenHeader';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { login, refresh } from '../../redux/features/auth/loginSlice';
-import { Context } from '../../contexts/AuthContext';
+import { AuthContext } from '../../contexts/AuthContext';
 import { LoginNav, LoginRoute } from '../../navigation/NavigationTypes';
 import ErrorWarnBox from '../../components/ErrorWarnBox';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -17,7 +17,7 @@ export default function LoginScreen({ navigation, route }: { navigation: LoginNa
     const [password, setPassword] = useState('');
     const [errorMess, setErrorMess] = useState('');
 
-    const context = useContext(Context);
+    const context = useContext(AuthContext);
     const dispatch = useAppDispatch();
     const { data, status, error } = useAppSelector(state => state.auth);
 
