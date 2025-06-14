@@ -19,5 +19,8 @@ export default function App() {
                 </ContextProvider>
             </Provider>
         </SafeAreaProvider>
+
+        
+    
     );
 }
