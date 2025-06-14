@@ -6,11 +6,11 @@ export type Product = {
     name: string;
     price: number;
     category: Category;
-    brand: Brand;
-    image: string;
+    brand?: Brand;
+    image?: string;
     banner?: string;
     description?: string;
-    sizes: string[];
-    colors: string[];
+    sizes?: string[];
+    colors?: string[];
     __v: number;
 };
