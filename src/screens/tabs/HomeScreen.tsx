@@ -23,7 +23,11 @@ export default function HomeScreen({navigation}) {
             <View style={styles.header}>
                 <TouchableOpacity><Image source={require('../../../assets/images/fb.png')} style={styles.logo} resizeMode='contain' /></TouchableOpacity>
                 <Text style={styles.txtTitle}>Trendsetter</Text>
-                <TouchableOpacity><Image source={require('../../../assets/icons/cart_icon.png')} style={styles.cart} resizeMode='contain' /></TouchableOpacity>
+                <TouchableOpacity
+                onPress={()=>{
+                    navigation.navigate('Cart')
+                }}
+                ><Image source={require('../../../assets/icons/cart_icon.png')} style={styles.cart} resizeMode='contain' /></TouchableOpacity>
             </View>
             <ScrollView showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
