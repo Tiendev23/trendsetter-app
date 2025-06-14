@@ -4,8 +4,12 @@ import SearchBar from '../../components/SearchBar'
 import Menubar from '../../components/Menubar'
 import WinterBanner from '../../components/Banner'
 import ProductItem from '../../components/ProductItems'
+import { HomeNav, TabsNav } from '../../navigation/NavigationTypes'
+import { useNavigation } from '@react-navigation/native'
 
-export default function HomeScreen({ navigation }) {
+export default function HomeScreen() {
+    const tabNav = useNavigation<HomeNav>();
+    const stackNav = useNavigation<TabsNav>();
 
     // const btnSeeall = () => {
     //     return (
@@ -37,52 +41,53 @@ export default function HomeScreen({ navigation }) {
                     <Text style={styles.textRecommend}>Recommended for you</Text>
                     <TouchableOpacity
                         onPress={() => {
-                            navigation.navigate('Search')
+                            tabNav.navigate('Search')
                         }}
                     >
                         <Text style={styles.textRecommend}>See all</Text>
                     </TouchableOpacity>
                 </View>
                 {/* Flatlist Product */}
-                <ProductItem />
+                <ProductItem navigation={stackNav} />
+
                 <View style={styles.recommend}>
                     <Text style={styles.textRecommend}>Shop By Category</Text>
                 </View>
-                <ProductItem />
+                <ProductItem navigation={stackNav} />
                 <View style={styles.recommend}>
                     <Text style={styles.textRecommend}>Most Popular</Text>
                     <TouchableOpacity
                         onPress={() => {
-                            navigation.navigate('Search')
+                            tabNav.navigate('Search')
                         }}
                     >
                         <Text style={styles.textRecommend}>See all</Text>
                     </TouchableOpacity>
                 </View>
-                <ProductItem />
+                <ProductItem navigation={stackNav} />
                 <View style={styles.recommend}>
                     <Text style={styles.textRecommend}>Featured Appareal</Text>
                     <TouchableOpacity
                         onPress={() => {
-                            navigation.navigate('Search')
+                            tabNav.navigate('Search')
                         }}
                     >
                         <Text style={styles.textRecommend}>See all</Text>
                     </TouchableOpacity>
                 </View>
-                <ProductItem />
+                <ProductItem navigation={stackNav} />
                 <WinterBanner />
                 <View style={styles.recommend}>
                     <Text style={styles.textRecommend}>Featured Appareal</Text>
                     <TouchableOpacity
                         onPress={() => {
-                            navigation.navigate('Search')
+                            tabNav.navigate('Search')
                         }}
                     >
                         <Text style={styles.textRecommend}>See all</Text>
                     </TouchableOpacity>
                 </View>
-                <ProductItem />
+                <ProductItem navigation={stackNav} />
 
 
             </ScrollView >
@@ -100,7 +105,7 @@ const styles = StyleSheet.create({
         padding: 10,
         backgroundColor: '#fff'
     },
-        header: {
+    header: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: "center",

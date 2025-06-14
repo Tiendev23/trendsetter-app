@@ -1,6 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, View } from 'react-native';
-import CustomDirectionButton from './DirectionButton';
+import CustomDirectionButton from './ChevronButton';
 import { useNavigation } from '@react-navigation/native';
 
 export default function AuthScreenHeader() {

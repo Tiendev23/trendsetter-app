@@ -1,26 +1,15 @@
-import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { ProDetailNav } from "../../navigation/NavigationTypes";
-import CustomDirectionButton from "../../components/DirectionButton";
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ProDetailNav, ProDetailRoute } from "../../navigation/NavigationTypes";
+import CustomDirectionButton from "../../components/ChevronButton";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
 import CustomButton from "../../components/CustomButton";
 import ReviewForm from "../../components/ReviewForm";
+import ToCartButton from "../../components/ToCartButton";
 
+export default function ProductDetail({ navigation, route }: { navigation: ProDetailNav, route: ProDetailRoute }) {
+    const product = route.params?.item;
 
-export default function ProductDetail({ navigation }: { navigation: ProDetailNav }) {
-    const [product, setProduct] = useState({
-        _id: "683fea03ba6f7bc4e44be69e",
-        name: "Giày Thể Thao Nam",
-        price: 299000,
-        category: "Giày thể thao",
-        brand: "Biti's Hunter",
-        image: 'https://agiay.vn/wp-content/uploads/2023/02/giay_the_thao_nam_AG0205-6.jpg',
-        banner: null,
-        description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora quibusdam ipsam enim eum quo corrupti? Autem repellendus aut sed dolorum tempora est. Deleniti maxime expedita, ipsam cumque corporis aliquid aperiam.",
-        sizes: ["S", "M", "L", "XL", "XXL"],
-        colors: ["Đen"],
-        __v: 0
-    })
     const formatCurrency = (amount: number) => {
         return new Intl.NumberFormat("vi-VN", {
             style: "currency",
@@ -36,87 +25,46 @@ export default function ProductDetail({ navigation }: { navigation: ProDetailNav
     }, [selectedSize])
 
     return (
-        <View style={{
-            backgroundColor: '#FFF',
-            flex: 1,
-        }}>
+        <View style={styles.container}>
             {/* header */}
             <View>
-                <View style={{
-                    paddingVertical: 22,
-                    paddingHorizontal: 18,
-                }}>
-                    <Text style={{
-                        fontWeight: '600',
-                        fontStyle: 'italic',
-                        fontSize: 20,
-                        color: '#006340',
-                        textAlign: 'center',
-                    }}>
-                        {product.category}
+                <View style={styles.headerContainer}>
+                    <Text style={styles.headerTitle}>
+                        {product.category.name}
                     </Text>
                 </View>
-                <View style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    position: 'absolute',
-                    width: '100%',
-                    height: '100%',
-                    paddingHorizontal: 18,
-                }}>
+                <View style={styles.headerActions}>
                     <CustomDirectionButton
                         direction="back"
                         onPress={() => navigation.goBack()}
                     />
 
-                    <MaterialCommunityIcons
+                    <ToCartButton navigation={navigation} />
+                    {/* <MaterialCommunityIcons
                         name="shopping-outline"
                         size={24} color="black"
                         style={{ padding: 10 }}
                         onPress={null}
-                    />
+                    /> */}
                 </View>
             </View>
 
-            <ScrollView style={{
-                flexDirection: 'column',
-                paddingHorizontal: 18,
-                flex: 1,
-            }}>
+            <ScrollView style={styles.scrollContainer}>
 
                 {/* images */}
-                <View style={{
-                    width: '100%',
-                    aspectRatio: '16 / 10',
-                    marginBottom: 16,
-                }}>
+                <View style={styles.imageContainer}>
                     <Image
                         source={{ uri: product.image }}
-                        style={{
-                            flex: 1,
-                            resizeMode: 'contain'
-                        }}
+                        style={styles.image}
                     />
                 </View>
 
                 {/* info */}
-                <View style={{
-                    gap: 10,
-                    marginBottom: 16,
-                }}>
-                    <Text style={{
-                        color: '#006340',
-                        fontSize: 16,
-                        textTransform: 'uppercase',
-                    }}>
-                        {product.brand}
+                <View style={styles.contentWrapper}>
+                    <Text style={styles.brandName}>
+                        {product.brand.name}
                     </Text>
-                    <Text style={{
-                        fontWeight: '600',
-                        fontSize: 24,
-                        color: '#1A2530',
-                    }}>
+                    <Text style={styles.productName}>
                         {product.name}
                     </Text>
                     {/* <Text style={{
@@ -125,23 +73,14 @@ export default function ProductDetail({ navigation }: { navigation: ProDetailNav
                     }}>
                         {formatCurrency(product.price)}
                     </Text> */}
-                    <Text style={{
-                        lineHeight: 22,
-                        color: '#707B81'
-                    }}>
+                    <Text style={styles.productDescription}>
                         {product.description}
                     </Text>
                 </View>
 
                 {/* sizes */}
-                <View style={{
-                    gap: 10,
-                    marginBottom: 16,
-                }}>
-                    <Text style={{
-                        fontWeight: '500',
-                        fontSize: 16,
-                    }}>
+                <View style={styles.contentWrapper}>
+                    <Text style={styles.sizeTitle}>
                         Kích thước
                     </Text>
                     <View style={{ flexDirection: 'row', gap: 12 }}>
@@ -152,15 +91,10 @@ export default function ProductDetail({ navigation }: { navigation: ProDetailNav
                                     onPress={() => {
                                         setSelectedSize(selectedSize === item ? null : item);
                                     }}
-                                    style={{
-                                        borderRadius: '100%',
+                                    style={[styles.sizeButton, {
                                         backgroundColor:
                                             selectedSize === item ? '#006340' : '#F8F9FA',
-                                        width: 45,
-                                        aspectRatio: 1,
-                                        justifyContent: 'center',
-                                        alignItems: 'center',
-                                    }}
+                                    }]}
                                 >
                                     <Text style={{
                                         color: selectedSize === item ? '#FFFFFF' : '#707B81'
@@ -172,31 +106,19 @@ export default function ProductDetail({ navigation }: { navigation: ProDetailNav
                 </View>
 
                 {/* Reviews */}
-                <View style={{
-                    gap: 10,
-                    marginBottom: 16,
-                }}>
-                    <View style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'space-between'
-                    }}>
+                <View style={styles.contentWrapper}>
+                    <View style={styles.reviewHeader}>
 
-                        <Text style={{
-                            fontWeight: '500',
-                            fontSize: 16,
-                        }}>
+                        <Text style={styles.reviewTitle}>
                             Đánh giá sản phẩm
                         </Text>
 
-                        <View style={{
-                            flexDirection: 'row',
-                            alignItems: 'center'
-                        }}>
+                        <View style={styles.reviewScoreContainer}>
                             <Text>4.67</Text>
                             <Ionicons name="star" size={14} color="gold" />
                         </View>
                     </View>
+                    {/* Có thể tạo thành component để truyền vào list Reivew */}
                     <View style={{ gap: 10 }}>
                         <ReviewForm
                             username="thailuan"
@@ -224,41 +146,13 @@ export default function ProductDetail({ navigation }: { navigation: ProDetailNav
             {/* subtotal popup */}
             {
                 subtotal ?
-                    <View style={{
-                        position: 'absolute',
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        bottom: 25,
-                        paddingVertical: 16,
-                        paddingHorizontal: 20,
-                        marginHorizontal: 10,
-                        borderRadius: 24,
-                        backgroundColor: '#FFFFFF',
-                        // shadow cho Android
-                        elevation: 5,
-                        // shadow cho IOS
-                        shadowColor: '#000', // Màu bóng
-                        shadowOffset: { width: 0, height: 5 }, // Độ lệch của bóng
-                        shadowOpacity: 0.3, // Độ trong suốt của bóng
-                        shadowRadius: 5, // Độ rộng của bóng
-                    }}>
-                        <View style={{
-                            flex: 1,
-                            gap: 4,
-                        }}>
-                            <Text style={{
-                                fontSize: 18,
-                                color: '#707B81'
-                            }}>Price</Text>
-                            <Text style={{
-                                fontSize: 24,
-                                fontWeight: '500'
-                            }}>{formatCurrency(subtotal)}</Text>
+                    <View style={styles.subtotalPopup}>
+                        <View style={styles.subtotalTextContainer}>
+                            <Text style={styles.subtotalTitle}>Price</Text>
+                            <Text style={styles.subtotalPrice}>{formatCurrency(subtotal)}</Text>
                         </View>
 
-                        <View style={{
-                            flex: 1,
-                        }}>
+                        <View style={{ flex: 1 }}>
                             <CustomButton
                                 title="Thêm vào giỏ hàng"
                                 onPress={() => { }}
@@ -270,3 +164,116 @@ export default function ProductDetail({ navigation }: { navigation: ProDetailNav
         </View >
     )
 };
+
+const styles = StyleSheet.create({
+    container: {
+        backgroundColor: '#FFF',
+        flex: 1,
+    },
+    headerContainer: {
+        paddingVertical: 22,
+        paddingHorizontal: 18,
+    },
+    headerTitle: {
+        fontWeight: '600',
+        fontStyle: 'italic',
+        fontSize: 20,
+        color: '#006340',
+        textAlign: 'center',
+    },
+    headerActions: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        paddingHorizontal: 18,
+    },
+    scrollContainer: {
+        flexDirection: 'column',
+        paddingHorizontal: 18,
+        flex: 1,
+    },
+    imageContainer: {
+        width: '100%',
+        aspectRatio: '16 / 10',
+        marginBottom: 16,
+    },
+    image: {
+        flex: 1,
+        resizeMode: 'contain',
+    },
+    contentWrapper: {
+        gap: 10,
+        marginBottom: 16,
+    },
+    brandName: {
+        color: '#006340',
+        fontSize: 16,
+        textTransform: 'uppercase',
+    },
+    productName: {
+        fontWeight: '600',
+        fontSize: 24,
+        color: '#1A2530',
+    },
+    productDescription: {
+        lineHeight: 22,
+        color: '#707B81',
+    },
+    sizeTitle: {
+        fontWeight: '500',
+        fontSize: 16,
+    },
+    sizeButton: {
+        borderRadius: '100%',
+        width: 45,
+        aspectRatio: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    reviewHeader: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
+    reviewTitle: {
+        fontWeight: '500',
+        fontSize: 16,
+    },
+    reviewScoreContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    subtotalPopup: {
+        position: 'absolute',
+        flexDirection: 'row',
+        alignItems: 'center',
+        bottom: 25,
+        paddingVertical: 16,
+        paddingHorizontal: 20,
+        marginHorizontal: 10,
+        borderRadius: 24,
+        backgroundColor: '#FFFFFF',
+        // shadow cho Android
+        elevation: 5,
+        // shadow cho IOS
+        shadowColor: '#000', // Màu bóng
+        shadowOffset: { width: 0, height: 5 }, // Độ lệch của bóng
+        shadowOpacity: 0.3, // Độ trong suốt của bóng
+        shadowRadius: 5, // Độ rộng của bóng
+    },
+    subtotalTextContainer: {
+        flex: 1,
+        gap: 4,
+    },
+    subtotalTitle: {
+        fontSize: 18,
+        color: '#707B81',
+    },
+    subtotalPrice: {
+        fontSize: 24,
+        fontWeight: '500',
+    },
+});
