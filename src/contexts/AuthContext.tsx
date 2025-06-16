@@ -10,7 +10,7 @@ type AuthContextType = {
 };
 
 // Khởi tạo Context
-export const Context = createContext<AuthContextType | undefined>(undefined);
+export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // Component Provider
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -18,19 +18,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     // Hàm đăng nhập
     const login = async (userData: User, token: string) => {
-        setUser(userData);
-        await AsyncStorage.setItem("token", token);
+        try {
+            setUser(userData);
+            await AsyncStorage.setItem("token", token);
+        } catch (error) {
+            console.error("Lưu token thất bại:", error);
+        }
     };
 
     // Hàm đăng xuất
     const logout = async () => {
-        setUser(null);
-        await AsyncStorage.removeItem("token");
+        try {
+            setUser(null);
+            await AsyncStorage.removeItem("token");
+        } catch (error) {
+            console.error("Xóa token thất bại:", error);
+        }
     };
 
     return (
-        <Context.Provider value={{ user, login, logout }}>
+        <AuthContext.Provider value={{ user, login, logout }}>
             {children}
-        </Context.Provider>
+        </AuthContext.Provider>
     );
 }

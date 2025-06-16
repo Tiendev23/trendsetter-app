@@ -11,7 +11,7 @@ import {
     ActivityIndicator,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllProducts } from '../redux/features/product/productSlice';
+import { getAllProducts } from '../redux/features/product/productsSlice';
 import { RootState, AppDispatch } from '../redux/store';
 
 const { width } = Dimensions.get('window');

@@ -24,7 +24,7 @@ export const getBrand = createAsyncThunk(
         }
     }
 )
-const productSlice = createSlice({
+const productsSlice = createSlice({
     name: 'products',
     initialState: {
         items: [],
@@ -63,4 +63,4 @@ const productSlice = createSlice({
     },
 });
 
-export default productSlice.reducer;
+export default productsSlice.reducer;

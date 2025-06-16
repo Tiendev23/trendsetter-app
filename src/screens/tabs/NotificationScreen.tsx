@@ -8,10 +8,10 @@ import {
     Image,
 } from "react-native";
 import { useState } from "react";
-import { Context } from "../../contexts/AuthContext";
+import { AuthContext } from "../../contexts/AuthContext";
 
 export default function NotificationScreen({ navigation }) {
-    const { user } = useContext(Context);
+    const { user } = useContext(AuthContext);
     const [expanded, setExpanded] = useState(false);
     return (
         <View style={styles.container}>

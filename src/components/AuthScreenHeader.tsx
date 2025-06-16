@@ -22,7 +22,6 @@ export default function AuthScreenHeader() {
 const styles = StyleSheet.create({
     headerContainer: {
         marginBottom: 10,
-        backgroundColor: 'gray'
     },
     titleWrapper: {
         position: 'relative',

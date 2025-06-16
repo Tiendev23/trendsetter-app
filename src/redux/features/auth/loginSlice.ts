@@ -1,9 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import apiClient from "../../../api/apiClient";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const login = createAsyncThunk(
-    "account/login",
+    "user/login",
     async (body: any, { rejectWithValue }) => {
         try {
             const response = await apiClient.post("/users/login", body);

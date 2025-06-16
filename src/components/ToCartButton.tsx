@@ -1,18 +1,18 @@
 import React, { useContext } from 'react';
 import { TouchableOpacity, Text, StyleSheet, View } from 'react-native';
 import Feather from '@expo/vector-icons/Feather';
-import { Context } from '../contexts/AuthContext';
+import { AuthContext } from '../contexts/AuthContext';
 
 
 export default function ToCartButton({ navigation }) {
 
-    const { user } = useContext(Context)
+    const { user } = useContext(AuthContext)
     return (
         <TouchableOpacity
             style={{
                 padding: 10,
             }}
-        // onPress={navigation.navigate('Cart')}
+            onPress={() => navigation.navigate('Cart')}
         >
             <Feather name="shopping-cart" size={24} color="black" />
             <View style={styles.dot} />

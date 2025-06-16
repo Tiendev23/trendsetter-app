@@ -9,7 +9,8 @@ export type AuthStackParamList = {
     Login: { email?: string }; // Có thể nhận email từ bất kỳ màn hình nào
     SignUp: undefined;
     ForgotPassword: undefined;
-    ProductDetail: { item?: Product }
+    ProductDetail: { item?: Product };
+    Cart: undefined;
 };
 
 export type BottomTabParamList = {
@@ -26,6 +27,7 @@ export type SignUpNav = NativeStackNavigationProp<AuthStackParamList, 'SignUp'>;
 export type ForgotPassNav = NativeStackNavigationProp<AuthStackParamList, 'ForgotPassword'>;
 export type ProDetailNav = NativeStackNavigationProp<AuthStackParamList, 'ProductDetail'>;
 export type ProDetailRoute = RouteProp<AuthStackParamList, 'ProductDetail'>;
+export type CartNav = NativeStackNavigationProp<AuthStackParamList, 'Cart'>;
 
 export type HomeNav = BottomTabNavigationProp<BottomTabParamList, 'Home'>
 export type SearchNav = BottomTabNavigationProp<BottomTabParamList, 'Search'>
