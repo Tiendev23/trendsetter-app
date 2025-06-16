@@ -2,21 +2,23 @@ import { createContext, useState, ReactNode } from "react";
 import { CartItem, Product } from "../types";
 
 type CartContextType = {
-    cartItems: CartItem[];
+    items: CartItem[];
+    status: string;
+    setStatus: (value: string) => void
+    getCartItem: (
+        item: CartItem
+    ) => CartItem;
+    getSubtotal: () => number;
     addToCart: (
         product: Product,
         selectedSize: string,
         selectedColor: string
     ) => void;
     deleteCartItem: (
-        productId: string,
-        selectedSize: string,
-        selectedColor: string
+        item: CartItem
     ) => void;
     updateCartItem: (
-        productId: string,
-        selectedSize: string,
-        selectedColor: string,
+        item: CartItem,
         newQuantity: number
     ) => void;
     clearCart: () => void;
@@ -25,10 +27,27 @@ type CartContextType = {
 export const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: ReactNode }) {
-    const [cartItems, setCartItems] = useState<CartItem[]>([]);
+    const [cart, setCart] = useState<CartItem[]>([
+        { color: "Xanh", price: 869000, product: "684c019883ca070cc65c8206", quantity: 2, size: "S" },
+        { color: "Trắng", price: 869000, product: "684c019883ca070cc65c8206", quantity: 1, size: "M" },
+        { color: "Xanh", price: 869000, product: "684c019883ca070cc65c8206", quantity: 1, size: "L" },
+    ]);
+    const [status, setStatus] = useState('idle');
+    const getCartItem = (item: CartItem) => {
+        return cart.find(
+            (obj) =>
+                obj.product === item.product &&
+                obj.size === item.size &&
+                obj.color === item.color
+        );
+    };
+
+    const getSubtotal = () => {
+        return cart.reduce((subtotal, obj) => subtotal + (obj.price * obj.quantity), 0);
+    };
 
     const addToCart = (product: Product, selectedSize: string, selectedColor: string) => {
-        setCartItems((prev) => {
+        setCart((prev) => {
             const existingItem = prev.find(
                 (item) =>
                     item.product === product._id &&
@@ -57,38 +76,39 @@ export function CartProvider({ children }: { children: ReactNode }) {
                 ];
             }
         });
+
     };
 
-    const updateCartItem = (productId: string, selectedSize: string, selectedColor: string, newQuantity: number) => {
-        setCartItems((prev) =>
-            prev.map((item) =>
-                item.product === productId &&
-                    item.size === selectedSize &&
-                    item.color === selectedColor
-                    ? { ...item, quantity: Math.max(newQuantity, 1) } // Không cho giảm dưới 1
-                    : item
+    const updateCartItem = (item: CartItem, newQuantity: number) => {
+        setCart((prev) =>
+            prev.map((obj) =>
+                obj.product === item.product &&
+                    obj.size === item.size &&
+                    obj.color === item.color
+                    ? { ...obj, quantity: Math.max(newQuantity, 1) } // Không cho giảm dưới 1
+                    : obj
 
             )
         );
     };
 
-    const deleteCartItem = (productId: string, selectedSize: string, selectedColor: string) => {
-        setCartItems((prev) =>
+    const deleteCartItem = (item: CartItem) => {
+        setCart((prev) =>
             prev.filter(
-                (item) =>
-                    !(item.product === productId &&
-                        item.size === selectedSize &&
-                        item.color === selectedColor)
+                (obj) =>
+                    !(obj.product === item.product &&
+                        obj.size === item.size &&
+                        obj.color === item.color)
             )
         );
     };
 
     const clearCart = () => {
-        setCartItems([]);
+        setCart([]);
     };
 
     return (
-        <CartContext.Provider value={{ cartItems, addToCart, updateCartItem, deleteCartItem, clearCart }}>
+        <CartContext.Provider value={{ items: cart, status, setStatus, getCartItem, getSubtotal, addToCart, updateCartItem, deleteCartItem, clearCart }}>
             {children}
         </CartContext.Provider>
     );
