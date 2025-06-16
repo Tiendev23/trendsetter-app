@@ -12,7 +12,7 @@ export default function ToCartButton({ navigation }) {
             style={{
                 padding: 10,
             }}
-        // onPress={navigation.navigate('Cart')}
+            onPress={() => navigation.navigate('Cart')}
         >
             <Feather name="shopping-cart" size={24} color="black" />
             <View style={styles.dot} />

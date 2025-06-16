@@ -1,7 +1,7 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import TabNavigator from './TabNavigator';
-import { ForgotPasswordScreen, LoginScreen, ProductDetail, SignUpScreen,Cart } from '../screens/stacks';
+import { ForgotPasswordScreen, LoginScreen, ProductDetailScreen, SignUpScreen, CartScreen } from '../screens/stacks';
 
 const Stack = createNativeStackNavigator();
 
@@ -11,9 +11,9 @@ export default function StackNavigator() {
             <Stack.Screen name="Tabs" component={TabNavigator} />
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="SignUp" component={SignUpScreen} />
-            <Stack.Screen name="Cart" component={Cart}/>
+            <Stack.Screen name="Cart" component={CartScreen}/>
             <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
-            <Stack.Screen name="ProductDetail" component={ProductDetail} />
+            <Stack.Screen name="ProductDetail" component={ProductDetailScreen} />
         </Stack.Navigator>
     );
 }

@@ -7,7 +7,7 @@ import ProductItem from '../../components/ProductItems'
 import { HomeNav, TabsNav } from '../../navigation/NavigationTypes'
 import { useNavigation } from '@react-navigation/native'
 
-export default function HomeScreen({navigation}) {
+export default function HomeScreen() {
     const tabNav = useNavigation<HomeNav>();
     const stackNav = useNavigation<TabsNav>();
 
@@ -29,7 +29,7 @@ export default function HomeScreen({navigation}) {
                 <Text style={styles.txtTitle}>Trendsetter</Text>
                 <TouchableOpacity
                 onPress={()=>{
-                    navigation.navigate('Cart')
+                    stackNav.navigate('Cart')
                 }}
                 ><Image source={require('../../../assets/icons/cart_icon.png')} style={styles.cart} resizeMode='contain' /></TouchableOpacity>
             </View>

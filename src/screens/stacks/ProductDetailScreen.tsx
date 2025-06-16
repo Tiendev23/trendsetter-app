@@ -1,18 +1,19 @@
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { ProDetailNav, ProDetailRoute } from "../../navigation/NavigationTypes";
 import CustomDirectionButton from "../../components/ChevronButton";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import { useEffect, useState } from "react";
+import { Ionicons } from "@expo/vector-icons";
+import { useContext, useEffect, useState } from "react";
 import CustomButton from "../../components/CustomButton";
 import ReviewForm from "../../components/ReviewForm";
 import ToCartButton from "../../components/ToCartButton";
 import { formatCurrency } from "../../utils/formatForm";
+import { CartContext } from "../../contexts/CartContext";
 
-export default function ProductDetail({ navigation, route }: { navigation: ProDetailNav, route: ProDetailRoute }) {
+export default function ProductDetailScreen({ navigation, route }: { navigation: ProDetailNav, route: ProDetailRoute }) {
     const product = route.params?.item;
-
     const [selectedSize, setSelectedSize] = useState(null);
     const [subtotal, setSubtotal] = useState(0)
+    const { addToCart } = useContext(CartContext);
 
     useEffect(() => {
         setSubtotal(selectedSize ? product.price : 0);
@@ -34,12 +35,6 @@ export default function ProductDetail({ navigation, route }: { navigation: ProDe
                     />
 
                     <ToCartButton navigation={navigation} />
-                    {/* <MaterialCommunityIcons
-                        name="shopping-outline"
-                        size={24} color="black"
-                        style={{ padding: 10 }}
-                        onPress={null}
-                    /> */}
                 </View>
             </View>
 
@@ -135,6 +130,9 @@ export default function ProductDetail({ navigation, route }: { navigation: ProDe
                     </View>
                 </View>
 
+                {/* Chỉ để tạo khoảng trống */}
+                <View style={{ height: 30 }} />
+
             </ScrollView>
 
             {/* subtotal popup */}
@@ -149,7 +147,7 @@ export default function ProductDetail({ navigation, route }: { navigation: ProDe
                         <View style={{ flex: 1 }}>
                             <CustomButton
                                 title="Thêm vào giỏ hàng"
-                                onPress={() => { }}
+                                onPress={() => { addToCart(product, selectedSize, "Xanh") }}
                             />
                         </View>
                     </View>
