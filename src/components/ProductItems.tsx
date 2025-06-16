@@ -5,8 +5,7 @@ import { DataContext } from '../contexts/DataContext';
 import { useDispatch, useSelector } from 'react-redux';
 // import { getAllProducts } from '../redux/slices/productSlice';
 import { RootState, AppDispatch } from '../redux/store';
-import { getAllProducts } from '../redux/features/product/productSlice';
-import { TabsNav } from '../navigation/NavigationTypes';
+import { getAllProducts } from '../redux/features/product/productsSlice';
 import { formatCurrency } from '../utils/formatForm';
 
 const ProductItem = ({ navigation }) => {
