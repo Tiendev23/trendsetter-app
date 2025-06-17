@@ -1,13 +1,7 @@
-import ForgotPasswordScreen from "./ForgotPasswordScreen";
-import LoginScreen from "./LoginScreen";
-import ProductDetailScreen from "./ProductDetailScreen";
-import SignUpScreen from "./SignUpScreen";
-import CartScreen from "./CartScreen";
+import ForgotPassword from "./ForgotPassword";
+import Login from "./Login";
+import ProductDetail from "./ProductDetail";
+import SignUp from "./SignUp";
+import Cart from "./Cart";
 
-export {
-    ForgotPasswordScreen,
-    LoginScreen,
-    SignUpScreen,
-    ProductDetailScreen,
-    CartScreen,
-};
+export { ForgotPassword, Login, SignUp, ProductDetail, Cart };

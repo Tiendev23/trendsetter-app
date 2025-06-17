@@ -1,7 +1,7 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
-import { HomeScreen, SearchScreen, NotificationScreen, AccountScreen } from '../screens/tabs';
+import { Home, Search, Notification, Account } from '../screens/tabs';
 import { StyleSheet } from 'react-native';
 
 const Tab = createBottomTabNavigator();
@@ -35,10 +35,10 @@ export default function TabNavigator() {
                 tabBarIconStyle: { marginTop: 10 }
             })}
         >
-            <Tab.Screen name="Home" component={HomeScreen} options={{ title: 'Trang chủ' }} />
-            <Tab.Screen name="Search" component={SearchScreen} options={{ title: 'Tìm kiếm' }} />
-            <Tab.Screen name="Notifications" component={NotificationScreen} options={{ title: 'Thông báo' }} />
-            <Tab.Screen name="Account" component={AccountScreen} options={{ title: 'Tài khoản' }} />
+            <Tab.Screen name="Home" component={Home} options={{ title: 'Trang chủ' }} />
+            <Tab.Screen name="Search" component={Search} options={{ title: 'Tìm kiếm' }} />
+            <Tab.Screen name="Notifications" component={Notification} options={{ title: 'Thông báo' }} />
+            <Tab.Screen name="Account" component={Account} options={{ title: 'Tài khoản' }} />
         </Tab.Navigator>
     );
 }

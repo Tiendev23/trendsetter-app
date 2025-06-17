@@ -7,7 +7,7 @@ import ProductItem from '../../components/ProductItems'
 import { HomeNav, TabsNav } from '../../navigation/NavigationTypes'
 import { useNavigation } from '@react-navigation/native'
 
-export default function HomeScreen() {
+export default function Home() {
     const tabNav = useNavigation<HomeNav>();
     const stackNav = useNavigation<TabsNav>();
 
@@ -28,9 +28,9 @@ export default function HomeScreen() {
                 <TouchableOpacity><Image source={require('../../../assets/images/fb.png')} style={styles.logo} resizeMode='contain' /></TouchableOpacity>
                 <Text style={styles.txtTitle}>Trendsetter</Text>
                 <TouchableOpacity
-                onPress={()=>{
-                    stackNav.navigate('Cart')
-                }}
+                    onPress={() => {
+                        stackNav.navigate('Cart')
+                    }}
                 ><Image source={require('../../../assets/icons/cart_icon.png')} style={styles.cart} resizeMode='contain' /></TouchableOpacity>
             </View>
             <ScrollView showsHorizontalScrollIndicator={false}

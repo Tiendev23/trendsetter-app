@@ -1,43 +1,62 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, Alert, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import AuthScreenHeader from '../../components/AuthScreenHeader';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import { login, refresh } from '../../redux/features/auth/loginSlice';
-import { AuthContext } from '../../contexts/AuthContext';
-import { LoginNav, LoginRoute } from '../../navigation/NavigationTypes';
+import { refresh, register } from '../../redux/features/auth/registerSlice';
+import { SignUpNav } from '../../navigation/NavigationTypes';
 import ErrorWarnBox from '../../components/ErrorWarnBox';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { validateEmail, validateFullName, validatePassword, validateUsername } from '../../utils/validation';
 
-export default function LoginScreen({ navigation, route }: { navigation: LoginNav; route: LoginRoute }) {
-
-    const [inputValue, setInputValue] = useState(route.params?.email || '');
+export default function SignUp({ navigation }: { navigation: SignUpNav }) {
+    const [username, setUsername] = useState('');
+    const [fullName, setFullName] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMess, setErrorMess] = useState('');
 
-    const context = useContext(AuthContext);
     const dispatch = useAppDispatch();
-    const { data, status, error } = useAppSelector(state => state.auth);
+    const { data, status, error } = useAppSelector(state => state.register);
+    console.log('>>>>>>>>>>>>\n', navigation.getState().routes);
+    const handleRegister = () => {
+        if (!validateFullName(fullName)) {
+            setErrorMess('Họ và tên không hợp lệ');
+            return;
+        }
+        if (!validateUsername(username)) {
+            setErrorMess('Tên đăng nhập không hợp lệ');
+            return;
+        }
+        if (!validateEmail(email)) {
+            setErrorMess('Email không đúng định dạng');
+            return;
+        }
+        if (!validatePassword(password)) {
+            setErrorMess('Mật khẩu không hợp lệ');
+            return;
+        }
 
-    const handleLogin = () => {
-        dispatch(login({ emailOrUsername: inputValue, password: password }));
+        dispatch(register({
+            username, password, email, fullName, role: 'customer'
+        }))
     }
 
     useEffect(() => {
-
         if (status === 'succeeded') {
-            context.login(data.user, data.token);
-
+            console.log('data SignUp', data);
             navigation.reset({
-                index: 0,
-                routes: [{ name: 'Tabs' }],
+                routes: [{
+                    name: 'Login',
+                    params: { email: data.email }
+                }],
             });
-        };
+            // navigation.navigate({ name: 'Login', params: { email: data.email } });
+        }
         if (status === 'failed') {
-            console.log('Đăng nhập thất bại:', error);
-            setErrorMess(error)
+            console.log('Đăng ký thất bại:', error);
             setTimeout(() => {
                 setErrorMess('');
                 dispatch(refresh());
@@ -52,26 +71,40 @@ export default function LoginScreen({ navigation, route }: { navigation: LoginNa
             <View style={styles.contentContainer}>
                 <ErrorWarnBox content={errorMess} />
 
-                <Text style={styles.title}>Đăng nhập</Text>
-                <CustomInput
-                    placeholder="Địa chỉ email / Tên đăng nhập"
-                    value={inputValue}
-                    onChangeText={setInputValue}
-                />
-                <CustomInput
-                    placeholder="Mật khẩu"
-                    value={password}
-                    onChangeText={setPassword}
-                    type='password'
-                />
-                <Text
-                    style={styles.link}
-                    onPress={() => navigation.navigate('ForgotPassword')}
-                >
-                    Quên mật khẩu?
-                </Text>
+                <Text style={styles.title}>Đăng Ký</Text>
+                <View>
+                    <CustomInput
+                        placeholder="Họ và tên"
+                        value={fullName}
+                        onChangeText={setFullName}
+                    />
+                </View>
+                <View>
+                    <CustomInput
+                        placeholder="Tên đăng nhập"
+                        value={username}
+                        onChangeText={setUsername}
+                        infoText='ít nhất 3 ký tự, không chứa ký tự đặc biệt'
+                    />
+                </View>
+                <View>
+                    <CustomInput
+                        placeholder="Địa chỉ email"
+                        value={email}
+                        onChangeText={setEmail}
+                    />
+                </View>
+                <View>
+                    <CustomInput
+                        placeholder="Mật khẩu"
+                        value={password}
+                        onChangeText={setPassword}
+                        type='password'
+                        infoText={"Tối thiểu 8 kí tự,\ngồm chữ thường, chữ hoa, số và ký tự đặc biệt"}
+                    />
+                </View>
                 <View style={styles.buttonWrapper}>
-                    <CustomButton title="Đăng nhập" onPress={handleLogin} />
+                    <CustomButton title="Đăng ký" onPress={handleRegister} />
                 </View>
 
                 <View style={styles.socialContainer}>
@@ -97,14 +130,16 @@ export default function LoginScreen({ navigation, route }: { navigation: LoginNa
                         <FontAwesome6 name="x-twitter" size={30} color="black" />
                     </TouchableOpacity>
                 </View>
-                <Text style={styles.textRegister}>
-                    Bạn chưa có tài khoản?{' '}
+                <Text style={styles.textDescription}>
+                    Bạn đã có tài khoản?{' '}
                     <Text style={styles.link}
                         onPress={() => {
-                            navigation.navigate('SignUp')
+                            navigation.reset({
+                                routes: [{ name: 'Login' }],
+                            });
                         }}
                     >
-                        Đăng ký
+                        Đăng nhập
                     </Text>
                 </Text>
             </View>
@@ -133,7 +168,7 @@ const styles = StyleSheet.create({
         textAlign: 'right',
         color: '#006340',
     },
-    textRegister: {
+    textDescription: {
         textAlign: 'center',
         fontFamily: 'Raleway',
         fontWeight: 'medium',

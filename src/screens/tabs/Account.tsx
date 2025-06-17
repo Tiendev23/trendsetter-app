@@ -6,7 +6,7 @@ import { AuthContext } from '../../contexts/AuthContext';
 import { useAppDispatch } from '../../redux/hooks';
 import { refresh } from '../../redux/features/auth/loginSlice';
 
-export default function AccountScreen({ navigation }) {
+export default function Account({ navigation }) {
     const { user, logout } = useContext(AuthContext);
     const { height } = useWindowDimensions();
     const [contentHeight, setContentHeight] = useState(0);

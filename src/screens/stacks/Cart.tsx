@@ -1,17 +1,14 @@
-import { FlatList, StyleSheet, Text, TouchableOpacity, View, Image, } from 'react-native'
-import React, { useContext, useEffect, useState } from 'react'
-import { Ionicons } from '@expo/vector-icons'
+import { FlatList, StyleSheet, Text, View } from 'react-native'
+import React, { useContext } from 'react'
 import { CartNav } from '../../navigation/NavigationTypes';
 import CustomDirectionButton from '../../components/ChevronButton';
-import SkeletonLoader from '../../components/loadingIndicators/SkeletonLoader';
+import Skeleton from '../../components/loaders/Skeleton';
 import { CartContext } from '../../contexts/CartContext';
 import CartItem from '../../components/listItems/CartItem';
-import { spread } from 'axios';
 import { formatCurrency } from '../../utils/formatForm';
 import CustomButton from '../../components/CustomButton';
-import { useAppSelector } from '../../redux/hooks';
 
-export default function CartScreen({ navigation }: { navigation: CartNav }) {
+export default function Cart({ navigation }: { navigation: CartNav }) {
     const cart = useContext(CartContext);
     console.log('CartScreen >>> cartItems:', cart.items);
 
@@ -49,7 +46,7 @@ export default function CartScreen({ navigation }: { navigation: CartNav }) {
                         {
                             cart.status === 'succeeded' ?
                                 <Text style={styles.price}>{formatCurrency(cart.getSubtotal())}</Text>
-                                : <SkeletonLoader width={100} height={20} />
+                                : <Skeleton width={100} height={20} />
                         }
                     </View>
                     <CustomButton

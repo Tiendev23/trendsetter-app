@@ -7,7 +7,7 @@ import { CartItem as Cart, IMAGE_NOT_FOUND, Product } from '../../types';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { fetchProductById } from '../../redux/features/product/productSlice';
 import { formatCurrency } from '../../utils/formatForm';
-import SkeletonLoader from '../loadingIndicators/SkeletonLoader';
+import Skeleton from '../loaders/Skeleton';
 import { CartContext } from '../../contexts/CartContext';
 
 
@@ -153,12 +153,12 @@ export default function CartItem({ item }: { item: Cart }) {
                     :
                     <View style={styles.contentContainer}>
                         <View style={styles.image}>
-                            <SkeletonLoader width={'100%'} height={"100%"} />
+                            <Skeleton width={'100%'} height={"100%"} />
                         </View>
                         <View style={styles.infoWrapper}>
-                            <SkeletonLoader width={200} height={20} />
-                            <SkeletonLoader width={150} height={20} />
-                            <SkeletonLoader width={100} height={20} />
+                            <Skeleton width={200} height={20} />
+                            <Skeleton width={150} height={20} />
+                            <Skeleton width={100} height={20} />
                         </View>
                     </View>
             }

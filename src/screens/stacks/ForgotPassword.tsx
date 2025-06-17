@@ -5,7 +5,7 @@ import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import { validateEmail } from '../../utils/validation';
 
-export default function ForgotPasswordScreen({ navigation }: any) {
+export default function ForgotPassword({ navigation }: any) {
     // const auth = useContext(AuthContext);
     const [email, setEmail] = useState('');
 
