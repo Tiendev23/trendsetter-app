@@ -38,13 +38,13 @@ export default function HomeScreen() {
             >
                 <WinterBanner />
                 <View style={styles.recommend}>
-                    <Text style={styles.textRecommend}>Recommended for you</Text>
+                    <Text style={styles.textRecommend}>Gợi Ý Cho Bạn</Text>
                     <TouchableOpacity
                         onPress={() => {
                             tabNav.navigate('Search')
                         }}
                     >
-                        <Text style={styles.textRecommend}>See all</Text>
+                        <Text style={styles.textRecommend}>Xem Thêm</Text>
                     </TouchableOpacity>
                 </View>
                 {/* Flatlist Product */}
@@ -55,36 +55,36 @@ export default function HomeScreen() {
                 </View>
                 <Menubar />
                 <View style={styles.recommend}>
-                    <Text style={styles.textRecommend}>Most Popular</Text>
+                    <Text style={styles.textRecommend}>Phổ Biến Nhất</Text>
                     <TouchableOpacity
                         onPress={() => {
                             tabNav.navigate('Search')
                         }}
                     >
-                        <Text style={styles.textRecommend}>See all</Text>
+                        <Text style={styles.textRecommend}>Xem Thêm</Text>
                     </TouchableOpacity>
                 </View>
                 <ProductItem navigation={stackNav} />
                 <View style={styles.recommend}>
-                    <Text style={styles.textRecommend}>Featured Appareal</Text>
+                    <Text style={styles.textRecommend}>Sản Phẩm Quần Áo Tiêu Biểu</Text>
                     <TouchableOpacity
                         onPress={() => {
                             tabNav.navigate('Search')
                         }}
                     >
-                        <Text style={styles.textRecommend}>See all</Text>
+                        <Text style={styles.textRecommend}>Xem Thêm</Text>
                     </TouchableOpacity>
                 </View>
                 <ProductItem navigation={stackNav} />
                 <WinterBanner />
                 <View style={styles.recommend}>
-                    <Text style={styles.textRecommend}>Featured Appareal</Text>
+                    <Text style={styles.textRecommend}>Sản Phẩm Quần Áo Tiêu Biểu</Text>
                     <TouchableOpacity
                         onPress={() => {
                             tabNav.navigate('Search')
                         }}
                     >
-                        <Text style={styles.textRecommend}>See all</Text>
+                        <Text style={styles.textRecommend}>Xem Thêm</Text>
                     </TouchableOpacity>
                 </View>
                 <ProductItem navigation={stackNav} />
