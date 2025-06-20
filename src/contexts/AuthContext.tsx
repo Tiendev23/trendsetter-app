@@ -15,19 +15,19 @@ export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 // Component Provider
 export function AuthProvider({ children }: { children: ReactNode }) {
-    const [user, setUser] = useState<User | null>(null
-        // {
-        //     _id: "684d708f62b10398864096d2",
-        //     username: "thailuan195",
-        //     password: "$2b$10$rjFf8rHQWomJOfjnlFF0UOIhnt5.kxZQ0IzQia6t3ZYhgdJ53r5Me",
-        //     email: "thailuan195@gmail.com",
-        //     fullName: "Thái Luân",
-        //     role: "customer",
-        //     favorites: [],
-        //     createdAt: "2025-06-14T12:52:31.162Z",
-        //     updatedAt: "2025-06-14T12:52:31.162Z",
-        //     __v: 0
-        // }
+    const [user, setUser] = useState<User | null>(
+        {
+            _id: "684d708f62b10398864096d2",
+            username: "thailuan195",
+            password: "$2b$10$rjFf8rHQWomJOfjnlFF0UOIhnt5.kxZQ0IzQia6t3ZYhgdJ53r5Me",
+            email: "thailuan195@gmail.com",
+            fullName: "Thái Luân",
+            role: "customer",
+            favorites: [],
+            createdAt: "2025-06-14T12:52:31.162Z",
+            updatedAt: "2025-06-14T12:52:31.162Z",
+            __v: 0
+        }
     );
 
     // Hàm đăng nhập
@@ -51,7 +51,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, logout,setUser }}>
+        <AuthContext.Provider value={{ user, login, logout, setUser }}>
             {children}
         </AuthContext.Provider>
     );

@@ -25,16 +25,7 @@ export default function Checkout({ navigation }: { navigation: CheckoutNav }) {
     const { status: paymentsStatus, data: paymentsData, error: paymentsError } = useAppSelector(state => state.payments);
     const { status, data, error } = useAppSelector(state => state.payOSMethod);
 
-    const [paymentMethods, setPaymentMethods] = useState([{
-        _id: '6854804db5eb5385e4c3d777',
-        logo: 'https://res.cloudinary.com/trendsetter/image/upload/v1750373123/payos_method_dfxheh.png',
-        name: 'Thanh toán qua MB Bank (PayOS)'
-    },
-    {
-        _id: '6854804db5eb5385e4c3d778',
-        logo: 'https://res.cloudinary.com/trendsetter/image/upload/v1750373123/payos_method_dfxheh.png',
-        name: 'Thanh toán qua MB Bank 2 (PayOS)'
-    }]);
+    const [paymentMethods, setPaymentMethods] = useState([]);
 
     const [email, setEmail] = useState(user.email);
     const [phone, setPhone] = useState('0938428870');
@@ -113,7 +104,7 @@ export default function Checkout({ navigation }: { navigation: CheckoutNav }) {
             <ScrollView style={styles.scrollContainer}>
                 {/* Thông tin liên hệ */}
                 <View style={[styles.contentContainer, { paddingBottom: 0 }]}>
-                    <Text style={styles.contentLabel}>Địa chi Email</Text>
+                    <Text style={styles.contentLabel}>Thông tin liên hệ</Text>
                     <View>
                         <InfoContainer
                             type='mail'
@@ -200,7 +191,7 @@ export default function Checkout({ navigation }: { navigation: CheckoutNav }) {
                     </View>
                     <View style={styles.priceWrapper}>
                         <Text style={[styles.label, styles.gray]}>Phí giao hàng</Text>
-                        <Text style={styles.label}>{formatCurrency(cart.getSubtotal())}</Text>
+                        <Text style={styles.label}>{formatCurrency(20000)}</Text>
                     </View>
                 </View>
                 <View style={styles.dashedLine} />

@@ -4,10 +4,10 @@ import React, { useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '../../redux/store';
 import { formatCurrency } from '../../utils/formatForm'
-import CustomDirectionButton from '../../components/ChevronButton';
 import ToCartButton from '../../components/ToCartButton';
 const { width } = Dimensions.get('window');
 import { getAllProducts, getProductById } from '../../redux/features/product/productsSlice';
+import CustomDirectionButton from '../../components/buttons/ChevronButton';
 
 const ProductlistScreen = ({ navigation, route, }) => {
     const { title, _id } = route.params;

@@ -1,9 +1,7 @@
 import { Button, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import React, { useEffect, useMemo, useState } from 'react';
-import { AntDesign, Ionicons } from '@expo/vector-icons';
-import CustomInput from '../CustomInput';
-import { validateEmail, validatePhoneNumber } from '../../utils/validateForm';
-import { Payment } from '../../types';
+import React from 'react';
+
+import { IMAGE_NOT_FOUND, Payment } from '../../types';
 import RadioButton from '../buttons/RadioButton';
 
 type Props = {
@@ -15,7 +13,9 @@ type Props = {
 };
 
 export default function PaymentMethod({ method, selectedMethod, setSelected, isHideRadio, disabled }: Props) {
+
     return (
+        method &&
         <TouchableOpacity
             style={styles.container}
             onPress={() => setSelected?.(method)}
@@ -23,7 +23,7 @@ export default function PaymentMethod({ method, selectedMethod, setSelected, isH
         >
             <View style={[styles.container, styles.methodWrapper]}>
                 <View style={styles.logoWrapper}>
-                    <Image source={{ uri: method.logo }} style={styles.logo} />
+                    <Image source={{ uri: method.logo || IMAGE_NOT_FOUND }} style={styles.logo} />
                 </View>
                 <Text style={styles.methodName}>
                     {method.name}
