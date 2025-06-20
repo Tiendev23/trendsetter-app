@@ -27,6 +27,7 @@ export type ForgotPassNav = NativeStackNavigationProp<AuthStackParamList, 'Forgo
 export type ProDetailNav = NativeStackNavigationProp<AuthStackParamList, 'ProductDetail'>;
 export type ProDetailRoute = RouteProp<AuthStackParamList, 'ProductDetail'>;
 
+
 export type HomeNav = BottomTabNavigationProp<BottomTabParamList, 'Home'>
 export type SearchNav = BottomTabNavigationProp<BottomTabParamList, 'Search'>
 export type NotifyNav = BottomTabNavigationProp<BottomTabParamList, 'Notifications'>

@@ -13,36 +13,44 @@ import { Context } from "../../contexts/AuthContext";
 export default function NotificationScreen({ navigation }) {
   const { user } = useContext(Context);
   const [expanded, setExpanded] = useState(false);
+
   return (
     <View style={styles.container}>
       {user ? (
         <ScrollView style={styles.container}>
-          <View style={styles.divider2} />
+          <View style={styles.dividerTop} />
 
           {list.map((item, index) => (
             <View key={index}>
-              <TouchableOpacity style={styles.tag}>
-                <View>
-                  <Image source={item.img} style={{ width: 60, height: 60 }} />
-                </View>
+              <TouchableOpacity
+                style={styles.tag}
+                onPress={() => navigation.navigate("Chat")}
+              >
+                <Image source={item.img} style={styles.avatar} />
 
                 <View style={styles.content}>
-                  <Text style={styles.tieude}>
-                    {item.title}
-                    {/* Introducing the New Message Center */}
-                  </Text>
+                  <View style={styles.titleRow}>
+                    <Text
+                      style={[
+                        styles.tieude,
+                        !item.read && { fontWeight: "bold" },
+                      ]}
+                    >
+                      {item.title}
+                    </Text>
+                    {!item.read && <View style={styles.unreadDot} />}
+                  </View>
+
                   <Text
                     style={styles.message}
-                    numberOfLines={expanded ? undefined : 2}
+                    numberOfLines={1}
                     ellipsizeMode="tail"
                   >
                     {item.nd}
-                    {/* Every StockX order status, release update, market change, and
-                more would be righ
-                you.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa */}
                   </Text>
                 </View>
               </TouchableOpacity>
+
               <View style={styles.divider} />
             </View>
           ))}
@@ -78,6 +86,7 @@ export default function NotificationScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#fff",
   },
   scroll: {
     flex: 1,
@@ -124,64 +133,65 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "600",
   },
-  image: {
-    width: "auto",
-    height: 200,
-    margin: -16,
+  avatar: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
   },
   tag: {
     flexDirection: "row",
-    height: 100,
-    padding: 20,
-    flex: 1,
+    padding: 16,
     alignItems: "center",
+    backgroundColor: "#fff",
   },
-  dot: {
+  content: {
+    flex: 1,
+    marginLeft: 12,
+  },
+  tieude: {
+    fontSize: 15,
+    color: "#000",
+  },
+  message: {
+    fontSize: 13,
+    color: "#555",
+    marginTop: 4,
+    lineHeight: 18,
+  },
+  unreadDot: {
     width: 10,
     height: 10,
     borderRadius: 5,
-    backgroundColor: "green",
-    marginTop: 6,
-    marginRight: 8,
+    backgroundColor: "#2ecc71",
+    marginLeft: 6,
   },
-  content: {
-    marginLeft: "5%",
-    flex: 1,
-  },
-  tieude: {
-    fontWeight: "600",
-    fontSize: 15,
-    marginBottom: 4,
-  },
-  message: {
-    fontSize: 12,
-    color: "#444",
-    lineHeight: 18,
-  },
-  closeText: {
-    fontSize: 18,
-    color: "#999",
+  titleRow: {
+    flexDirection: "row",
+    alignItems: "center",
   },
   divider: {
-    marginHorizontal: 35,
     height: 1,
-    backgroundColor: "gray",
+    backgroundColor: "#eee",
   },
-  divider2: {
+  dividerTop: {
     height: 2,
-    backgroundColor: "gray",
+    backgroundColor: "#ccc",
   },
 });
+
 
 const list = [
   {
     img: require("../../../assets/images/anh2.png"),
-    title: "Trung tâm thông báo",
-    nd: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaammmmmmmmmmmmmmmmmmmmmmmaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaammmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm",
+    title: "Admin",
+    nd: "Chào bạn, đây là tin nhắn chưa đọc. Hãy kiểm tra ngay!aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    read: false,
   },
   {
     img: require("../../../assets/images/anh2.png"),
-    title: "Trung tâm thông báo",
-    nd: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    title: "Shop thời trang",
+    nd: "Đơn hàng của bạn đã được giao thành công. ",
+    read: true,
   },
 ];
+
