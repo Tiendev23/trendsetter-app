@@ -1,6 +1,6 @@
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteProp } from '@react-navigation/native';
-import { Product } from '../types';
+import { Payment, Product } from '../types';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 
 // Danh sách màn hình
@@ -11,6 +11,9 @@ export type AuthStackParamList = {
     ForgotPassword: undefined;
     ProductDetail: { item?: Product };
     Cart: undefined;
+    Checkout: undefined;
+    Order: undefined;
+    MethodSelection: { method?: Payment, setMethod?: React.Dispatch<React.SetStateAction<Payment>>, paymentMethods: Payment[] };
 };
 
 export type BottomTabParamList = {
@@ -28,6 +31,10 @@ export type ForgotPassNav = NativeStackNavigationProp<AuthStackParamList, 'Forgo
 export type ProDetailNav = NativeStackNavigationProp<AuthStackParamList, 'ProductDetail'>;
 export type ProDetailRoute = RouteProp<AuthStackParamList, 'ProductDetail'>;
 export type CartNav = NativeStackNavigationProp<AuthStackParamList, 'Cart'>;
+export type CheckoutNav = NativeStackNavigationProp<AuthStackParamList, 'Checkout'>;
+export type OrderNav = NativeStackNavigationProp<AuthStackParamList, 'Order'>;
+export type MethodSelectionNav = NativeStackNavigationProp<AuthStackParamList, 'MethodSelection'>;
+export type MethodSelectionRoute = RouteProp<AuthStackParamList, 'MethodSelection'>;
 
 export type HomeNav = BottomTabNavigationProp<BottomTabParamList, 'Home'>
 export type SearchNav = BottomTabNavigationProp<BottomTabParamList, 'Search'>

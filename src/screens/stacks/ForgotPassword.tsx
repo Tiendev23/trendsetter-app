@@ -2,8 +2,8 @@ import React, { useState, useContext } from 'react';
 import { View, Text, Alert, StyleSheet } from 'react-native';
 // import { AuthContext } from '../../contexts/AuthContext';
 import CustomInput from '../../components/CustomInput';
-import CustomButton from '../../components/CustomButton';
-import { validateEmail } from '../../utils/validation';
+import CustomButton from '../../components/buttons/CustomButton';
+import { validateEmail } from '../../utils/validateForm';
 
 export default function ForgotPassword({ navigation }: any) {
     // const auth = useContext(AuthContext);

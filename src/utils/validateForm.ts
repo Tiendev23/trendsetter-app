@@ -12,7 +12,8 @@ export const validateEmail = (email: string): boolean => {
  * [A-Za-z\d!@#$%^&*]{8,} → Tổng độ dài phải từ 8 ký tự trở lên
  */
 export const validatePassword = (password: string): boolean => {
-    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+    const regex =
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
     return regex.test(password);
 };
 
@@ -28,3 +29,10 @@ export const validateFullName = (fullName: string): boolean => {
     return regex.test(fullName.trim());
 };
 
+// Kiểm tra số điện thoại
+export const validatePhoneNumber = (phone: string): boolean => {
+    let regex;
+    const vietnamPhoneRegex = /^(0(3|5|7|8|9)[0-9]{8})$/;
+    regex = vietnamPhoneRegex;
+    return regex.test(phone.trim());
+};

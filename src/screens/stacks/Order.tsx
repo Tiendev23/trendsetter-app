@@ -7,11 +7,9 @@ import { CartContext } from '../../contexts/CartContext';
 import CartItem from '../../components/listItems/CartItem';
 import { formatCurrency } from '../../utils/formatForm';
 import CustomButton from '../../components/buttons/CustomButton';
-import { AuthContext } from '../../contexts/AuthContext';
 
-export default function Cart({ navigation }: { navigation: CartNav }) {
+export default function Order({ navigation }: { navigation: CartNav }) {
     const cart = useContext(CartContext);
-    const { user } = useContext(AuthContext);
 
     return (
         <View style={styles.container}>
@@ -40,23 +38,21 @@ export default function Cart({ navigation }: { navigation: CartNav }) {
             </View>
 
             {
-                user ?
-                    cart.items.length > 0 &&
-                    <View style={styles.pricingPanel}>
-                        <View style={styles.priceWrapper}>
-                            <Text style={styles.label}>Tổng cộng</Text>
-                            {
-                                cart.status === 'succeeded' ?
-                                    <Text style={[styles.label, styles.price]}>{formatCurrency(cart.getSubtotal())}</Text>
-                                    : <Skeleton width={100} height={20} />
-                            }
-                        </View>
-                        <CustomButton
-                            title='Mua Hàng'
-                            onPress={() => { navigation.navigate('Checkout') }}
-                        />
+                cart.items.length > 0 &&
+                <View style={styles.pricingPanel}>
+                    <View style={styles.priceWrapper}>
+                        <Text style={styles.label}>Tổng cộng</Text>
+                        {
+                            cart.status === 'succeeded' ?
+                                <Text style={[styles.label, styles.price]}>{formatCurrency(cart.getSubtotal())}</Text>
+                                : <Skeleton width={100} height={20} />
+                        }
                     </View>
-                    : null
+                    <CustomButton
+                        title='Mua Hàng'
+                        onPress={() => { }}
+                    />
+                </View>
             }
         </View>
     )

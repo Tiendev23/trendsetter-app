@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, Image, View, ImageSourcePropType } from 'react-native';
-import CustomDirectionButton from './ChevronButton';
+import CustomDirectionButton from './buttons/ChevronButton';
 
 type Props = {
     title: string;
@@ -32,7 +32,9 @@ export default function AccountTabSection({ title, label, onPress }: Props) {
             onPress={onPress}
         >
             <View style={styles.wrapper}>
-                <Image source={getImageSource(label)} style={styles.icon} />
+                <View style={styles.image}>
+                    <Image source={getImageSource(label)} style={styles.icon} />
+                </View>
                 <Text style={styles.title}>{title}</Text>
             </View>
             {
@@ -58,6 +60,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         gap: 24,
+    },
+    image: {
+        width: 30,
+        alignItems: 'center',
     },
     icon: {
         tintColor: '#2B2B2B',

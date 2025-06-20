@@ -2,11 +2,11 @@ import React, { useContext } from 'react';
 import { TouchableOpacity, Text, StyleSheet, View } from 'react-native';
 import Feather from '@expo/vector-icons/Feather';
 import { AuthContext } from '../contexts/AuthContext';
+import { CartContext } from '../contexts/CartContext';
 
 
 export default function ToCartButton({ navigation }) {
-
-    const { user } = useContext(AuthContext)
+    const cart = useContext(CartContext);
     return (
         <TouchableOpacity
             style={{
@@ -15,7 +15,7 @@ export default function ToCartButton({ navigation }) {
             onPress={() => navigation.navigate('Cart')}
         >
             <Feather name="shopping-cart" size={24} color="black" />
-            <View style={styles.dot} />
+            {cart.items.length > 0 && <View style={styles.dot} />}
         </TouchableOpacity>
     );
 }

@@ -1,10 +1,10 @@
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { ProDetailNav, ProDetailRoute } from "../../navigation/NavigationTypes";
-import CustomDirectionButton from "../../components/ChevronButton";
+import CustomDirectionButton from "../../components/buttons/ChevronButton";
 import { Ionicons } from "@expo/vector-icons";
 import { useContext, useEffect, useState } from "react";
-import CustomButton from "../../components/CustomButton";
-import ReviewForm from "../../components/ReviewForm";
+import CustomButton from "../../components/buttons/CustomButton";
+import ReviewForm from "../../components/listItems/ReviewForm";
 import ToCartButton from "../../components/ToCartButton";
 import { formatCurrency } from "../../utils/formatForm";
 import { CartContext } from "../../contexts/CartContext";

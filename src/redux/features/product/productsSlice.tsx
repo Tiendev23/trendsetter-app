@@ -25,7 +25,7 @@ export const getBrand = createAsyncThunk(
     }
 )
 const productsSlice = createSlice({
-    name: 'products',
+    name: 'payments',
     initialState: {
         items: [],
         loading: "idle",

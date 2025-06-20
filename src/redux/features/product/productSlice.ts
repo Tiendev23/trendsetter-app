@@ -13,6 +13,7 @@ export const fetchProductById = createAsyncThunk(
             const response = await apiClient.get(`/products/${productId}`);
             return response.data;
         } catch (error) {
+            console.log(error);            
             return rejectWithValue(error.response?.data?.message);
         }
     }
@@ -65,7 +66,7 @@ const productSlice = createSlice({
             })
             .addCase(fetchProductById.rejected, (state, action) => {
                 state.status[action.meta.arg] = "failed";
-                state.error[action.meta.arg] = action.payload;
+                state.error[action.meta.arg] = action.payload;                
             });
     },
 });
