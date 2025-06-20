@@ -34,9 +34,11 @@ export default function AccountScreen({ navigation }) {
                             >
                                 <View style={styles.menuWrapper}>
                                     <AccountTabSection
-                                        title='Hồ sơ'
+                                        title='Thiết lập tài khoản'
                                         label='Profile'
-                                        onPress={null}
+                                        onPress={()=>{
+                                            navigation.navigate('Profile')
+                                        }}
                                     />
                                     <AccountTabSection
                                         title='Giỏ hàng'
@@ -51,7 +53,7 @@ export default function AccountScreen({ navigation }) {
                                     <AccountTabSection
                                         title='Đơn hàng'
                                         label='Orders'
-                                        onPress={null}
+                                        onPress={()=>navigation.navigate('OrderStatus')}
                                     />
                                     <AccountTabSection
                                         title='Ví'

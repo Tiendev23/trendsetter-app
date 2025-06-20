@@ -13,7 +13,7 @@ import { useAppSelector } from '../../redux/hooks';
 
 export default function CartScreen({ navigation }: { navigation: CartNav }) {
     const cart = useContext(CartContext);
-    console.log('CartScreen >>> cartItems:', cart.items);
+    // console.log('CartScreen >>> cartItems:', cart.items);
 
     return (
         <View style={styles.container}>
