@@ -1,6 +1,6 @@
-import AccountScreen from "./AccountScreen"
-import HomeScreen from "./HomeScreen"
-import NotificationScreen from "./NotificationScreen"
-import SearchScreen from "./SearchScreen"
+import Account from "./Account";
+import Home from "./Home";
+import Notification from "./Notification";
+import Search from "./Search";
 
-export { AccountScreen, HomeScreen, NotificationScreen, SearchScreen }
+export { Account, Home, Notification, Search };

@@ -27,11 +27,7 @@ type CartContextType = {
 export const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: ReactNode }) {
-    const [cart, setCart] = useState<CartItem[]>([
-        { color: "Xanh", price: 869000, product: "684c019883ca070cc65c8206", quantity: 2, size: "S" },
-        { color: "Trắng", price: 869000, product: "684c019883ca070cc65c8206", quantity: 1, size: "M" },
-        { color: "Xanh", price: 869000, product: "684c019883ca070cc65c8206", quantity: 1, size: "L" },
-    ]);
+    const [cart, setCart] = useState<CartItem[]>([]);
     const [status, setStatus] = useState('idle');
     const getCartItem = (item: CartItem) => {
         return cart.find(
@@ -67,6 +63,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
                 return [
                     ...prev,
                     {
+                        name: product.name,
                         product: product._id,
                         quantity: 1,
                         price: product.price,
@@ -76,7 +73,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
                 ];
             }
         });
-
     };
 
     const updateCartItem = (item: CartItem, newQuantity: number) => {

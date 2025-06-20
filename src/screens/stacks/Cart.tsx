@@ -1,19 +1,17 @@
-import { FlatList, StyleSheet, Text, TouchableOpacity, View, Image, } from 'react-native'
-import React, { useContext, useEffect, useState } from 'react'
-import { Ionicons } from '@expo/vector-icons'
+import { FlatList, StyleSheet, Text, View } from 'react-native'
+import React, { useContext } from 'react'
 import { CartNav } from '../../navigation/NavigationTypes';
-import CustomDirectionButton from '../../components/ChevronButton';
-import SkeletonLoader from '../../components/loadingIndicators/SkeletonLoader';
+import CustomDirectionButton from '../../components/buttons/ChevronButton';
+import Skeleton from '../../components/loaders/Skeleton';
 import { CartContext } from '../../contexts/CartContext';
 import CartItem from '../../components/listItems/CartItem';
-import { spread } from 'axios';
 import { formatCurrency } from '../../utils/formatForm';
-import CustomButton from '../../components/CustomButton';
-import { useAppSelector } from '../../redux/hooks';
+import CustomButton from '../../components/buttons/CustomButton';
+import { AuthContext } from '../../contexts/AuthContext';
 
-export default function CartScreen({ navigation }: { navigation: CartNav }) {
+export default function Cart({ navigation }: { navigation: CartNav }) {
     const cart = useContext(CartContext);
-    // console.log('CartScreen >>> cartItems:', cart.items);
+    const { user } = useContext(AuthContext);
 
     return (
         <View style={styles.container}>
@@ -42,21 +40,23 @@ export default function CartScreen({ navigation }: { navigation: CartNav }) {
             </View>
 
             {
-                cart.items.length > 0 &&
-                <View style={styles.pricingPanel}>
-                    <View style={styles.priceWrapper}>
-                        <Text style={styles.label}>Tổng cộng</Text>
-                        {
-                            cart.status === 'succeeded' ?
-                                <Text style={styles.price}>{formatCurrency(cart.getSubtotal())}</Text>
-                                : <SkeletonLoader width={100} height={20} />
-                        }
+                user ?
+                    cart.items.length > 0 &&
+                    <View style={styles.pricingPanel}>
+                        <View style={styles.priceWrapper}>
+                            <Text style={styles.label}>Tổng cộng</Text>
+                            {
+                                cart.status === 'succeeded' ?
+                                    <Text style={[styles.label, styles.price]}>{formatCurrency(cart.getSubtotal())}</Text>
+                                    : <Skeleton width={100} height={20} />
+                            }
+                        </View>
+                        <CustomButton
+                            title='Mua Hàng'
+                            onPress={() => { navigation.navigate('Checkout') }}
+                        />
                     </View>
-                    <CustomButton
-                        title='Mua Hàng'
-                        onPress={() => { }}
-                    />
-                </View>
+                    : null
             }
         </View>
     )
@@ -106,8 +106,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     price: {
-        fontWeight: '600',
-        fontSize: 18,
         color: '#006340'
     },
 

@@ -3,7 +3,7 @@ import { View, StyleSheet, DimensionValue } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Reanimated, { useSharedValue, useAnimatedStyle, withTiming, withRepeat } from "react-native-reanimated";
 
-export default function SkeletonLoader({ width, height }: {
+export default function Skeleton({ width, height }: {
     width: DimensionValue | undefined,
     height: DimensionValue | undefined
 }) {

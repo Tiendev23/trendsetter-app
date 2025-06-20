@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, Text, TextInput, View, ScrollView, TouchableOpacity, Image, useWindowDimensions, RefreshControl } from 'react-native'
+import { FlatList, Text, TextInput, View, ScrollView, TouchableOpacity, Image, useWindowDimensions, RefreshControl, StyleSheet } from 'react-native'
 import React, { useContext, useState } from 'react'
 import SearchBar from '../../components/SearchBar'
 import Menubar from '../../components/Menubar'
@@ -8,13 +8,11 @@ import { HomeNav, TabsNav } from '../../navigation/NavigationTypes'
 import { useNavigation } from '@react-navigation/native'
 import eventBus from '../../utils/Evenbus'
 
-
-
 export default function HomeScreen({navigation}) {
     const tabNav = useNavigation<HomeNav>();
     const stackNav = useNavigation<TabsNav>();
     const [refreshing, setRefreshing] = useState(false);
-// refreshing 
+// refreshing
     const onRefresh = () => {
         setRefreshing(true);
         eventBus.emit('REFRESH_ALL');
@@ -101,7 +99,7 @@ export default function HomeScreen({navigation}) {
 
         </View >
     )
-}
+};
 
 
 const styles = StyleSheet.create({

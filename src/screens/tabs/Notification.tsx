@@ -10,7 +10,7 @@ import {
 import { useState } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
 
-export default function NotificationScreen({ navigation }) {
+export default function Notification({ navigation }) {
     const { user } = useContext(AuthContext);
     const [expanded, setExpanded] = useState(false);
     return (

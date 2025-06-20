@@ -11,82 +11,7 @@ import Skeleton from '../loaders/Skeleton';
 import { CartContext } from '../../contexts/CartContext';
 
 
-function LeftAction({ item, drag }: { item: Cart, drag: SharedValue<number> }) {
-    // function LeftAction(prog: SharedValue<number>, drag: SharedValue<number>) {
-    const [width, setWidth] = useState(0);
-    const cart = useContext(CartContext);
-    const styleAnimation = useAnimatedStyle(() => {
-        /**
-         *  console.log('showLeftProgress:', prog.value);
-         *  console.log('appliedTranslation:', drag.value);
-         */
-        return {
-            transform: [{ translateX: drag.value - width }],
-        };
-    });
-
-    return (
-        <Reanimated.View
-            onLayout={(event) => setWidth(event.nativeEvent.layout.width)}
-            style={styleAnimation}
-        >
-            <View style={[styles.sideActionWrapper, styles.button, styles.leftButton]}>
-                <TouchableOpacity style={styles.button}
-                    onPress={() => cart.updateCartItem(
-                        item,
-                        item.quantity + 1
-                    )}
-                >
-                    <FontAwesome5 name="plus" size={24} color="#FFFFFF" />
-                </TouchableOpacity>
-                <Text style={{ color: '#FFFFFF' }}>
-                    {item.quantity}
-                </Text>
-                <TouchableOpacity style={styles.button}
-                    onPress={() => cart.updateCartItem(
-                        item,
-                        item.quantity - 1
-                    )}
-                >
-                    <FontAwesome5 name="minus" size={24} color="#FFFFFF" />
-                </TouchableOpacity>
-            </View>
-        </Reanimated.View>
-    );
-}
-
-function RightAction({ item, drag }: { item: Cart, drag: SharedValue<number> }) {
-    // function RightAction(prog: SharedValue<number>, drag: SharedValue<number>) {
-    const [width, setWidth] = useState(0);
-    const cart = useContext(CartContext);
-    const styleAnimation = useAnimatedStyle(() => {
-        /**
-         *  console.log('showRightProgress:', prog.value);
-         *  console.log('appliedTranslation:', drag.value);
-         */
-        return {
-            transform: [{ translateX: drag.value + width }],
-        };
-    });
-
-    return (
-        <Reanimated.View
-            onLayout={(event) => setWidth(event.nativeEvent.layout.width)}
-            style={styleAnimation}
-        >
-            <TouchableOpacity
-                style={[styles.sideActionWrapper, styles.button, styles.rightButton]}
-                onPress={() => cart.deleteCartItem(item)}
-            >
-                <FontAwesome5 name="trash-alt" size={32} color="#FFFFFF" />
-            </TouchableOpacity>
-        </Reanimated.View>
-    );
-}
-/**
- *  Đọc doc ở đây https://docs.swmansion.com/react-native-gesture-handler/docs/components/reanimated_swipeable#rightthreshold
- */
-export default function CartItem({ item }: { item: Cart }) {
+export default function OrderDetailsItem({ item }: { item: Cart }) {
     const { setStatus } = useContext(CartContext)
     const dispatch = useAppDispatch();
     const { data, status, error } = useAppSelector(state => state.product);
@@ -116,14 +41,7 @@ export default function CartItem({ item }: { item: Cart }) {
     // }, [dispatch, item.product, product]);
 
     return (
-        <ReanimatedSwipeable
-            enabled={status[item.product] === 'succeeded'}
-            friction={3}
-            enableTrackpadTwoFingerGesture
-            rightThreshold={80}
-            renderLeftActions={(progress, drag) => <LeftAction item={item} drag={drag} />}
-            renderRightActions={(progress, drag) => <RightAction item={item} drag={drag} />}
-        >
+        <View>
             {
                 status[item.product] === 'succeeded' ?
                     // product ?
@@ -145,9 +63,12 @@ export default function CartItem({ item }: { item: Cart }) {
                             <Text>
                                 Size {item.size} - Màu {item.color}
                             </Text>
-                            <Text style={styles.itemPrice}>
-                                {formatCurrency(item.price)}
-                            </Text>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                <Text style={styles.itemPrice}>
+                                    {formatCurrency(item.price)}
+                                </Text>
+                                <Text>x{item.quantity}</Text>
+                            </View>
                         </View>
                     </View>
                     :
@@ -162,7 +83,7 @@ export default function CartItem({ item }: { item: Cart }) {
                         </View>
                     </View>
             }
-        </ReanimatedSwipeable>
+        </View>
     );
 }
 
@@ -185,10 +106,8 @@ const styles = StyleSheet.create({
         borderRadius: 8,
     },
     contentContainer: {
-        marginHorizontal: 18,
         backgroundColor: '#FFFFFF',
         flexDirection: 'row',
-        padding: 18,
         gap: 18,
         alignItems: 'center',
         borderRadius: 8,

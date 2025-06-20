@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { View, Text, Alert, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import CustomInput from '../../components/CustomInput';
-import CustomButton from '../../components/CustomButton';
+import CustomButton from '../../components/buttons/CustomButton';
 import AuthScreenHeader from '../../components/AuthScreenHeader';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
@@ -9,9 +9,9 @@ import { refresh, register } from '../../redux/features/auth/registerSlice';
 import { SignUpNav } from '../../navigation/NavigationTypes';
 import ErrorWarnBox from '../../components/ErrorWarnBox';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { validateEmail, validateFullName, validatePassword, validateUsername } from '../../utils/validation';
+import { validateEmail, validateFullName, validatePassword, validateUsername } from '../../utils/validateForm';
 
-export default function SignUpScreen({ navigation }: { navigation: SignUpNav }) {
+export default function SignUp({ navigation }: { navigation: SignUpNav }) {
     const [username, setUsername] = useState('');
     const [fullName, setFullName] = useState('');
     const [email, setEmail] = useState('');

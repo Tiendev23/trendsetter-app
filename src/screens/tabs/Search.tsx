@@ -12,7 +12,7 @@ type Product = {
 
 const { width } = Dimensions.get('window');
 
-export default function SearchScreen() {
+export default function Search() {
     const [searchQuery, setSearchQuery] = useState('');
     const [activeCategory, setActiveCategory] = useState('Tất Cả');
     const [dropdownVisible, setDropdownVisible] = useState(false);

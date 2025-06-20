@@ -1,15 +1,15 @@
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { ProDetailNav, ProDetailRoute } from "../../navigation/NavigationTypes";
-import CustomDirectionButton from "../../components/ChevronButton";
+import CustomDirectionButton from "../../components/buttons/ChevronButton";
 import { Ionicons } from "@expo/vector-icons";
 import { useContext, useEffect, useState } from "react";
-import CustomButton from "../../components/CustomButton";
-import ReviewForm from "../../components/ReviewForm";
+import CustomButton from "../../components/buttons/CustomButton";
+import ReviewForm from "../../components/listItems/ReviewForm";
 import ToCartButton from "../../components/ToCartButton";
 import { formatCurrency } from "../../utils/formatForm";
 import { CartContext } from "../../contexts/CartContext";
 
-export default function ProductDetailScreen({ navigation, route }: { navigation: ProDetailNav, route: ProDetailRoute }) {
+export default function ProductDetail({ navigation, route }: { navigation: ProDetailNav, route: ProDetailRoute }) {
     const product = route.params?.item;
     const [selectedSize, setSelectedSize] = useState(null);
     const [subtotal, setSubtotal] = useState(0)

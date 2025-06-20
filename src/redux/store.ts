@@ -4,6 +4,9 @@ import {
     productsReducer,
     productReducer,
     registerReducer,
+    orderReducer,
+    payOSReducer,
+    paymentsReducer,
 } from "./features";
 
 export const store = configureStore({
@@ -12,6 +15,10 @@ export const store = configureStore({
         register: registerReducer,
         products: productsReducer,
         product: productReducer,
+        order: orderReducer,
+        payments: paymentsReducer,
+        // Phương thức hanh toán
+        payOSMethod: payOSReducer,
     },
 });
 
