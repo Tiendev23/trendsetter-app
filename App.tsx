@@ -6,6 +6,7 @@ import { default as AppNavigation } from './src/navigation/StackNavigator';
 import { Provider } from 'react-redux';
 import { store } from './src/redux/store';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import Profile from './src/screens/stacks/Profile';
 
 export default function App() {
     return (
@@ -16,6 +17,7 @@ export default function App() {
                         <Provider store={store}>
                             <NavigationContainer>
                                 <AppNavigation />
+                                {/* <Profile/> */}
                             </NavigationContainer>
                         </Provider>
                     </ContextProvider>

@@ -61,7 +61,7 @@ const productSlice = createSlice({
             })
             .addCase(fetchProductById.fulfilled, (state, action) => {
                 state.status[action.meta.arg] = "succeeded";
-                state.data[action.meta.arg] = action.payload;                
+                state.data[action.meta.arg] = action.payload;
                 // productAdapter.upsertOne(state, action.payload); // Lưu trữ sản phẩm vào adapter
             })
             .addCase(fetchProductById.rejected, (state, action) => {

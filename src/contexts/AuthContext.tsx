@@ -7,6 +7,7 @@ type AuthContextType = {
     user: User | null;
     login: (userData: User, token: string) => void;
     logout: () => void;
+    setUser: (user: User | null) => void;
 };
 
 // Khởi tạo Context
@@ -50,7 +51,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, logout }}>
+        <AuthContext.Provider value={{ user, login, logout,setUser }}>
             {children}
         </AuthContext.Provider>
     );

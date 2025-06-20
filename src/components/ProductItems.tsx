@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList, ActivityIndicator, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useContext, useEffect } from 'react';
 import { DataContext } from '../contexts/DataContext';
@@ -7,6 +7,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '../redux/store';
 import { getAllProducts } from '../redux/features/product/productsSlice';
 import { formatCurrency } from '../utils/formatForm';
+
+
+const { width, height } = Dimensions.get('window');
 
 const ProductItem = ({ navigation }) => {
     const dispatch = useDispatch<AppDispatch>();
@@ -32,7 +35,6 @@ const ProductItem = ({ navigation }) => {
             </View>
         );
     }
-    const { DataPr } = useContext(DataContext);
     const renderProduct = ({ item }) => {
 
         return (
@@ -80,12 +82,12 @@ export default ProductItem;
 const styles = StyleSheet.create({
     card: {
         width: 160,
-        height: 215,
+        height: 240,
         backgroundColor: '#f9f9f9',
         borderRadius: 10,
         marginRight: 12,
         overflow: 'hidden',
-        position: 'relative',
+        position: 'static',
         boxSizing: 'border-box',
 
     },
@@ -97,8 +99,8 @@ const styles = StyleSheet.create({
     },
     heartIcon: {
         position: 'absolute',
-        top: 8,
-        right: 8,
+        top: 7,
+        right: 15,
         padding: 5,
         borderRadius: 20,
         borderWidth: 1,
@@ -130,6 +132,7 @@ const styles = StyleSheet.create({
         paddingVertical: 2,
         borderRadius: 5,
         alignSelf: 'flex-start',
+        marginTop:10
     },
     shipText: {
         marginLeft: 4,
