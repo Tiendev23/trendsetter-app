@@ -9,6 +9,7 @@ import ProductlistScreen from '../screens/stacks/ProductlistScreen';
 import editProfile from '../screens/stacks/editProfile';
 import EditAddressScreen from '../screens/stacks/EditAddressScreen';
 import ChangePasswordScreen from '../screens/stacks/ChangePasswordScreen';
+import ChatScreen from '../screens/stacks/ChatScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -31,6 +32,7 @@ export default function StackNavigator() {
             <Stack.Screen name="addr" component={EditAddressScreen} />
             <Stack.Screen name="ChangePasswordScreen" component={ChangePasswordScreen} />
             <Stack.Screen name="ForgotPasswordScreen" component={ForgotPassword} />
+            <Stack.Screen name="Chat" component={ChatScreen}/>
 
         </Stack.Navigator>
     );
