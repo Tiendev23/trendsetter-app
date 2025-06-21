@@ -184,7 +184,7 @@ const list = [
   {
     img: require("../../../assets/images/anh2.png"),
     title: "Admin",
-    nd: "Chào bạn, đây là tin nhắn chưa đọc. Hãy kiểm tra ngay!aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    nd: "Chào bạn, đây là tin nhắn chưa đọcaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
     read: false,
   },
   {
