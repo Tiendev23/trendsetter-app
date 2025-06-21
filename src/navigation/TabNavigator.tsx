@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { Home, Search, Notification, Account } from '../screens/tabs';
 import { StyleSheet } from 'react-native';
+import NotificationScreen from '../screens/tabs/NotificationScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -37,7 +38,7 @@ export default function TabNavigator() {
         >
             <Tab.Screen name="Home" component={Home} options={{ title: 'Trang chủ' }} />
             <Tab.Screen name="Search" component={Search} options={{ title: 'Tìm kiếm' }} />
-            <Tab.Screen name="Notifications" component={Notification} options={{ title: 'Thông báo' }} />
+            <Tab.Screen name="Notifications" component={NotificationScreen} options={{ title: 'Thông báo' }} />
             <Tab.Screen name="Account" component={Account} options={{ title: 'Tài khoản' }} />
         </Tab.Navigator>
     );
