@@ -81,7 +81,7 @@ export default ChatScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f2f2f2",
+    backgroundColor: "white",
   },
   messageBubble: {
     padding: 10,
@@ -90,16 +90,16 @@ const styles = StyleSheet.create({
     maxWidth: "75%",
   },
   myMessage: {
-    backgroundColor: "green",
+    backgroundColor: "#006340",
     alignSelf: "flex-end",
   },
   otherMessage: {
-    backgroundColor: "#FFF",
+    backgroundColor: "#555",
     alignSelf: "flex-start",
   },
   messageText: {
     fontSize: 16,
-    
+    color:'white'
   },
   inputText: {
     flexDirection: "row",
