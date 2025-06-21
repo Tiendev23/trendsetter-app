@@ -47,7 +47,7 @@ const ChatScreen: React.FC = (navigation) => {
   );
 
   return (
-    
+      
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === "ios" ? "padding" : undefined}

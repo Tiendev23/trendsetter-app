@@ -16,6 +16,9 @@ export default function NotificationScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
+      <View style={styles.headerContainer}>
+      <Text style={styles.headerTitle}>Thông báo</Text>
+    </View>
       {user ? (
         <ScrollView style={styles.container}>
           <View style={styles.dividerTop} />
