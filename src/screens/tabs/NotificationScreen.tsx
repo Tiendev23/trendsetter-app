@@ -177,6 +177,26 @@ const styles = StyleSheet.create({
     height: 2,
     backgroundColor: "#ccc",
   },
+  headerContainer: {
+        paddingVertical: 22,
+        paddingHorizontal: 18,
+    },
+    headerTitle: {
+        fontWeight: '600',
+        fontStyle: 'italic',
+        fontSize: 20,
+        color: '#006340',
+        textAlign: 'center',
+    },
+    headerActions: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        paddingHorizontal: 18,
+    },
 });
 
 
