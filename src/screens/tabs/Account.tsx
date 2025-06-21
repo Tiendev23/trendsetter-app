@@ -1,13 +1,13 @@
 import React, { useContext, useState } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, useWindowDimensions } from 'react-native';
 import AccountTabSection from '../../components/AccountTabSection';
-import CustomButton from '../../components/CustomButton';
-import { Context } from '../../contexts/AuthContext';
+import CustomButton from '../../components/buttons/CustomButton';
+import { AuthContext } from '../../contexts/AuthContext';
 import { useAppDispatch } from '../../redux/hooks';
 import { refresh } from '../../redux/features/auth/loginSlice';
 
-export default function AccountScreen({ navigation }) {
-    const { user, logout } = useContext(Context);
+export default function Account({ navigation }) {
+    const { user, logout } = useContext(AuthContext);
     const { height } = useWindowDimensions();
     const [contentHeight, setContentHeight] = useState(0);
     const dispatch = useAppDispatch();
@@ -34,9 +34,11 @@ export default function AccountScreen({ navigation }) {
                             >
                                 <View style={styles.menuWrapper}>
                                     <AccountTabSection
-                                        title='Hồ sơ'
+                                        title='Thiết lập tài khoản'
                                         label='Profile'
-                                        onPress={null}
+                                        onPress={()=>{
+                                            navigation.navigate('Profile')
+                                        }}
                                     />
                                     <AccountTabSection
                                         title='Giỏ hàng'
@@ -51,7 +53,7 @@ export default function AccountScreen({ navigation }) {
                                     <AccountTabSection
                                         title='Đơn hàng'
                                         label='Orders'
-                                        onPress={null}
+                                        onPress={()=>navigation.navigate('OrderStatus')}
                                     />
                                     <AccountTabSection
                                         title='Ví'

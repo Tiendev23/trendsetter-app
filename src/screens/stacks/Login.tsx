@@ -1,23 +1,23 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import CustomInput from '../../components/CustomInput';
-import CustomButton from '../../components/CustomButton';
+import CustomButton from '../../components/buttons/CustomButton';
 import AuthScreenHeader from '../../components/AuthScreenHeader';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { login, refresh } from '../../redux/features/auth/loginSlice';
-import { Context } from '../../contexts/AuthContext';
+import { AuthContext } from '../../contexts/AuthContext';
 import { LoginNav, LoginRoute } from '../../navigation/NavigationTypes';
 import ErrorWarnBox from '../../components/ErrorWarnBox';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 
-export default function LoginScreen({ navigation, route }: { navigation: LoginNav; route: LoginRoute }) {
+export default function Login({ navigation, route }: { navigation: LoginNav; route: LoginRoute }) {
 
     const [inputValue, setInputValue] = useState(route.params?.email || '');
     const [password, setPassword] = useState('');
     const [errorMess, setErrorMess] = useState('');
 
-    const context = useContext(Context);
+    const context = useContext(AuthContext);
     const dispatch = useAppDispatch();
     const { data, status, error } = useAppSelector(state => state.auth);
 

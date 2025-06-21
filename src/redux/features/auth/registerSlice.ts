@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import apiClient from "../../../api/apiClient";
 
 export const register = createAsyncThunk(
-    "account/register",
+    "user/register",
     async (body: any, { rejectWithValue }) => {
         try {
             const response = await apiClient.post("/users", body);

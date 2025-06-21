@@ -12,6 +12,18 @@ export const getAllProducts = createAsyncThunk(
         }
     }
 );
+//getproductbyId
+export const getProductById = createAsyncThunk(
+    'products/getById',
+    async (id: string, { rejectWithValue }) => {
+        try {
+            const res = await apiClient.get(`products/${id}`);
+            return res.data;
+        } catch (err: any) {
+            return rejectWithValue(err.response?.data?.message || 'Lỗi lấy chi tiết sản phẩm');
+        }
+    }
+);
 
 export const getBrand = createAsyncThunk(
     'brand/getBrand',
@@ -24,14 +36,19 @@ export const getBrand = createAsyncThunk(
         }
     }
 )
-const productSlice = createSlice({
-    name: 'products',
+const productsSlice = createSlice({
+    name: 'payments',
     initialState: {
+        // trang thái all product
         items: [],
         loading: "idle",
         error: null,
+        // trang thái brand
         brands: [],
         brandLoading: 'idle',
+        // trang thai sanphamtheodanhmuc
+        productId: [],
+        productByIdStatus: 'idle',
     },
     reducers: {}, // nếu cần xử lý thêm (xóa sp, v.v.)
 
@@ -60,7 +77,21 @@ const productSlice = createSlice({
                 state.brandLoading = 'failed';
                 state.error = action.payload || 'Đã xảy ra lỗi';
             });
+        builder
+            .addCase(getProductById.pending, (state) => {
+                state.productByIdStatus = 'loading';
+            })
+            .addCase(getProductById.fulfilled, (state, action) => {
+                state.productByIdStatus = 'succeeded';
+                state.productId = action.payload;
+                state.items = [action.payload]; // để reuse FlatList
+
+            })
+            .addCase(getProductById.rejected, (state, action) => {
+                state.productByIdStatus = 'failed';
+                state.error = action.payload;
+            });
     },
 });
 
-export default productSlice.reducer;
+export default productsSlice.reducer;

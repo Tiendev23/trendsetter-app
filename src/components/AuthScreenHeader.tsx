@@ -1,6 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, View } from 'react-native';
-import CustomDirectionButton from './ChevronButton';
+import CustomDirectionButton from './buttons/ChevronButton';
 import { useNavigation } from '@react-navigation/native';
 
 export default function AuthScreenHeader() {
@@ -22,7 +22,6 @@ export default function AuthScreenHeader() {
 const styles = StyleSheet.create({
     headerContainer: {
         marginBottom: 10,
-        backgroundColor: 'gray'
     },
     titleWrapper: {
         position: 'relative',

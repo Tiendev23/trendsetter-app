@@ -1,90 +1,94 @@
-import { FlatList, StyleSheet, Text, TextInput, View, ScrollView, TouchableOpacity, Image } from 'react-native'
-import React, { useContext } from 'react'
+import { FlatList, Text, TextInput, View, ScrollView, TouchableOpacity, Image, useWindowDimensions, RefreshControl, StyleSheet } from 'react-native'
+import React, { useContext, useState } from 'react'
 import SearchBar from '../../components/SearchBar'
 import Menubar from '../../components/Menubar'
 import WinterBanner from '../../components/Banner'
 import ProductItem from '../../components/ProductItems'
 import { HomeNav, TabsNav } from '../../navigation/NavigationTypes'
 import { useNavigation } from '@react-navigation/native'
+import eventBus from '../../utils/Evenbus'
 
 export default function HomeScreen({navigation}) {
     const tabNav = useNavigation<HomeNav>();
     const stackNav = useNavigation<TabsNav>();
+    const [refreshing, setRefreshing] = useState(false);
+// refreshing
+    const onRefresh = () => {
+        setRefreshing(true);
+        eventBus.emit('REFRESH_ALL');
+        setRefreshing(false);
+    }
 
-    // const btnSeeall = () => {
-    //     return (
-    //         <TouchableOpacity
-    //             onPress={() => {
-    //                 navigation.navigate('Search')
-    //             }}
-    //         >
-    //             <Text style={styles.txtRecommen}>See all</Text>
-    //         </TouchableOpacity>
-    //     )
-    // }
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <TouchableOpacity><Image source={require('../../../assets/images/fb.png')} style={styles.logo} resizeMode='contain' /></TouchableOpacity>
+                <TouchableOpacity><Image source={require('../../../assets/images/logo.jpg')} style={styles.logo} resizeMode='contain' /></TouchableOpacity>
                 <Text style={styles.txtTitle}>Trendsetter</Text>
                 <TouchableOpacity
-                onPress={()=>{
-                    navigation.navigate('Cart')
-                }}
+                    onPress={() => {
+                        stackNav.navigate('Cart')
+                    }}
                 ><Image source={require('../../../assets/icons/cart_icon.png')} style={styles.cart} resizeMode='contain' /></TouchableOpacity>
             </View>
             <ScrollView showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                        colors={['#006340']}
+                    />
+                }
             >
-                <WinterBanner />
+                <WinterBanner navigation={stackNav} />
                 <View style={styles.recommend}>
-                    <Text style={styles.textRecommend}>Recommended for you</Text>
+                    <Text style={styles.textRecommend}>Gợi Ý Cho Bạn</Text>
                     <TouchableOpacity
                         onPress={() => {
-                            tabNav.navigate('Search')
+                            navigation.navigate('ProductlistScreen',{title:'Gợi ý Cho bạn'})
                         }}
                     >
-                        <Text style={styles.textRecommend}>See all</Text>
+                        <Text style={styles.textRecommend}>Xem Thêm</Text>
                     </TouchableOpacity>
                 </View>
                 {/* Flatlist Product */}
                 <ProductItem navigation={stackNav} />
 
                 <View style={styles.recommend}>
-                    <Text style={styles.textRecommend}>Shop By Category</Text>
+                    <Text style={styles.textRecommend}>Mua sắm theo danh mục</Text>
                 </View>
-                <Menubar />
+                <Menubar navigation={stackNav} />
                 <View style={styles.recommend}>
-                    <Text style={styles.textRecommend}>Most Popular</Text>
+                    <Text style={styles.textRecommend}>Phổ Biến Nhất</Text>
                     <TouchableOpacity
                         onPress={() => {
-                            tabNav.navigate('Search')
+                            navigation.navigate('ProductlistScreen',{title:'Phổ biến nhất'})
                         }}
                     >
-                        <Text style={styles.textRecommend}>See all</Text>
+                        <Text style={styles.textRecommend}>Xem Thêm</Text>
                     </TouchableOpacity>
                 </View>
                 <ProductItem navigation={stackNav} />
                 <View style={styles.recommend}>
-                    <Text style={styles.textRecommend}>Featured Appareal</Text>
+                    <Text style={styles.textRecommend}>Sản phẩm quần áo tiêu biểu</Text>
                     <TouchableOpacity
                         onPress={() => {
-                            tabNav.navigate('Search')
+                            navigation.navigate('ProductlistScreen',{title:'Sản phẩm quần áo tiêu biểu'})
                         }}
                     >
-                        <Text style={styles.textRecommend}>See all</Text>
+                        <Text style={styles.textRecommend}>Xem Thêm</Text>
                     </TouchableOpacity>
                 </View>
                 <ProductItem navigation={stackNav} />
-                <WinterBanner />
+                <WinterBanner navigation={stackNav} />
                 <View style={styles.recommend}>
-                    <Text style={styles.textRecommend}>Featured Appareal</Text>
+                    <Text style={styles.textRecommend}>Sản Phẩm Quần Áo Tiêu Biểu</Text>
                     <TouchableOpacity
                         onPress={() => {
-                            tabNav.navigate('Search')
+                            navigation.navigate('ProductlistScreen',{title:'Sản phẩm quần áo tiêu biểu'})
                         }}
                     >
-                        <Text style={styles.textRecommend}>See all</Text>
+                        <Text style={styles.textRecommend}>Xem Thêm</Text>
                     </TouchableOpacity>
                 </View>
                 <ProductItem navigation={stackNav} />
@@ -95,7 +99,7 @@ export default function HomeScreen({navigation}) {
 
         </View >
     )
-}
+};
 
 
 const styles = StyleSheet.create({
@@ -119,8 +123,9 @@ const styles = StyleSheet.create({
         fontStyle: 'italic',
     },
     logo: {
-        height: 35,
+        height: 45,
         width: 50,
+        borderRadius: '50%'
     },
     cart: {
         height: 35,
@@ -142,8 +147,7 @@ const styles = StyleSheet.create({
     recommend: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginHorizontal: 10,
-        marginTop: 10,
+        margin: 10
     },
     textRecommend: {
         fontSize: 16,

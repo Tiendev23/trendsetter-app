@@ -1,193 +1,112 @@
-import { FlatList, StyleSheet, Text, TouchableOpacity, View, Image, } from 'react-native'
-import React, { useState } from 'react'
-import { Ionicons } from '@expo/vector-icons'
+import { FlatList, StyleSheet, Text, View } from 'react-native'
+import React, { useContext } from 'react'
+import { CartNav } from '../../navigation/NavigationTypes';
+import CustomDirectionButton from '../../components/buttons/ChevronButton';
+import Skeleton from '../../components/loaders/Skeleton';
+import { CartContext } from '../../contexts/CartContext';
+import CartItem from '../../components/listItems/CartItem';
+import { formatCurrency } from '../../utils/formatForm';
+import CustomButton from '../../components/buttons/CustomButton';
+import { AuthContext } from '../../contexts/AuthContext';
 
-const Cart = ({ navigation }) => {
-    const data = [
-        { id: 1, name: 'Product 1', price: 10 },
-        { id: 2, name: 'Product 2', price: 20 },
-        { id: 3, name: 'Product 3', price: 30 },
-        { id: 4, name: 'Product 4', price: 40 },
-        { id: 5, name: 'Product 5', price: 50 },
-    ];
-
-    const [editing, setEditing] = useState(false);
+export default function Cart({ navigation }: { navigation: CartNav }) {
+    const cart = useContext(CartContext);
+    const { user } = useContext(AuthContext);
 
     return (
         <View style={styles.container}>
-            <View style={styles.header}>
-                <TouchableOpacity style={styles.header_btn} onPress={() => navigation.goBack()}>
-                    <Ionicons name='chevron-back' size={24} color='black' />
-                </TouchableOpacity>
-                <Text style={styles.header_title}>My Cart</Text>
-            </View>
+            {/* header */}
             <View>
-                <FlatList
-                    data={data}
-                    renderItem={({ item }) => (
-                        <View style={styles.listcart}>
-                    <Image
-                        source={require('../../../assets/images/banner-quang-cao-giay-1.png')
-                        } style={styles.image}
-                        resizeMode='stretch'
-                    />
-                    <Text style={styles.listcart_update} onPress={() => setEditing(!editing)}>Sửa</Text>
-
-                    <View style={styles.listcart_content}>
-                        <Text style={styles.txtname} numberOfLines={1}
-                            ellipsizeMode="tail"
-                        >Xin chào nàng thiếu nữ</Text>
-                        <Text style={styles.txtprice}>800,000 VND</Text>
-
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', height: 30, width: 260 }}>
-                            <View style={styles.shipTag}>
-                                <Ionicons name="rocket-outline" size={14} color="#000" />
-                                <Text style={styles.shipText}>Xpress Ship</Text>
-                            </View>
-                            <View style={styles.listcart_content_btn}>
-                                <TouchableOpacity>
-                                    <Ionicons name="remove" size={16} color="black" />
-                                </TouchableOpacity>
-                                <Text style={{ fontSize: 16 }}>16</Text>
-                                <TouchableOpacity>
-                                    <Ionicons name="add" size={16} color="black" />
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-
-                    </View>
-                    {editing && (
-                        <View style={styles.editPanel}>
-                            <TouchableOpacity>
-                                <Text style={styles.editText}>Xóa</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity>
-                                <Text style={styles.editText}>Sản phẩm liên quan</Text>
-                            </TouchableOpacity>
-                        </View>
-                    )}
-
+                <View style={styles.headerContainer}>
+                    <Text style={styles.headerTitle}>
+                        Giỏ Hàng
+                    </Text>
                 </View>
-                    )}
-                />
-                
+                <View style={styles.headerActions}>
+                    <CustomDirectionButton
+                        direction="back"
+                        onPress={() => navigation.goBack()}
+                    />
+                </View>
             </View>
+
+            <View style={{ flex: 1 }}>
+                <FlatList
+                    data={cart.items}
+                    // extraData={cartItems}
+                    renderItem={({ item }) => <CartItem item={item} />}
+                    contentContainerStyle={{ gap: 16, paddingVertical: 16 }}
+                />
+            </View>
+
+            {
+                user ?
+                    cart.items.length > 0 &&
+                    <View style={styles.pricingPanel}>
+                        <View style={styles.priceWrapper}>
+                            <Text style={styles.label}>Tổng cộng</Text>
+                            {
+                                cart.status === 'succeeded' ?
+                                    <Text style={[styles.label, styles.price]}>{formatCurrency(cart.getSubtotal())}</Text>
+                                    : <Skeleton width={100} height={20} />
+                            }
+                        </View>
+                        <CustomButton
+                            title='Mua Hàng'
+                            onPress={() => { navigation.navigate('Checkout') }}
+                        />
+                    </View>
+                    : null
+            }
         </View>
     )
 }
 
-export default Cart
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 10
+        backgroundColor: '#F7F7F9'
     },
-    header: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center', // căn giữa theo chiều ngang
-        position: 'relative',
+    headerContainer: {
+        backgroundColor: '#FFF',
+        paddingVertical: 22,
+        paddingHorizontal: 18,
     },
-    header_btn: {
-        position: 'absolute',
-        left: 0
-    },
-    header_title: {
-        fontSize: 24,
-        fontWeight: 'bold',
+    headerTitle: {
+        fontWeight: '600',
         fontStyle: 'italic',
+        fontSize: 20,
+        color: '#006340',
+        textAlign: 'center',
     },
-    listcart: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        padding: 15,
-        backgroundColor: 'rgba(213, 216, 215, 0.37)',
-        height: 100,
-        position: 'relative',
-        borderRadius: 10,
-
-    },
-    image: {
-        width: 87,
-        height: 85
-    },
-    listcart_content: {
-        boxSizing: 'border-box',
-        position: 'absolute',
-        top: 8,
-        left: 110
-
-
-    },
-    txtname: {
-        width: 230,
-        fontSize: 19,
-        fontWeight: '500',
-        color: '#333',
-        letterSpacing: 1,
-        lineHeight: 24,
-
-    },
-    txtprice: {
-        fontSize: 16,
-        color: '#333',
-        lineHeight: 24,
-        marginTop: 5
-    },
-    listcart_update: {
-        position: 'absolute',
-        right: 10,
-        top: 10,
-    },
-    shipTag: {
-        flexDirection: 'row',
-        backgroundColor: '#fff',
-        borderWidth: 1,
-        borderColor: '#006340',
-        paddingHorizontal: 6,
-        paddingVertical: 2,
-        borderRadius: 5,
-        alignSelf: 'flex-start',
-        marginTop: 5
-    },
-    shipText: {
-        marginLeft: 4,
-        fontSize: 12,
-        color: '#006340'
-
-    },
-    listcart_content_btn: {
+    headerActions: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        height: 18,
-        width: 60
-
-
-    },
-    editPanel: {
         position: 'absolute',
-        right: 0,
-        top: 40,
-        width: 160,
-        height: 70,
-        backgroundColor: '#f5f5f5',
-        padding: 10,
-        borderRadius: 8,
-        justifyContent: 'space-around',
-        elevation: 3, // bóng (Android)
-        shadowColor: '#000', // bóng (iOS)
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
-        shadowRadius: 2,
+        width: '100%',
+        height: '100%',
+        paddingHorizontal: 18,
     },
 
-    editText: {
-        fontSize: 14,
+    pricingPanel: {
+        padding: 20,
+        backgroundColor: '#FFFFFF',
+        gap: 20,
+        paddingBottom: 30
+    },
+
+    priceWrapper: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+    },
+    label: {
         fontWeight: '500',
-        color: '#333',
-        margin: 4
+        fontSize: 16,
+    },
+    price: {
+        color: '#006340'
     },
 
 })
