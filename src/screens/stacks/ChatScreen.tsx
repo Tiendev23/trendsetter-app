@@ -48,19 +48,7 @@ const ChatScreen: React.FC = (navigation) => {
 
   return (
     <View>
-      <View>
-        <View style={styles.headerContainer}>
-          <Text style={styles.headerTitle}>Message</Text>
-        </View>
-        <View style={styles.headerActions}>
-          <CustomDirectionButton
-            direction="back"
-            onPress={() => navigation.goBack()}
-          />
 
-          <ToCartButton navigation={navigation} />
-        </View>
-      </View>
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
