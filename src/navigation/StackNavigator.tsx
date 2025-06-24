@@ -2,6 +2,7 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import TabNavigator from './TabNavigator';
 import * as Stacks from '../screens/stacks'
+import ChatScreen from '../screens/stacks/ChatScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -25,6 +26,7 @@ export default function StackNavigator() {
             <Stack.Screen name="addr" component={Stacks.AddressEdit} />
             <Stack.Screen name="ChangePasswordScreen" component={Stacks.ChangePassword} />
             <Stack.Screen name="ForgotPasswordScreen" component={Stacks.ForgotPassword} />
+            <Stack.Screen name="Chat" component={ChatScreen}/>
 
         </Stack.Navigator>
     );
