@@ -14,7 +14,7 @@ interface Props {
     navigation: any;
 }
 
-const Profile: React.FC<Props> = ({ navigation }) => {
+export default function Profile({ navigation }) {
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const { user, } = useContext(AuthContext);
 
@@ -61,7 +61,7 @@ const Profile: React.FC<Props> = ({ navigation }) => {
                     <Text style={styles.sectionTitle}>Địa chỉ</Text>
                 </View>
                 <View style={styles.addressBox}>
-                    <Text style={styles.edittext} onPress={()=>{ navigation.navigate('addr')}}>Sửa</Text>
+                    <Text style={styles.edittext} onPress={() => { navigation.navigate('addr') }}>Sửa</Text>
 
                     <View style={styles.addressTopRow}>
                         <Ionicons
@@ -115,8 +115,6 @@ const Profile: React.FC<Props> = ({ navigation }) => {
         </ScrollView>
     );
 };
-
-export default Profile;
 
 const styles = StyleSheet.create({
     container: {

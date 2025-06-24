@@ -47,6 +47,8 @@ export default function Checkout({ navigation }: { navigation: CheckoutNav }) {
             items: cart.items,
             amount: subtotal
         };
+        console.log('data>>>', data);
+
         setOrderData(data);
     }
 

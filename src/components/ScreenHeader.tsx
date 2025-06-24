@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         color: '#006340',
         textAlign: 'center',
+        textTransform: 'capitalize',
     },
     headerActions: {
         flexDirection: 'row',

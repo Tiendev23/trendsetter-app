@@ -18,7 +18,7 @@ export const createOrder = createAsyncThunk(
 );
 
 const orderSlice = createSlice({
-    name: "order",
+    name: "orders",
     initialState: {
         data: null,
         status: "idle",

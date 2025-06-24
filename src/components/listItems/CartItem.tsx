@@ -197,8 +197,7 @@ const styles = StyleSheet.create({
         width: 100,
         aspectRatio: 1,
         borderRadius: 15,
-        justifyContent: 'center',
-        alignItems: 'center',
+        overflow: 'hidden'
     },
     infoWrapper: {
         gap: 6,
