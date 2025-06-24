@@ -3,6 +3,7 @@ import registerReducer from "./auth/registerSlice";
 import productsReducer from "./product/productsSlice";
 import productReducer from "./product/productSlice";
 import orderReducer from "./order/orderSlice";
+import ordersReducer from "./order/ordersSlice";
 import payOSReducer from "./payment/payOSSlice";
 import paymentsReducer from "./payment/paymentsSlice";
 
@@ -14,4 +15,5 @@ export {
     orderReducer,
     payOSReducer,
     paymentsReducer,
+    ordersReducer,
 };

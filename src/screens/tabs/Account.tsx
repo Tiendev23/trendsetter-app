@@ -5,8 +5,9 @@ import CustomButton from '../../components/buttons/CustomButton';
 import { AuthContext } from '../../contexts/AuthContext';
 import { useAppDispatch } from '../../redux/hooks';
 import { refresh } from '../../redux/features/auth/loginSlice';
+import { AccountNav, TabsNav } from '../../navigation/NavigationTypes';
 
-export default function Account({ navigation }) {
+export default function Account({ navigation }: { navigation: TabsNav }) {
     const { user, logout } = useContext(AuthContext);
     const { height } = useWindowDimensions();
     const [contentHeight, setContentHeight] = useState(0);
@@ -36,7 +37,7 @@ export default function Account({ navigation }) {
                                     <AccountTabSection
                                         title='Thiết lập tài khoản'
                                         label='Profile'
-                                        onPress={()=>{
+                                        onPress={() => {
                                             navigation.navigate('Profile')
                                         }}
                                     />
@@ -53,7 +54,7 @@ export default function Account({ navigation }) {
                                     <AccountTabSection
                                         title='Đơn hàng'
                                         label='Orders'
-                                        onPress={()=>navigation.navigate('OrderStatus')}
+                                        onPress={() => navigation.navigate('OrderHistory')}
                                     />
                                     <AccountTabSection
                                         title='Ví'

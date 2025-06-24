@@ -28,13 +28,13 @@ export default function PayOSWebView({ checkoutUrl, navigation, orderData, setPa
     useEffect(() => {
         if (status === 'succeeded') {
             setOrderStatus(status);
-            if (urlResult.includes('/success')) {
+            if (urlResult.includes('/succeeded')) {
                 setTimeout(() => {
                     setPaymentStatus(true);
                     dispatch(refresh());
                 }, 5000);
             };
-            if (urlResult.includes('/cancel')) {
+            if (urlResult.includes('/cancelled')) {
                 setTimeout(() => {
                     setPaymentStatus(false);
                     navigation.reset({

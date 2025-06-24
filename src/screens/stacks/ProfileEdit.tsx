@@ -4,8 +4,8 @@ import * as ImagePicker from 'expo-image-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { AuthContext } from '../../contexts/AuthContext';
 
-export default function EditProfileScreen({navigation}) {
-    const {user,setUser} = useContext(AuthContext)
+export default function ProfileEdit({ navigation }) {
+    const { user, setUser } = useContext(AuthContext)
 
     const [name, setName] = useState(user?.fullName || '');
     const [email, setEmail] = useState('');
@@ -27,30 +27,30 @@ export default function EditProfileScreen({navigation}) {
         }
     };
     const handleSave = () => {
-  if (!user) return;
+        if (!user) return;
 
-  const updatedUser = {
-    ...user,
-    fullName: name,
-    email,
-    gender,
-    dob: dob.toISOString(),
-    phone,
-    avatar,
-    updatedAt: new Date().toISOString(),
-  };
-  
- Alert.alert(
-    'Thành công',
-    'Thông tin đã được lưu.',
-    [
-      {
-        text: 'OK',
-        onPress: () => navigation.goBack(), // quay lại màn hình trước
-      },
-    ],
-  );
-};
+        const updatedUser = {
+            ...user,
+            fullName: name,
+            email,
+            gender,
+            dob: dob.toISOString(),
+            phone,
+            avatar,
+            updatedAt: new Date().toISOString(),
+        };
+
+        Alert.alert(
+            'Thành công',
+            'Thông tin đã được lưu.',
+            [
+                {
+                    text: 'OK',
+                    onPress: () => navigation.goBack(), // quay lại màn hình trước
+                },
+            ],
+        );
+    };
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
@@ -64,11 +64,11 @@ export default function EditProfileScreen({navigation}) {
 
             <Text style={styles.label}>Họ và tên</Text>
             <TextInput value={name}
-            onChangeText={setName} style={styles.input} />
+                onChangeText={setName} style={styles.input} />
 
             <Text style={styles.label}>Email</Text>
-            <TextInput value={user.email} onChangeText={setEmail} style={[styles.input, { backgroundColor: '#EEE' }]} keyboardType="email-address"  editable={false}
- />
+            <TextInput value={user.email} onChangeText={setEmail} style={[styles.input, { backgroundColor: '#EEE' }]} keyboardType="email-address" editable={false}
+            />
 
             <Text style={styles.label}>Giới tính</Text>
             <View style={styles.genderContainer}>
@@ -100,7 +100,7 @@ export default function EditProfileScreen({navigation}) {
             <TextInput value={phone} onChangeText={setPhone} style={styles.input} keyboardType="phone-pad" />
 
             <TouchableOpacity style={styles.saveButton}
-            onPress={handleSave}>
+                onPress={handleSave}>
                 <Text style={styles.saveText}>Lưu thay đổi</Text>
             </TouchableOpacity>
         </ScrollView>

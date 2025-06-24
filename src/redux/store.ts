@@ -1,24 +1,17 @@
 import { configureStore } from "@reduxjs/toolkit";
-import {
-    loginReducer,
-    productsReducer,
-    productReducer,
-    registerReducer,
-    orderReducer,
-    payOSReducer,
-    paymentsReducer,
-} from "./features";
+import * as Reducer from "./features";
 
 export const store = configureStore({
     reducer: {
-        auth: loginReducer,
-        register: registerReducer,
-        products: productsReducer,
-        product: productReducer,
-        order: orderReducer,
-        payments: paymentsReducer,
+        auth: Reducer.loginReducer,
+        register: Reducer.registerReducer,
+        products: Reducer.productsReducer,
+        product: Reducer.productReducer,
+        order: Reducer.orderReducer,
+        payments: Reducer.paymentsReducer,
+        orders: Reducer.ordersReducer,
         // Phương thức hanh toán
-        payOSMethod: payOSReducer,
+        payOSMethod: Reducer.payOSReducer,
     },
 });
 

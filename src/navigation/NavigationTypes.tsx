@@ -10,9 +10,10 @@ export type AuthStackParamList = {
     SignUp: undefined;
     ForgotPassword: undefined;
     ProductDetail: { item?: Product };
-    Cart: undefined;
     Checkout: undefined;
-    Order: undefined;
+    Profile: undefined;
+    Cart: undefined;
+    OrderHistory: undefined;
     MethodSelection: { method?: Payment, setMethod?: React.Dispatch<React.SetStateAction<Payment>>, paymentMethods: Payment[] };
 };
 
@@ -32,7 +33,8 @@ export type ProDetailNav = NativeStackNavigationProp<AuthStackParamList, 'Produc
 export type ProDetailRoute = RouteProp<AuthStackParamList, 'ProductDetail'>;
 export type CartNav = NativeStackNavigationProp<AuthStackParamList, 'Cart'>;
 export type CheckoutNav = NativeStackNavigationProp<AuthStackParamList, 'Checkout'>;
-export type OrderNav = NativeStackNavigationProp<AuthStackParamList, 'Order'>;
+export type ProfileNav = NativeStackNavigationProp<AuthStackParamList, 'Profile'>;
+export type OrderNav = NativeStackNavigationProp<AuthStackParamList, 'OrderHistory'>;
 export type MethodSelectionNav = NativeStackNavigationProp<AuthStackParamList, 'MethodSelection'>;
 export type MethodSelectionRoute = RouteProp<AuthStackParamList, 'MethodSelection'>;
 
