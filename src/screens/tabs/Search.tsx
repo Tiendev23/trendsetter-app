@@ -118,7 +118,7 @@ export default function SearchScreen() {
                       style={[
                         styles.dropdownItemText,
                         activeCategory === item &&
-                          styles.activeDropdownItemText,
+                        styles.activeDropdownItemText,
                       ]}
                     >
                       {item}
@@ -132,21 +132,21 @@ export default function SearchScreen() {
       </View>
 
       {/* Loading state */}
-      {loading && (
+      {loading === 'loading' && (
         <View style={styles.centerContainer}>
           <Text>Đang tải...</Text>
         </View>
       )}
 
       {/* Error state */}
-      {error && (
+      {loading === 'failed' && (
         <View style={styles.centerContainer}>
           <Text style={styles.errorText}>Lỗi: {error}</Text>
         </View>
       )}
 
       {/* Danh sách sản phẩm */}
-      {!loading && !error && (
+      {loading === 'succeeded' && !error && (
         <FlatList
           data={filteredProducts}
           renderItem={renderProductItem}
@@ -156,10 +156,9 @@ export default function SearchScreen() {
           contentContainerStyle={styles.productList}
           showsVerticalScrollIndicator={false}
           ListEmptyComponent={
-            <View style={styles.centerContainer}>
-              <Text>Không tìm thấy sản phẩm nào</Text>
-            </View>
-          }
+          <View style={styles.centerContainer}>
+            <Text>Không tìm thấy sản phẩm nào</Text>
+          </View>}
         />
       )}
     </View>
