@@ -53,7 +53,7 @@ const Menubar = ({navigation}) => {
         return (
             <TouchableOpacity style={[styles.menuItem, { backgroundColor: '#111' }]}
             onPress={()=>{
-                navigation.navigate('ProductlistScreen',{_id:item})
+                navigation.navigate('ProductlistScreen',{brandId:item})
             }}>
                 <ImageBackground
                     source={require('../../assets/images/biti_hunter.png')} // Ảnh nền bên ngoài
