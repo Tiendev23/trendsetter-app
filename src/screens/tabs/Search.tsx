@@ -14,6 +14,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { getAllProducts } from "../../redux/features/product/productsSlice";
 import { fetchCategories } from "../../redux/features/category/categoriesSlice";
 import { Product } from "../../types";
+import { Ionicons } from '@expo/vector-icons';
 
 const { width } = Dimensions.get("window");
 
@@ -48,6 +49,9 @@ export default function SearchScreen() {
 
   const renderProductItem = ({ item }: { item: Product }) => (
     <View style={styles.productCard}>
+      <TouchableOpacity style={styles.favoriteIcon}>
+        <Ionicons name="heart-outline" size={22} color="#C21E0C" />
+      </TouchableOpacity>
       <Image
         source={
           typeof item.image === "string" ? { uri: item.image } : item.image
@@ -257,6 +261,17 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
+    elevation: 2,
+    position: 'relative',
+  },
+  favoriteIcon: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    zIndex: 2,
+    backgroundColor: '#fff',
+    borderRadius: 16,
+    padding: 4,
     elevation: 2,
   },
   productImage: {
