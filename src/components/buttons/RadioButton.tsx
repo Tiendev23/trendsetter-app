@@ -22,13 +22,13 @@ const styles = StyleSheet.create({
         aspectRatio: 1,
         borderWidth: 1,
         borderColor: '#006340',
-        borderRadius: '100%',
+        borderRadius: 100,
         padding: 2,
         marginEnd: 10
     },
     solid: {
         flex: 1,
-        borderRadius: '100%',
+        borderRadius: 100,
 
     },
     selected: {
