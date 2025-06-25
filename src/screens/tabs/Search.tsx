@@ -15,11 +15,15 @@ import { getAllProducts } from "../../redux/features/product/productsSlice";
 import { fetchCategories } from "../../redux/features/category/categoriesSlice";
 import { Product } from "../../types";
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { AuthStackParamList } from '../../navigation/NavigationTypes';
 
 const { width } = Dimensions.get("window");
 
 export default function SearchScreen() {
   const dispatch = useAppDispatch();
+  const navigation = useNavigation<NativeStackNavigationProp<AuthStackParamList>>();
 
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("Tất Cả");
@@ -48,7 +52,7 @@ export default function SearchScreen() {
   });
 
   const renderProductItem = ({ item }: { item: Product }) => (
-    <View style={styles.productCard}>
+    <TouchableOpacity style={styles.productCard} onPress={() => navigation.navigate('ProductDetail', { item })}>
       <TouchableOpacity style={styles.favoriteIcon}>
         <Ionicons name="heart-outline" size={22} color="#C21E0C" />
       </TouchableOpacity>
@@ -64,7 +68,7 @@ export default function SearchScreen() {
         <Text style={styles.productName}>{item.name || 'Unknown Product'}</Text>
         <Text style={styles.productPrice}>{item.price || 0}₫</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
   // rồi vậy thôi
   return (
