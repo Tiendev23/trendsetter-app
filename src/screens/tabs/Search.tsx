@@ -53,8 +53,8 @@ export default function SearchScreen() {
 
   const renderProductItem = ({ item }: { item: Product }) => (
     <TouchableOpacity style={styles.productCard} onPress={() => navigation.navigate('ProductDetail', { item })}>
-      <TouchableOpacity style={styles.favoriteIcon}>
-        <Ionicons name="heart-outline" size={22} color="#C21E0C" />
+      <TouchableOpacity style={styles.heartIcon}>
+        <Ionicons name="heart-outline" size={24} color="white" />
       </TouchableOpacity>
       <Image
         source={
@@ -268,15 +268,16 @@ const styles = StyleSheet.create({
     elevation: 2,
     position: 'relative',
   },
-  favoriteIcon: {
+  heartIcon: {
     position: 'absolute',
-    top: 8,
-    right: 8,
+    top: 7,
+    right: 15,
+    padding: 5,
+    borderRadius: 20,
+    backgroundColor: '#E0E0E0',
+    borderWidth: 1,
+    borderColor: 'transparent',
     zIndex: 2,
-    backgroundColor: '#fff',
-    borderRadius: 16,
-    padding: 4,
-    elevation: 2,
   },
   productImage: {
     width: "100%",
