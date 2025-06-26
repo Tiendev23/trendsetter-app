@@ -6,7 +6,7 @@ import orderReducer from "./order/orderSlice";
 import ordersReducer from "./order/ordersSlice";
 import payOSReducer from "./payment/payOSSlice";
 import paymentsReducer from "./payment/paymentsSlice";
-
+import categoriesReducer from "./category/categoriesSlice";
 export {
     loginReducer,
     registerReducer,
@@ -16,4 +16,5 @@ export {
     payOSReducer,
     paymentsReducer,
     ordersReducer,
+    categoriesReducer,
 };
