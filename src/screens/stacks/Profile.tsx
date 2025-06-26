@@ -7,7 +7,7 @@ import {
     TouchableOpacity,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import PasswordConfirmModal from '../../components/PasswordConfirmModal'; // chỉnh đường dẫn nếu cần
+import PasswordConfirmModal from '../../components/Password/PasswordConfirmModal'; // chỉnh đường dẫn nếu cần
 import { AuthContext } from '../../contexts/AuthContext';
 
 interface Props {
@@ -110,7 +110,7 @@ const Profile: React.FC<Props> = ({ navigation }) => {
                 visible={modalVisible}
                 onClose={() => setModalVisible(false)}
                 onSuccess={() => navigation.navigate('ChangePasswordScreen')}
-                onForgotPassword={() => navigation.navigate('ForgotPasswordScreen')}
+                onForgotPassword={() => navigation.navigate('ForgotPassword')}
             />
         </ScrollView>
     );

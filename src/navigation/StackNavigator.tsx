@@ -5,9 +5,10 @@ import { ForgotPasswordScreen, LoginScreen, ProductDetailScreen, SignUpScreen, C
 import Profile from '../screens/stacks/Profile';
 import OrderStatus from '../screens/stacks/OrderStatus';
 import ProductlistScreen from '../screens/stacks/ProductlistScreen';
-import editProfile from '../screens/stacks/editProfile';
-import EditAddressScreen from '../screens/stacks/EditAddressScreen';
-import ChangePasswordScreen from '../screens/stacks/ChangePasswordScreen';
+import editProfile from '../screens/stacks/EditProfile/editProfile';
+import EditAddressScreen from '../screens/stacks/EditProfile/EditAddressScreen';
+import ChangePasswordScreen from '../screens/stacks/PassWord/ChangePasswordScreen';
+import VerifyOtpScreen from '../screens/stacks/PassWord/VerifyOtpScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -26,7 +27,7 @@ export default function StackNavigator() {
             <Stack.Screen name="editProfile" component={editProfile} />
             <Stack.Screen name="addr" component={EditAddressScreen} />
             <Stack.Screen name="ChangePasswordScreen" component={ChangePasswordScreen} />
-            <Stack.Screen name="ForgotPasswordScreen" component={ForgotPasswordScreen} />
+            <Stack.Screen name="VerifyOtpScreen" component={VerifyOtpScreen}/>
 
         </Stack.Navigator>
     );

@@ -1,4 +1,4 @@
-import ForgotPasswordScreen from "./ForgotPasswordScreen";
+import ForgotPasswordScreen from "./PassWord/ForgotPasswordScreen";
 import LoginScreen from "./LoginScreen";
 import ProductDetailScreen from "./ProductDetailScreen";
 import SignUpScreen from "./SignUpScreen";
@@ -10,4 +10,5 @@ export {
     SignUpScreen,
     ProductDetailScreen,
     CartScreen,
+    
 };

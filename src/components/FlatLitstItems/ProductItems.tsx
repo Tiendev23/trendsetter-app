@@ -1,12 +1,12 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList, ActivityIndicator, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useContext, useEffect } from 'react';
-import { DataContext } from '../contexts/DataContext';
+import { DataContext } from '../../contexts/DataContext';
 import { useDispatch, useSelector } from 'react-redux';
 // import { getAllProducts } from '../redux/slices/productSlice';
-import { RootState, AppDispatch } from '../redux/store';
-import { getAllProducts } from '../redux/features/product/productsSlice';
-import { formatCurrency } from '../utils/formatForm';
+import { RootState, AppDispatch } from '../../redux/store';
+import { getAllProducts } from '../../redux/features/product/productsSlice';
+import { formatCurrency } from '../../utils/formatForm';
 
 
 const { width, height } = Dimensions.get('window');
@@ -69,7 +69,8 @@ const ProductItem = ({ navigation }) => {
                 data={items}
                 renderItem={renderProduct}
                 keyExtractor={(item) => item._id}
-
+                initialNumToRender={4}
+                maxToRenderPerBatch={8}
                 horizontal
                 showsHorizontalScrollIndicator={false}
             />
@@ -132,7 +133,7 @@ const styles = StyleSheet.create({
         paddingVertical: 2,
         borderRadius: 5,
         alignSelf: 'flex-start',
-        marginTop:10
+        marginTop: 10
     },
     shipText: {
         marginLeft: 4,

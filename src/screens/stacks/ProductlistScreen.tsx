@@ -23,7 +23,6 @@ const ProductlistScreen = ({ navigation, route }) => {
     const { brandId,title } = route.params ;
     const dispatch = useDispatch<AppDispatch>();
     const { items, loading, error } = useSelector((state: RootState) => state.products);
-        console.log("t ow day ne",brandId)
 
     useEffect(() => {
         dispatch(getAllProducts());

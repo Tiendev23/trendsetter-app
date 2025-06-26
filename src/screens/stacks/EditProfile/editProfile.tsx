@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, ScrollView, Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { AuthContext } from '../../contexts/AuthContext';
+import { AuthContext } from '../../../contexts/AuthContext';
 
 export default function EditProfileScreen({navigation}) {
     const {user,setUser} = useContext(AuthContext)
@@ -56,7 +56,7 @@ export default function EditProfileScreen({navigation}) {
         <ScrollView contentContainerStyle={styles.container}>
             <TouchableOpacity onPress={handleImagePick}>
                 <Image
-                    source={avatar ? { uri: avatar } : require('../../../assets/images/nenchu.jpg')}
+                    source={avatar ? { uri: avatar } : require('../../../../assets/images/nenchu.jpg')}
                     style={styles.avatar}
                 />
                 <Text style={styles.avatarText}>Thay ảnh đại diện</Text>

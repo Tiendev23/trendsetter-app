@@ -1,11 +1,11 @@
 import { StyleSheet, Text, View, FlatList, TouchableOpacity, ActivityIndicator, ImageBackground } from 'react-native';
 import React, { useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getBrand } from '../redux/features/product/productsSlice';
-import { RootState, AppDispatch } from '../redux/store';
-import { DataContext } from '../contexts/DataContext';
+import { getBrand } from '../../redux/features/product/productsSlice';
+import { RootState, AppDispatch } from '../../redux/store';
+import { DataContext } from '../../contexts/DataContext';
 import MaskedView from '@react-native-masked-view/masked-view';
-import eventBus from '../utils/Evenbus';
+import eventBus from '../../utils/Evenbus';
 
 
 
@@ -56,7 +56,7 @@ const Menubar = ({navigation}) => {
                 navigation.navigate('ProductlistScreen',{brandId:item})
             }}>
                 <ImageBackground
-                    source={require('../../assets/images/biti_hunter.png')} // Ảnh nền bên ngoài
+                    source={require('../../../assets/images/biti_hunter.png')} // Ảnh nền bên ngoài
                     style={[StyleSheet.absoluteFill, { opacity: 0.7 }]}
                     resizeMode='repeat'
                 />
@@ -69,7 +69,7 @@ const Menubar = ({navigation}) => {
                     }
                 >
                     <ImageBackground
-                        source={require('../../assets/images/nenchu.jpg')} // Ảnh bên trong vùng chữ
+                        source={require('../../../assets/images/nenchu.jpg')} // Ảnh bên trong vùng chữ
                         style={[styles.imageBackground, { opacity: 0.7 }]} // giảm sáng ảnh chữ
                         imageStyle={styles.imageStyle}
                     />
