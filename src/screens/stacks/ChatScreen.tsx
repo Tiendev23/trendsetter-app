@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+
 type Message = {
   id: string;
   text: string;
@@ -50,8 +51,8 @@ const ChatScreen: React.FC = (navigation) => {
   return (
     <KeyboardAvoidingView
       style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : "height"} // iOS dùng padding
-      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20} // chỉnh offset phù hợp
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
     >
       <SafeAreaView style={{ flex: 1 }}>
         <FlatList
@@ -108,6 +109,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderColor: "#ccc",
     backgroundColor: "#fff",
+    marginBottom:20,
   },
 
   input: {
