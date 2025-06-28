@@ -1,8 +1,7 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { View, Text, Alert, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/buttons/CustomButton';
-import AuthScreenHeader from '../../components/AuthScreenHeader';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { refresh, register } from '../../redux/features/auth/registerSlice';
@@ -10,6 +9,8 @@ import { SignUpNav } from '../../navigation/NavigationTypes';
 import ErrorWarnBox from '../../components/ErrorWarnBox';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { validateEmail, validateFullName, validatePassword, validateUsername } from '../../utils/validateForm';
+import ScreenHeader from '../../components/ScreenHeader';
+import { setPrevRoute } from '../../redux/features/navigation/navigateSlice';
 
 export default function SignUp({ navigation }: { navigation: SignUpNav }) {
     const [username, setUsername] = useState('');
@@ -20,7 +21,13 @@ export default function SignUp({ navigation }: { navigation: SignUpNav }) {
 
     const dispatch = useAppDispatch();
     const { data, status, error } = useAppSelector(state => state.register);
-    console.log('>>>>>>>>>>>>\n', navigation.getState().routes);
+
+    useEffect(() => {
+        if (prevRoute) return;
+        dispatch(setPrevRoute(navigation.getState().routes[0]));
+    }, []);
+    const prevRoute = useAppSelector(state => state.navRoute.prevRoute);
+
     const handleRegister = () => {
         if (!validateFullName(fullName)) {
             setErrorMess('Họ và tên không hợp lệ');
@@ -38,7 +45,6 @@ export default function SignUp({ navigation }: { navigation: SignUpNav }) {
             setErrorMess('Mật khẩu không hợp lệ');
             return;
         }
-
         dispatch(register({
             username, password, email, fullName, role: 'customer'
         }))
@@ -64,9 +70,16 @@ export default function SignUp({ navigation }: { navigation: SignUpNav }) {
         }
     }, [status])
 
+
     return (
         <View style={styles.screenContainer}>
-            <AuthScreenHeader />
+            <ScreenHeader
+                title='Trendsetter'
+                titleStyle={{
+                    fontSize: 30,
+                    fontStyle: 'italic'
+                }}
+            />
 
             <View style={styles.contentContainer}>
                 <ErrorWarnBox content={errorMess} />

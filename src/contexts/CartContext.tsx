@@ -12,7 +12,8 @@ type CartContextType = {
     addToCart: (
         product: Product,
         selectedSize: string,
-        selectedColor: string
+        selectedColor: string,
+        quantity: number
     ) => void;
     deleteCartItem: (
         item: CartItem
@@ -27,10 +28,7 @@ type CartContextType = {
 export const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: ReactNode }) {
-    const [cart, setCart] = useState<CartItem[]>([
-        { "color": "Xanh", "name": "Nike Air Zoom Pegasus 40", "price": 5000, "product": "685bee08c9c6ffe04f185a3d", "quantity": 1, "size": "L" },
-        { "color": "Xanh", "name": "Nike Air Zoom Pegasus 40", "price": 5000, "product": "685bee08c9c6ffe04f185a3d", "quantity": 1, "size": "XL" }
-    ]);
+    const [cart, setCart] = useState<CartItem[]>([]);
     const [status, setStatus] = useState('idle');
     const getCartItem = (item: CartItem) => {
         return cart.find(
@@ -45,7 +43,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         return cart.reduce((subtotal, obj) => subtotal + (obj.price * obj.quantity), 0);
     };
 
-    const addToCart = (product: Product, selectedSize: string, selectedColor: string) => {
+    const addToCart = (product: Product, selectedSize: string, selectedColor: string, quantity: number) => {
         setCart((prev) => {
             const existingItem = prev.find(
                 (item) =>
@@ -59,7 +57,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
                     item.product === product._id &&
                         item.size === selectedSize &&
                         item.color === selectedColor
-                        ? { ...item, quantity: item.quantity + 1 }
+                        ? { ...item, quantity: item.quantity + quantity }
                         : item
                 );
             } else {
@@ -68,7 +66,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
                     {
                         name: product.name,
                         product: product._id,
-                        quantity: 1,
+                        quantity: quantity,
                         price: product.price,
                         size: selectedSize,
                         color: selectedColor,

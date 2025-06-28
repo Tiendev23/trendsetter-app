@@ -5,7 +5,7 @@ import CustomButton from '../../components/buttons/CustomButton';
 import { AuthContext } from '../../contexts/AuthContext';
 import { useAppDispatch } from '../../redux/hooks';
 import { refresh } from '../../redux/features/auth/loginSlice';
-import { AccountNav, TabsNav } from '../../navigation/NavigationTypes';
+import { TabsNav } from '../../navigation/NavigationTypes';
 
 export default function Account({ navigation }: { navigation: TabsNav }) {
     const { user, logout } = useContext(AuthContext);

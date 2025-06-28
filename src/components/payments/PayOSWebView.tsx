@@ -39,7 +39,7 @@ export default function PayosWebView({ navigation, orderData, setPaymentStatus, 
                 setTimeout(() => {
                     setPaymentStatus(true);
                     dispatch(refreshOrder());
-                }, 5000);
+                }, 3000);
             };
             if (urlResult.includes('/cancelled')) {
                 setTimeout(() => {
@@ -49,7 +49,7 @@ export default function PayosWebView({ navigation, orderData, setPaymentStatus, 
                         routes: [{ name: 'Tabs' }],
                     });
                     dispatch(refreshPayos());
-                }, 5000);
+                }, 3000);
             };
         }
         if (status === 'failed') {

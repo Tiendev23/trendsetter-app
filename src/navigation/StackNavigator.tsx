@@ -8,7 +8,7 @@ const Stack = createNativeStackNavigator();
 
 export default function StackNavigator() {
     return (
-        <Stack.Navigator initialRouteName="Checkout" screenOptions={{ headerShown: false }} id={undefined}>
+        <Stack.Navigator initialRouteName="Tabs" screenOptions={{ headerShown: false }} id={undefined}>
             <Stack.Screen name="Tabs" component={TabNavigator} />
             <Stack.Screen name="Login" component={Stacks.Login} />
             <Stack.Screen name="SignUp" component={Stacks.SignUp} />
