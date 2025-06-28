@@ -10,6 +10,7 @@ export const store = configureStore({
         order: Reducer.orderReducer,
         payments: Reducer.paymentsReducer,
         orders: Reducer.ordersReducer,
+        categories: Reducer.categoriesReducer,
         // Phương thức hanh toán
         payosMethod: Reducer.payosReducer,
         zalopayMethod: Reducer.zalopayReducer,

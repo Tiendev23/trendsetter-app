@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
     logo: {
         height: 45,
         width: 50,
-        borderRadius: '50%'
+        borderRadius: 25 
     },
     cart: {
         height: 35,

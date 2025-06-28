@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     sizeButton: {
-        borderRadius: '100%',
+        borderRadius: 100,
         width: 45,
         aspectRatio: 1,
         justifyContent: 'center',
