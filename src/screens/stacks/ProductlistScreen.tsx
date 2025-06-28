@@ -1,13 +1,4 @@
-import {
-    View,
-    Text,
-    StyleSheet,
-    Image,
-    TouchableOpacity,
-    FlatList,
-    ActivityIndicator,
-    Dimensions,
-} from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList, ActivityIndicator, Dimensions, RefreshControl } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,40 +7,33 @@ import { formatCurrency } from '../../utils/formatForm';
 import CustomDirectionButton from '../../components/ChevronButton';
 import ToCartButton from '../../components/ToCartButton';
 import { getAllProducts } from '../../redux/features/product/productsSlice';
+import eventBus from '../../utils/Evenbus';
 
 const { width } = Dimensions.get("window");
 
 const ProductlistScreen = ({ navigation, route }) => {
-    const { brandId,title } = route.params ;
+    const { brandId, title } = route.params;
     const dispatch = useDispatch<AppDispatch>();
     const { items, loading, error } = useSelector((state: RootState) => state.products);
+
+    const [refreshing, setRefreshing] = React.useState(false);
 
     useEffect(() => {
         dispatch(getAllProducts());
     }, [dispatch]);
 
-    if (loading === 'loading') {
-        return (
-            <View style={styles.center}>
-                <ActivityIndicator size="large" color="#006340" />
-                <Text>Đang tải sản phẩm...</Text>
-            </View>
-        );
-    }
 
-    if (loading === 'failed') {
-        return (
-            <View style={styles.center}>
-                <Text style={{ color: 'red' }}>Lỗi: {error}</Text>
-            </View>
-        );
-    }
+    const onRefresh = () => {
+        setRefreshing(true);
+        dispatch(getAllProducts()).finally(() => setRefreshing(false));
+    };
+
 
     const dataToRender = brandId?._id
         ? items.filter((product) => product.brand && product.brand._id === brandId._id)
         : items;
 
-    if ( brandId?._id &&dataToRender.length === 0) {
+    if (brandId?._id && dataToRender.length === 0) {
         return (
             <View style={styles.center}>
                 <Text>Không có sản phẩm nào thuộc thương hiệu được chọn</Text>
@@ -87,15 +71,42 @@ const ProductlistScreen = ({ navigation, route }) => {
                     <ToCartButton navigation={navigation} />
                 </View>
             </View>
-            <FlatList
-                data={dataToRender}
-                keyExtractor={(item) => item._id}
-                numColumns={2}
-                columnWrapperStyle={styles.row}
-                renderItem={renderProduct}
-                showsVerticalScrollIndicator={false}
-                contentContainerStyle={styles.listContent}
-            />
+            {loading === "loading" && !refreshing ? (
+                <View style={styles.center}>
+                    <ActivityIndicator size="large" color="#006340" />
+                    <Text>Đang tải sản phẩm...</Text>
+                </View>
+            ) : loading === "failed" ? (
+                <View style={styles.center}>
+                    <Text style={{ color: 'red' }}>Lỗi: {error}</Text>
+                </View>
+            ) : (!refreshing && (
+                <><FlatList
+                    data={dataToRender}
+                    keyExtractor={(item) => item._id}
+                    numColumns={2}
+                    columnWrapperStyle={styles.row}
+                    renderItem={renderProduct}
+                    showsVerticalScrollIndicator={false}
+                    contentContainerStyle={styles.listContent}
+
+
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={refreshing}
+                            onRefresh={onRefresh}
+                            colors={['#006340']}
+                            title="Đang làm mới sản phẩm..." // <- Dòng chữ bạn muốn hiển thị
+                            tintColor="#006340"
+                            titleColor="#006340"
+                        />
+                    }
+
+                /></>
+            ))
+            }
+
+
         </View>
     );
 };
@@ -106,7 +117,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1
     },
-     headerContainer: {
+    headerContainer: {
         backgroundColor: '#FFF',
         paddingVertical: 22,
         paddingHorizontal: 18,

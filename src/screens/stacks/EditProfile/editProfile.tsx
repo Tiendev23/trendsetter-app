@@ -56,7 +56,7 @@ export default function EditProfileScreen({navigation}) {
         <ScrollView contentContainerStyle={styles.container}>
             <TouchableOpacity onPress={handleImagePick}>
                 <Image
-                    source={avatar ? { uri: avatar } : require('../../../../assets/images/nenchu.jpg')}
+                    source={avatar ? { uri: avatar } : { uri: 'https://images-na.ssl-images-amazon.com/images/I/610Y2DFPlBL._RI_.jpg' }}
                     style={styles.avatar}
                 />
                 <Text style={styles.avatarText}>Thay ảnh đại diện</Text>

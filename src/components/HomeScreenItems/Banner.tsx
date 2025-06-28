@@ -7,29 +7,21 @@ import { getAllProducts } from '../../redux/features/product/productsSlice';
 import { RootState, AppDispatch } from '../../redux/store';
 import eventBus from '../../utils/Evenbus';
 import { formatCurrency } from '../../utils/formatForm';
+import { ProductsItem } from '../../navigation/NavigationTypes';
 
 const { width } = Dimensions.get('window');
-const WinterBanner = ({ navigation }) => {
-    const dispatch = useDispatch<AppDispatch>();
-    const { items, loading, error } = useSelector((state: RootState) => state.products);
+const WinterBanner :React.FC<ProductsItem> = ({ navigation,items }) => {
     const flatListRef = useRef<FlatList>(null);
-
-    useEffect(() => {
-        dispatch(getAllProducts());
-    }, [dispatch]);
-
-    // refeshing
-    useEffect(() => {
-        const listener = () => {
-            dispatch(getAllProducts());
-        };
-
-        eventBus.on('REFRESH_ALL', listener);
-
-        return () => {
-            eventBus.off('REFRESH_ALL', listener);
-        };
-    }, []);
+    // // refeshing
+    // useEffect(() => {
+    //     const listener = () => {
+    //         dispatch(getAllProducts());
+    //     };
+    //     eventBus.on('REFRESH_ALL', listener);
+    //     return () => {
+    //         eventBus.off('REFRESH_ALL', listener);
+    //     };
+    // }, []);
 
     const scrollX = useRef(new Animated.Value(0)).current;
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -65,22 +57,7 @@ const WinterBanner = ({ navigation }) => {
         return () => clearInterval(interval);
     }, [currentIndex, shuffledItems, width]);
 
-    if (loading === 'loading') {
-        return (
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <ActivityIndicator size="large" color="#006340" />
-                <Text>Đang tải sản phẩm...</Text>
-            </View>
-        );
-    }
-
-    if (loading === 'failed') {
-        return (
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <Text style={{ color: 'red' }}>Lỗi: {error}</Text>
-            </View>
-        );
-    }
+   
 
     const BannerItem = ({ item }) => {
         return (

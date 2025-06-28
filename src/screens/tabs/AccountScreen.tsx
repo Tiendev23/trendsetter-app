@@ -37,7 +37,7 @@ export default function AccountScreen({ navigation }) {
                                         title='Thiết lập tài khoản'
                                         label='Profile'
                                         onPress={()=>{
-                                            navigation.navigate('Profile')
+                                            navigation.navigate('Profile',{title:"Thiết lập tài khoản"})
                                         }}
                                     />
                                     <AccountTabSection

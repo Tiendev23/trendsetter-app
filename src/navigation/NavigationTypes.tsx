@@ -19,6 +19,18 @@ export type BottomTabParamList = {
     Notifications: undefined;
     Account: undefined;
 }
+
+
+export type ProductsItem = {
+    navigation: any;
+    items: any[];
+
+}
+export type BannerItem={
+    navigation: any;
+    brands :any []; 
+
+}
 // Định nghĩa kiểu navigation, route cho từng màn hình
 export type TabsNav = NativeStackNavigationProp<AuthStackParamList, 'Tabs'>;
 export type LoginNav = NativeStackNavigationProp<AuthStackParamList, 'Login'>;
