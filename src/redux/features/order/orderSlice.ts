@@ -11,7 +11,7 @@ export const createOrder = createAsyncThunk(
 
             return response.data;
         } catch (error) {
-            console.log("error", error);
+            console.log("orderSlice > error", error);
             return rejectWithValue(error.response?.data?.message);
         }
     }

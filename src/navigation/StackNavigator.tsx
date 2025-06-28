@@ -8,7 +8,7 @@ const Stack = createNativeStackNavigator();
 
 export default function StackNavigator() {
     return (
-        <Stack.Navigator initialRouteName="Tabs" screenOptions={{ headerShown: false }} id={undefined}>
+        <Stack.Navigator initialRouteName="Checkout" screenOptions={{ headerShown: false }} id={undefined}>
             <Stack.Screen name="Tabs" component={TabNavigator} />
             <Stack.Screen name="Login" component={Stacks.Login} />
             <Stack.Screen name="SignUp" component={Stacks.SignUp} />
@@ -26,7 +26,7 @@ export default function StackNavigator() {
             <Stack.Screen name="addr" component={Stacks.AddressEdit} />
             <Stack.Screen name="ChangePasswordScreen" component={Stacks.ChangePassword} />
             <Stack.Screen name="ForgotPasswordScreen" component={Stacks.ForgotPassword} />
-            <Stack.Screen name="Chat" component={ChatScreen}/>
+            <Stack.Screen name="Chat" component={ChatScreen} />
 
         </Stack.Navigator>
     );

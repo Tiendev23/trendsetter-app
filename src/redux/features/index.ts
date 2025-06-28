@@ -4,8 +4,9 @@ import productsReducer from "./product/productsSlice";
 import productReducer from "./product/productSlice";
 import orderReducer from "./order/orderSlice";
 import ordersReducer from "./order/ordersSlice";
-import payOSReducer from "./payment/payOSSlice";
+import payosReducer from "./payment/payosSlice";
 import paymentsReducer from "./payment/paymentsSlice";
+import zalopayReducer from "./payment/zalopaySlice";
 
 export {
     loginReducer,
@@ -13,7 +14,8 @@ export {
     productsReducer,
     productReducer,
     orderReducer,
-    payOSReducer,
     paymentsReducer,
     ordersReducer,
+    payosReducer,
+    zalopayReducer,
 };

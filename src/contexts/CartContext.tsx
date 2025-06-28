@@ -27,7 +27,10 @@ type CartContextType = {
 export const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: ReactNode }) {
-    const [cart, setCart] = useState<CartItem[]>([]);
+    const [cart, setCart] = useState<CartItem[]>([
+        { "color": "Xanh", "name": "Nike Air Zoom Pegasus 40", "price": 5000, "product": "685bee08c9c6ffe04f185a3d", "quantity": 1, "size": "L" },
+        { "color": "Xanh", "name": "Nike Air Zoom Pegasus 40", "price": 5000, "product": "685bee08c9c6ffe04f185a3d", "quantity": 1, "size": "XL" }
+    ]);
     const [status, setStatus] = useState('idle');
     const getCartItem = (item: CartItem) => {
         return cart.find(

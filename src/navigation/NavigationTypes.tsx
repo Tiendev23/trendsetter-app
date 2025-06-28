@@ -14,7 +14,7 @@ export type AuthStackParamList = {
     Profile: undefined;
     Cart: undefined;
     OrderHistory: undefined;
-    MethodSelection: { method?: Payment, setMethod?: React.Dispatch<React.SetStateAction<Payment>>, paymentMethods: Payment[] };
+    MethodSelection: { method?: Payment, paymentMethods: Payment[] };
 };
 
 export type BottomTabParamList = {

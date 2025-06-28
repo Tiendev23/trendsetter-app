@@ -11,7 +11,8 @@ export const store = configureStore({
         payments: Reducer.paymentsReducer,
         orders: Reducer.ordersReducer,
         // Phương thức hanh toán
-        payOSMethod: Reducer.payOSReducer,
+        payosMethod: Reducer.payosReducer,
+        zalopayMethod: Reducer.zalopayReducer,
     },
 });
 
