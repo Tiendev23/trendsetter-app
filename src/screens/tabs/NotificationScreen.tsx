@@ -17,8 +17,8 @@ export default function NotificationScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
-      <Text style={styles.headerTitle}>Thông báo</Text>
-    </View>
+        <Text style={styles.headerTitle}>Thông báo</Text>
+      </View>
       {user ? (
         <ScrollView style={styles.container}>
           <View style={styles.dividerTop} />
@@ -41,9 +41,8 @@ export default function NotificationScreen({ navigation }) {
                     >
                       {item.title}
                     </Text>
-                    {!item.read && <View style={styles.unreadDot} />}
+                    {!item.read && <View style={styles.unread} />}
                   </View>
-
                   <Text
                     style={styles.message}
                     numberOfLines={1}
@@ -51,6 +50,7 @@ export default function NotificationScreen({ navigation }) {
                   >
                     {item.nd}
                   </Text>
+                  <Text style={styles.timeText}>{item.time}</Text>{" "}
                 </View>
               </TouchableOpacity>
 
@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
     lineHeight: 18,
   },
-  unreadDot: {
+  unread: {
     width: 10,
     height: 10,
     borderRadius: 5,
@@ -180,41 +180,47 @@ const styles = StyleSheet.create({
     height: 2,
     backgroundColor: "#ccc",
   },
-  headerContainer: {
-        paddingVertical: 22,
-        paddingHorizontal: 18,
-    },
-    headerTitle: {
-        fontWeight: '600',
-        fontStyle: 'italic',
-        fontSize: 20,
-        color: '#006340',
-        textAlign: 'center',
-    },
-    headerActions: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        position: 'absolute',
-        width: '100%',
-        height: '100%',
-        paddingHorizontal: 18,
-    },
-});
+  timeText: {
+    fontSize: 12,
+    color: "#888",
+    marginTop: 6,
+  },
 
+  headerContainer: {
+    paddingVertical: 22,
+    paddingHorizontal: 18,
+  },
+  headerTitle: {
+    fontWeight: "600",
+    fontStyle: "italic",
+    fontSize: 20,
+    color: "#006340",
+    textAlign: "center",
+  },
+  headerActions: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+    paddingHorizontal: 18,
+  },
+});
 
 const list = [
   {
     img: require("../../../assets/images/anh2.png"),
     title: "Admin",
-    nd: "Chào bạn, đây là tin nhắn chưa đọcaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    nd: "Chào bạn, đây là tin nhắn chưa đọc. Hãy kiểm tra ngay!",
     read: false,
+    time: "10:45 AM",
   },
   {
     img: require("../../../assets/images/anh2.png"),
     title: "Shop thời trang",
-    nd: "Đơn hàng của bạn đã được giao thành công. ",
+    nd: "Đơn hàng của bạn đã được giao thành công. Cảm ơn bạn!",
     read: true,
+    time: "Hôm qua",
   },
 ];
-
