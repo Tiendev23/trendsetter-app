@@ -144,7 +144,7 @@ export default function ProductDetail({ navigation, route }: { navigation: ProDe
                             <Text style={styles.subtotalPrice}>{formatCurrency(subtotal)}</Text>
                         </View>
 
-                        <View style={{ flex: 1 }}>
+                        <View style={styles.buttonWrapper}>
                             <CustomButton
                                 title="Thêm vào giỏ hàng"
                                 onPress={() => { addToCart(product, selectedSize, "Xanh") }}
@@ -255,9 +255,14 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 5 }, // Độ lệch của bóng
         shadowOpacity: 0.3, // Độ trong suốt của bóng
         shadowRadius: 5, // Độ rộng của bóng
+        justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        gap: 12,
     },
     subtotalTextContainer: {
-        flex: 1,
+        flexBasis: '45%',
+        flexGrow: 1,
+        flexShrink: 1,
         gap: 4,
     },
     subtotalTitle: {
@@ -267,5 +272,10 @@ const styles = StyleSheet.create({
     subtotalPrice: {
         fontSize: 24,
         fontWeight: '500',
+    },
+    buttonWrapper: {
+        flexBasis: '55%',
+        flexGrow: 1,
+        flexShrink: 1,
     },
 });

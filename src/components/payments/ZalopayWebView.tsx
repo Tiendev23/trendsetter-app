@@ -1,9 +1,9 @@
-import { ActivityIndicator, ScrollView, View } from 'react-native'
+import { ActivityIndicator, Alert, Linking, ScrollView, View } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import WebView from 'react-native-webview';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { createOrder, refresh as refreshOrder } from '../../redux/features/order/orderSlice';
-import { refresh as refreshPayos } from '../../redux/features/payment/payosSlice';
+import { refresh as refreshZalopay } from '../../redux/features/payment/zalopaySlice';
 import { AuthContext } from '../../contexts/AuthContext';
 import { CreateOrderReq } from '../../types';
 import { CheckoutNav } from '../../navigation/NavigationTypes';
@@ -16,39 +16,42 @@ type Props = {
     setOrderStatus: React.Dispatch<React.SetStateAction<"loading" | "succeeded" | "failed">>
 }
 
-export default function PayosWebView({ navigation, orderData, setPaymentStatus, setOrderStatus }: Props) {
+export default function ZalopayWebView({ navigation, orderData, setPaymentStatus, setOrderStatus }: Props) {
     const [isPaid, setPaid] = useState<boolean>(false);
-    const [urlResult, setUrlResult] = useState('');
+    const [hasHandled, setHasHandled] = useState(false);
     const { user } = useContext(AuthContext);
     const cart = useContext(CartContext);
     const dispatch = useAppDispatch();
     const { status, data, error } = useAppSelector(state => state.order);
 
-    const { data: payosData, status: payosStatus } = useAppSelector(state => state.payosMethod);
+    const { data: zalopayData, status: zalopayStatus } = useAppSelector(state => state.zalopayMethod);
     const [checkoutUrl, setCheckoutUrl] = useState('');
 
     useEffect(() => {
-        if (payosStatus === 'succeeded') setCheckoutUrl(payosData.data.checkoutUrl);
-    }, [payosStatus]);
+        if (zalopayStatus === 'succeeded') {
+            setCheckoutUrl(zalopayData.order_url);
+            Linking.openURL(zalopayData.order_url);
+        }
+    }, [zalopayStatus]);
+
 
     useEffect(() => {
         if (status === 'succeeded') {
-            console.log('PayosWebView >> data', data);
+            console.log('ZalopayWebView >> data', data);
             setOrderStatus(status);
-            if (urlResult.includes('/succeeded')) {
+            if (isPaid) {
                 setTimeout(() => {
                     setPaymentStatus(true);
                     dispatch(refreshOrder());
                 }, 5000);
-            };
-            if (urlResult.includes('/cancelled')) {
+            } else {
                 setTimeout(() => {
                     setPaymentStatus(false);
                     navigation.reset({
                         index: 0,
                         routes: [{ name: 'Tabs' }],
                     });
-                    dispatch(refreshPayos());
+                    dispatch(refreshZalopay());
                 }, 5000);
             };
         }
@@ -72,16 +75,17 @@ export default function PayosWebView({ navigation, orderData, setPaymentStatus, 
 
     const handleNavigationChange = (navState) => {
         const { url, navigationType } = navState;
-        setUrlResult(url);
-        if (isPaid) return
-        if (url.includes('/succeeded')) {
-            cart.clearCart();
-            setPaid(true);
-            createOrderWithStatus(true);
-        } else if (url.includes('/cancelled')) {
-            cart.clearCart();
-            setPaid(true);
-            createOrderWithStatus(false);
+        if (isPaid) return;
+        if (url.includes('payments/succeeded?')) {
+            if (url.includes('status=1')) {
+                cart.clearCart();
+                setPaid(true);
+                createOrderWithStatus(true);
+            } else {
+                cart.clearCart();
+                setPaid(true);
+                createOrderWithStatus(false);
+            }
         }
     };
 

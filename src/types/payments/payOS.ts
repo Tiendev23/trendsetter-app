@@ -1,22 +1,6 @@
 import { CartItem } from "../cartItem";
 
-
-export type CreateRequestReq = {
-    // orderCode?: number; // 123
-    amount: number; // 56000000
-    // description?: string; // "VQRIO123"
-    buyerName: string; // "Nguyen Van A"
-    buyerEmail: string; // "buyer-email@gmail.com"
-    buyerPhone: string; // "090xxxxxxx"
-    buyerAddress: string; // "số nhà, đường, phường, tỉnh hoặc thành phố"
-    items: CartItem[];
-    // cancelUrl?: string; // "https://your-cancel-url.com"
-    // returnUrl?: string; // "https://your-success-url.com"
-    // expiredAt?: number; // 1696559798
-    // signature?: string; // "string"
-};
-
-export type CreateRequestRes = {
+export type PayosCreateRes = {
     code?: string; // "00"
     desc?: string; // "Success - Thành công"
     data?: {

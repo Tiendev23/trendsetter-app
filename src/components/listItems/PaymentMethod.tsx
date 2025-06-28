@@ -1,4 +1,4 @@
-import { Button, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Button, Image, StyleProp, StyleSheet, Text, TextInput, TouchableOpacity, View, ViewStyle } from 'react-native';
 import React from 'react';
 
 import { IMAGE_NOT_FOUND, Payment } from '../../types';
@@ -7,17 +7,17 @@ import RadioButton from '../buttons/RadioButton';
 type Props = {
     method: Payment;
     selectedMethod?: Payment;
-    setSelected?: React.Dispatch<React.SetStateAction<Payment>>;
+    setSelected?: (method: Payment) => void;
     isHideRadio?: boolean;
     disabled?: boolean;
+    style?: StyleProp<ViewStyle>,
 };
 
-export default function PaymentMethod({ method, selectedMethod, setSelected, isHideRadio, disabled }: Props) {
-
+export default function PaymentMethod({ method, selectedMethod, setSelected, isHideRadio, disabled, style }: Props) {
     return (
         method &&
         <TouchableOpacity
-            style={styles.container}
+            style={[styles.container, style]}
             onPress={() => setSelected?.(method)}
             disabled={disabled}
         >
@@ -54,10 +54,15 @@ const styles = StyleSheet.create({
         width: 50,
         aspectRatio: 1,
         justifyContent: 'center',
+        backgroundColor: 'gray',
+        borderRadius: 12,
+        overflow: 'hidden',
+        borderWidth: 1,
+        borderColor: '#E5E5E5'
     },
     logo: {
         flex: 1,
-        resizeMode: 'contain'
+        resizeMode: 'contain',
     },
     methodName: {
         flexShrink: 1,

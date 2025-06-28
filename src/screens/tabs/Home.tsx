@@ -8,11 +8,11 @@ import { HomeNav, TabsNav } from '../../navigation/NavigationTypes'
 import { useNavigation } from '@react-navigation/native'
 import eventBus from '../../utils/Evenbus'
 
-export default function HomeScreen({navigation}) {
+export default function Home({ navigation }) {
     const tabNav = useNavigation<HomeNav>();
     const stackNav = useNavigation<TabsNav>();
     const [refreshing, setRefreshing] = useState(false);
-// refreshing
+    // refreshing
     const onRefresh = () => {
         setRefreshing(true);
         eventBus.emit('REFRESH_ALL');
@@ -45,7 +45,7 @@ export default function HomeScreen({navigation}) {
                     <Text style={styles.textRecommend}>Gợi Ý Cho Bạn</Text>
                     <TouchableOpacity
                         onPress={() => {
-                            navigation.navigate('ProductlistScreen',{title:'Gợi ý Cho bạn'})
+                            navigation.navigate('ProductlistScreen', { title: 'Gợi ý Cho bạn' })
                         }}
                     >
                         <Text style={styles.textRecommend}>Xem Thêm</Text>
@@ -62,7 +62,7 @@ export default function HomeScreen({navigation}) {
                     <Text style={styles.textRecommend}>Phổ Biến Nhất</Text>
                     <TouchableOpacity
                         onPress={() => {
-                            navigation.navigate('ProductlistScreen',{title:'Phổ biến nhất'})
+                            navigation.navigate('ProductlistScreen', { title: 'Phổ biến nhất' })
                         }}
                     >
                         <Text style={styles.textRecommend}>Xem Thêm</Text>
@@ -73,7 +73,7 @@ export default function HomeScreen({navigation}) {
                     <Text style={styles.textRecommend}>Sản phẩm quần áo tiêu biểu</Text>
                     <TouchableOpacity
                         onPress={() => {
-                            navigation.navigate('ProductlistScreen',{title:'Sản phẩm quần áo tiêu biểu'})
+                            navigation.navigate('ProductlistScreen', { title: 'Sản phẩm quần áo tiêu biểu' })
                         }}
                     >
                         <Text style={styles.textRecommend}>Xem Thêm</Text>
@@ -85,7 +85,7 @@ export default function HomeScreen({navigation}) {
                     <Text style={styles.textRecommend}>Sản Phẩm Quần Áo Tiêu Biểu</Text>
                     <TouchableOpacity
                         onPress={() => {
-                            navigation.navigate('ProductlistScreen',{title:'Sản phẩm quần áo tiêu biểu'})
+                            navigation.navigate('ProductlistScreen', { title: 'Sản phẩm quần áo tiêu biểu' })
                         }}
                     >
                         <Text style={styles.textRecommend}>Xem Thêm</Text>

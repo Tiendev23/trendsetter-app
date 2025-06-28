@@ -40,23 +40,26 @@ export default function Cart({ navigation }: { navigation: CartNav }) {
             </View>
 
             {
-                user ?
-                    cart.items.length > 0 &&
-                    <View style={styles.pricingPanel}>
-                        <View style={styles.priceWrapper}>
-                            <Text style={styles.label}>Tổng cộng</Text>
-                            {
-                                cart.status === 'succeeded' ?
-                                    <Text style={[styles.label, styles.price]}>{formatCurrency(cart.getSubtotal())}</Text>
-                                    : <Skeleton width={100} height={20} />
-                            }
-                        </View>
-                        <CustomButton
-                            title='Mua Hàng'
-                            onPress={() => { navigation.navigate('Checkout') }}
-                        />
+                cart.items.length > 0 &&
+                <View style={styles.pricingPanel}>
+                    <View style={styles.priceWrapper}>
+                        <Text style={styles.label}>Tổng cộng</Text>
+                        {
+                            cart.status === 'succeeded' ?
+                                <Text style={[styles.label, styles.price]}>{formatCurrency(cart.getSubtotal())}</Text>
+                                : <Skeleton width={100} height={20} />
+                        }
                     </View>
-                    : null
+                    <CustomButton
+                        title='Mua Hàng'
+                        onPress={() => {
+                            user ?
+                                navigation.navigate('Checkout')
+                                :
+                                navigation.navigate('Login')
+                        }}
+                    />
+                </View>
             }
         </View>
     )

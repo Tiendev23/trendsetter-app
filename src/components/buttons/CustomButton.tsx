@@ -27,6 +27,7 @@ export default function CustomButton({ title, outlineStyle, onPress, onLongPress
 const styles = StyleSheet.create({
     btn: {
         paddingVertical: 15,
+        paddingHorizontal: 20,
         borderRadius: 15,
         width: '100%',
         alignItems: 'center',
@@ -37,5 +38,6 @@ const styles = StyleSheet.create({
     text: {
         fontWeight: '700',
         fontSize: 16,
+        textAlign: 'center'
     },
 });
