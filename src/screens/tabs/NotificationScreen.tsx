@@ -112,6 +112,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
   },
   login: {
+    flex:1,
     borderWidth: 1,
     borderColor: "#006340",
     borderRadius: 10,
@@ -125,6 +126,7 @@ const styles = StyleSheet.create({
     color: "#006340",
   },
   signup: {
+    flex:1,
     backgroundColor: "#006340",
     borderRadius: 10,
     width: 180,
