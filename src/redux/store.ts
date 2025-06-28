@@ -3,6 +3,7 @@ import * as Reducer from "./features";
 
 export const store = configureStore({
     reducer: {
+        navRoute: Reducer.navigationReducer,
         auth: Reducer.loginReducer,
         register: Reducer.registerReducer,
         products: Reducer.productsReducer,

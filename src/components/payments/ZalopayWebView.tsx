@@ -37,13 +37,13 @@ export default function ZalopayWebView({ navigation, orderData, setPaymentStatus
 
     useEffect(() => {
         if (status === 'succeeded') {
-            console.log('ZalopayWebView >> data', data);
+            console.log('ZalopayWebView > data', data);
             setOrderStatus(status);
             if (isPaid) {
                 setTimeout(() => {
                     setPaymentStatus(true);
                     dispatch(refreshOrder());
-                }, 5000);
+                }, 3000);
             } else {
                 setTimeout(() => {
                     setPaymentStatus(false);
@@ -52,13 +52,13 @@ export default function ZalopayWebView({ navigation, orderData, setPaymentStatus
                         routes: [{ name: 'Tabs' }],
                     });
                     dispatch(refreshZalopay());
-                }, 5000);
+                }, 3000);
             };
         }
         if (status === 'failed') {
             setOrderStatus(status);
             setPaymentStatus(true);
-            console.log('PayosWebView >>> error', error);
+            console.log('PayosWebView > error', error);
             dispatch(refreshOrder());
         }
     }, [status]);

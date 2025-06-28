@@ -2,7 +2,6 @@ import React, { useState, useContext, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/buttons/CustomButton';
-import AuthScreenHeader from '../../components/AuthScreenHeader';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { login, refresh } from '../../redux/features/auth/loginSlice';
@@ -10,6 +9,9 @@ import { AuthContext } from '../../contexts/AuthContext';
 import { LoginNav, LoginRoute } from '../../navigation/NavigationTypes';
 import ErrorWarnBox from '../../components/ErrorWarnBox';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import ScreenHeader from '../../components/ScreenHeader';
+import { resetPreRoute, setPrevRoute } from '../../redux/features/navigation/navigateSlice';
+import CustomDirectionButton from '../../components/buttons/ChevronButton';
 
 export default function Login({ navigation, route }: { navigation: LoginNav; route: LoginRoute }) {
 
@@ -21,15 +23,20 @@ export default function Login({ navigation, route }: { navigation: LoginNav; rou
     const dispatch = useAppDispatch();
     const { data, status, error } = useAppSelector(state => state.auth);
 
+    useEffect(() => {
+        if (prevRoute) return;
+        dispatch(setPrevRoute(navigation.getState().routes[0]));
+    }, []);
+    const prevRoute = useAppSelector(state => state.navRoute.prevRoute);
+
     const handleLogin = () => {
         dispatch(login({ emailOrUsername: inputValue, password: password }));
-    }
+    };
 
     useEffect(() => {
-
         if (status === 'succeeded') {
+            dispatch(resetPreRoute());
             context.login(data.user, data.token);
-
             navigation.reset({
                 index: 0,
                 routes: [{ name: 'Tabs' }],
@@ -47,7 +54,38 @@ export default function Login({ navigation, route }: { navigation: LoginNav; rou
 
     return (
         <View style={styles.screenContainer}>
-            <AuthScreenHeader />
+            <ScreenHeader
+                title='Trendsetter'
+                titleStyle={{
+                    fontSize: 30,
+                    fontStyle: 'italic'
+                }}
+                leftButton={
+                    <CustomDirectionButton
+                        direction="back"
+                        onPress={() => {
+                            const tabState = prevRoute.state;
+                            const activeIndex = tabState?.index ?? 0;
+                            dispatch(resetPreRoute())
+                            navigation.reset({
+                                index: 0,
+                                routes: [
+                                    {
+                                        name: prevRoute.name,
+                                        state: {
+                                            index: activeIndex,
+                                            routes: tabState.routes.map(route => ({
+                                                name: route.name,
+                                                params: route.params,
+                                            }))
+                                        }
+                                    }
+                                ]
+                            });
+                        }}
+                    />
+                }
+            />
 
             <View style={styles.contentContainer}>
                 <ErrorWarnBox content={errorMess} />

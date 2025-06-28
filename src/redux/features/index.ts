@@ -1,3 +1,4 @@
+import navigationReducer from "./navigation/navigateSlice";
 import loginReducer from "./auth/loginSlice";
 import registerReducer from "./auth/registerSlice";
 import productsReducer from "./product/productsSlice";
@@ -9,6 +10,7 @@ import paymentsReducer from "./payment/paymentsSlice";
 import zalopayReducer from "./payment/zalopaySlice";
 import categoriesReducer from "./category/categoriesSlice";
 export {
+    navigationReducer,
     loginReducer,
     registerReducer,
     productsReducer,

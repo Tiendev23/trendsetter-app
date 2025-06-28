@@ -8,6 +8,7 @@ import CartItem from '../../components/listItems/CartItem';
 import { formatCurrency } from '../../utils/formatForm';
 import CustomButton from '../../components/buttons/CustomButton';
 import { AuthContext } from '../../contexts/AuthContext';
+import ScreenHeader from '../../components/ScreenHeader';
 
 export default function Cart({ navigation }: { navigation: CartNav }) {
     const cart = useContext(CartContext);
@@ -15,20 +16,9 @@ export default function Cart({ navigation }: { navigation: CartNav }) {
 
     return (
         <View style={styles.container}>
-            {/* header */}
-            <View>
-                <View style={styles.headerContainer}>
-                    <Text style={styles.headerTitle}>
-                        Giỏ Hàng
-                    </Text>
-                </View>
-                <View style={styles.headerActions}>
-                    <CustomDirectionButton
-                        direction="back"
-                        onPress={() => navigation.goBack()}
-                    />
-                </View>
-            </View>
+            <ScreenHeader
+                title='Giỏ Hàng'
+            />
 
             <View style={{ flex: 1 }}>
                 <FlatList
