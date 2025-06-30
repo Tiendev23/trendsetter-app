@@ -6,7 +6,7 @@ export * from "./zalopay";
 export enum PaymentProvider {
     PAYOS = "payos",
     ZALOPAY = "zalopay",
-};
+}
 
 export type Payment = {
     _id?: string;
