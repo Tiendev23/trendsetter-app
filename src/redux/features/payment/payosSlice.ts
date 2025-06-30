@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import apiClient from "../../../api/apiClient";
-import { PayosCreateRes, CreateOrderReq, BaseState } from "../../../types";
+import { CreateOrderReq, BaseState, PayosCreateRes } from "../../../types";
 
 export const createPayosOrder = createAsyncThunk<
     PayosCreateRes,
@@ -18,7 +18,6 @@ export const createPayosOrder = createAsyncThunk<
         return rejectWithValue(error.response?.data?.message);
     }
 });
-
 
 const initialState: BaseState<PayosCreateRes> = {
     data: null,

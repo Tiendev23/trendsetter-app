@@ -14,7 +14,7 @@ import PaymentMethod from '../../components/listItems/PaymentMethod';
 import { fetchAllMethods, refresh as paymentsRefresh, setSelectedMethod } from '../../redux/features/payment/paymentsSlice';
 import Skeleton from '../../components/loaders/Skeleton';
 import ScreenHeader from '../../components/ScreenHeader';
-import { checkoutByProvider, getProviderFromMethod } from '../../../services/payment/CheckoutHandler';
+import { checkoutByProvider, getProviderFromMethod } from '../../services/payment/CheckoutHandler';
 import PaymentController from '../../components/payments/PaymentController';
 import OrderNotification from '../../components/payments/OrderNotification';
 import { BlurView } from 'expo-blur';

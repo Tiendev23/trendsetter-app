@@ -1,12 +1,12 @@
-import { createPayosOrder } from "../../src/redux/features/payment/payosSlice";
-import { createZalopayOrder } from "../../src/redux/features/payment/zalopaySlice";
-import { AppDispatch } from "../../src/redux/store";
+import { createPayosOrder } from "../../redux/features/payment/payosSlice";
+import { createZalopayOrder } from "../../redux/features/payment/zalopaySlice";
+import { AppDispatch } from "../../redux/store";
 import {
     CreateOrderReq,
     PaymentProvider,
     PayosCreateRes,
     ZalopayCreateRes,
-} from "../../src/types";
+} from "../../types";
 
 export const getProviderFromMethod = (methodName: string): PaymentProvider => {
     const lower = methodName.toLowerCase();

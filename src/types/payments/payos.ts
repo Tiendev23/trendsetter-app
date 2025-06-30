@@ -1,5 +1,3 @@
-import { CartItem } from "../cartItem";
-
 export type PayosCreateRes = {
     code?: string; // "00"
     desc?: string; // "Success - Thành công"
