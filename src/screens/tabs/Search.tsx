@@ -125,7 +125,7 @@ export default function SearchScreen() {
                     ]}
                     onPress={() => {
                       setActiveCategory(item);
-                      setDropdownVisible(false);
+                      setDropdownVisible(false);  
                     }}
                   >
                     <Text
