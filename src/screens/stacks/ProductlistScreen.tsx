@@ -8,6 +8,7 @@ import ToCartButton from '../../components/ToCartButton';
 const { width } = Dimensions.get('window');
 import { getAllProducts, getProductById } from '../../redux/features/product/productsSlice';
 import CustomDirectionButton from '../../components/buttons/ChevronButton';
+import { IMAGE_NOT_FOUND } from '../../types';
 
 const ProductlistScreen = ({ navigation, route, }) => {
     const { title, _id } = route.params;
@@ -48,7 +49,7 @@ const ProductlistScreen = ({ navigation, route, }) => {
             style={styles.card}
             onPress={() => navigation.navigate('ProductDetail', { item })}
         >
-            <Image source={{ uri: item.image }} style={styles.image} />
+            <Image source={{ uri: item.image || IMAGE_NOT_FOUND }} style={styles.image} />
             <TouchableOpacity style={styles.heartIcon}>
                 <Ionicons name="heart-outline" size={20} color="white" />
             </TouchableOpacity>

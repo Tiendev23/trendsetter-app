@@ -72,8 +72,10 @@ export default function InfoContainer({ type, value, onChangeText: setValue }: P
                     </View>
                 }
             </View>
-
-            <Text style={styles.error}>{errorMess}</Text>
+            {
+                errorMess &&
+                <Text style={styles.error}>{errorMess}</Text>
+            }
         </View>
     );
 }
@@ -90,7 +92,6 @@ const styles = StyleSheet.create({
     },
     contentContainer: {
         flex: 1,
-        gap: 2
     },
     label: {
         color: '#707B81',
@@ -101,6 +102,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: '500',
         lineHeight: 22,
+        paddingBottom: 0
     },
     inputEditable: {
         borderBottomColor: 'black',
@@ -111,6 +113,6 @@ const styles = StyleSheet.create({
         fontFamily: 'Raleway',
         fontWeight: 'medium',
         color: '#eb6566',
-        marginVertical: 6,
+        marginTop: 4,
     }
 });

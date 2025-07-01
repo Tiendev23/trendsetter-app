@@ -8,6 +8,7 @@ import ToCartButton from "../../components/ToCartButton";
 import { formatCurrency } from "../../utils/formatForm";
 import { CartContext } from "../../contexts/CartContext";
 import ScreenHeader from "../../components/ScreenHeader";
+import { IMAGE_NOT_FOUND } from "../../types";
 
 export default function ProductDetail({ navigation, route }: { navigation: ProDetailNav, route: ProDetailRoute }) {
     const product = route.params?.item;
@@ -35,7 +36,7 @@ export default function ProductDetail({ navigation, route }: { navigation: ProDe
                     {/* images */}
                     <View style={styles.imageContainer}>
                         <Image
-                            source={{ uri: product.image }}
+                            source={{ uri: product.image || IMAGE_NOT_FOUND }}
                             style={styles.image}
                         />
                     </View>

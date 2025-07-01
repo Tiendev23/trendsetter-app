@@ -2,7 +2,7 @@ import { CreateOrderReq, Payment, PaymentProvider } from "../../types";
 import { Text } from "react-native";
 import { CheckoutNav } from "../../navigation/NavigationTypes";
 import ZalopayWebView from "./ZalopayWebView";
-import ZalopayApp from "./ZalopayApp";
+import PayosWebView from "./PayosWebView";
 
 type Props = {
     provider: PaymentProvider;
@@ -17,7 +17,7 @@ export default function PaymentController(props: Props) {
 
     switch (provider) {
         case PaymentProvider.PAYOS:
-            // return <PayosWebView {...rest} />;
+            return <PayosWebView {...rest} />;
         case PaymentProvider.ZALOPAY:
             return <ZalopayWebView {...rest} />;
         default:

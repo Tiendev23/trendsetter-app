@@ -1,10 +1,12 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react';
-import {View,Text,StyleSheet,TouchableOpacity,FlatList,Dimensions,ActivityIndicator,Animated,ImageBackground,
+import {
+    View, Text, StyleSheet, TouchableOpacity, FlatList, Dimensions, ActivityIndicator, Animated, ImageBackground,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllProducts } from '../redux/features/product/productsSlice';
 import { RootState, AppDispatch } from '../redux/store';
 import eventBus from '../utils/Evenbus';
+import { IMAGE_NOT_FOUND } from '../types';
 
 const { width } = Dimensions.get('window');
 const WinterBanner = ({ navigation }) => {
@@ -17,15 +19,15 @@ const WinterBanner = ({ navigation }) => {
     }, [dispatch]);
 
     // refeshing
-        useEffect(() => {
+    useEffect(() => {
         const listener = () => {
-            dispatch(getAllProducts()); 
+            dispatch(getAllProducts());
         };
 
         eventBus.on('REFRESH_ALL', listener);
 
         return () => {
-            eventBus.off('REFRESH_ALL', listener); 
+            eventBus.off('REFRESH_ALL', listener);
         };
     }, []);
 
@@ -42,7 +44,7 @@ const WinterBanner = ({ navigation }) => {
     };
 
 
-     const shuffledItems = useMemo(() => shuffleArray(items), [items]);
+    const shuffledItems = useMemo(() => shuffleArray(items), [items]);
     // const shuffledItems = useMemo(() => {
     //     const filtered = items.filter(item => item.banner); // lọc trước
     //     return shuffleArray(filtered);
@@ -83,7 +85,7 @@ const WinterBanner = ({ navigation }) => {
     const BannerItem = ({ item }) => {
         return (
             <ImageBackground
-                source={{ uri: item.banner }}
+                source={{ uri: item.banner || IMAGE_NOT_FOUND }}
                 style={styles.bannerItem}
                 imageStyle={{ borderRadius: 12 }}
             >
@@ -142,7 +144,7 @@ const styles = StyleSheet.create({
     },
     bannerItem: {
         //width: 397,
-        width:width-38,
+        width: width - 38,
         height: 140,
         flexDirection: 'row',
         borderRadius: 12,
@@ -150,7 +152,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         marginHorizontal: 17,
-        marginTop:4,
+        marginTop: 4,
         backgroundColor: 'blue',
     },
     textContainer: {

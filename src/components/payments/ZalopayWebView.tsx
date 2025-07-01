@@ -1,4 +1,4 @@
-import { ActivityIndicator, Alert, Linking, ScrollView, View } from 'react-native'
+import { ActivityIndicator, ScrollView, View } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import WebView from 'react-native-webview';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -8,6 +8,7 @@ import { AuthContext } from '../../contexts/AuthContext';
 import { CreateOrderReq } from '../../types';
 import { CheckoutNav } from '../../navigation/NavigationTypes';
 import { CartContext } from '../../contexts/CartContext';
+import * as Linking from 'expo-linking';
 
 type Props = {
     navigation: CheckoutNav;
@@ -17,8 +18,8 @@ type Props = {
 }
 
 export default function ZalopayWebView({ navigation, orderData, setPaymentStatus, setOrderStatus }: Props) {
+    const [hasHandled, setHandled] = useState<boolean>(false);
     const [isPaid, setPaid] = useState<boolean>(false);
-    const [hasHandled, setHasHandled] = useState(false);
     const { user } = useContext(AuthContext);
     const cart = useContext(CartContext);
     const dispatch = useAppDispatch();
@@ -30,38 +31,8 @@ export default function ZalopayWebView({ navigation, orderData, setPaymentStatus
     useEffect(() => {
         if (zalopayStatus === 'succeeded') {
             setCheckoutUrl(zalopayData.order_url);
-            Linking.openURL(zalopayData.order_url);
         }
     }, [zalopayStatus]);
-
-
-    useEffect(() => {
-        if (status === 'succeeded') {
-            console.log('ZalopayWebView > data', data);
-            setOrderStatus(status);
-            if (isPaid) {
-                setTimeout(() => {
-                    setPaymentStatus(true);
-                    dispatch(refreshOrder());
-                }, 3000);
-            } else {
-                setTimeout(() => {
-                    setPaymentStatus(false);
-                    navigation.reset({
-                        index: 0,
-                        routes: [{ name: 'Tabs' }],
-                    });
-                    dispatch(refreshZalopay());
-                }, 3000);
-            };
-        }
-        if (status === 'failed') {
-            setOrderStatus(status);
-            setPaymentStatus(true);
-            console.log('PayosWebView > error', error);
-            dispatch(refreshOrder());
-        }
-    }, [status]);
 
     const createOrderWithStatus = (isSuccess: boolean) => {
         dispatch(createOrder({
@@ -74,20 +45,80 @@ export default function ZalopayWebView({ navigation, orderData, setPaymentStatus
     };
 
     const handleNavigationChange = (navState) => {
-        const { url, navigationType } = navState;
-        if (isPaid) return;
-        if (url.includes('payments/succeeded?')) {
-            if (url.includes('status=1')) {
-                cart.clearCart();
+        const { url } = navState;
+        console.log('url', url);
+        if (hasHandled) return;
+        console.log('you here 1');
+        if (url.includes('result?')) {
+            // const query = new URL(url).searchParams;
+            // console.log('query', query);
+            // const code = query.get('code');
+            // console.log('code', code);
+            if (!url.includes('returncode=1')) {
+                console.log('you here 2.1');
+                setPaid(false);
+                createOrderWithStatus(false);
+            } else {
+                console.log('you here 2.2');
                 setPaid(true);
                 createOrderWithStatus(true);
-            } else {
-                cart.clearCart();
-                setPaid(true);
-                createOrderWithStatus(false);
             }
+            cart.clearCart();
+            setHandled(true);
         }
+        console.log('you here 3');
     };
+
+    useEffect(() => {
+        if (status === 'succeeded') {
+            console.log('ZalopayWebView > data', data);
+            setOrderStatus(status);
+            if (isPaid) {
+                setTimeout(() => {
+                    setPaymentStatus(isPaid);
+                    dispatch(refreshZalopay());
+                }, 3000);
+            } else {
+                setTimeout(() => {
+                    setPaymentStatus(isPaid);
+                    navigation.reset({
+                        index: 0,
+                        routes: [{ name: 'Tabs' }],
+                    });
+                    dispatch(refreshZalopay());
+                }, 3000);
+            };
+        }
+        if (status === 'failed') {
+            setOrderStatus(status);
+            setPaymentStatus(isPaid);
+            console.log('ZalopayWebView > error', error);
+            dispatch(refreshZalopay());
+            dispatch(refreshOrder());
+        }
+    }, [status]);
+
+    /** Thao tác deeplink
+     *  useEffect(() => {
+     *      const checkURL = async () => {
+     *          const initialURL = await Linking.getInitialURL();
+     *          if (initialURL) {
+     *              console.log("Deep link được mở với:", initialURL);
+     *              const path = Linking.parse(initialURL).path;
+     *              console.log("Đường dẫn deep link:", path);
+     *          }
+     *      };
+     *      checkURL();
+     *  }, []);
+     *  
+     *  useEffect(() => {
+     *      const handleDeepLink = (event: { url: string }) => {
+     *          console.log('Deel link received:', event.url);
+     *      };
+     *      const subscription = Linking.addEventListener('url', handleDeepLink);
+     *      return () => { subscription.remove(); }
+     *  }, []);
+     */ 
 
     return (
         <View style={{
@@ -113,10 +144,13 @@ export default function ZalopayWebView({ navigation, orderData, setPaymentStatus
                         <WebView
                             source={{ uri: checkoutUrl }}
                             style={{ flex: 1 }}
-                            javaScriptEnabled={true}
-                            domStorageEnabled={true}
+                            // javaScriptEnabled={true}
+                            // domStorageEnabled={true}
                             scalesPageToFit={true}
+                            setSupportMultipleWindows={false}
                             onNavigationStateChange={handleNavigationChange}
+                            startInLoadingState
+                            renderLoading={() => <ActivityIndicator size={'large'} color={'#006340'} />}
                         />
                     </ScrollView>
             }

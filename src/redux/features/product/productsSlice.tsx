@@ -37,7 +37,7 @@ export const getBrand = createAsyncThunk(
     }
 )
 const productsSlice = createSlice({
-    name: 'payments',
+    name: 'products',
     initialState: {
         // trang thái all product
         items: [],

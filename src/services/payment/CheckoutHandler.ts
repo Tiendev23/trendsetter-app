@@ -5,6 +5,7 @@ import {
     CreateOrderReq,
     PaymentProvider,
     PayosCreateRes,
+    ZalopayCreateReq,
     ZalopayCreateRes,
 } from "../../types";
 
@@ -17,14 +18,19 @@ export const getProviderFromMethod = (methodName: string): PaymentProvider => {
 
 export const checkoutByProvider = (
     provider: PaymentProvider,
-    data: CreateOrderReq,
+    data: CreateOrderReq | ZalopayCreateReq,
     dispatch: AppDispatch
 ) => {
     switch (provider) {
         case PaymentProvider.PAYOS:
             return dispatch(createPayosOrder(data));
         case PaymentProvider.ZALOPAY:
-            return dispatch(createZalopayOrder(data));
+            return dispatch(
+                createZalopayOrder({
+                    ...data,
+                    urlCalbackSuccess: "trendsetter://checkout",
+                } as ZalopayCreateReq)
+            );
         default:
             throw new Error("Phương thức thanh toán chưa được hỗ trợ");
     }

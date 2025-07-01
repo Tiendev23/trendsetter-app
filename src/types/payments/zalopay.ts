@@ -1,3 +1,9 @@
+import { CreateOrderReq } from ".";
+
+export type ZalopayCreateReq = CreateOrderReq & {
+    urlCalbackSuccess: string;
+};
+
 export type ZalopayCreateRes = {
     return_code: number; // 1;
     return_message: string; // "Giao dịch thành công";

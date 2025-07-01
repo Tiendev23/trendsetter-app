@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { Home, Search, Notification, Account } from '../screens/tabs';
 import { StyleSheet } from 'react-native';
 import NotificationScreen from '../screens/tabs/NotificationScreen';
-
 const Tab = createBottomTabNavigator();
 
 export default function TabNavigator() {
+
     return (
         <Tab.Navigator
             id={undefined}

@@ -6,6 +6,7 @@ import { AuthContext } from '../../contexts/AuthContext';
 import { useAppDispatch } from '../../redux/hooks';
 import { refresh } from '../../redux/features/auth/loginSlice';
 import { TabsNav } from '../../navigation/NavigationTypes';
+import { IMAGE_NOT_FOUND } from '../../types';
 
 export default function Account({ navigation }: { navigation: TabsNav }) {
     const { user, logout } = useContext(AuthContext);
@@ -20,7 +21,7 @@ export default function Account({ navigation }: { navigation: TabsNav }) {
                     <>
                         <View style={styles.userSection}>
                             <Image
-                                source={{ uri: 'https://images-na.ssl-images-amazon.com/images/I/610Y2DFPlBL._RI_.jpg' }} // avatar
+                                source={{ uri: 'https://images-na.ssl-images-amazon.com/images/I/610Y2DFPlBL._RI_.jpg' || IMAGE_NOT_FOUND }} // avatar
                                 height={100}
                                 style={styles.userAvatar}
                             />
