@@ -9,11 +9,13 @@ import {
 } from "react-native";
 import { useState } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
+import { useMessages } from "../../contexts/ChatDataContext";
+import CustomButton from "../../components/buttons/CustomButton";
 
 export default function NotificationScreen({ navigation }) {
   const { user } = useContext(AuthContext);
   const [expanded, setExpanded] = useState(false);
-
+  const { messages } = useMessages();
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
@@ -23,11 +25,11 @@ export default function NotificationScreen({ navigation }) {
         <ScrollView style={styles.container}>
           <View style={styles.dividerTop} />
 
-          {list.map((item, index) => (
+          {messages.map((item, index) => (
             <View key={index}>
               <TouchableOpacity
                 style={styles.tag}
-                onPress={() => navigation.navigate("Chat")}
+                onPress={() => navigation.navigate("Chat", { id: item.id })}
               >
                 <Image source={item.img} style={styles.avatar} />
 
@@ -50,7 +52,7 @@ export default function NotificationScreen({ navigation }) {
                   >
                     {item.nd}
                   </Text>
-                  <Text style={styles.timeText}>{item.time}</Text>{" "}
+                  <Text style={styles.timeText}>{item.time}</Text>
                 </View>
               </TouchableOpacity>
 
@@ -65,20 +67,16 @@ export default function NotificationScreen({ navigation }) {
             Nhận thông báo đơn hàng và sản phẩm bạn theo dõi — hãy đăng nhập
             hoặc đăng ký.
           </Text>
-          <View style={styles.button}>
-            <TouchableOpacity
-              style={styles.login}
-              onPress={() => navigation.navigate("Login")}
-            >
-              <Text style={styles.loginText}>Đăng nhập</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={styles.signup}
+          <View style={styles.authContainer}>
+            <CustomButton
+              title="Đăng ký"
               onPress={() => navigation.navigate("SignUp")}
-            >
-              <Text style={styles.signupText}>Đăng ký</Text>
-            </TouchableOpacity>
+            />
+            <CustomButton
+              title="Đăng nhập"
+              outlineStyle
+              onPress={() => navigation.navigate("Login")}
+            />
           </View>
         </ScrollView>
       )}
@@ -106,38 +104,7 @@ const styles = StyleSheet.create({
     color: "#555",
     marginBottom: 20,
   },
-  button: {
-    flexDirection: "row",
-    marginVertical: 35,
-    justifyContent: "space-around",
-  },
-  login: {
-    flex:1,
-    borderWidth: 1,
-    borderColor: "#006340",
-    borderRadius: 10,
-    width: 180,
-    height: 50,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  loginText: {
-    fontWeight: "600",
-    color: "#006340",
-  },
-  signup: {
-    flex:1,
-    backgroundColor: "#006340",
-    borderRadius: 10,
-    width: 180,
-    height: 50,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  signupText: {
-    color: "white",
-    fontWeight: "600",
-  },
+
   avatar: {
     width: 50,
     height: 50,
@@ -206,6 +173,14 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: "100%",
     height: "100%",
+    paddingHorizontal: 18,
+  },
+  authContainer: {
+    marginTop: 20,
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 20,
     paddingHorizontal: 18,
   },
 });
