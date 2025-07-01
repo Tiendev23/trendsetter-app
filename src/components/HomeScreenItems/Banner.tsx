@@ -1,33 +1,27 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react';
-import {View,Text,StyleSheet,TouchableOpacity,FlatList,Dimensions,ActivityIndicator,Animated,ImageBackground,
+import {
+    View, Text, StyleSheet, TouchableOpacity, FlatList, Dimensions, ActivityIndicator, Animated, ImageBackground,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllProducts } from '../redux/features/product/productsSlice';
-import { RootState, AppDispatch } from '../redux/store';
-import eventBus from '../utils/Evenbus';
+import { getAllProducts } from '../../redux/features/product/productsSlice';
+import { RootState, AppDispatch } from '../../redux/store';
+import eventBus from '../../utils/Evenbus';
+import { formatCurrency } from '../../utils/formatForm';
+import { ProductsItem } from '../../navigation/NavigationTypes';
 
 const { width } = Dimensions.get('window');
-const WinterBanner = ({ navigation }) => {
-    const dispatch = useDispatch<AppDispatch>();
-    const { items, loading, error } = useSelector((state: RootState) => state.products);
+const WinterBanner :React.FC<ProductsItem> = ({ navigation,items }) => {
     const flatListRef = useRef<FlatList>(null);
-
-    useEffect(() => {
-        dispatch(getAllProducts());
-    }, [dispatch]);
-
-    // refeshing
-        useEffect(() => {
-        const listener = () => {
-            dispatch(getAllProducts()); 
-        };
-
-        eventBus.on('REFRESH_ALL', listener);
-
-        return () => {
-            eventBus.off('REFRESH_ALL', listener); 
-        };
-    }, []);
+    // // refeshing
+    // useEffect(() => {
+    //     const listener = () => {
+    //         dispatch(getAllProducts());
+    //     };
+    //     eventBus.on('REFRESH_ALL', listener);
+    //     return () => {
+    //         eventBus.off('REFRESH_ALL', listener);
+    //     };
+    // }, []);
 
     const scrollX = useRef(new Animated.Value(0)).current;
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -42,7 +36,7 @@ const WinterBanner = ({ navigation }) => {
     };
 
 
-     const shuffledItems = useMemo(() => shuffleArray(items), [items]);
+    const shuffledItems = useMemo(() => shuffleArray(items), [items]);
     // const shuffledItems = useMemo(() => {
     //     const filtered = items.filter(item => item.banner); // lọc trước
     //     return shuffleArray(filtered);
@@ -63,35 +57,22 @@ const WinterBanner = ({ navigation }) => {
         return () => clearInterval(interval);
     }, [currentIndex, shuffledItems, width]);
 
-    if (loading === 'loading') {
-        return (
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <ActivityIndicator size="large" color="#006340" />
-                <Text>Đang tải sản phẩm...</Text>
-            </View>
-        );
-    }
-
-    if (loading === 'failed') {
-        return (
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <Text style={{ color: 'red' }}>Lỗi: {error}</Text>
-            </View>
-        );
-    }
+   
 
     const BannerItem = ({ item }) => {
         return (
             <ImageBackground
                 source={{ uri: item.banner }}
                 style={styles.bannerItem}
-                imageStyle={{ borderRadius: 12 }}
+                imageStyle={{ borderRadius: 12, resizeMode: 'cover', opacity: 0.9 }}
             >
                 <View style={styles.textContainer}>
                     <Text style={styles.smallText} numberOfLines={1}>{item.name}</Text>
-                    <Text style={styles.bigText} numberOfLines={1}>{item.price} đ</Text>
+                    <Text style={styles.bigText} numberOfLines={1}>{formatCurrency(item.price)}</Text>
                     <Text style={styles.smallText} numberOfLines={1}>{item.description}</Text>
+
                 </View>
+
 
                 <TouchableOpacity
                     style={styles.button}
@@ -113,6 +94,8 @@ const WinterBanner = ({ navigation }) => {
                 horizontal
                 pagingEnabled
                 showsHorizontalScrollIndicator={false}
+                initialNumToRender={4}
+                maxToRenderPerBatch={8}
                 onScroll={Animated.event(
                     [{ nativeEvent: { contentOffset: { x: scrollX } } }],
                     { useNativeDriver: false }
@@ -142,7 +125,7 @@ const styles = StyleSheet.create({
     },
     bannerItem: {
         //width: 397,
-        width:width-38,
+        width: width - 38,
         height: 140,
         flexDirection: 'row',
         borderRadius: 12,
@@ -150,17 +133,18 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         marginHorizontal: 17,
-        marginTop:4,
-        backgroundColor: 'blue',
+        marginTop: 4,
     },
     textContainer: {
         flex: 1,
         marginRight: 10,
+
     },
     smallText: {
         color: '#fff',
         fontSize: 16,
         marginBottom: 4,
+
     },
     bigText: {
         color: '#fff',

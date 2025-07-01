@@ -14,7 +14,6 @@ export default function StackNavigator() {
             <Stack.Screen name="Tabs" component={TabNavigator} />
             <Stack.Screen name="Login" component={Stacks.Login} />
             <Stack.Screen name="SignUp" component={Stacks.SignUp} />
-            <Stack.Screen name="ForgotPassword" component={Stacks.ForgotPassword} />
             <Stack.Screen name="ProductDetail" component={Stacks.ProductDetail} />
             <Stack.Screen name="Cart" component={Stacks.Cart} />
             <Stack.Screen name="Checkout" component={Stacks.Checkout} />
@@ -26,9 +25,11 @@ export default function StackNavigator() {
             <Stack.Screen name='ProductlistScreen' component={Stacks.ProductlistScreen} />
             <Stack.Screen name="editProfile" component={Stacks.ProfileEdit} />
             <Stack.Screen name="addr" component={Stacks.AddressEdit} />
-            <Stack.Screen name="ChangePasswordScreen" component={Stacks.ChangePassword} />
-            <Stack.Screen name="ForgotPasswordScreen" component={Stacks.ForgotPassword} />
+            <Stack.Screen name="ChangePasswordScreen" component={Stacks.ChangePasswordScreen} />
+            <Stack.Screen name="ForgotPasswordScreen" component={Stacks.ForgotPasswordScreen} />
+            <Stack.Screen name="VerifyOtp" component={Stacks.VerifyOtp} />
             <Stack.Screen name="Chat" component={ChatScreen} />
+            <Stack.Screen name="TermsOfServiceScreen" component={Stacks.TermsOfServiceScreen} />
 
         </Stack.Navigator>
     );

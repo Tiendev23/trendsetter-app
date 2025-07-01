@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { TouchableOpacity, Text, StyleSheet, Image, View, ImageSourcePropType } from 'react-native';
+import { TouchableOpacity, Text, StyleSheet, View } from 'react-native';
 import CustomDirectionButton from './buttons/ChevronButton';
 
 type Props = {
@@ -11,19 +11,19 @@ type Props = {
 
 export default function AccountTabSection({ title, label, onPress }: Props) {
 
-    const iconMap: Record<string, ImageSourcePropType> = {
-        profile: require('../../assets/icons/profile_icon.png'),
-        mycart: require('../../assets/icons/cart_icon.png'),
-        favorite: require('../../assets/icons/favorite_icon.png'),
-        orders: require('../../assets/icons/orders_icon.png'),
-        wallet: require('../../assets/icons/wallet_icon.png'),
-        settings: require('../../assets/icons/setting_icon.png'),
-        signout: require('../../assets/icons/signout_icon.png'),
+    const iconMap: Record<string, keyof typeof Ionicons.glyphMap> = {
+        profile: 'person-outline',
+        mycart: 'cart-outline',
+        favorite: 'heart-outline',
+        orders: 'receipt-outline',
+        wallet: 'wallet-outline',
+        settings: 'settings-outline',
+        signout: 'log-out-outline',
     };
 
-    const getImageSource = (name: string): ImageSourcePropType => {
-        const formattedName = name.replace(/\s+/g, '').toLowerCase();
-        return iconMap[formattedName] || require('../../assets/icons/profile_icon.png');
+    const getIconName = (label: string): keyof typeof Ionicons.glyphMap => {
+        const key = label.replace(/\s+/g, '').toLowerCase();
+        return iconMap[key] || 'person-outline';
     };
 
     return (
@@ -32,17 +32,20 @@ export default function AccountTabSection({ title, label, onPress }: Props) {
             onPress={onPress}
         >
             <View style={styles.wrapper}>
-                <View style={styles.image}>
-                    <Image source={getImageSource(label)} style={styles.icon} />
-                </View>
+                <Ionicons
+                    name={getIconName(label)}
+                    size={22}
+                    color="#2B2B2B"
+                />
                 <Text style={styles.title}>{title}</Text>
             </View>
             {
-                label === 'Sign Out' ? null :
+                label === 'Sign Out' ? null : (
                     <CustomDirectionButton
-                        direction='forward'
+                        direction="forward"
                         onPress={onPress}
                     />
+                )
             }
         </TouchableOpacity>
     );
@@ -61,18 +64,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         gap: 24,
     },
-    image: {
-        width: 30,
-        alignItems: 'center',
-    },
-    icon: {
-        tintColor: '#2B2B2B',
-    },
     title: {
-        fontWeight: 'medium',
         fontSize: 16,
         lineHeight: 20,
         color: '#2B2B2B',
+        fontWeight: '500',
     },
-
-})
+});

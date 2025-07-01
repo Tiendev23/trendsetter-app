@@ -57,7 +57,7 @@ const Onboarding = ({ navigation, onFinish }) => {
       flatListRef.current?.scrollToIndex({ index: currentIndex + 1 });
     } else {
       if (navigation && navigation.replace) {
-        navigation.replace('Login');
+        navigation.replace('Tabs');
       } else if (onFinish) {
         onFinish();
       }

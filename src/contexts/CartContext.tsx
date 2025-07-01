@@ -13,7 +13,7 @@ type CartContextType = {
         product: Product,
         selectedSize: string,
         selectedColor: string,
-        quantity: number
+        quantity?: number
     ) => void;
     deleteCartItem: (
         item: CartItem

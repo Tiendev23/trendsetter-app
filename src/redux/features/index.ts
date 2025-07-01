@@ -9,6 +9,7 @@ import paymentsReducer from "./payment/paymentsSlice";
 import zalopayReducer from "./payment/zalopaySlice";
 import payosReducer from "./payment/payosSlice";
 import categoriesReducer from "./category/categoriesSlice";
+import ChangePasswordReducer from "./auth/ChangePassword";
 export {
     navigationReducer,
     loginReducer,
@@ -21,4 +22,5 @@ export {
     zalopayReducer,
     payosReducer,
     categoriesReducer,
+    ChangePasswordReducer
 };

@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { TouchableOpacity, Text, StyleSheet, View } from 'react-native';
-import Feather from '@expo/vector-icons/Feather';
+import { Ionicons } from '@expo/vector-icons'; 
 import { AuthContext } from '../contexts/AuthContext';
 import { CartContext } from '../contexts/CartContext';
 
@@ -14,7 +14,7 @@ export default function ToCartButton({ navigation }) {
             }}
             onPress={() => navigation.navigate('Cart')}
         >
-            <Feather name="shopping-cart" size={24} color="black" />
+            <Ionicons name="cart-outline" size={33} color="black"/>
             {cart.items.length > 0 && <View style={styles.dot} />}
         </TouchableOpacity>
     );
