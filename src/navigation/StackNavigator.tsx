@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import TabNavigator from './TabNavigator';
 import * as Stacks from '../screens/stacks'
@@ -8,6 +8,8 @@ import Onboarding from '../screens/Onboarding';
 const Stack = createNativeStackNavigator();
 
 export default function StackNavigator() {
+
+
     return (
         <Stack.Navigator initialRouteName="Onboarding" screenOptions={{ headerShown: false }} id={undefined}>
             <Stack.Screen name="Onboarding" component={Onboarding} />
@@ -29,7 +31,6 @@ export default function StackNavigator() {
             <Stack.Screen name="ChangePasswordScreen" component={Stacks.ChangePassword} />
             <Stack.Screen name="ForgotPasswordScreen" component={Stacks.ForgotPassword} />
             <Stack.Screen name="Chat" component={ChatScreen} />
-
         </Stack.Navigator>
     );
 }

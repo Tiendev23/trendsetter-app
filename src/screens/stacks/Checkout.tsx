@@ -1,4 +1,4 @@
-import { ActivityIndicator, FlatList, Image, Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import { CheckoutNav } from '../../navigation/NavigationTypes';
 import CustomDirectionButton from '../../components/buttons/ChevronButton';
@@ -66,82 +66,83 @@ export default function Checkout({ navigation }: { navigation: CheckoutNav }) {
         checkoutByProvider(provider, data, dispatch);
     }
 
-
     return (
         <View style={styles.container}>
             <ScreenHeader
                 title='Thanh toán'
             />
 
-            <ScrollView style={styles.scrollContainer}>
-                {/* Thông tin liên hệ */}
-                <View style={styles.contentContainer}>
-                    <Text style={styles.contentLabel}>Thông tin liên hệ</Text>
-                    <View>
-                        <InfoContainer
-                            type='mail'
-                            value={email}
-                            onChangeText={setEmail}
-                        />
-                        <InfoContainer
-                            type='call'
-                            value={phone}
-                            onChangeText={setPhone}
-                        />
+            <ScrollView>
+                <View style={styles.scrollContainer}>
+                    {/* Thông tin liên hệ */}
+                    <View style={styles.contentContainer}>
+                        <Text style={styles.contentLabel}>Thông tin liên hệ</Text>
+                        <View style={{ gap: 10 }}>
+                            <InfoContainer
+                                type='mail'
+                                value={email}
+                                onChangeText={setEmail}
+                            />
+                            <InfoContainer
+                                type='call'
+                                value={phone}
+                                onChangeText={setPhone}
+                            />
+                        </View>
                     </View>
-                </View>
-                <View style={styles.contentContainer}>
-                    <Text style={styles.contentLabel}>Địa chỉ</Text>
-                    <Text
-                        numberOfLines={2}
-                        ellipsizeMode='tail'
-                    >
-                        {address}
-                    </Text>
-                </View>
-                {/* Danh sách sản phẩm */}
-                <View style={styles.contentContainer}>
-                    <Text style={styles.contentLabel}>Danh sách sản phẩm</Text>
-                    <View>
-                        <FlatList
-                            data={cart.items}
-                            // extraData={cartItems}
-                            renderItem={({ item }) => <OrderDetailsItem item={item} />}
-                            scrollEnabled={false} // Tắt cuộn riêng của FlatList
-                            nestedScrollEnabled={true} // Cho phép cuộn bên trong ScrollView
-                            contentContainerStyle={{ gap: 16 }}
-                        />
+                    <View style={styles.contentContainer}>
+                        <Text style={styles.contentLabel}>Địa chỉ</Text>
+                        <Text
+                            numberOfLines={2}
+                            ellipsizeMode='tail'
+                        >
+                            {address}
+                        </Text>
                     </View>
-                </View>
-                {/* Phương thức thanh toán */}
-                <View style={styles.contentContainer}>
-                    <Text style={styles.contentLabel}>Phương thức thanh toán</Text>
-                    <View >
-                        {
-                            status !== 'succeeded' ?
-                                <Skeleton width={'100%'} height={50} /> :
-                                <TouchableOpacity
-                                    onPress={() => {
-                                        navigation.navigate('MethodSelection', {
-                                            paymentMethods,
-                                            method: selectedMethod
-                                        });
-                                    }}
-                                    style={styles.rowWrapper}
-                                >
-                                    <PaymentMethod
-                                        method={selectedMethod}
-                                        isHideRadio
-                                        disabled
-                                    />
-                                    <CustomDirectionButton
-                                        direction='forward'
-                                        size={18}
-                                        color={'#707B81'}
-                                        disabled
-                                    />
-                                </TouchableOpacity>
-                        }
+                    {/* Danh sách sản phẩm */}
+                    <View style={styles.contentContainer}>
+                        <Text style={styles.contentLabel}>Danh sách sản phẩm</Text>
+                        <View>
+                            <FlatList
+                                data={cart.items}
+                                // extraData={cartItems}
+                                renderItem={({ item }) => <OrderDetailsItem item={item} />}
+                                scrollEnabled={false} // Tắt cuộn riêng của FlatList
+                                nestedScrollEnabled={true} // Cho phép cuộn bên trong ScrollView
+                                contentContainerStyle={{ gap: 16 }}
+                            />
+                        </View>
+                    </View>
+                    {/* Phương thức thanh toán */}
+                    <View style={styles.contentContainer}>
+                        <Text style={styles.contentLabel}>Phương thức thanh toán</Text>
+                        <View >
+                            {
+                                status !== 'succeeded' ?
+                                    <Skeleton width={'100%'} height={50} /> :
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            navigation.navigate('MethodSelection', {
+                                                paymentMethods,
+                                                method: selectedMethod
+                                            });
+                                        }}
+                                        style={styles.rowWrapper}
+                                    >
+                                        <PaymentMethod
+                                            method={selectedMethod}
+                                            isHideRadio
+                                            disabled
+                                        />
+                                        <CustomDirectionButton
+                                            direction='forward'
+                                            size={18}
+                                            color={'#707B81'}
+                                            disabled
+                                        />
+                                    </TouchableOpacity>
+                            }
+                        </View>
                     </View>
                 </View>
             </ScrollView >
@@ -181,7 +182,9 @@ export default function Checkout({ navigation }: { navigation: CheckoutNav }) {
                                 setPaymentStatus={setPaymentStatus}
                             />
                             : (
-                                orderStatus === 'succeeded' ?
+                                orderStatus === 'loading' ?
+                                    <ActivityIndicator color={'green'} size={'large'} />
+                                    :
                                     <OrderNotification
                                         status={orderStatus}
                                         onPress={() => {
@@ -191,8 +194,6 @@ export default function Checkout({ navigation }: { navigation: CheckoutNav }) {
                                             });
                                         }}
                                     />
-                                    :
-                                    <ActivityIndicator color={'green'} size={'large'} />
                             )
                     }
                 </BlurView>
@@ -233,17 +234,15 @@ const styles = StyleSheet.create({
         borderColor: '#707B81',
         borderStyle: 'dashed',
     },
-
     scrollContainer: {
-        flexDirection: 'column',
         padding: 18,
+        gap: 18,
         flex: 1,
     },
     contentContainer: {
         backgroundColor: '#FFFFFF',
         padding: 20,
         borderRadius: 16,
-        marginBottom: 18,
         gap: 12,
     },
     contentLabel: {
