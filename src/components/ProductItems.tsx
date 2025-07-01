@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '../redux/store';
 import { getAllProducts } from '../redux/features/product/productsSlice';
 import { formatCurrency } from '../utils/formatForm';
+import { IMAGE_NOT_FOUND } from '../types';
 
 
 const { width, height } = Dimensions.get('window');
@@ -42,7 +43,10 @@ const ProductItem = ({ navigation }) => {
                 style={styles.card}
                 onPress={() => navigation.navigate('ProductDetail', { item })}
             >
-                <Image source={{ uri: item.image }} style={styles.image} />
+                <Image
+                    source={{ uri: item.image || IMAGE_NOT_FOUND }}
+                    style={styles.image}
+                />
                 <TouchableOpacity style={styles.heartIcon}>
                     <Ionicons name="heart-outline" size={24} color="white" />
                 </TouchableOpacity>
@@ -132,7 +136,7 @@ const styles = StyleSheet.create({
         paddingVertical: 2,
         borderRadius: 5,
         alignSelf: 'flex-start',
-        marginTop:10
+        marginTop: 10
     },
     shipText: {
         marginLeft: 4,
