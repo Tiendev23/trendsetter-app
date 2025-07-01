@@ -8,7 +8,7 @@ const API_URL = 'https://trendsetter-backend.onrender.com/api';
  *  <IPv4 Address>:5000 khi chạy máy thật
  */
 
-// const API_URL = 'http://192.168.0.3:5000/api';
+// const API_URL = 'https://1a56-116-110-41-68.ngrok-free.app/api';
 
 const apiClient = axios.create({
     baseURL: API_URL,

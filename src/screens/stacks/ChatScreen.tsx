@@ -9,6 +9,8 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+
 
 type Message = {
   id: string;
@@ -47,12 +49,12 @@ const ChatScreen: React.FC = (navigation) => {
   );
 
   return (
-      
-      <KeyboardAvoidingView
-        style={styles.container}
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
-        keyboardVerticalOffset={80}
-      >
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+    >
+      <SafeAreaView style={{ flex: 1 }}>
         <FlatList
           data={messages}
           renderItem={renderMessage}
@@ -72,8 +74,8 @@ const ChatScreen: React.FC = (navigation) => {
             <Text style={styles.sendText}>Gửi</Text>
           </TouchableOpacity>
         </View>
-      </KeyboardAvoidingView>
-    
+      </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -107,6 +109,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderColor: "#ccc",
     backgroundColor: "#fff",
+    marginBottom:20,
   },
 
   input: {

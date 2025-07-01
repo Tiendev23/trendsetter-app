@@ -1,4 +1,4 @@
-import { ActivityIndicator, FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, FlatList, Image, Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import { CheckoutNav } from '../../navigation/NavigationTypes';
 import CustomDirectionButton from '../../components/buttons/ChevronButton';
@@ -8,38 +8,52 @@ import CustomButton from '../../components/buttons/CustomButton';
 import InfoContainer from '../../components/InfoContainer';
 import { AuthContext } from '../../contexts/AuthContext';
 import OrderDetailsItem from '../../components/listItems/OrderDetail';
-import PayOSWebView from '../../components/payments/PayOSWebView';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { createPayOSPayment, refresh } from '../../redux/features/payment/payOSSlice';
-import { BlurView } from 'expo-blur';
-import OrderNotification from '../../components/OrderNotification';
-import { CreateRequestReq, Payment } from '../../types';
+import { CreateOrderReq } from '../../types';
 import PaymentMethod from '../../components/listItems/PaymentMethod';
-import { getAllPaymentMethods, refresh as paymentsRefresh } from '../../redux/features/payment/paymentsSlice';
+import { fetchAllMethods, refresh as paymentsRefresh, setSelectedMethod } from '../../redux/features/payment/paymentsSlice';
 import Skeleton from '../../components/loaders/Skeleton';
+import ScreenHeader from '../../components/ScreenHeader';
+import { checkoutByProvider, getProviderFromMethod } from '../../services/payment/CheckoutHandler';
+import PaymentController from '../../components/payments/PaymentController';
+import OrderNotification from '../../components/payments/OrderNotification';
+import { BlurView } from 'expo-blur';
+import { refresh } from '../../redux/features/order/orderSlice';
 
 export default function Checkout({ navigation }: { navigation: CheckoutNav }) {
     const { user } = useContext(AuthContext);
     const cart = useContext(CartContext);
-    const dispatch = useAppDispatch();
-    const { status: paymentsStatus, data: paymentsData, error: paymentsError } = useAppSelector(state => state.payments);
-    const { status, data, error } = useAppSelector(state => state.payOSMethod);
-
-    const [paymentMethods, setPaymentMethods] = useState([]);
 
     const [email, setEmail] = useState(user.email);
     const [phone, setPhone] = useState('0938428870');
     const [address, setAddress] = useState('Tòa nhà QTSC9 (toà T), đường Tô Ký, phường Tân Chánh Hiệp, quận 12, TP HCM');
-    const [selectedMethod, setSelectedMethod] = useState<Payment>(paymentMethods[0]);
 
-    const [paymentUrl, setPaymentUrl] = useState('');
-    const [isPaymentSucceeded, setPaymentStatus] = useState(false);
-    const [orderStatus, setOrderStatus] = useState<'loading' | 'succeeded' | 'failed'>('loading');
-    const [orderData, setOrderData] = useState<CreateRequestReq | null>(null);
+    const dispatch = useAppDispatch();
+    const { status, data, error } = useAppSelector(state => state.payments);
+    const selectedMethod = useAppSelector(state => state.payments.selectedMethod);
+    const [paymentMethods, setPaymentMethods] = useState([]);
     const subtotal = cart.getSubtotal() + 20000;
 
-    const handlePayment = () => {
-        const data: CreateRequestReq = {
+    const [orderData, setOrderData] = useState<CreateOrderReq | null>(null);
+    const [isPaymentSucceeded, setPaymentStatus] = useState(false);
+    const [orderStatus, setOrderStatus] = useState<'loading' | 'succeeded' | 'failed'>('loading');
+
+    useEffect(() => {
+        dispatch(fetchAllMethods())
+    }, []);
+    useEffect(() => {
+        if (status === 'succeeded') {
+            setPaymentMethods(data);
+            dispatch(setSelectedMethod(data[0]))
+        }
+        if (status === 'failed') {
+            console.log('Checkout >>> payments', error);
+            dispatch(paymentsRefresh())
+        }
+    }, [status]);
+
+    const handleCheckout = () => {
+        const data: CreateOrderReq = {
             buyerName: user.fullName,
             buyerEmail: user.email,
             buyerPhone: phone,
@@ -47,65 +61,21 @@ export default function Checkout({ navigation }: { navigation: CheckoutNav }) {
             items: cart.items,
             amount: subtotal
         };
-        console.log('data>>>', data);
-
         setOrderData(data);
+        const provider = getProviderFromMethod(selectedMethod.name);
+        checkoutByProvider(provider, data, dispatch);
     }
 
-    useEffect(() => {
-        dispatch(getAllPaymentMethods())
-    }, []);
-
-    useEffect(() => {
-        if (paymentsStatus === 'succeeded') {
-            setPaymentMethods(paymentsData);
-            setSelectedMethod(paymentsData[0]);
-        }
-        if (paymentsStatus === 'failed') {
-            console.log('Checkout >>> payments', paymentsError);
-            dispatch(paymentsRefresh())
-        }
-    }, [paymentsStatus])
-
-
-    useEffect(() => {
-        if (orderData != null) {
-            dispatch(createPayOSPayment(orderData));
-        }
-    }, [orderData]);
-
-    useEffect(() => {
-        if (status === 'succeeded') {
-            console.log('data', data);
-            setPaymentUrl(data);
-        }
-        if (status === 'failed') {
-            setTimeout(() => {
-                dispatch(refresh());
-            }, 5000);
-        }
-    }, [status])
 
     return (
         <View style={styles.container}>
-            {/* header */}
-            <View>
-                <View style={styles.headerContainer}>
-                    <Text style={styles.headerTitle}>
-                        Thanh Toán
-                    </Text>
-                </View>
-                <View style={styles.headerActions}>
-                    <CustomDirectionButton
-                        direction="back"
-                        onPress={() => navigation.goBack()}
-                    />
-                </View>
-            </View>
+            <ScreenHeader
+                title='Thanh toán'
+            />
 
             <ScrollView style={styles.scrollContainer}>
                 {/* Thông tin liên hệ */}
-                <View style={[styles.contentContainer, { paddingBottom: 0 }]}>
+                <View style={styles.contentContainer}>
                     <Text style={styles.contentLabel}>Thông tin liên hệ</Text>
                     <View>
                         <InfoContainer
@@ -120,8 +90,6 @@ export default function Checkout({ navigation }: { navigation: CheckoutNav }) {
                         />
                     </View>
                 </View>
-
-                {/* Địa chỉ */}
                 <View style={styles.contentContainer}>
                     <Text style={styles.contentLabel}>Địa chỉ</Text>
                     <Text
@@ -131,7 +99,7 @@ export default function Checkout({ navigation }: { navigation: CheckoutNav }) {
                         {address}
                     </Text>
                 </View>
-
+                {/* Danh sách sản phẩm */}
                 <View style={styles.contentContainer}>
                     <Text style={styles.contentLabel}>Danh sách sản phẩm</Text>
                     <View>
@@ -145,27 +113,21 @@ export default function Checkout({ navigation }: { navigation: CheckoutNav }) {
                         />
                     </View>
                 </View>
-
                 {/* Phương thức thanh toán */}
                 <View style={styles.contentContainer}>
                     <Text style={styles.contentLabel}>Phương thức thanh toán</Text>
                     <View >
                         {
-                            paymentsStatus !== 'succeeded' ?
+                            status !== 'succeeded' ?
                                 <Skeleton width={'100%'} height={50} /> :
                                 <TouchableOpacity
                                     onPress={() => {
                                         navigation.navigate('MethodSelection', {
                                             paymentMethods,
-                                            method: selectedMethod,
-                                            setMethod: setSelectedMethod
+                                            method: selectedMethod
                                         });
                                     }}
-                                    style={{
-                                        flexDirection: 'row',
-                                        alignItems: 'center',
-                                        justifyContent: 'space-between',
-                                    }}
+                                    style={styles.rowWrapper}
                                 >
                                     <PaymentMethod
                                         method={selectedMethod}
@@ -187,96 +149,70 @@ export default function Checkout({ navigation }: { navigation: CheckoutNav }) {
             {/* Bảng giá */}
             <View style={styles.pricingPanel} >
                 <View style={{ gap: 10 }}>
-                    <View style={styles.priceWrapper}>
+                    <View style={styles.rowWrapper}>
                         <Text style={[styles.label, styles.gray]}>Tạm tính</Text>
                         <Text style={styles.label}>{formatCurrency(cart.getSubtotal())}</Text>
                     </View>
-                    <View style={styles.priceWrapper}>
+                    <View style={styles.rowWrapper}>
                         <Text style={[styles.label, styles.gray]}>Phí giao hàng</Text>
                         <Text style={styles.label}>{formatCurrency(20000)}</Text>
                     </View>
                 </View>
                 <View style={styles.dashedLine} />
-                <View style={styles.priceWrapper}>
+                <View style={styles.rowWrapper}>
                     <Text style={styles.label}>Tổng cộng</Text>
                     <Text style={[styles.label, styles.green]}>{formatCurrency(subtotal)}</Text>
                 </View>
                 <CustomButton
                     title='Thanh Toán'
-                    onLongPress={handlePayment}
+                    onLongPress={handleCheckout}
                 />
             </View>
             {
-                status !== 'idle' &&
+                orderData &&
                 <BlurView intensity={8} style={styles.blurBackground}>
                     {
-                        !isPaymentSucceeded ? (
-                            !paymentUrl ?
-                                <ActivityIndicator color={'green'} size={'large'} />
-                                :
-                                <PayOSWebView
-                                    checkoutUrl={paymentUrl}
-                                    orderData={orderData}
-                                    navigation={navigation}
-                                    setPaymentStatus={setPaymentStatus}
-                                    setOrderStatus={setOrderStatus}
-                                    refresh={() => dispatch(refresh())}
-                                />
-                        ) : (
-                            orderStatus === 'loading' ?
-                                <ActivityIndicator color={'green'} size={'large'} />
-                                :
-                                <OrderNotification
-                                    status={orderStatus}
-                                    onPress={() => {
-                                        dispatch(refresh());
-                                        navigation.reset({
-                                            routes: [{ name: 'Tabs' }],
-                                        });
-                                    }}
-                                />
-                        )
+                        !isPaymentSucceeded ?
+                            <PaymentController
+                                provider={getProviderFromMethod(selectedMethod.name)}
+                                navigation={navigation}
+                                orderData={orderData}
+                                setOrderStatus={setOrderStatus}
+                                setPaymentStatus={setPaymentStatus}
+                            />
+                            : (
+                                orderStatus === 'succeeded' ?
+                                    <OrderNotification
+                                        status={orderStatus}
+                                        onPress={() => {
+                                            dispatch(refresh());
+                                            navigation.reset({
+                                                routes: [{ name: 'Tabs' }],
+                                            });
+                                        }}
+                                    />
+                                    :
+                                    <ActivityIndicator color={'green'} size={'large'} />
+                            )
                     }
                 </BlurView>
             }
         </View >
     )
-}
+};
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#F7F7F9'
     },
-    headerContainer: {
-        backgroundColor: '#FFF',
-        paddingVertical: 22,
-        paddingHorizontal: 18,
-    },
-    headerTitle: {
-        fontWeight: '600',
-        fontStyle: 'italic',
-        fontSize: 20,
-        color: '#006340',
-        textAlign: 'center',
-    },
-    headerActions: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        position: 'absolute',
-        width: '100%',
-        height: '100%',
-        paddingHorizontal: 18,
-    },
-
     pricingPanel: {
         padding: 20,
         backgroundColor: '#FFFFFF',
         gap: 16,
         paddingBottom: 30
     },
-    priceWrapper: {
+    rowWrapper: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center'

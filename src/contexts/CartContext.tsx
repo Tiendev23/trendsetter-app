@@ -12,7 +12,8 @@ type CartContextType = {
     addToCart: (
         product: Product,
         selectedSize: string,
-        selectedColor: string
+        selectedColor: string,
+        quantity: number
     ) => void;
     deleteCartItem: (
         item: CartItem
@@ -42,7 +43,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         return cart.reduce((subtotal, obj) => subtotal + (obj.price * obj.quantity), 0);
     };
 
-    const addToCart = (product: Product, selectedSize: string, selectedColor: string) => {
+    const addToCart = (product: Product, selectedSize: string, selectedColor: string, quantity: number) => {
         setCart((prev) => {
             const existingItem = prev.find(
                 (item) =>
@@ -56,7 +57,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
                     item.product === product._id &&
                         item.size === selectedSize &&
                         item.color === selectedColor
-                        ? { ...item, quantity: item.quantity + 1 }
+                        ? { ...item, quantity: item.quantity + quantity }
                         : item
                 );
             } else {
@@ -65,7 +66,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
                     {
                         name: product.name,
                         product: product._id,
-                        quantity: 1,
+                        quantity: quantity,
                         price: product.price,
                         size: selectedSize,
                         color: selectedColor,

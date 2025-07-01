@@ -28,7 +28,7 @@ export default function StackNavigator() {
             <Stack.Screen name="addr" component={Stacks.AddressEdit} />
             <Stack.Screen name="ChangePasswordScreen" component={Stacks.ChangePassword} />
             <Stack.Screen name="ForgotPasswordScreen" component={Stacks.ForgotPassword} />
-            <Stack.Screen name="Chat" component={ChatScreen}/>
+            <Stack.Screen name="Chat" component={ChatScreen} />
 
         </Stack.Navigator>
     );

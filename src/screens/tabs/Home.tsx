@@ -7,12 +7,14 @@ import ProductItem from '../../components/ProductItems'
 import { HomeNav, TabsNav } from '../../navigation/NavigationTypes'
 import { useNavigation } from '@react-navigation/native'
 import eventBus from '../../utils/Evenbus'
+import ScreenHeader from '../../components/ScreenHeader'
+import ToCartButton from '../../components/ToCartButton'
 
-export default function HomeScreen({navigation}) {
+export default function Home({ navigation }) {
     const tabNav = useNavigation<HomeNav>();
     const stackNav = useNavigation<TabsNav>();
     const [refreshing, setRefreshing] = useState(false);
-// refreshing
+    // refreshing
     const onRefresh = () => {
         setRefreshing(true);
         eventBus.emit('REFRESH_ALL');
@@ -20,16 +22,21 @@ export default function HomeScreen({navigation}) {
     }
 
     return (
-        <View style={styles.container}>
-            <View style={styles.header}>
-                <TouchableOpacity><Image source={require('../../../assets/images/logo.jpg')} style={styles.logo} resizeMode='contain' /></TouchableOpacity>
-                <Text style={styles.txtTitle}>Trendsetter</Text>
-                <TouchableOpacity
-                    onPress={() => {
-                        stackNav.navigate('Cart')
-                    }}
-                ><Image source={require('../../../assets/icons/cart_icon.png')} style={styles.cart} resizeMode='contain' /></TouchableOpacity>
-            </View>
+        <View style={{ backgroundColor: '#fff' }}>
+            <ScreenHeader
+                title='Trendsetter'
+                titleStyle={{
+                    fontStyle: 'italic',
+                    fontWeight: 'bold',
+                    letterSpacing: 1
+                }}
+                leftButton={
+                    <Image source={require('../../../assets/images/logo.jpg')} style={styles.logo} resizeMode='contain' />
+                }
+                rightButton={
+                    <ToCartButton navigation={navigation} />
+                }
+            />
             <ScrollView showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
                 refreshControl={
@@ -40,60 +47,60 @@ export default function HomeScreen({navigation}) {
                     />
                 }
             >
-                <WinterBanner navigation={stackNav} />
-                <View style={styles.recommend}>
-                    <Text style={styles.textRecommend}>Gợi Ý Cho Bạn</Text>
-                    <TouchableOpacity
-                        onPress={() => {
-                            navigation.navigate('ProductlistScreen',{title:'Gợi ý Cho bạn'})
-                        }}
-                    >
-                        <Text style={styles.textRecommend}>Xem Thêm</Text>
-                    </TouchableOpacity>
-                </View>
-                {/* Flatlist Product */}
-                <ProductItem navigation={stackNav} />
+                <View style={styles.container}>
+                    <WinterBanner navigation={stackNav} />
+                    <View style={styles.recommend}>
+                        <Text style={styles.textRecommend}>Gợi Ý Cho Bạn</Text>
+                        <TouchableOpacity
+                            onPress={() => {
+                                navigation.navigate('ProductlistScreen', { title: 'Gợi ý Cho bạn' })
+                            }}
+                        >
+                            <Text style={styles.textRecommend}>Xem Thêm</Text>
+                        </TouchableOpacity>
+                    </View>
+                    {/* Flatlist Product */}
+                    <ProductItem navigation={stackNav} />
 
-                <View style={styles.recommend}>
-                    <Text style={styles.textRecommend}>Mua sắm theo danh mục</Text>
+                    <View style={styles.recommend}>
+                        <Text style={styles.textRecommend}>Mua sắm theo danh mục</Text>
+                    </View>
+                    <Menubar navigation={stackNav} />
+                    <View style={styles.recommend}>
+                        <Text style={styles.textRecommend}>Phổ Biến Nhất</Text>
+                        <TouchableOpacity
+                            onPress={() => {
+                                navigation.navigate('ProductlistScreen', { title: 'Phổ biến nhất' })
+                            }}
+                        >
+                            <Text style={styles.textRecommend}>Xem Thêm</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <ProductItem navigation={stackNav} />
+                    <View style={styles.recommend}>
+                        <Text style={styles.textRecommend}>Sản phẩm quần áo tiêu biểu</Text>
+                        <TouchableOpacity
+                            onPress={() => {
+                                navigation.navigate('ProductlistScreen', { title: 'Sản phẩm quần áo tiêu biểu' })
+                            }}
+                        >
+                            <Text style={styles.textRecommend}>Xem Thêm</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <ProductItem navigation={stackNav} />
+                    <WinterBanner navigation={stackNav} />
+                    <View style={styles.recommend}>
+                        <Text style={styles.textRecommend}>Sản Phẩm Quần Áo Tiêu Biểu</Text>
+                        <TouchableOpacity
+                            onPress={() => {
+                                navigation.navigate('ProductlistScreen', { title: 'Sản phẩm quần áo tiêu biểu' })
+                            }}
+                        >
+                            <Text style={styles.textRecommend}>Xem Thêm</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <ProductItem navigation={stackNav} />
                 </View>
-                <Menubar navigation={stackNav} />
-                <View style={styles.recommend}>
-                    <Text style={styles.textRecommend}>Phổ Biến Nhất</Text>
-                    <TouchableOpacity
-                        onPress={() => {
-                            navigation.navigate('ProductlistScreen',{title:'Phổ biến nhất'})
-                        }}
-                    >
-                        <Text style={styles.textRecommend}>Xem Thêm</Text>
-                    </TouchableOpacity>
-                </View>
-                <ProductItem navigation={stackNav} />
-                <View style={styles.recommend}>
-                    <Text style={styles.textRecommend}>Sản phẩm quần áo tiêu biểu</Text>
-                    <TouchableOpacity
-                        onPress={() => {
-                            navigation.navigate('ProductlistScreen',{title:'Sản phẩm quần áo tiêu biểu'})
-                        }}
-                    >
-                        <Text style={styles.textRecommend}>Xem Thêm</Text>
-                    </TouchableOpacity>
-                </View>
-                <ProductItem navigation={stackNav} />
-                <WinterBanner navigation={stackNav} />
-                <View style={styles.recommend}>
-                    <Text style={styles.textRecommend}>Sản Phẩm Quần Áo Tiêu Biểu</Text>
-                    <TouchableOpacity
-                        onPress={() => {
-                            navigation.navigate('ProductlistScreen',{title:'Sản phẩm quần áo tiêu biểu'})
-                        }}
-                    >
-                        <Text style={styles.textRecommend}>Xem Thêm</Text>
-                    </TouchableOpacity>
-                </View>
-                <ProductItem navigation={stackNav} />
-
-
             </ScrollView >
 
 
@@ -125,7 +132,7 @@ const styles = StyleSheet.create({
     logo: {
         height: 45,
         width: 50,
-        borderRadius: 25 
+        borderRadius: 25
     },
     cart: {
         height: 35,

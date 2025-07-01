@@ -6,11 +6,19 @@ import { FlatList } from 'react-native-gesture-handler';
 import PaymentMethod from '../../components/listItems/PaymentMethod';
 import { Payment } from '../../types';
 import CustomButton from '../../components/buttons/CustomButton';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { setSelectedMethod } from '../../redux/features/payment/paymentsSlice';
 
 export default function MethodSelection({ navigation, route }: { navigation: MethodSelectionNav, route: MethodSelectionRoute }) {
 
+    const dispatch = useAppDispatch();
     const data = route.params.paymentMethods;
-    const [selectedMethod, setSelectedMethod] = useState<Payment>(route.params.method);
+    const [selected, setSelected] = useState<Payment>(useAppSelector(state => state.payments.selectedMethod));
+
+    // const selected = useAppSelector(state => state.payments.selectedMethod);
+    // const handleSelect = (method: Payment) => {
+    //     dispatch(setSelectedMethod(method));
+    // };
 
     return (
         <View style={styles.container}>
@@ -23,8 +31,9 @@ export default function MethodSelection({ navigation, route }: { navigation: Met
                 renderItem={({ item }) => (
                     <PaymentMethod
                         method={item}
-                        selectedMethod={selectedMethod}
-                        setSelected={setSelectedMethod}
+                        selectedMethod={selected}
+                        setSelected={setSelected}
+                        style={{ paddingVertical: 10 }}
                     />
                 )}
                 contentContainerStyle={styles.contentContainer}
@@ -35,7 +44,7 @@ export default function MethodSelection({ navigation, route }: { navigation: Met
                 <CustomButton
                     title='Chọn'
                     onPress={() => {
-                        route.params.setMethod(selectedMethod);
+                        dispatch(setSelectedMethod(selected));
                         navigation.goBack();
                     }}
                 />

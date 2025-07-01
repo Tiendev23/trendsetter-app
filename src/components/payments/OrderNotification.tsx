@@ -1,6 +1,6 @@
 import { Image, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import CustomButton from './buttons/CustomButton';
+import CustomButton from '../buttons/CustomButton';
 
 type Props = {
     status: 'succeeded' | 'failed';
@@ -14,9 +14,9 @@ export default function OrderNotification({ status, onPress }: Props) {
         <View style={styles.container}>
             {
                 status === 'succeeded' ?
-                    <Image source={require('../../assets/images/payment_successful.png')} />
+                    <Image source={require('../../../assets/images/payment_successful.png')} />
                     :
-                    <Image source={require('../../assets/images/order_failed.png')} />
+                    <Image source={require('../../../assets/images/order_failed.png')} />
             }
             <Text style={styles.description}>
                 {description}

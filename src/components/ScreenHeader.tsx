@@ -1,30 +1,37 @@
 import React from 'react';
-import { TouchableOpacity, Text, StyleSheet, View } from 'react-native';
+import { TouchableOpacity, Text, StyleSheet, View, StyleProp, TextStyle } from 'react-native';
 import CustomDirectionButton from './buttons/ChevronButton';
 import { useNavigation } from '@react-navigation/native';
 
 type Props = {
     title: string;
-    rightButton?: React.JSX.Element;
+    titleStyle?: StyleProp<TextStyle>;
+    rightButton?, leftButton?: React.JSX.Element;
+    // leftButton?: React.JSX.Element;
 };
 
-export default function ScreenHeader({ title, rightButton }: Props) {
+export default function ScreenHeader({ title, titleStyle, rightButton, leftButton }: Props) {
     const navigation = useNavigation();
 
     return (
         <View>
             <View style={styles.headerContainer}>
-                <Text style={styles.headerTitle}>
+                <Text style={[styles.headerTitle, titleStyle]}>
                     {title}
                 </Text>
             </View>
             <View style={styles.headerActions}>
-                <CustomDirectionButton
-                    direction="back"
-                    onPress={() => navigation.goBack()}
-                />
+                {
+                    leftButton ??
+                    <CustomDirectionButton
+                        direction="back"
+                        onPress={() => navigation.goBack()}
+                    />
+                }
                 {rightButton}
             </View>
+
+            <View style={styles.separatorLine} />
         </View>
     );
 }
@@ -37,11 +44,11 @@ const styles = StyleSheet.create({
     },
     headerTitle: {
         fontWeight: '600',
-        fontStyle: 'italic',
         fontSize: 20,
         color: '#006340',
         textAlign: 'center',
         textTransform: 'capitalize',
+        letterSpacing: 1
     },
     headerActions: {
         flexDirection: 'row',
@@ -51,5 +58,10 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         paddingHorizontal: 18,
+    },
+    separatorLine: {
+        height: 1,
+        width: '100%',
+        backgroundColor: '#D0D3D5',
     },
 });
