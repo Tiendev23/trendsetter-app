@@ -2,15 +2,23 @@ import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, View } from 'react-native';
 import CustomDirectionButton from './buttons/ChevronButton';
 import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { AuthStackParamList } from '../navigation/NavigationTypes';
 
 export default function AuthScreenHeader() {
-    const navigation = useNavigation();
+    const navigation = useNavigation<NativeStackNavigationProp<AuthStackParamList>>();
 
     return (
         <View style={styles.headerContainer}>
             <View style={styles.titleWrapper}>
                 <View style={styles.backButtonWrapper}>
-                    <CustomDirectionButton direction="back" onPress={() => navigation.goBack()} />
+                    <CustomDirectionButton direction="back" onPress={() => {
+                        if (navigation.canGoBack()) {
+                            navigation.goBack();
+                        } else {
+                            navigation.navigate('Tabs');
+                        }
+                    }} />
                 </View>
                 <Text style={styles.titleText}>Trendsetter</Text>
             </View>

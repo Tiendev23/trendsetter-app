@@ -18,6 +18,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { AuthStackParamList } from '../../navigation/NavigationTypes';
+import { formatCurrency } from '../../utils/formatForm';
 
 const { width } = Dimensions.get("window");
 
@@ -53,9 +54,6 @@ export default function SearchScreen() {
 
   const renderProductItem = ({ item }: { item: Product }) => (
     <TouchableOpacity style={styles.productCard} onPress={() => navigation.navigate('ProductDetail', { item })}>
-      <TouchableOpacity style={styles.heartIcon}>
-        <Ionicons name="heart-outline" size={24} color="white" />
-      </TouchableOpacity>
       <Image
         source={
           typeof item.image === "string" ? { uri: item.image } : item.image
@@ -63,10 +61,18 @@ export default function SearchScreen() {
         style={styles.productImage}
         resizeMode="contain"
       />
+      <TouchableOpacity style={styles.heartIcon}>
+        <Ionicons name="heart-outline" size={24} color="white" />
+      </TouchableOpacity>
       <View style={styles.productInfo}>
-        <Text style={styles.productBrand}>{item.brand?.name || 'Unknown Brand'}</Text>
-        <Text style={styles.productName}>{item.name || 'Unknown Product'}</Text>
-        <Text style={styles.productPrice}>{item.price || 0}₫</Text>
+        <Text numberOfLines={1} style={styles.productName}>{item.name}</Text>
+        <View style={styles.priceContainer}>
+          <Text style={styles.productPrice}>{formatCurrency(item.price)}</Text>
+          <View style={styles.shipTag}>
+            <Ionicons name="rocket-outline" size={14} color="#000" />
+            <Text style={styles.shipText}>Xpress Ship</Text>
+          </View>
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -274,10 +280,8 @@ const styles = StyleSheet.create({
     right: 15,
     padding: 5,
     borderRadius: 20,
-    backgroundColor: '#E0E0E0',
     borderWidth: 1,
-    borderColor: 'transparent',
-    zIndex: 2,
+    backgroundColor: '#E0E0E0',
   },
   productImage: {
     width: "100%",
@@ -289,19 +293,39 @@ const styles = StyleSheet.create({
   productInfo: {
     marginBottom: 8,
   },
-  productBrand: {
-    fontSize: 14,
-    color: "#666",
-  },
   productName: {
-    fontSize: 16,
-    fontWeight: "bold",
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#333',
+    width: 100,
     marginVertical: 4,
   },
   productPrice: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#333",
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#006340',
+    marginVertical: 4,
+  },
+  priceContainer: {
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+  },
+  shipTag: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#006340',
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 5,
+    alignSelf: 'flex-start',
+    marginTop: 10,
+  },
+  shipText: {
+    marginLeft: 4,
+    fontSize: 12,
+    color: '#006340',
   },
   centerContainer: {
     flex: 1,
