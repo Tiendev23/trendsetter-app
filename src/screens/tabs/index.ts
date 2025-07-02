@@ -1,5 +1,5 @@
 import Account from "./Account";
-import Home from "./Home";
+import Home from "./HomeScreen";
 import Notification from "./Notification";
 import Search from "./Search";
 

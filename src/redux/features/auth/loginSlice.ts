@@ -6,11 +6,9 @@ export const login = createAsyncThunk(
     async (body: any, { rejectWithValue }) => {
         try {
             const response = await apiClient.post("/users/login", body);
-            console.log("response.data:", response.data);
 
             return response.data;
         } catch (error) {
-            console.log("error", error);
             return rejectWithValue(error.response?.data?.message);
         }
     }

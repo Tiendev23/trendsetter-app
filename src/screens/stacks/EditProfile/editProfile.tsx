@@ -2,7 +2,9 @@ import React, { useContext, useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, ScrollView, Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { AuthContext } from '../../contexts/AuthContext';
+import { AuthContext } from '../../../contexts/AuthContext';
+import { Ionicons } from '@expo/vector-icons';
+
 
 export default function ProfileEdit({ navigation }) {
     const { user, setUser } = useContext(AuthContext)
@@ -46,21 +48,20 @@ export default function ProfileEdit({ navigation }) {
             [
                 {
                     text: 'OK',
-                    onPress: () => navigation.goBack(), // quay lại màn hình trước
+                    onPress: () => navigation.goBack(), 
                 },
             ],
         );
     };
-
+   
     return (
         <ScrollView contentContainerStyle={styles.container}>
-            <TouchableOpacity onPress={handleImagePick}>
-                <Image
-                    source={avatar ? { uri: avatar } : require('../../../assets/images/nenchu.jpg')}
-                    style={styles.avatar}
-                />
-                <Text style={styles.avatarText}>Thay ảnh đại diện</Text>
-            </TouchableOpacity>
+            <View style={styles.avatarSection}>
+                <Image source={{ uri: avatar? avatar : 'https://i.pravatar.cc/150' }} style={styles.avatar} />
+                <TouchableOpacity style={styles.cameraButton} onPress={handleImagePick}>
+                    <Ionicons name="camera-reverse-outline" size={24} color="#FFFFFF" />
+                </TouchableOpacity>
+            </View>
 
             <Text style={styles.label}>Họ và tên</Text>
             <TextInput value={name}
@@ -112,7 +113,7 @@ const styles = StyleSheet.create({
         padding: 20,
         backgroundColor: '#F8F9FA',
     },
-    avatar: {
+    avatar1: {
         width: 100,
         height: 100,
         borderRadius: 50,
@@ -171,5 +172,30 @@ const styles = StyleSheet.create({
         color: 'white',
         textAlign: 'center',
         fontWeight: '600',
+    },
+    avatarSection: {
+        alignItems: 'center',
+        marginVertical: 20,
+        position: 'relative',
+    },
+    avatar: {
+        width: 120,
+        height: 120,
+        borderRadius: 60,
+        borderWidth: 3,
+        borderColor: '#00796B',
+    },
+    cameraButton: {
+        position: 'absolute',
+        bottom: 0,
+        right: '35%',
+        backgroundColor: '#00796B',
+        width: 44,
+        height: 44,
+        borderRadius: 22,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 2,
+        borderColor: '#FFFFFF',
     },
 });

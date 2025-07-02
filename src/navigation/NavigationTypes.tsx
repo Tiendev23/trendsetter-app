@@ -11,7 +11,7 @@ export type AuthStackParamList = {
     ForgotPassword: undefined;
     ProductDetail: { item?: Product };
     Checkout: undefined;
-    Profile: undefined;
+    Profile: {title?:string};
     Cart: undefined;
     OrderHistory: undefined;
     MethodSelection: { method?: Payment, paymentMethods: Payment[] };
@@ -22,6 +22,18 @@ export type BottomTabParamList = {
     Search: undefined;
     Notifications: undefined;
     Account: undefined;
+}
+
+
+export type ProductsItem = {
+    navigation: any;
+    items: any[];
+
+}
+export type BannerItem={
+    navigation: any;
+    brands :any []; 
+
 }
 // Định nghĩa kiểu navigation, route cho từng màn hình
 export type TabsNav = NativeStackNavigationProp<AuthStackParamList, 'Tabs'>;
