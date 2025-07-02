@@ -9,6 +9,7 @@ import { CreateOrderReq } from '../../types';
 import { CheckoutNav } from '../../navigation/NavigationTypes';
 import { CartContext } from '../../contexts/CartContext';
 import * as Linking from 'expo-linking';
+import { showErrorToast } from '../../utils/toast';
 
 type Props = {
     navigation: CheckoutNav;
@@ -25,12 +26,18 @@ export default function ZalopayWebView({ navigation, orderData, setPaymentStatus
     const dispatch = useAppDispatch();
     const { status, data, error } = useAppSelector(state => state.order);
 
-    const { data: zalopayData, status: zalopayStatus } = useAppSelector(state => state.zalopayMethod);
+    const { data: zalopayData, status: zalopayStatus, error: zalopayErr } = useAppSelector(state => state.zalopayMethod);
     const [checkoutUrl, setCheckoutUrl] = useState('');
 
     useEffect(() => {
         if (zalopayStatus === 'succeeded') {
             setCheckoutUrl(zalopayData.order_url);
+        }
+        if (zalopayStatus === 'failed') {
+            showErrorToast('Không thể tạo đơn hàng Zalopay', zalopayErr?.message || 'Vui lòng thử lại sau');
+            setTimeout(() => {
+                dispatch(refreshZalopay());
+            }, 3000);
         }
     }, [zalopayStatus]);
 
@@ -118,7 +125,7 @@ export default function ZalopayWebView({ navigation, orderData, setPaymentStatus
      *      const subscription = Linking.addEventListener('url', handleDeepLink);
      *      return () => { subscription.remove(); }
      *  }, []);
-     */ 
+     */
 
     return (
         <View style={{
