@@ -8,6 +8,7 @@ import CartItem from '../../components/listItems/CartItem';
 import { formatCurrency } from '../../utils/formatForm';
 import CustomButton from '../../components/buttons/CustomButton';
 import { AuthContext } from '../../contexts/AuthContext';
+import ScreenHeader from '../../components/ScreenHeader';
 
 export default function Cart({ navigation }: { navigation: CartNav }) {
     const cart = useContext(CartContext);
@@ -15,20 +16,9 @@ export default function Cart({ navigation }: { navigation: CartNav }) {
 
     return (
         <View style={styles.container}>
-            {/* header */}
-            <View>
-                <View style={styles.headerContainer}>
-                    <Text style={styles.headerTitle}>
-                        Giỏ Hàng
-                    </Text>
-                </View>
-                <View style={styles.headerActions}>
-                    <CustomDirectionButton
-                        direction="back"
-                        onPress={() => navigation.goBack()}
-                    />
-                </View>
-            </View>
+            <ScreenHeader
+                title='Giỏ Hàng'
+            />
 
             <View style={{ flex: 1 }}>
                 <FlatList
@@ -40,23 +30,26 @@ export default function Cart({ navigation }: { navigation: CartNav }) {
             </View>
 
             {
-                user ?
-                    cart.items.length > 0 &&
-                    <View style={styles.pricingPanel}>
-                        <View style={styles.priceWrapper}>
-                            <Text style={styles.label}>Tổng cộng</Text>
-                            {
-                                cart.status === 'succeeded' ?
-                                    <Text style={[styles.label, styles.price]}>{formatCurrency(cart.getSubtotal())}</Text>
-                                    : <Skeleton width={100} height={20} />
-                            }
-                        </View>
-                        <CustomButton
-                            title='Mua Hàng'
-                            onPress={() => { navigation.navigate('Checkout') }}
-                        />
+                cart.items.length > 0 &&
+                <View style={styles.pricingPanel}>
+                    <View style={styles.priceWrapper}>
+                        <Text style={styles.label}>Tổng cộng</Text>
+                        {
+                            cart.status === 'succeeded' ?
+                                <Text style={[styles.label, styles.price]}>{formatCurrency(cart.getSubtotal())}</Text>
+                                : <Skeleton width={100} height={20} />
+                        }
                     </View>
-                    : null
+                    <CustomButton
+                        title='Mua Hàng'
+                        onPress={() => {
+                            user ?
+                                navigation.navigate('Checkout')
+                                :
+                                navigation.navigate('Login')
+                        }}
+                    />
+                </View>
             }
         </View>
     )

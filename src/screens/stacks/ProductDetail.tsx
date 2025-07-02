@@ -1,155 +1,169 @@
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { ProDetailNav, ProDetailRoute } from "../../navigation/NavigationTypes";
-import CustomDirectionButton from "../../components/buttons/ChevronButton";
-import { Ionicons } from "@expo/vector-icons";
+import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { useContext, useEffect, useState } from "react";
 import CustomButton from "../../components/buttons/CustomButton";
 import ReviewForm from "../../components/listItems/ReviewForm";
 import ToCartButton from "../../components/ToCartButton";
 import { formatCurrency } from "../../utils/formatForm";
 import { CartContext } from "../../contexts/CartContext";
+import ScreenHeader from "../../components/ScreenHeader";
+import { IMAGE_NOT_FOUND } from "../../types";
 
 export default function ProductDetail({ navigation, route }: { navigation: ProDetailNav, route: ProDetailRoute }) {
     const product = route.params?.item;
     const [selectedSize, setSelectedSize] = useState(null);
-    const [subtotal, setSubtotal] = useState(0)
+    const [subtotal, setSubtotal] = useState(0);
+    const [quantity, setQuantity] = useState(1);
     const { addToCart } = useContext(CartContext);
 
     useEffect(() => {
         setSubtotal(selectedSize ? product.price : 0);
-    }, [selectedSize])
+        if (!selectedSize) setQuantity(1);
+    }, [selectedSize]);
 
     return (
         <View style={styles.container}>
             {/* header */}
-            <View>
-                <View style={styles.headerContainer}>
-                    <Text style={styles.headerTitle}>
-                        {product.category.name}
-                    </Text>
-                </View>
-                <View style={styles.headerActions}>
-                    <CustomDirectionButton
-                        direction="back"
-                        onPress={() => navigation.goBack()}
-                    />
-
+            <ScreenHeader
+                title={product.category.name}
+                rightButton={
                     <ToCartButton navigation={navigation} />
-                </View>
-            </View>
-
-            <ScrollView style={styles.scrollContainer}>
-
-                {/* images */}
-                <View style={styles.imageContainer}>
-                    <Image
-                        source={{ uri: product.image }}
-                        style={styles.image}
-                    />
-                </View>
-
-                {/* info */}
-                <View style={styles.contentWrapper}>
-                    <Text style={styles.brandName}>
-                        {product.brand.name}
-                    </Text>
-                    <Text style={styles.productName}>
-                        {product.name}
-                    </Text>
-                    {/* <Text style={{
-                        fontWeight: '500',
-                        fontSize: 20
-                    }}>
-                        {formatCurrency(product.price)}
-                    </Text> */}
-                    <Text style={styles.productDescription}>
-                        {product.description}
-                    </Text>
-                </View>
-
-                {/* sizes */}
-                <View style={styles.contentWrapper}>
-                    <Text style={styles.sizeTitle}>
-                        Kích thước
-                    </Text>
-                    <View style={{ flexDirection: 'row', gap: 12 }}>
-                        {
-                            product.sizes.map((item, index) => (
-                                <TouchableOpacity
-                                    key={index}
-                                    onPress={() => {
-                                        setSelectedSize(selectedSize === item ? null : item);
-                                    }}
-                                    style={[styles.sizeButton, {
-                                        backgroundColor:
-                                            selectedSize === item ? '#006340' : '#F8F9FA',
-                                    }]}
-                                >
-                                    <Text style={{
-                                        color: selectedSize === item ? '#FFFFFF' : '#707B81'
-                                    }}>{item}</Text>
-                                </TouchableOpacity>
-                            ))
-                        }
+                }
+            />
+            <ScrollView>
+                <View style={styles.contentContainer}>
+                    {/* images */}
+                    <View style={styles.imageContainer}>
+                        <Image
+                            source={{ uri: product.image || IMAGE_NOT_FOUND }}
+                            style={styles.image}
+                        />
                     </View>
-                </View>
 
-                {/* Reviews */}
-                <View style={styles.contentWrapper}>
-                    <View style={styles.reviewHeader}>
-
-                        <Text style={styles.reviewTitle}>
-                            Đánh giá sản phẩm
+                    {/* info */}
+                    <View style={styles.contentWrapper}>
+                        <Text style={styles.brandName}>
+                            {product.brand.name}
                         </Text>
+                        <Text style={styles.productName}>
+                            {product.name}
+                        </Text>
+                        <Text style={styles.productDescription}>
+                            {product.description}
+                        </Text>
+                    </View>
 
-                        <View style={styles.reviewScoreContainer}>
-                            <Text>4.67</Text>
-                            <Ionicons name="star" size={14} color="gold" />
+                    {/* sizes */}
+                    <View style={styles.contentWrapper}>
+                        <Text style={styles.sizeTitle}>
+                            Kích thước
+                        </Text>
+                        <View style={{ flexDirection: 'row', gap: 12 }}>
+                            {
+                                product.sizes.map((item, index) => (
+                                    <TouchableOpacity
+                                        key={index}
+                                        onPress={() => {
+                                            setSelectedSize(selectedSize === item ? null : item);
+                                        }}
+                                        style={[styles.sizeButton, {
+                                            backgroundColor:
+                                                selectedSize === item ? '#006340' : '#F8F9FA',
+                                        }]}
+                                    >
+                                        <Text style={{
+                                            color: selectedSize === item ? '#FFFFFF' : '#707B81'
+                                        }}>{item}</Text>
+                                    </TouchableOpacity>
+                                ))
+                            }
                         </View>
                     </View>
-                    {/* Có thể tạo thành component để truyền vào list Reivew */}
-                    <View style={{ gap: 10 }}>
-                        <ReviewForm
-                            username="thailuan"
-                            rating={5}
-                            reviewText="Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium accusantium cumque nulla delectus inventore quas nobis libero iure, aspernatur sunt dolorum ducimus suscipit? Error obcaecati ipsa hic adipisci eveniet temporibus."
-                            createdAt="12/07"
-                        />
-                        <ReviewForm
-                            username="tientq"
-                            rating={4}
-                            reviewText="Lorem, ipsum dolor sit amet consectetur adipisicing elit. Iusto aliquam voluptates nemo aliquid similique illo est quam distinctio tenetur."
-                            createdAt="02/07"
-                        />
-                        <ReviewForm
-                            username="tuananh"
-                            rating={5}
-                            reviewText="Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni vero ducimus eos quia asperiores, aspernatur, iure corrupti, voluptates aliquid deserunt recusandae."
-                            createdAt="22/06"
-                        />
+
+                    {/* Reviews */}
+                    <View style={styles.contentWrapper}>
+                        <View style={styles.reviewHeader}>
+
+                            <Text style={styles.reviewTitle}>
+                                Đánh giá sản phẩm
+                            </Text>
+
+                            <View style={styles.reviewScoreContainer}>
+                                <Text>4.67</Text>
+                                <Ionicons name="star" size={14} color="gold" />
+                            </View>
+                        </View>
+                        {/* Có thể tạo thành component để truyền vào list Reivew */}
+                        <View style={{ gap: 10 }}>
+                            <ReviewForm
+                                username="thailuan"
+                                rating={5}
+                                reviewText="Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium accusantium cumque nulla delectus inventore quas nobis libero iure, aspernatur sunt dolorum ducimus suscipit? Error obcaecati ipsa hic adipisci eveniet temporibus."
+                                createdAt="12/07"
+                            />
+                            <ReviewForm
+                                username="tientq"
+                                rating={4}
+                                reviewText="Lorem, ipsum dolor sit amet consectetur adipisicing elit. Iusto aliquam voluptates nemo aliquid similique illo est quam distinctio tenetur."
+                                createdAt="02/07"
+                            />
+                            <ReviewForm
+                                username="tuananh"
+                                rating={5}
+                                reviewText="Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni vero ducimus eos quia asperiores, aspernatur, iure corrupti, voluptates aliquid deserunt recusandae."
+                                createdAt="22/06"
+                            />
+                        </View>
                     </View>
+
                 </View>
-
-                {/* Chỉ để tạo khoảng trống */}
-                <View style={{ height: 30 }} />
-
             </ScrollView>
 
             {/* subtotal popup */}
             {
                 subtotal ?
                     <View style={styles.subtotalPopup}>
-                        <View style={styles.subtotalTextContainer}>
-                            <Text style={styles.subtotalTitle}>Price</Text>
-                            <Text style={styles.subtotalPrice}>{formatCurrency(subtotal)}</Text>
+                        <View style={{
+                            flexDirection: 'row'
+                        }}>
+                            <View style={styles.subtotalTextContainer}>
+                                <Text style={styles.subtotalTitle}>Price</Text>
+                                <Text style={styles.subtotalPrice}>{formatCurrency(subtotal * quantity)}</Text>
+                            </View>
+                            <View style={[styles.quantityWrapper, styles.buttonOutline]}>
+                                <TouchableOpacity style={styles.quantityWrapper}
+                                    disabled={quantity === 1}
+                                    onPress={() => { setQuantity(quantity - 1) }}
+                                >
+                                    <FontAwesome5 name="minus" size={24} color="#006340" />
+                                </TouchableOpacity>
+                                <TouchableOpacity style={styles.quantityWrapper}
+                                    onPress={() => { setQuantity(quantity + 1) }}
+                                >
+                                    <FontAwesome5 name="plus" size={24} color="#006340" />
+                                </TouchableOpacity>
+                                <View style={styles.quantity}>
+                                    <TextInput
+                                        style={styles.quantityInput}
+                                        value={quantity.toString()}
+                                        keyboardType="numeric"
+                                        onChangeText={text => setQuantity(
+                                            Number.parseInt(text) || 1
+                                        )}
+                                    />
+                                </View>
+                            </View>
                         </View>
 
-                        <View style={{ flex: 1 }}>
-                            <CustomButton
-                                title="Thêm vào giỏ hàng"
-                                onPress={() => { addToCart(product, selectedSize, "Xanh") }}
-                            />
-                        </View>
+                        <CustomButton
+                            title="Thêm vào giỏ hàng"
+                            onPress={() => {
+                                addToCart(product, selectedSize, "Xanh", quantity);
+                                setSelectedSize(null)
+                                setQuantity(1);
+                            }}
+                        />
                     </View>
                     : null
             }
@@ -162,30 +176,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFF',
         flex: 1,
     },
-    headerContainer: {
-        paddingVertical: 22,
-        paddingHorizontal: 18,
-    },
-    headerTitle: {
-        fontWeight: '600',
-        fontStyle: 'italic',
-        fontSize: 20,
-        color: '#006340',
-        textAlign: 'center',
-    },
-    headerActions: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        position: 'absolute',
-        width: '100%',
-        height: '100%',
-        paddingHorizontal: 18,
-    },
-    scrollContainer: {
-        flexDirection: 'column',
-        paddingHorizontal: 18,
+    contentContainer: {
         flex: 1,
+        paddingHorizontal: 18,
+        paddingBottom: 18,
     },
     imageContainer: {
         width: '100%',
@@ -240,14 +234,15 @@ const styles = StyleSheet.create({
     },
     subtotalPopup: {
         position: 'absolute',
-        flexDirection: 'row',
-        alignItems: 'center',
         bottom: 25,
+        left: 10,
+        right: 10,
+        backgroundColor: '#FFFFFF',
         paddingVertical: 16,
         paddingHorizontal: 20,
-        marginHorizontal: 10,
         borderRadius: 24,
-        backgroundColor: '#FFFFFF',
+        alignItems: 'center',
+        gap: 12,
         // shadow cho Android
         elevation: 5,
         // shadow cho IOS
@@ -267,5 +262,31 @@ const styles = StyleSheet.create({
     subtotalPrice: {
         fontSize: 24,
         fontWeight: '500',
+    },
+    quantityWrapper: {
+        flex: 0.7,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100%',
+        overflow: 'hidden'
+    },
+    quantity: {
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    quantityInput: {
+        color: '#006340',
+        height: '100%',
+        width: '20%',
+        textAlign: 'center'
+    },
+    buttonOutline: {
+        borderRadius: 20,
+        borderWidth: 1,
+        borderColor: '#006340'
     },
 });

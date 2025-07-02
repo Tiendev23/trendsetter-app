@@ -3,6 +3,7 @@ import * as Reducer from "./features";
 
 export const store = configureStore({
     reducer: {
+        navRoute: Reducer.navigationReducer,
         auth: Reducer.loginReducer,
         register: Reducer.registerReducer,
         products: Reducer.productsReducer,
@@ -12,7 +13,10 @@ export const store = configureStore({
         orders: Reducer.ordersReducer,
         categories: Reducer.categoriesReducer,
         // Phương thức hanh toán
-        payOSMethod: Reducer.payOSReducer,
+        payosMethod: Reducer.payosReducer,
+        zalopayMethod: Reducer.zalopayReducer,
+
+        changePass: Reducer.ChangePasswordReducer
     },
 });
 
