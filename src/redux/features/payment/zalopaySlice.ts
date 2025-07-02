@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import apiClient from "../../../api/apiClient";
 import { BaseState, ErrorResponse } from "../../../types";
-import {  ZalopayCreateReq, ZalopayCreateRes } from "../../../types/payments";
+import { ZalopayCreateReq, ZalopayCreateRes } from "../../../types/payments";
 import { AxiosError } from "axios";
 
 export const createZalopayOrder = createAsyncThunk<
@@ -18,6 +18,7 @@ export const createZalopayOrder = createAsyncThunk<
         return response.data;
     } catch (err) {
         const error = err as AxiosError<{ message: string }>;
+        console.log("zalopaySlice > createZalopayOrder", err?.message);
         return rejectWithValue(
             error.response?.data || { message: "Lỗi không xác định" }
         );

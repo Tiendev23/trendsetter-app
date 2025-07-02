@@ -1,6 +1,6 @@
 import { ActivityIndicator, ScrollView, View } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
-import WebView from 'react-native-webview';
+import WebView, { WebViewNavigation } from 'react-native-webview';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { createOrder, refresh as refreshOrder } from '../../redux/features/order/orderSlice';
 import { refresh as refreshZalopay } from '../../redux/features/payment/zalopaySlice';
@@ -9,6 +9,7 @@ import { CreateOrderReq } from '../../types';
 import { CheckoutNav } from '../../navigation/NavigationTypes';
 import { CartContext } from '../../contexts/CartContext';
 import * as Linking from 'expo-linking';
+import { showErrorToast } from '../../utils/toast';
 
 type Props = {
     navigation: CheckoutNav;
@@ -25,12 +26,18 @@ export default function ZalopayWebView({ navigation, orderData, setPaymentStatus
     const dispatch = useAppDispatch();
     const { status, data, error } = useAppSelector(state => state.order);
 
-    const { data: zalopayData, status: zalopayStatus } = useAppSelector(state => state.zalopayMethod);
+    const { data: zalopayData, status: zalopayStatus, error: zalopayErr } = useAppSelector(state => state.zalopayMethod);
     const [checkoutUrl, setCheckoutUrl] = useState('');
 
     useEffect(() => {
         if (zalopayStatus === 'succeeded') {
             setCheckoutUrl(zalopayData.order_url);
+        }
+        if (zalopayStatus === 'failed') {
+            showErrorToast('Không thể tạo đơn hàng Zalopay', zalopayErr?.message || 'Vui lòng thử lại sau');
+            setTimeout(() => {
+                dispatch(refreshZalopay());
+            }, 3000);
         }
     }, [zalopayStatus]);
 
@@ -44,7 +51,7 @@ export default function ZalopayWebView({ navigation, orderData, setPaymentStatus
         }));
     };
 
-    const handleNavigationChange = (navState) => {
+    const handleNavigationChange = (navState: WebViewNavigation) => {
         const { url } = navState;
         console.log('url', url);
         if (hasHandled) return;
@@ -118,7 +125,7 @@ export default function ZalopayWebView({ navigation, orderData, setPaymentStatus
      *      const subscription = Linking.addEventListener('url', handleDeepLink);
      *      return () => { subscription.remove(); }
      *  }, []);
-     */ 
+     */
 
     return (
         <View style={{
