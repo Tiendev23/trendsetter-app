@@ -1,6 +1,6 @@
 import { ActivityIndicator, ScrollView, View } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
-import WebView from 'react-native-webview';
+import WebView, { WebViewNavigation } from 'react-native-webview';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { createOrder, refresh as refreshOrder } from '../../redux/features/order/orderSlice';
 import { refresh as refreshZalopay } from '../../redux/features/payment/zalopaySlice';
@@ -51,7 +51,7 @@ export default function ZalopayWebView({ navigation, orderData, setPaymentStatus
         }));
     };
 
-    const handleNavigationChange = (navState) => {
+    const handleNavigationChange = (navState: WebViewNavigation) => {
         const { url } = navState;
         console.log('url', url);
         if (hasHandled) return;
