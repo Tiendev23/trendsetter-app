@@ -6,8 +6,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAllProducts } from '../../redux/features/product/productsSlice';
 import { AppDispatch, RootState } from '../../redux/store';
 import { formatCurrency } from '../../utils/formatForm';
-import { IMAGE_NOT_FOUND } from '../types';
 import { ProductsItem } from '../../navigation/NavigationTypes';
+import { IMAGE_NOT_FOUND } from '../../types';
 
 
 const { width, height } = Dimensions.get('window');

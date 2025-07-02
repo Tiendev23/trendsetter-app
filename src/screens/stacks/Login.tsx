@@ -27,7 +27,7 @@ export default function Login({ navigation, route }: { navigation: LoginNav; rou
         if (prevRoute) return;
         dispatch(setPrevRoute(navigation.getState().routes[0]));
     }, []);
-    const prevRoute = useAppSelector(state => state.navRoute.prevRoute);
+    const prevRoute = useAppSelector(state => state?.navRoute.prevRoute);
 
     const handleLogin = () => {
         dispatch(login({ emailOrUsername: inputValue, password: password }));

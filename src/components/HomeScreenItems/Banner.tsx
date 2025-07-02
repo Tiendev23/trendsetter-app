@@ -6,9 +6,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAllProducts } from '../../redux/features/product/productsSlice';
 import { RootState, AppDispatch } from '../../redux/store';
 import eventBus from '../../utils/Evenbus';
-import { IMAGE_NOT_FOUND } from '../types';
 import { formatCurrency } from '../../utils/formatForm';
 import { ProductsItem } from '../../navigation/NavigationTypes';
+import { IMAGE_NOT_FOUND } from '../../types';
 
 const { width } = Dimensions.get('window');
 const WinterBanner :React.FC<ProductsItem> = ({ navigation,items }) => {
