@@ -12,18 +12,7 @@ export const getAllProducts = createAsyncThunk(
         }
     }
 );
-//getproductbyId
-export const getProductById = createAsyncThunk(
-    'products/getById',
-    async (id: string, { rejectWithValue }) => {
-        try {
-            const res = await apiClient.get(`products/${id}`);
-            return res.data;
-        } catch (err: any) {
-            return rejectWithValue(err.response?.data?.message || 'Lỗi lấy chi tiết sản phẩm');
-        }
-    }
-);
+
 
 export const getBrand = createAsyncThunk(
     'brand/getBrand',
@@ -46,11 +35,19 @@ const productsSlice = createSlice({
         // trang thái brand
         brands: [],
         brandLoading: 'idle',
-        // trang thai sanphamtheodanhmuc
-        productId: [],
-        productByIdStatus: 'idle',
+        // productbyid
+        filteredItems: [],
+        selectedBrand: null,
+
     },
-    reducers: {}, // nếu cần xử lý thêm (xóa sp, v.v.)
+    reducers: {
+        setSelectedBrand: (state, action) => {
+            state.selectedBrand = action.payload;
+            state.filteredItems = action.payload
+                ? state.items.filter((p) => p.brand === action.payload)
+                : state.items;
+        }
+    }, // nếu cần xử lý thêm (xóa sp, v.v.)
 
     extraReducers: (builder) => {
         builder
@@ -60,6 +57,8 @@ const productsSlice = createSlice({
             .addCase(getAllProducts.fulfilled, (state, action) => {
                 state.loading = 'succeeded';
                 state.items = action.payload;
+                state.filteredItems = action.payload;
+
             })
             .addCase(getAllProducts.rejected, (state, action) => {
                 state.loading = 'failed';
@@ -77,21 +76,11 @@ const productsSlice = createSlice({
                 state.brandLoading = 'failed';
                 state.error = action.payload || 'Đã xảy ra lỗi';
             });
-        builder
-            .addCase(getProductById.pending, (state) => {
-                state.productByIdStatus = 'loading';
-            })
-            .addCase(getProductById.fulfilled, (state, action) => {
-                state.productByIdStatus = 'succeeded';
-                state.productId = action.payload;
-                state.items = [action.payload]; // để reuse FlatList
+  
 
-            })
-            .addCase(getProductById.rejected, (state, action) => {
-                state.productByIdStatus = 'failed';
-                state.error = action.payload;
-            });
+
     },
 });
 
+export const { setSelectedBrand } = productsSlice.actions;
 export default productsSlice.reducer;

@@ -1,49 +1,46 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList, ActivityIndicator, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList, ActivityIndicator, Dimensions, RefreshControl } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '../../redux/store';
-import { formatCurrency } from '../../utils/formatForm'
-import ToCartButton from '../../components/ToCartButton';
-const { width } = Dimensions.get('window');
-import { getAllProducts, getProductById } from '../../redux/features/product/productsSlice';
+import { formatCurrency } from '../../utils/formatForm';
 import CustomDirectionButton from '../../components/buttons/ChevronButton';
+import ToCartButton from '../../components/ToCartButton';
+import { getAllProducts } from '../../redux/features/product/productsSlice';
+import eventBus from '../../utils/Evenbus';
+
+const { width } = Dimensions.get("window");
 import { IMAGE_NOT_FOUND } from '../../types';
 
-const ProductlistScreen = ({ navigation, route, }) => {
-    const { title, _id } = route.params;
+const ProductlistScreen = ({ navigation, route }) => {
+    const { brandId, title } = route.params;
     const dispatch = useDispatch<AppDispatch>();
-    const { items, loading, error, productByIdStatus, productId } = useSelector((state: RootState) => state.products);
-    const dataToRender = _id ? [productId] : items;
+    const { items, loading, error } = useSelector((state: RootState) => state.products);
+
+    const [refreshing, setRefreshing] = React.useState(false);
 
     useEffect(() => {
-        if (_id) {
-            dispatch(getProductById(_id));
-            console.log('Gọi API getProductById với id:', _id);
-        } else {
-            dispatch(getAllProducts());
-            console.log(' Gọi API getAllProducts');
+        dispatch(getAllProducts());
+    }, [dispatch]);
 
-        }
-    }, [dispatch, _id]);
 
-    if (loading === 'loading') {
+    const onRefresh = () => {
+        setRefreshing(true);
+        dispatch(getAllProducts()).finally(() => setRefreshing(false));
+    };
+
+
+    const dataToRender = brandId?._id
+        ? items.filter((product) => product.brand && product.brand._id === brandId._id)
+        : items;
+
+    if (brandId?._id && dataToRender.length === 0) {
         return (
             <View style={styles.center}>
-                <ActivityIndicator size="large" color="#006340" />
-                <Text>Đang tải sản phẩm...</Text>
+                <Text>Không có sản phẩm nào thuộc thương hiệu được chọn</Text>
             </View>
         );
     }
-
-    if (loading === 'failed') {
-        return (
-            <View style={styles.center}>
-                <Text style={{ color: 'red' }}>Lỗi: {error}</Text>
-            </View>
-        );
-    }
-
     const renderProduct = ({ item }) => (
         <TouchableOpacity
             style={styles.card}
@@ -53,7 +50,6 @@ const ProductlistScreen = ({ navigation, route, }) => {
             <TouchableOpacity style={styles.heartIcon}>
                 <Ionicons name="heart-outline" size={20} color="white" />
             </TouchableOpacity>
-
             <View style={styles.infoContainer}>
                 <Text numberOfLines={1} style={styles.name}>{item.name}</Text>
                 <View style={styles.priceContainer}>
@@ -71,28 +67,50 @@ const ProductlistScreen = ({ navigation, route, }) => {
         <View style={styles.container}>
             <View>
                 <View style={styles.headerContainer}>
-                    <Text style={styles.headerTitle}>{title}</Text>
                 </View>
                 <View style={styles.headerActions}>
-
-                    <CustomDirectionButton
-                        direction="back"
-                        onPress={() => navigation.goBack()}
-                    />
+                    <CustomDirectionButton direction="back" onPress={() => navigation.goBack()} />
+                    <Text style={styles.headerTitle}>{brandId?.name ? brandId.name : title}</Text>
 
                     <ToCartButton navigation={navigation} />
                 </View>
             </View>
-            <View style={styles.product}>
-                <FlatList
+            {loading === "loading" && !refreshing ? (
+                <View style={styles.center}>
+                    <ActivityIndicator size="large" color="#006340" />
+                    <Text>Đang tải sản phẩm...</Text>
+                </View>
+            ) : loading === "failed" ? (
+                <View style={styles.center}>
+                    <Text style={{ color: 'red' }}>Lỗi: {error}</Text>
+                </View>
+            ) : (!refreshing && (
+                <><FlatList
                     data={dataToRender}
-                    renderItem={renderProduct}
                     keyExtractor={(item) => item._id}
                     numColumns={2}
                     columnWrapperStyle={styles.row}
+                    renderItem={renderProduct}
                     showsVerticalScrollIndicator={false}
-                />
-            </View>
+                    contentContainerStyle={styles.listContent}
+
+
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={refreshing}
+                            onRefresh={onRefresh}
+                            colors={['#006340']}
+                            title="Đang làm mới sản phẩm..." // <- Dòng chữ bạn muốn hiển thị
+                            tintColor="#006340"
+                            titleColor="#006340"
+                        />
+                    }
+
+                /></>
+            ))
+            }
+
+
         </View>
     );
 };
@@ -104,6 +122,7 @@ const styles = StyleSheet.create({
         flex: 1
     },
     headerContainer: {
+        backgroundColor: '#FFF',
         paddingVertical: 22,
         paddingHorizontal: 18,
     },
@@ -122,27 +141,27 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         paddingHorizontal: 18,
+
     },
-    product: {
-        marginTop: 10,
+    listContent: {
         paddingHorizontal: 12,
+        paddingBottom: 20
     },
     row: {
         justifyContent: 'space-between',
-        marginBottom: 12,
+        marginBottom: 12
     },
     card: {
-        width: (width - 36) / 2, // (padding 12 * 2) + spacing 12
-        height: 260,
+        width: (width - 36) / 2,
         backgroundColor: '#f9f9f9',
         borderRadius: 10,
-        overflow: 'hidden',
+        overflow: 'hidden'
     },
     image: {
         width: '100%',
         height: 140,
         borderTopLeftRadius: 10,
-        borderTopRightRadius: 10,
+        borderTopRightRadius: 10
     },
     heartIcon: {
         position: 'absolute',
@@ -150,44 +169,43 @@ const styles = StyleSheet.create({
         right: 10,
         padding: 5,
         borderRadius: 20,
-        backgroundColor: '#E0E0E0',
+        backgroundColor: '#E0E0E0'
     },
     infoContainer: {
-        padding: 8,
+        padding: 8
     },
     name: {
         fontSize: 14,
         fontWeight: '500',
-        color: '#333',
+        color: '#333'
     },
     priceContainer: {
-        marginTop: 6,
+        marginTop: 6
     },
     price: {
         fontSize: 14,
         fontWeight: 'bold',
-        color: '#006340',
+        color: '#006340'
     },
     shipTag: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#fff',
         borderWidth: 1,
         borderColor: '#006340',
         paddingHorizontal: 6,
         paddingVertical: 2,
         borderRadius: 5,
         alignSelf: 'flex-start',
-        marginTop: 8,
+        marginTop: 8
     },
     shipText: {
         marginLeft: 4,
         fontSize: 12,
-        color: '#006340',
+        color: '#006340'
     },
     center: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center',
-    },
+        alignItems: 'center'
+    }
 });

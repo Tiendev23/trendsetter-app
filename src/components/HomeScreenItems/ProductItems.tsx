@@ -1,41 +1,20 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList, ActivityIndicator, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import React, { useContext, useEffect } from 'react';
-import { DataContext } from '../contexts/DataContext';
+import React, { useEffect } from 'react';
+import { ActivityIndicator, Dimensions, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 // import { getAllProducts } from '../redux/slices/productSlice';
-import { RootState, AppDispatch } from '../redux/store';
-import { getAllProducts } from '../redux/features/product/productsSlice';
-import { formatCurrency } from '../utils/formatForm';
-import { IMAGE_NOT_FOUND } from '../types';
+import { getAllProducts } from '../../redux/features/product/productsSlice';
+import { AppDispatch, RootState } from '../../redux/store';
+import { formatCurrency } from '../../utils/formatForm';
+import { ProductsItem } from '../../navigation/NavigationTypes';
+import { IMAGE_NOT_FOUND } from '../../types';
 
 
 const { width, height } = Dimensions.get('window');
 
-const ProductItem = ({ navigation }) => {
-    const dispatch = useDispatch<AppDispatch>();
-    const { items, loading, error } = useSelector((state: RootState) => state.products);
-
-    useEffect(() => {
-        dispatch(getAllProducts());
-    }, [dispatch]);
-
-    if (loading === 'loading') {
-        return (
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <ActivityIndicator size="large" color="#006340" />
-                <Text>Đang tải sản phẩm...</Text>
-            </View>
-        );
-    }
-
-    if (loading === 'failed') {
-        return (
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <Text style={{ color: 'red' }}>Lỗi: {error}</Text>
-            </View>
-        );
-    }
+const ProductItem: React.FC<ProductsItem> = ({ navigation,items}) => {
+    
+    
     const renderProduct = ({ item }) => {
 
         return (
@@ -48,7 +27,7 @@ const ProductItem = ({ navigation }) => {
                     style={styles.image}
                 />
                 <TouchableOpacity style={styles.heartIcon}>
-                    <Ionicons name="heart-outline" size={24} color="white" />
+                    <Ionicons name="heart-outline" size={24} color="#006340" />
                 </TouchableOpacity>
 
                 <View style={styles.infoContainer}>
@@ -73,7 +52,8 @@ const ProductItem = ({ navigation }) => {
                 data={items}
                 renderItem={renderProduct}
                 keyExtractor={(item) => item._id}
-
+                initialNumToRender={4}
+                maxToRenderPerBatch={8}
                 horizontal
                 showsHorizontalScrollIndicator={false}
             />
@@ -104,11 +84,9 @@ const styles = StyleSheet.create({
     heartIcon: {
         position: 'absolute',
         top: 7,
-        right: 15,
-        padding: 5,
-        borderRadius: 20,
-        borderWidth: 1,
-        backgroundColor: "#E0E0E0"
+        right: 10,
+        padding: 3,
+
     },
     infoContainer: {
         padding: 8,
