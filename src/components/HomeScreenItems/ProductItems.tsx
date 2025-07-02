@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAllProducts } from '../../redux/features/product/productsSlice';
 import { AppDispatch, RootState } from '../../redux/store';
 import { formatCurrency } from '../../utils/formatForm';
+import { IMAGE_NOT_FOUND } from '../types';
 import { ProductsItem } from '../../navigation/NavigationTypes';
 
 
@@ -21,7 +22,10 @@ const ProductItem: React.FC<ProductsItem> = ({ navigation,items}) => {
                 style={styles.card}
                 onPress={() => navigation.navigate('ProductDetail', { item })}
             >
-                <Image source={{ uri: item.image }} style={styles.image} />
+                <Image
+                    source={{ uri: item.image || IMAGE_NOT_FOUND }}
+                    style={styles.image}
+                />
                 <TouchableOpacity style={styles.heartIcon}>
                     <Ionicons name="heart-outline" size={24} color="#006340" />
                 </TouchableOpacity>

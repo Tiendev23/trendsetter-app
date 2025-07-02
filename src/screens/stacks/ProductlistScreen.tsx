@@ -10,6 +10,7 @@ import { getAllProducts } from '../../redux/features/product/productsSlice';
 import eventBus from '../../utils/Evenbus';
 
 const { width } = Dimensions.get("window");
+import { IMAGE_NOT_FOUND } from '../../types';
 
 const ProductlistScreen = ({ navigation, route }) => {
     const { brandId, title } = route.params;
@@ -41,8 +42,11 @@ const ProductlistScreen = ({ navigation, route }) => {
         );
     }
     const renderProduct = ({ item }) => (
-        <TouchableOpacity style={styles.card} onPress={() => navigation.navigate("ProductDetail", { item })}>
-            <Image source={{ uri: item.image }} style={styles.image} />
+        <TouchableOpacity
+            style={styles.card}
+            onPress={() => navigation.navigate('ProductDetail', { item })}
+        >
+            <Image source={{ uri: item.image || IMAGE_NOT_FOUND }} style={styles.image} />
             <TouchableOpacity style={styles.heartIcon}>
                 <Ionicons name="heart-outline" size={20} color="white" />
             </TouchableOpacity>

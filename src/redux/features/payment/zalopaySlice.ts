@@ -1,12 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import apiClient from "../../../api/apiClient";
 import { BaseState, ErrorResponse } from "../../../types";
-import { CreateOrderReq, ZalopayCreateRes } from "../../../types/payments";
+import {  ZalopayCreateReq, ZalopayCreateRes } from "../../../types/payments";
 import { AxiosError } from "axios";
 
 export const createZalopayOrder = createAsyncThunk<
     ZalopayCreateRes,
-    CreateOrderReq,
+    ZalopayCreateReq,
     { rejectValue: ErrorResponse }
 >("payment/zalopay/create", async (body, { rejectWithValue }) => {
     try {

@@ -1,6 +1,6 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, { useState } from 'react';
-import { Order, OrderItem, User } from '../../types';
+import { IMAGE_NOT_FOUND, Order, OrderItem, User } from '../../types';
 import { formatCurrency, formatDate, formatOrderStatus } from '../../utils/formatForm';
 import CustomDirectionButton from '../buttons/ChevronButton';
 import CustomButton from '../buttons/CustomButton';
@@ -37,8 +37,8 @@ export default function OrderPreview({ order, navigation }: Props) {
                 <View style={[styles.rowWrapper, styles.itemWrapper]}>
                     <View style={styles.imageWrapper}>
                         <Image
-                            source={{ uri: items[0].product.image }}
-                            style={{ flex: 1, backgroundColor: 'gray' }}
+                            source={{ uri: items[0].product?.image || IMAGE_NOT_FOUND }}
+                            style={{ flex: 1 }}
                         />
                     </View>
                     <View style={styles.nameWrapper}>
