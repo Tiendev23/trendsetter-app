@@ -7,7 +7,7 @@ export const getAllProducts = createAsyncThunk(
         try {
             const res = await apiClient.get('products');
             return res.data;
-        } catch (err) {
+        } catch (err:any) {
             return rejectWithValue(err.response?.data?.message || 'Lỗi gọi API');
         }
     }
@@ -20,7 +20,7 @@ export const getBrand = createAsyncThunk(
         try {
             const res = await apiClient.get('brands');
             return res.data;
-        } catch (err) {
+        } catch (err:any) {
             return rejectWithValue(err.response?.data?.message || 'Lỗi gọi API');
         }
     }

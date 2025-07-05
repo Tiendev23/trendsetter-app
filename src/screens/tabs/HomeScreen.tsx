@@ -117,7 +117,7 @@ export default function HomeScreen({ navigation }) {
                         </View>
                         <ProductItem navigation={stackNav} items={items} />
                         <View style={styles.recommend}>
-                            <Text style={styles.textRecommend}>Sản phẩm quần áo tiêu biểu</Text>
+                            <Text style={styles.textRecommend}>Sản phẩm tiêu biểu</Text>
                             <TouchableOpacity
                                 onPress={() => {
                                     navigation.navigate('ProductlistScreen', { title: 'Sản phẩm quần áo tiêu biểu' })

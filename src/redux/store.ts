@@ -15,7 +15,7 @@ export const store = configureStore({
         // Phương thức hanh toán
         payosMethod: Reducer.payosReducer,
         zalopayMethod: Reducer.zalopayReducer,
-
+        sendEmail: Reducer.sendEmailReducer,
         changePass: Reducer.ChangePasswordReducer
     },
 });
