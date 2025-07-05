@@ -13,7 +13,8 @@ export const fetchProductById = createAsyncThunk(
             const response = await apiClient.get(`/products/${productId}`);
             return response.data;
         } catch (error) {
-            console.log(error);            
+            console.log("productSlice > error", error);          
+            console.log("productSlice > error", error.response);          
             return rejectWithValue(error.response?.data?.message);
         }
     }

@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import apiClient from "../../../api/apiClient";
-import { BaseState, ErrorResponse } from "../../../types";
+import { reduxInitState, ErrorResponse } from "../../../types";
 import { ZalopayCreateReq, ZalopayCreateRes } from "../../../types/payments";
 import { AxiosError } from "axios";
 
@@ -25,7 +25,7 @@ export const createZalopayOrder = createAsyncThunk<
     }
 });
 
-const initialState: BaseState<ZalopayCreateRes> = {
+const initialState: reduxInitState<ZalopayCreateRes> = {
     data: null,
     status: "idle",
     error: null,

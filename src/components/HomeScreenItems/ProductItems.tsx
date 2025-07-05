@@ -23,7 +23,7 @@ const ProductItem: React.FC<ProductsItem> = ({ navigation,items}) => {
                 onPress={() => navigation.navigate('ProductDetail', { item })}
             >
                 <Image
-                    source={{ uri: item.image || IMAGE_NOT_FOUND }}
+                    source={{ uri: item.imagez || IMAGE_NOT_FOUND }}
                     style={styles.image}
                 />
                 <TouchableOpacity style={styles.heartIcon}>

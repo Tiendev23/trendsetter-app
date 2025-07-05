@@ -1,4 +1,4 @@
-export type BaseState<T = any> = {
+export type reduxInitState<T = any> = {
     data: T | null;
     status: "idle" | "loading" | "succeeded" | "failed";
     error: string | any | null;
@@ -9,3 +9,5 @@ export type ErrorResponse = {
     code?: string;
     details?: any;
 };
+
+export type useStateTuple<T> = [T, React.Dispatch<React.SetStateAction<T>>];

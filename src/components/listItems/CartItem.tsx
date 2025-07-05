@@ -102,7 +102,7 @@ export default function CartItem({ item }: { item: Cart }) {
             setStatus('succeeded');
         }
         if (status[item.product] === 'failed') {
-            console.log('Lỗi fetchProductById:', error[item.product]);
+            console.log('CartItem > error', error[item.product]);
         }
     }, [status, data, item.product]);
 
@@ -130,7 +130,7 @@ export default function CartItem({ item }: { item: Cart }) {
                     <View style={styles.contentContainer}>
                         <View style={styles.image}>
                             <Image
-                                source={{ uri: product?.image || IMAGE_NOT_FOUND }}
+                                source={{ uri: product?.images[0] || IMAGE_NOT_FOUND }}
                                 style={styles.image}
                             />
                         </View>

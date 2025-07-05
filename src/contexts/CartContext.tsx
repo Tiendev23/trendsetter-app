@@ -53,6 +53,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
     };
 
     const addToCart = (product: Product, selectedSize: string, selectedColor: string, quantity: number) => {
+        console.log("Adding to cart:", product, selectedSize, selectedColor, quantity);
+
         setCart((prev) => {
             const existingItem = prev.find(
                 (item) =>

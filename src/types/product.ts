@@ -7,12 +7,14 @@ export type Product = {
     price: number;
     category?: Category;
     brand?: Brand;
-    image: string;
+    images?: string[];
     banner?: string;
     description?: string;
     sizes?: string[];
     colors?: string[];
+    stock?: number;
     __v: number;
 };
 
-export const IMAGE_NOT_FOUND = 'https://res.cloudinary.com/trendsetter/image/upload/v1750076569/download_cdvees.png';
+export const IMAGE_NOT_FOUND =
+    "https://res.cloudinary.com/trendsetter/image/upload/v1750076569/download_cdvees.png";

@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import apiClient from "../../../api/apiClient";
-import { BaseState, Payment } from "../../../types";
+import { reduxInitState, Payment } from "../../../types";
 
 export const fetchAllMethods = createAsyncThunk(
     "payments/fetchAll",
@@ -15,7 +15,7 @@ export const fetchAllMethods = createAsyncThunk(
     }
 );
 
-type PaymentsState = BaseState<Payment[]> & {
+type PaymentsState = reduxInitState<Payment[]> & {
     selectedMethod: Payment | null;
 };
 

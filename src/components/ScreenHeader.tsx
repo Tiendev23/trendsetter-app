@@ -15,7 +15,7 @@ export default function ScreenHeader({ title, titleStyle, rightButton, leftButto
 
     return (
         <View>
-            <View style={styles.headerContainer}>
+            <View style={[styles.headerContainer, styles.separatorLine]}>
                 <Text style={[styles.headerTitle, titleStyle]}>
                     {title}
                 </Text>
@@ -30,8 +30,6 @@ export default function ScreenHeader({ title, titleStyle, rightButton, leftButto
                 }
                 {rightButton}
             </View>
-
-            <View style={styles.separatorLine} />
         </View>
     );
 }
@@ -60,8 +58,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 18,
     },
     separatorLine: {
-        height: 1,
-        width: '100%',
-        backgroundColor: '#D0D3D5',
+        borderBottomColor: '#D0D3D5',
+        borderBottomWidth: 1,
     },
 });

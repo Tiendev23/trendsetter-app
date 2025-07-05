@@ -1,4 +1,4 @@
-import { BaseState, ErrorResponse } from "../../../types/baseRedux";
+import { reduxInitState, ErrorResponse } from "../../../types/baseTuple";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import apiClient from "../../../api/apiClient";
 import { AxiosError } from "axios";
@@ -21,7 +21,7 @@ export const fetchOrdersByUser = createAsyncThunk<
     }
 });
 
-const initialState: BaseState<Order[]> = {
+const initialState: reduxInitState<Order[]> = {
     data: [],
     status: "idle",
     error: null,

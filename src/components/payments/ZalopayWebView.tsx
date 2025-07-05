@@ -55,25 +55,17 @@ export default function ZalopayWebView({ navigation, orderData, setPaymentStatus
         const { url } = navState;
         console.log('url', url);
         if (hasHandled) return;
-        console.log('you here 1');
         if (url.includes('result?')) {
-            // const query = new URL(url).searchParams;
-            // console.log('query', query);
-            // const code = query.get('code');
-            // console.log('code', code);
             if (!url.includes('returncode=1')) {
-                console.log('you here 2.1');
                 setPaid(false);
                 createOrderWithStatus(false);
             } else {
-                console.log('you here 2.2');
                 setPaid(true);
                 createOrderWithStatus(true);
             }
             cart.clearCart();
             setHandled(true);
         }
-        console.log('you here 3');
     };
 
     useEffect(() => {
@@ -157,7 +149,6 @@ export default function ZalopayWebView({ navigation, orderData, setPaymentStatus
                             setSupportMultipleWindows={false}
                             onNavigationStateChange={handleNavigationChange}
                             startInLoadingState
-                            renderLoading={() => <ActivityIndicator size={'large'} color={'#006340'} />}
                         />
                     </ScrollView>
             }

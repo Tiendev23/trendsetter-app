@@ -8,10 +8,34 @@ import ToCartButton from "../../components/ToCartButton";
 import { formatCurrency } from "../../utils/formatForm";
 import { CartContext } from "../../contexts/CartContext";
 import ScreenHeader from "../../components/ScreenHeader";
-import { IMAGE_NOT_FOUND } from "../../types";
+import { IMAGE_NOT_FOUND, Product } from "../../types";
+import PricePopup from "../../components/ProductDetails/PricePopup";
+import SizeMapping from "../../components/ProductDetails/SizeMapping";
 
 export default function ProductDetail({ navigation, route }: { navigation: ProDetailNav, route: ProDetailRoute }) {
-    const product = route.params?.item;
+    const demoProduct = {
+        __v: 0,
+        _id: "685bee08c9c6ffe04f185a3d",
+        banner: "",
+        brand: { __v: 0, _id: "685bec9ac9c6ffe04f185a2e", name: "Nike " },
+        category: {
+            __v: 0,
+            _id: "685bec32c9c6ffe04f185a1e",
+            name: "Giày thể thao",
+            parent: null,
+        },
+        colors: ["Trắng", "Đen", "Xanh"],
+        description:
+            "Đôi giày chạy bộ với công nghệ Zoom Air ở mũi và gót chân mang lại khả năng đàn hồi tốt, giúp tăng tốc độ và bảo vệ chân. Upper dạng mesh thoáng khí, thiết kế nhẹ, tăng trải nghiệm chạy bộ hoặc sử dụng hàng ngày. Kiểu sneaker năng động, phối hợp tốt với trang phục thể thao và tông màu dễ mix.",
+        images: [
+            "https://res.cloudinary.com/trendsetter/image/upload/v1751064115/products/1751064115169-8ujcyyw4.webp",
+        ],
+        name: "Nike Air Zoom Pegasus 40",
+        price: 35000,
+        sizes: ["S", "M", "L", "XL"],
+        stock: 50,
+    };
+    const [product, setProduct] = useState<Product>(route.params?.item || demoProduct);
     const [selectedSize, setSelectedSize] = useState(null);
     const [subtotal, setSubtotal] = useState(0);
     const [quantity, setQuantity] = useState(1);
@@ -36,7 +60,7 @@ export default function ProductDetail({ navigation, route }: { navigation: ProDe
                     {/* images */}
                     <View style={styles.imageContainer}>
                         <Image
-                            source={{ uri: product.image || IMAGE_NOT_FOUND }}
+                            source={{ uri: product.images[0] || IMAGE_NOT_FOUND }}
                             style={styles.image}
                         />
                     </View>
@@ -59,26 +83,12 @@ export default function ProductDetail({ navigation, route }: { navigation: ProDe
                         <Text style={styles.sizeTitle}>
                             Kích thước
                         </Text>
-                        <View style={{ flexDirection: 'row', gap: 12 }}>
-                            {
-                                product.sizes.map((item, index) => (
-                                    <TouchableOpacity
-                                        key={index}
-                                        onPress={() => {
-                                            setSelectedSize(selectedSize === item ? null : item);
-                                        }}
-                                        style={[styles.sizeButton, {
-                                            backgroundColor:
-                                                selectedSize === item ? '#006340' : '#F8F9FA',
-                                        }]}
-                                    >
-                                        <Text style={{
-                                            color: selectedSize === item ? '#FFFFFF' : '#707B81'
-                                        }}>{item}</Text>
-                                    </TouchableOpacity>
-                                ))
-                            }
-                        </View>
+                        <SizeMapping
+                            sizes={product.sizes}
+                            state={{
+                                selectedSize: [selectedSize, setSelectedSize],
+                            }}
+                        />
                     </View>
 
                     {/* Reviews */}
@@ -116,56 +126,20 @@ export default function ProductDetail({ navigation, route }: { navigation: ProDe
                             />
                         </View>
                     </View>
-
                 </View>
             </ScrollView>
 
             {/* subtotal popup */}
             {
-                subtotal ?
-                    <View style={styles.subtotalPopup}>
-                        <View style={{
-                            flexDirection: 'row'
-                        }}>
-                            <View style={styles.subtotalTextContainer}>
-                                <Text style={styles.subtotalTitle}>Price</Text>
-                                <Text style={styles.subtotalPrice}>{formatCurrency(subtotal * quantity)}</Text>
-                            </View>
-                            <View style={[styles.quantityWrapper, styles.buttonOutline]}>
-                                <TouchableOpacity style={styles.quantityWrapper}
-                                    disabled={quantity === 1}
-                                    onPress={() => { setQuantity(quantity - 1) }}
-                                >
-                                    <FontAwesome5 name="minus" size={24} color="#006340" />
-                                </TouchableOpacity>
-                                <TouchableOpacity style={styles.quantityWrapper}
-                                    onPress={() => { setQuantity(quantity + 1) }}
-                                >
-                                    <FontAwesome5 name="plus" size={24} color="#006340" />
-                                </TouchableOpacity>
-                                <View style={styles.quantity}>
-                                    <TextInput
-                                        style={styles.quantityInput}
-                                        value={quantity.toString()}
-                                        keyboardType="numeric"
-                                        onChangeText={text => setQuantity(
-                                            Number.parseInt(text) || 1
-                                        )}
-                                    />
-                                </View>
-                            </View>
-                        </View>
-
-                        <CustomButton
-                            title="Thêm vào giỏ hàng"
-                            onPress={() => {
-                                addToCart(product, selectedSize, "Xanh", quantity);
-                                setSelectedSize(null)
-                                setQuantity(1);
-                            }}
-                        />
-                    </View>
-                    : null
+                subtotal &&
+                <PricePopup
+                    product={product}
+                    subtotal={subtotal}
+                    state={{
+                        selectedSize: [selectedSize, setSelectedSize],
+                        quantity: [quantity, setQuantity]
+                    }}
+                />
             }
         </View >
     )
@@ -214,7 +188,7 @@ const styles = StyleSheet.create({
     },
     sizeButton: {
         borderRadius: 100,
-        width: 45,
+        height: 45,
         aspectRatio: 1,
         justifyContent: 'center',
         alignItems: 'center',
@@ -231,62 +205,5 @@ const styles = StyleSheet.create({
     reviewScoreContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-    },
-    subtotalPopup: {
-        position: 'absolute',
-        bottom: 25,
-        left: 10,
-        right: 10,
-        backgroundColor: '#FFFFFF',
-        paddingVertical: 16,
-        paddingHorizontal: 20,
-        borderRadius: 24,
-        alignItems: 'center',
-        gap: 12,
-        // shadow cho Android
-        elevation: 5,
-        // shadow cho IOS
-        shadowColor: '#000', // Màu bóng
-        shadowOffset: { width: 0, height: 5 }, // Độ lệch của bóng
-        shadowOpacity: 0.3, // Độ trong suốt của bóng
-        shadowRadius: 5, // Độ rộng của bóng
-    },
-    subtotalTextContainer: {
-        flex: 1,
-        gap: 4,
-    },
-    subtotalTitle: {
-        fontSize: 18,
-        color: '#707B81',
-    },
-    subtotalPrice: {
-        fontSize: 24,
-        fontWeight: '500',
-    },
-    quantityWrapper: {
-        flex: 0.7,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100%',
-        overflow: 'hidden'
-    },
-    quantity: {
-        position: 'absolute',
-        width: '100%',
-        height: '100%',
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    quantityInput: {
-        color: '#006340',
-        height: '100%',
-        width: '20%',
-        textAlign: 'center'
-    },
-    buttonOutline: {
-        borderRadius: 20,
-        borderWidth: 1,
-        borderColor: '#006340'
     },
 });
