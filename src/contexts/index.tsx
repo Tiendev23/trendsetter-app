@@ -10,7 +10,6 @@ export function AppProviders({ children }: { children: ReactNode }) {
             <CartProvider>
                 <DataProvider>
                     <MessageProvider>
-                        {" "}
                         {children}
                     </MessageProvider>
                 </DataProvider>

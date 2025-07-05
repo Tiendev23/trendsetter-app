@@ -64,8 +64,15 @@ export default function Login({ navigation, route }: { navigation: LoginNav; rou
                     <CustomDirectionButton
                         direction="back"
                         onPress={() => {
-                            const tabState = prevRoute.state;
+                            const tabState = prevRoute?.state;
                             const activeIndex = tabState?.index ?? 0;
+                            if (!prevRoute || !tabState || !tabState.routes) {
+                                navigation.reset({
+                                    index: 0,
+                                    routes: [{ name: 'Tabs' }],
+                                });
+                                return;
+                            }
                             dispatch(resetPreRoute())
                             navigation.reset({
                                 index: 0,
