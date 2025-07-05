@@ -3,7 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import TabNavigator from './TabNavigator';
 import * as Stacks from '../screens/stacks'
 import ChatScreen from '../screens/stacks/ChatScreen';
-import Onboarding from '../screens/Onboarding';
+import Onboarding from '../screens/tabs/Onboarding';
 
 const Stack = createNativeStackNavigator();
 
