@@ -51,7 +51,7 @@ const Onboarding = ({ navigation, onFinish }) => {
   const flatListRef = useRef(null);
   const timerRef = useRef(null);
 
-  // Auto slide 3s
+  // Auto slide 5s
   useEffect(() => {
     if (currentIndex < ONBOARD_DATA.length - 1) {
       timerRef.current = setTimeout(() => {
@@ -60,7 +60,7 @@ const Onboarding = ({ navigation, onFinish }) => {
           flatListRef.current?.scrollToIndex({ index: next });
           return next;
         });
-      }, 3000);
+      }, 5000);
     }
     return () => clearTimeout(timerRef.current);
   }, [currentIndex]);
@@ -71,7 +71,7 @@ const Onboarding = ({ navigation, onFinish }) => {
       flatListRef.current?.scrollToIndex({ index: currentIndex + 1 });
     } else {
       if (navigation && navigation.replace) {
-        navigation.replace("Login");
+        navigation.replace("Tabs");
       } else if (onFinish) {
         onFinish();
       }
@@ -87,7 +87,7 @@ const Onboarding = ({ navigation, onFinish }) => {
 
   const skip = () => {
     if (navigation && navigation.replace) {
-      navigation.replace("Login");
+      navigation.replace("Tabs");
     } else if (onFinish) {
       onFinish();
     }
@@ -260,7 +260,7 @@ const styles = StyleSheet.create({
   },
   skipBtn: {
     position: "absolute",
-    top: 48,
+    top: 18,
     right: 24,
     zIndex: 10,
     paddingVertical: 6,
@@ -274,7 +274,7 @@ const styles = StyleSheet.create({
   },
   backBtn: {
     position: "absolute",
-    top: 48,
+    top: 18,
     left: 24,
     zIndex: 10,
     paddingVertical: 6,
