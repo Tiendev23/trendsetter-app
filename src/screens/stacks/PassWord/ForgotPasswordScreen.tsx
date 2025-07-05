@@ -1,10 +1,18 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert, ScrollView, } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert, ScrollView, ActivityIndicator } from 'react-native';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import CustomDirectionButton from '../../../components/buttons/ChevronButton';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../../redux/store';
+import { sendEmail } from '../../../redux/features/forgotPassword/sendEmailSlice';
 
 const ForgotPasswordScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
+  const dispatch = useDispatch<AppDispatch>();
+  const { loading, data, error } = useSelector((state: RootState) => state.sendEmail);
+  const isloading = loading == "loading";
+
+
 
 
   const isValidEmail = (email: string) => {
@@ -42,15 +50,29 @@ const ForgotPasswordScreen = ({ navigation }) => {
           <TouchableOpacity
             style={[styles.saveButton, !email && styles.disabledButton]}
             disabled={!email}
-            onPress={() => {
-              if (!isValidEmail(email)) {
+            onPress={async () => {
+              if (!isValidEmail(email.trim())) {
                 Alert.alert('Lỗi', 'Email không hợp lệ.');
                 return;
               }
-              navigation.navigate("VerifyOtp", { email });
+              try {
+                const resultAction = await dispatch(sendEmail(email))
+                if (sendEmail.fulfilled.match(resultAction)) {
+                  navigation.navigate("VerifyOtp", { email });
+                } else {
+                  Alert.alert("Lỗi", resultAction.payload as string || "Gửi mã OTP thất bại!");
+                }
+              } catch (error) {
+                Alert.alert("Lỗi", "Có lỗi khi gửi email!");
+              }
             }}
-          >
+          >{isloading ? (
+            <ActivityIndicator color="#FFFFFF" size="small" />
+
+          ) : (
             <Text style={styles.saveText}>Tiếp theo</Text>
+          )}
+
           </TouchableOpacity>
         </View>
 

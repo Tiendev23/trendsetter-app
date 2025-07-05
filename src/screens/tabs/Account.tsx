@@ -11,7 +11,7 @@ import { User } from '../../types';
 // Dữ liệu cho các mục menu
 const myAccountItems = [
     { id: 'profile', icon: 'user-cog', title: 'Thiết lập tài khoản', screen: 'Profile' },
-    { id: 'cart', icon: 'shopping-cart', title: 'Giỏ hàng', screen: 'Cart' }, 
+    { id: 'cart', icon: 'shopping-cart', title: 'Giỏ hàng', screen: 'Cart' },
     { id: 'favorite', icon: 'heart', title: 'Yêu thích', screen: 'Favorites' },
     { id: 'wallet', icon: 'wallet', title: 'Ví', screen: 'Wallet' },
 ];
@@ -38,7 +38,7 @@ const UserProfileHeader = ({ user }: { user: User }) => (
             style={styles.headerAvatar}
         />
         <View>
-            <Text style={styles.headerUserName}>{user.username}</Text>
+            <Text style={styles.headerUserName}>{user.fullName}</Text>
             <Text style={styles.headerUserSubtitle}>{user.role}</Text>
         </View>
     </View>

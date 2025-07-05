@@ -1,15 +1,36 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useRef, useState } from 'react'
 import { ScrollView, TextInput } from 'react-native'
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import Backnav from '../../../components/Tabbar/Backnav';
+import { AppDispatch, RootState } from '../../../redux/store';
+import { useDispatch } from 'react-redux';
+import { verifyOtp } from '../../../redux/features/forgotPassword/sendEmailSlice';
 
 const VerifyOtp = ({ navigation, route }) => {
     const inputRefs = useRef([]);
     const { email } = route.params;
+    const dispatch = useDispatch<AppDispatch>();
+
 
     const [otp, setOtp] = useState(Array(6).fill(''));
 
+
+    const handleVerifyOtp = async () => {
+        const code = otp.join('');
+
+        try {
+            const resultAction = await dispatch(verifyOtp({ email, otp: code }));
+            if (verifyOtp.fulfilled.match(resultAction)) {
+                // thành công
+                navigation.replace("ChangePasswordScreen"); // hoặc lưu token
+            } else {
+                Alert.alert("Lỗi", resultAction.payload as string);
+            }
+        } catch (err) {
+            Alert.alert("Lỗi", "Không thể xác thực OTP.");
+        }
+    };
     return (
         <View style={styles.container}>
             <Backnav navigation={navigation} />
@@ -57,7 +78,7 @@ const VerifyOtp = ({ navigation, route }) => {
                     <TouchableOpacity style={[styles.saveButton, otp.includes('') && styles.disabledButton]} disabled={otp.includes('')}
                         onPress={() => {
                             const code = otp.join('');
-                            navigation.replace("ChangePassword");
+                            handleVerifyOtp()
                         }} >
                         <Text style={styles.saveText}>Tiếp theo</Text>
                     </TouchableOpacity>

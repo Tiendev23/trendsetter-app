@@ -11,7 +11,7 @@ import { ProductsItem } from '../../navigation/NavigationTypes';
 import { IMAGE_NOT_FOUND } from '../../types';
 
 const { width } = Dimensions.get('window');
-const WinterBanner :React.FC<ProductsItem> = ({ navigation,items }) => {
+const WinterBanner: React.FC<ProductsItem> = ({ navigation, items }) => {
     const flatListRef = useRef<FlatList>(null);
     // // refeshing
     // useEffect(() => {
@@ -58,7 +58,7 @@ const WinterBanner :React.FC<ProductsItem> = ({ navigation,items }) => {
         return () => clearInterval(interval);
     }, [currentIndex, shuffledItems, width]);
 
-   
+
 
     const BannerItem = ({ item }) => {
         return (
@@ -145,6 +145,8 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 16,
         marginBottom: 4,
+        textShadowColor: 'rgba(0, 0, 0, 0.6)',
+        textShadowOffset: { width: 1, height: 1 },
 
     },
     bigText: {
@@ -152,6 +154,8 @@ const styles = StyleSheet.create({
         fontSize: 22,
         fontWeight: 'bold',
         marginBottom: 4,
+        textShadowColor: 'rgba(0, 0, 0, 0.6)',
+        textShadowOffset: { width: 1, height: 1 },
     },
     button: {
         backgroundColor: '#fff',
