@@ -35,7 +35,7 @@ const PasswordConfirmModal: React.FC<Props> = ({
   const { status, error: authError } = useAppSelector((state) => state.auth);
   const { user } = useContext(AuthContext);
 
-  const email = user?.email;
+  const email = user.email;
   const isLoading = status === 'loading';
 
   // Reset state khi modal được mở
@@ -67,11 +67,7 @@ const PasswordConfirmModal: React.FC<Props> = ({
     }
     dispatch(login({ emailOrUsername: email, password }));
   };
-
-  const handleForgotPassword = () => {
-    onClose();
-    setTimeout(onForgotPassword, 250); 
-  };
+  
 
   return (
     <Modal
@@ -109,10 +105,6 @@ const PasswordConfirmModal: React.FC<Props> = ({
            
           />
           {error ? <Text style={styles.errorText}>{error}</Text> : null}
-
-          <TouchableOpacity onPress={handleForgotPassword}>
-            <Text style={styles.forgotText}>Bạn quên mật khẩu?</Text>
-          </TouchableOpacity>
 
           <View style={styles.buttonContainer}>
             <TouchableOpacity style={styles.secondaryButton} onPress={onClose} disabled={isLoading}>
@@ -198,7 +190,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     width: '100%',
-    marginTop: 10,
+    marginTop: 40,
     gap: 10,
   },
   secondaryButton: {

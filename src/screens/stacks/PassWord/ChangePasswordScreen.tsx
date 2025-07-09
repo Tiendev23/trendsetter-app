@@ -13,14 +13,13 @@ import Backnav from '../../../components/Tabbar/Backnav';
 import CustomInput from '../../../components/CustomInput';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { AuthContext } from '../../../contexts/AuthContext';
-import { changePass } from '../../../redux/features/auth/ChangePassword';
+import { changePass, resetChangePass } from '../../../redux/features/auth/ChangePassword';
 
 export default function ChangePasswordScreen({ navigation }) {
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const dispatch = useAppDispatch();
-
-    const { user } = useContext(AuthContext);
+    const {email} = useContext(AuthContext)
     const { status, error } = useAppSelector((state) => state.changePass);
 
     const handleChangePassword = () => {
@@ -29,18 +28,22 @@ export default function ChangePasswordScreen({ navigation }) {
             return;
         }
 
-        if (!user?._id) {
-            Alert.alert('Lỗi', 'Không tìm thấy thông tin người dùng.');
-            return;
-        }
-
-        dispatch(changePass({ _id: user._id, body: { password: newPassword } }));
+        dispatch(changePass({ newPassword }));
     };
 
     useEffect(() => {
         if (status === 'succeeded') {
             Alert.alert('Thành công', 'Mật khẩu của bạn đã được thay đổi.', [
-                { text: 'OK', onPress: () => navigation.goBack() },
+                {
+                    text: 'OK',
+                    onPress: () => {
+                        dispatch(resetChangePass());
+                        navigation.reset({
+                            index: 0,
+                            routes: [{ name: 'Login', params: { email } }],
+                        });
+                    },
+                },
             ]);
         }
 
@@ -48,6 +51,7 @@ export default function ChangePasswordScreen({ navigation }) {
             Alert.alert('Lỗi', error || 'Đổi mật khẩu thất bại. Vui lòng thử lại!');
         }
     }, [status]);
+
 
     return (
         <View style={styles.container}>

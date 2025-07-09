@@ -8,7 +8,7 @@ export type AuthStackParamList = {
     Tabs: undefined;
     Login: { email?: string }; // Có thể nhận email từ bất kỳ màn hình nào
     SignUp: undefined;
-    ForgotPassword: undefined;
+    ForgotPasswordScreen: undefined;
     ProductDetail: { item?: Product };
     Checkout: undefined;
     Profile: {title?:string};
@@ -40,7 +40,7 @@ export type TabsNav = NativeStackNavigationProp<AuthStackParamList, 'Tabs'>;
 export type LoginNav = NativeStackNavigationProp<AuthStackParamList, 'Login'>;
 export type LoginRoute = RouteProp<AuthStackParamList, 'Login'>;
 export type SignUpNav = NativeStackNavigationProp<AuthStackParamList, 'SignUp'>;
-export type ForgotPassNav = NativeStackNavigationProp<AuthStackParamList, 'ForgotPassword'>;
+export type ForgotPassNav = NativeStackNavigationProp<AuthStackParamList, 'ForgotPasswordScreen'>;
 export type ProDetailNav = NativeStackNavigationProp<AuthStackParamList, 'ProductDetail'>;
 export type ProDetailRoute = RouteProp<AuthStackParamList, 'ProductDetail'>;
 export type CartNav = NativeStackNavigationProp<AuthStackParamList, 'Cart'>;

@@ -8,6 +8,8 @@ type AuthContextType = {
     login: (userData: User, token: string) => void;
     logout: () => void;
     setUser: (user: User | null) => void;
+    email: string;
+    setEmail:(email:string)=>void;
 };
 
 // Khởi tạo Context
@@ -30,7 +32,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         //     __v: 0
         // }
     );
-
+const [email, setEmail] = useState<string>('')
     // Hàm đăng nhập
     const login = async (userData: User, token: string) => {
         try {
@@ -52,7 +54,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, logout, setUser }}>
+        <AuthContext.Provider value={{ user, login, logout, setUser,email,setEmail }}>
             {children}
         </AuthContext.Provider>
     );

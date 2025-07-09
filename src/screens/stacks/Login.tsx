@@ -14,7 +14,8 @@ import { resetPreRoute, setPrevRoute } from '../../redux/features/navigation/nav
 import CustomDirectionButton from '../../components/buttons/ChevronButton';
 
 export default function Login({ navigation, route }: { navigation: LoginNav; route: LoginRoute }) {
-
+    const { email } = route.params || {};
+    const {setEmail} = useContext(AuthContext)
     const [inputValue, setInputValue] = useState(route.params?.email || '');
     const [password, setPassword] = useState('');
     const [errorMess, setErrorMess] = useState('');
@@ -104,7 +105,11 @@ export default function Login({ navigation, route }: { navigation: LoginNav; rou
                 />
                 <Text
                     style={styles.link}
-                    onPress={() => navigation.navigate('ForgotPassword')}
+                    onPress={() => {
+                        setEmail('');
+                        navigation.navigate('ForgotPasswordScreen')
+                    }
+                    }
                 >
                     Quên mật khẩu?
                 </Text>

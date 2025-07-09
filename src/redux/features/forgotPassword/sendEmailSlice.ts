@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk, } from "@reduxjs/toolkit";
 import apiClient from "../../../api/apiClient";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const sendEmail = createAsyncThunk(
     'sendEmail/sendEmail',
@@ -8,7 +9,9 @@ export const sendEmail = createAsyncThunk(
             const res = await apiClient.post('/email', { to: email });
             return res.data;
         } catch (error: any) {
-            return rejectWithValue(error.res?.data?.message || "gửi email thất bại!")
+            return rejectWithValue(error.response?.data?.message || "Gửi email thất bại!");
+
+
         }
     }
 );
@@ -17,7 +20,7 @@ export const verifyOtp = createAsyncThunk(
     async (data: { email: string; otp: string }, { rejectWithValue }) => {
         try {
             const res = await apiClient.post('/email/verifyOtp', data);
-            return res.data; // có thể chứa token hoặc message
+            return res.data;
         } catch (error: any) {
             return rejectWithValue(error.response?.data?.message || "Xác thực OTP thất bại!");
         }
@@ -45,14 +48,14 @@ export const sendEmailSlice = createSlice({
             })
             .addCase(sendEmail.fulfilled, (state, action) => {
                 state.loading = 'succeeded';
-                state.error = action.payload || 'Gui email thanh cong!'
+                state.error = action.payload
             })
             .addCase(sendEmail.rejected, (state, action) => {
                 state.loading = 'failed';
-                state.error = action.payload || 'Gui email that bai!'
+                state.error = action.payload
             })
 
-            
+
         builder
             .addCase(verifyOtp.pending, (state) => {
                 state.loading = 'loading';
@@ -61,6 +64,10 @@ export const sendEmailSlice = createSlice({
                 state.loading = 'succeeded';
                 state.error = null;
                 state.data = action.payload;
+                const token = action.payload?.token;
+                if (token) {
+                    AsyncStorage.setItem("token", token);
+                }
             })
             .addCase(verifyOtp.rejected, (state, action) => {
                 state.loading = 'failed';

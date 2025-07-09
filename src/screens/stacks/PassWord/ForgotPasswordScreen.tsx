@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert, ScrollView, ActivityIndicator } from 'react-native';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import CustomDirectionButton from '../../../components/buttons/ChevronButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../../redux/store';
 import { sendEmail } from '../../../redux/features/forgotPassword/sendEmailSlice';
+import { AuthContext } from '../../../contexts/AuthContext';
 
 const ForgotPasswordScreen = ({ navigation }) => {
-  const [email, setEmail] = useState('');
+  const {email,setEmail} = useContext(AuthContext);
   const dispatch = useDispatch<AppDispatch>();
   const { loading, data, error } = useSelector((state: RootState) => state.sendEmail);
   const isloading = loading == "loading";
