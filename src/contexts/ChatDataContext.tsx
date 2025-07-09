@@ -26,7 +26,7 @@ export const MessageProvider = ({ children }: { children: ReactNode }) => {
     {
       id: "1",
       title: "Admin",
-      img: require("../../assets/images/anh2.png"),
+      img: require("../../assets/images/logo.jpg"),
       nd: "Chào bạn, đây là tin nhắn chưa đọc. Hãy kiểm tra ngay!",
       time: "10:45 AM",
       read: false,
