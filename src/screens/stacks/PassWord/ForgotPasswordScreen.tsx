@@ -1,14 +1,14 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert, ScrollView, ActivityIndicator } from 'react-native';
-import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
-import CustomDirectionButton from '../../../components/buttons/ChevronButton';
+import { Feather } from '@expo/vector-icons';
+import React, { useContext } from 'react';
+import { ActivityIndicator, Alert, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../../redux/store';
-import { sendEmail } from '../../../redux/features/forgotPassword/sendEmailSlice';
+import CustomDirectionButton from '../../../components/buttons/ChevronButton';
 import { AuthContext } from '../../../contexts/AuthContext';
+import { sendEmail } from '../../../redux/features/forgotPassword/sendEmailSlice';
+import { AppDispatch, RootState } from '../../../redux/store';
 
 const ForgotPasswordScreen = ({ navigation }) => {
-  const {email,setEmail} = useContext(AuthContext);
+  const { email, setEmail } = useContext(AuthContext);
   const dispatch = useDispatch<AppDispatch>();
   const { loading, data, error } = useSelector((state: RootState) => state.sendEmail);
   const isloading = loading == "loading";
@@ -49,15 +49,18 @@ const ForgotPasswordScreen = ({ navigation }) => {
           />
 
           <TouchableOpacity
-            style={[styles.saveButton, !email && styles.disabledButton]}
-            disabled={!email}
+            style={[
+              styles.saveButton,
+              (!email || isloading) && styles.disabledButton,
+            ]}
+            disabled={!email || isloading}
             onPress={async () => {
               if (!isValidEmail(email.trim())) {
                 Alert.alert('Lỗi', 'Email không hợp lệ.');
                 return;
               }
               try {
-                const resultAction = await dispatch(sendEmail(email))
+                const resultAction = await dispatch(sendEmail(email));
                 if (sendEmail.fulfilled.match(resultAction)) {
                   navigation.navigate("VerifyOtp", { email });
                 } else {
@@ -67,14 +70,14 @@ const ForgotPasswordScreen = ({ navigation }) => {
                 Alert.alert("Lỗi", "Có lỗi khi gửi email!");
               }
             }}
-          >{isloading ? (
-            <ActivityIndicator color="#FFFFFF" size="small" />
-
-          ) : (
-            <Text style={styles.saveText}>Tiếp theo</Text>
-          )}
-
+          >
+            {isloading ? (
+              <ActivityIndicator color="#FFFFFF" size="small" />
+            ) : (
+              <Text style={styles.saveText}>Tiếp theo</Text>
+            )}
           </TouchableOpacity>
+
         </View>
 
 

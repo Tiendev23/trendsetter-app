@@ -18,8 +18,10 @@ import { changePass, resetChangePass } from '../../../redux/features/auth/Change
 export default function ChangePasswordScreen({ navigation }) {
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [showSuccess, setShowSuccess] = useState(false);
+
     const dispatch = useAppDispatch();
-    const {email} = useContext(AuthContext)
+    const { email } = useContext(AuthContext);
     const { status, error } = useAppSelector((state) => state.changePass);
 
     const handleChangePassword = () => {
@@ -33,18 +35,14 @@ export default function ChangePasswordScreen({ navigation }) {
 
     useEffect(() => {
         if (status === 'succeeded') {
-            Alert.alert('Thành công', 'Mật khẩu của bạn đã được thay đổi.', [
-                {
-                    text: 'OK',
-                    onPress: () => {
-                        dispatch(resetChangePass());
-                        navigation.reset({
-                            index: 0,
-                            routes: [{ name: 'Login', params: { email } }],
-                        });
-                    },
-                },
-            ]);
+            setShowSuccess(true);
+            setTimeout(() => {
+                dispatch(resetChangePass());
+                navigation.reset({
+                    index: 0,
+                    routes: [{ name: 'Login', params: { email } }],
+                });
+            }, 4000);
         }
 
         if (status === 'failed') {
@@ -52,6 +50,16 @@ export default function ChangePasswordScreen({ navigation }) {
         }
     }, [status]);
 
+    if (showSuccess) {
+        return (
+            <View style={styles.successContainer}>
+                <View style={styles.successCircle}>
+                    <MaterialCommunityIcons name="check" size={60} color="#088A2D" />
+                </View>
+                <Text style={styles.Circletitle}>Đổi mật khẩu thành công!</Text>
+            </View>
+        );
+    }
 
     return (
         <View style={styles.container}>
@@ -119,13 +127,6 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         paddingBottom: 20,
     },
-    header: {
-        fontSize: 22,
-        fontWeight: 'bold',
-        color: '#006340',
-        marginBottom: 24,
-        textAlign: 'center',
-    },
     inputGroup: {
         marginBottom: 20,
     },
@@ -139,16 +140,6 @@ const styles = StyleSheet.create({
         color: '#333',
         fontSize: 15,
         fontWeight: '600',
-    },
-
-    codeButton: {
-        marginTop: 8,
-        alignSelf: 'flex-end',
-    },
-    codeButtonText: {
-        color: '#006340',
-        fontWeight: '600',
-        fontSize: 14,
     },
     saveButton: {
         backgroundColor: '#006340',
@@ -165,7 +156,6 @@ const styles = StyleSheet.create({
     container_content: {
         marginTop: 10,
         marginBottom: 33,
-
     },
     txttitle: {
         fontSize: 20,
@@ -175,6 +165,32 @@ const styles = StyleSheet.create({
     txtsub: {
         fontSize: 16,
         color: '#989898',
-        lineHeight: 23
+        lineHeight: 23,
     },
+    successContainer: {
+        flex: 1,
+        alignItems: 'center',
+        backgroundColor: '#fff',
+        paddingTop:200
+    },
+    successCircle: {
+        width: 120,
+        height: 120,
+        borderRadius: 60,
+        backgroundColor: '#EFF4FF',
+        justifyContent: 'center',
+        alignItems: 'center',
+        elevation: 5,
+        borderWidth: 1,
+        borderColor: '#088A2D'
+    },
+
+    Circletitle: {
+        marginTop:20,
+        justifyContent:'center',
+        alignItems:'center',
+        fontSize:20,
+        fontWeight:'bold'
+
+    }
 });
