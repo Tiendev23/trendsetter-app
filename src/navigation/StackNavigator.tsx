@@ -26,12 +26,15 @@ export default function StackNavigator() {
             <Stack.Screen name='OrderStatus' component={Stacks.OrderStatus} />
             <Stack.Screen name='ProductlistScreen' component={Stacks.ProductlistScreen} />
             <Stack.Screen name="editProfile" component={Stacks.ProfileEdit} />
-            <Stack.Screen name="addr" component={Stacks.AddressEdit} />
+            <Stack.Screen name="addr" component={Stacks.AddressListScreen} />
             <Stack.Screen name="ChangePasswordScreen" component={Stacks.ChangePasswordScreen} />
             <Stack.Screen name="ForgotPasswordScreen" component={Stacks.ForgotPasswordScreen} />
             <Stack.Screen name="VerifyOtp" component={Stacks.VerifyOtp} />
             <Stack.Screen name="Chat" component={ChatScreen} />
             <Stack.Screen name="TermsOfServiceScreen" component={Stacks.TermsOfServiceScreen} />
+            <Stack.Screen name="EditAddress" component={Stacks.EditAddress} />
+            <Stack.Screen name="LocationScreen" component={Stacks.LocationScreen}/>
+            
         </Stack.Navigator>
     );
 }

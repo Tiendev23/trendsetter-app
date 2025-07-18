@@ -12,9 +12,11 @@ import OrderHistory from "./OrderHistory";
 import ProductlistScreen from "./ProductlistScreen";
 import Profile from "./Account/Profile";
 import OrderStatus from "./Account/OrderStatus";
-import AddressEdit from "./EditProfile/EditAddressScreen"
+import AddressListScreen from "./Account/AddressListScreen"
+import EditAddress from "./EditProfile/EditAddressScreen"
 import ProfileEdit from "./EditProfile/editProfile";
 import TermsOfServiceScreen from "./Account/TermsOfServiceScreen";
+import LocationScreen from "./EditProfile/LocationScreen";
 export {
     ForgotPasswordScreen,
     ChangePasswordScreen,
@@ -29,7 +31,9 @@ export {
     ProductlistScreen,
     Profile,
     OrderStatus,
-    AddressEdit,
+    AddressListScreen,
     ProfileEdit,
     TermsOfServiceScreen,
+    EditAddress,
+    LocationScreen,
 };

@@ -16,7 +16,9 @@ export const store = configureStore({
         payosMethod: Reducer.payosReducer,
         zalopayMethod: Reducer.zalopayReducer,
         sendEmail: Reducer.sendEmailReducer,
-        changePass: Reducer.ChangePasswordReducer
+        changePass: Reducer.ChangePasswordReducer,
+        address : Reducer.addressReducer,
+        location: Reducer.LocationReducer,
     },
 });
 

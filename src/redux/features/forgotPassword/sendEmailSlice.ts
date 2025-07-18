@@ -6,7 +6,7 @@ export const sendEmail = createAsyncThunk(
     'sendEmail/sendEmail',
     async (email: string, { rejectWithValue }) => {
         try {
-            const res = await apiClient.post('/email', { to: email });
+            const res = await apiClient.post('/auth/forgot-password', { to: email });
             return res.data;
         } catch (error: any) {
             return rejectWithValue(error.response?.data?.message || "Gửi email thất bại!");
@@ -19,7 +19,7 @@ export const verifyOtp = createAsyncThunk(
     'verifyOtp/verifyOtp',
     async (data: { email: string; otp: string }, { rejectWithValue }) => {
         try {
-            const res = await apiClient.post('/email/verifyOtp', data);
+            const res = await apiClient.post('/auth/verify-otp', data);
             return res.data;
         } catch (error: any) {
             return rejectWithValue(error.response?.data?.message || "Xác thực OTP thất bại!");
