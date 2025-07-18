@@ -34,15 +34,15 @@ const NavRow: React.FC<NavRowProps> = ({ text, icon, onPress, color = '#333' }) 
 );
 
 // Switch
-interface SwitchRowProps {
+export interface SwitchRowProps {
     text: string;
     icon: keyof typeof Ionicons.glyphMap;
     value: boolean;
     onValueChange: (value: boolean) => void;
 }
-const SwitchRow: React.FC<SwitchRowProps> = ({ text, icon, value, onValueChange }) => (
+export const SwitchRow: React.FC<SwitchRowProps> = ({ text, icon, value, onValueChange }) => (
     <View style={styles.navRow}>
-        <Ionicons name={icon} size={22} color="#333" style={styles.navRowIcon} />
+        <Ionicons name={icon} size={22} color="#34C759" style={styles.navRowIcon} />
         <Text style={styles.navRowText}>{text}</Text>
         <Switch
             trackColor={{ false: "#E9E9EA", true: "#34C759" }}
@@ -74,7 +74,7 @@ const Profile: React.FC<Props> = ({ navigation, route }) => {
  
                 <SettingsCard title="Tài khoản">
                     <NavRow text="Thông tin cá nhân" icon="person-outline" onPress={() => navigation.navigate('editProfile')} />
-                    <NavRow text="Địa chỉ đã lưu" icon="location-outline" onPress={() => navigation.navigate('addr')} />
+                    <NavRow text="Địa chỉ đã lưu" icon="location-outline" onPress={() => navigation.navigate('addr',{title:"Địa chỉ đã lưu"})} />
                     <NavRow text="Phương thức thanh toán" icon="card-outline" onPress={() => { /* cap nhat sau */ }} />
                 </SettingsCard>
 
@@ -110,9 +110,9 @@ const Profile: React.FC<Props> = ({ navigation, route }) => {
             <PasswordConfirmModal
                 visible={modalVisible}
                 onClose={() => setModalVisible(false)}
-                onSuccess={() => {
+                onSuccess={(currentPassword) => {
                     setModalVisible(false);
-                    navigation.navigate('ChangePasswordScreen');
+                    navigation.navigate('ChangePasswordScreen',{currentPassword});
                 }}
                 onForgotPassword={() => {
                     setModalVisible(false);

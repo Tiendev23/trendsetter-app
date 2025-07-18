@@ -3,12 +3,12 @@ import apiClient from "../../../api/apiClient";
 
 export const changePass = createAsyncThunk(
   'users/changePass',
-  async ({ newPassword }: { newPassword: string }, { rejectWithValue }) => {
+  async ({ currentPassword, newPassword }: { currentPassword: string, newPassword: string }, { rejectWithValue }) => {
     try {
-      const response = await apiClient.put(`/users/changePassword`, { newPassword });
+      const response = await apiClient.patch(`/auth/password`, { currentPassword, newPassword });
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || "Đổi mật khẩu thất bại");
+      return rejectWithValue(error.response?.data?.message);
     }
   }
 );
@@ -38,7 +38,7 @@ const changePassSlice = createSlice({
       })
       .addCase(changePass.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.payload || "Đã xảy ra lỗi";
+        state.error = action.payload;
       });
   },
 });

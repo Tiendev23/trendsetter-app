@@ -11,6 +11,8 @@ import payosReducer from "./payment/payosSlice";
 import categoriesReducer from "./category/categoriesSlice";
 import ChangePasswordReducer from "./auth/ChangePassword";
 import sendEmailReducer from "./forgotPassword/sendEmailSlice"
+import addressReducer from "./addresses/addressesSlice"
+import LocationReducer from "./addresses/locationSlice"
 export {
     navigationReducer,
     loginReducer,
@@ -24,5 +26,7 @@ export {
     payosReducer,
     categoriesReducer,
     ChangePasswordReducer,
-    sendEmailReducer
+    sendEmailReducer,
+    addressReducer,
+    LocationReducer
 };

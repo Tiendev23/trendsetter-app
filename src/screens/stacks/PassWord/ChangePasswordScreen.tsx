@@ -15,22 +15,26 @@ import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { AuthContext } from '../../../contexts/AuthContext';
 import { changePass, resetChangePass } from '../../../redux/features/auth/ChangePassword';
 
-export default function ChangePasswordScreen({ navigation }) {
+export default function ChangePasswordScreen({ navigation, route }) {
+    const { currentPassword } = route.params;
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [showSuccess, setShowSuccess] = useState(false);
+    const [isVisible, setIsVisible] = useState(false)
 
     const dispatch = useAppDispatch();
     const { email } = useContext(AuthContext);
     const { status, error } = useAppSelector((state) => state.changePass);
-
+    useEffect(() => {
+        dispatch(resetChangePass());
+    }, []);
     const handleChangePassword = () => {
         if (newPassword !== confirmPassword) {
             Alert.alert('Lỗi', 'Mật khẩu xác nhận không khớp.');
             return;
         }
 
-        dispatch(changePass({ newPassword }));
+        dispatch(changePass({ currentPassword, newPassword }));
     };
 
     useEffect(() => {
@@ -48,7 +52,7 @@ export default function ChangePasswordScreen({ navigation }) {
         if (status === 'failed') {
             Alert.alert('Lỗi', error || 'Đổi mật khẩu thất bại. Vui lòng thử lại!');
         }
-    }, [status]);
+    }, [status, error]);
 
     if (showSuccess) {
         return (
@@ -171,7 +175,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         backgroundColor: '#fff',
-        paddingTop:200
+        paddingTop: 200
     },
     successCircle: {
         width: 120,
@@ -186,11 +190,11 @@ const styles = StyleSheet.create({
     },
 
     Circletitle: {
-        marginTop:20,
-        justifyContent:'center',
-        alignItems:'center',
-        fontSize:20,
-        fontWeight:'bold'
+        marginTop: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+        fontSize: 20,
+        fontWeight: 'bold'
 
     }
 });
