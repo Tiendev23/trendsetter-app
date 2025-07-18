@@ -9,7 +9,7 @@ type AuthContextType = {
     logout: () => void;
     setUser: (user: User | null) => void;
     email: string;
-    setEmail:(email:string)=>void;
+    setEmail: (email: string) => void;
 };
 
 // Khởi tạo Context
@@ -32,7 +32,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         //     __v: 0
         // }
     );
-const [email, setEmail] = useState<string>('')
+    const [email, setEmail] = useState<string>('')
     // Hàm đăng nhập
     const login = async (userData: User, token: string) => {
         try {
@@ -40,6 +40,8 @@ const [email, setEmail] = useState<string>('')
             await AsyncStorage.setItem("token", token);
         } catch (error) {
             console.error("Lưu token thất bại:", error);
+
+
         }
     };
 
@@ -54,7 +56,7 @@ const [email, setEmail] = useState<string>('')
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, logout, setUser,email,setEmail }}>
+        <AuthContext.Provider value={{ user, login, logout, setUser, email, setEmail }}>
             {children}
         </AuthContext.Provider>
     );

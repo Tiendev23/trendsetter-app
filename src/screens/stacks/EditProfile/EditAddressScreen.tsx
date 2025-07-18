@@ -1,252 +1,254 @@
-import React, { useState } from 'react';
-import {View,Text,StyleSheet,ScrollView,TouchableOpacity,FlatList,Image,} from 'react-native';
+import { ScrollView, StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
-import Backnav from '../../../components/Tabbar/Backnav';
-interface Address {
-    id: string;
-    name: string;
-    phone: string;
-    address: string;
-    city: string;
-    isDefault: boolean;
-}
-
-export interface Props {
-    navigation: any;
-    route?: any;
-}
-
-const FAKE_ADDRESSES = [
-    {
-        id: '1',
-        name: 'Trần Văn An',
-        phone: '0987 654 321',
-        address: '123 Đường Lê Lợi, Phường Bến Thành, Quận 1',
-        city: 'TP. Hồ Chí Minh',
-        isDefault: true,
-    },
-    {
-        id: '2',
-        name: 'Văn phòng Công ty',
-        phone: '0123 456 789',
-        address: 'Tầng 10, Tòa nhà Bitexco, 2 Hải Triều, Phường Bến Nghé, Quận 1',
-        city: 'TP. Hồ Chí Minh',
-        isDefault: false,
-    },
-    {
-        id: '3',
-        name: 'Nguyễn Thị Bình',
-        phone: '0369 852 147',
-        address: 'Số 50, Ngõ 100, Phố Dịch Vọng Hậu',
-        city: 'Hà Nội',
-        isDefault: false,
-    },
-];
+import ScreenHeader from '../../../components/ScreenHeader';
+import { SwitchRow, SwitchRowProps } from '../Account/Profile'
+import { WebView } from 'react-native-webview';
+import { styles as Styles } from '../Account/AddressListScreen';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../../redux/store';
+import { fetchAddress } from '../../../redux/features/addresses/addressesSlice';
+import { useFocusEffect } from '@react-navigation/native';
 
 
-const AddressCard = ({ address, onEdit }: { address: Address, onEdit: (id: string) => void }) => (
-    <View style={styles.card}>
-        <TouchableOpacity style={styles.editButton} onPress={() => onEdit(address.id)}>
-            <Text style={styles.editButtonText}>Sửa</Text>
-        </TouchableOpacity>
-        <View style={styles.cardHeader}>
-            <Text style={styles.nameText}>{address.name}</Text>
-            {address.isDefault && (
-                <View style={styles.defaultTag}>
-                    <Ionicons name="checkmark-circle" size={14} color="#34C759" />
-                    <Text style={styles.defaultTagText}>Mặc định</Text>
-                </View>
-            )}
-        </View>
-        <View style={styles.cardBody}>
-            <Text style={styles.infoText}>{address.phone}</Text>
-            <Text style={styles.infoText}>{address.address}</Text>
-            <Text style={styles.infoText}>{address.city}</Text>
-        </View>
-    </View>
-);
-
-//  màn hình trống
-const EmptyState = ({ onAdd }: { onAdd: () => void }) => (
-    <View style={styles.emptyContainer}>
-        <Image
-            source={require('../../../../assets/images/nenchu.jpg')} // Thay bằng ảnh của bạn
-            style={styles.emptyImage}
-        />
-        <Text style={styles.emptyTitle}>Chưa có địa chỉ nào</Text>
-        <Text style={styles.emptySubtitle}>
-            Hãy thêm địa chỉ để việc mua sắm được nhanh hơn nhé!
-        </Text>
-        <TouchableOpacity style={styles.addButton} onPress={onAdd}>
-            <Ionicons name="add" size={22} color="#FFFFFF" />
-            <Text style={styles.addButtonText}>Thêm địa chỉ mới</Text>
-        </TouchableOpacity>
-    </View>
-);
-
-
-const AddressListScreen: React.FC<Props> = ({ navigation, route }) => {
-    const { title } = route.params || {};
-    const [addresses, setAddresses] = useState<Address[]>(FAKE_ADDRESSES);
-
-    const handleEditAddress = (addressId: string) => {
-        navigation.navigate('EditAddressScreen', { addressId });
-        console.log('Edit address:', addressId);
-    };
-
-    const handleAddAddress = () => {
-        navigation.navigate('AddAddressScreen');
-        console.log('Add new address');
-    };
-
-    const renderAddress = ({ item }: { item: Address }) => (
-        <AddressCard address={item} onEdit={handleEditAddress} />
-    );
-
+export const AddressCard = ({ title, children }: { title: string, children: React.ReactNode }) => {
     return (
-        <View style={styles.screen}>
-            <Backnav navigation={navigation} route={route}  />
-            {addresses.length === 0 ? (
-                <EmptyState onAdd={handleAddAddress} />
-            ) : (
-                <>
-                    <FlatList
-                        data={addresses}
-                        renderItem={renderAddress}
-                        keyExtractor={(item) => item.id}
-                        contentContainerStyle={styles.listContainer}
-                        showsVerticalScrollIndicator={false}
-                    />
-                    <View style={styles.footer}>
-                        <TouchableOpacity style={styles.addButton} onPress={handleAddAddress}>
-                            <Ionicons name="add" size={22} color="#FFFFFF" />
-                            <Text style={styles.addButtonText}>Thêm địa chỉ mới</Text>
-                        </TouchableOpacity>
-                    </View>
-                </>
-            )}
+        <View style={styles.card}>
+            <Text style={styles.cardTitle}>{title}</Text>
+            {children}
         </View>
     );
 };
 
-export default AddressListScreen;
+export interface LabelValueProps {
+    label: string;
+    value: string;
+    onChangeText?: (text: string) => void;
+}
+
+export const LabelValueBox: React.FC<LabelValueProps> = ({ label, value, onChangeText }) => {
+    return (
+        <View style={styles.labelValueBox}>
+            <Text style={styles.label}>{label}</Text>
+            <TextInput
+                style={styles.input}
+                value={value}
+                onChangeText={onChangeText}
+                placeholder={`Nhập ${label.toLowerCase()}`}
+            />
+        </View>
+    );
+};
+
+const EditAddressScreen = ({ navigation, route }) => {
+    const [fullName, setFullName] = useState('');
+    const [phone, setPhone] = useState('');
+    const [city, setCity] = useState('');
+    const [district, setDistrict] = useState('');
+    const [ward, setWard] = useState('');
+    const [streetDetails, setStreetDetails] = useState('');
+    const [isEnabled, setIsEnabled] = useState(false);
+
+    const [ShowEditadd, setShowEditadd] = useState(false)
+    const { addressId, userId } = route.params;
+const [isManuallyUpdated, setIsManuallyUpdated] = useState(false);
+
+    const { loading, error, selectedAddress } = useSelector((state: RootState) => state.address)
+    const dispatch = useDispatch<AppDispatch>();
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            dispatch(fetchAddress({ _id: userId, addressId }));
+        });
+        return unsubscribe
+    }, [navigation, addressId, userId])
+
+useEffect(() => {
+  if (selectedAddress && !isManuallyUpdated) {
+    setFullName(selectedAddress.fullName || '');
+    setPhone(selectedAddress.phone || '');
+    setCity(selectedAddress.city || '');
+    setDistrict(selectedAddress.district || '');
+    setWard(selectedAddress.ward || '');
+    setStreetDetails(selectedAddress.streetDetails || '');
+    setIsEnabled(selectedAddress.isDefault || false);
+  }
+}, [selectedAddress, isManuallyUpdated]);
+    // useFocusEffect(
+    //   useCallback(() => {
+    //     if (route.params?.locationData) {
+    //       const { city, district, ward, streetDetails } = route.params.locationData;
+    //       console.log("🔁 Nhận lại locationData khi quay về:", route.params.locationData);
+    //       setCity(city);
+    //       setDistrict(district);
+    //       setWard(ward);
+    //       setStreetDetails(streetDetails);
+    //     }
+    //   }, [route.params]) // CHỈ phụ thuộc vào `route.params` hoặc không cần dependency
+    // );
+
+    console.log("🔍 State hiện tại:", { city, district, ward, streetDetails });
+    console.log("valu mới ", city, district, ward, streetDetails);
+
+
+    return (
+        <View style={styles.container}>
+            <ScreenHeader
+                title="Sửa địa chỉ"
+                titleStyle={{
+                    fontStyle: 'italic',
+                    fontWeight: 'bold',
+                    letterSpacing: 1
+                }}
+            />
+            <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+                <AddressCard title="Thông tin người nhận">
+                    <LabelValueBox label='Họ tên' value={fullName} onChangeText={setFullName} />
+                    <LabelValueBox label="Số điện thoại" value={phone} onChangeText={setPhone} />
+
+                </AddressCard>
+                <AddressCard title="Địa chỉ giao hàng">
+
+                    <View style={styles.labelValueBox}>
+                        <Text style={styles.label}>
+                            Tỉnh / Thành, Quận / Huyện, Phường / Xã
+                        </Text>
+                        <TouchableOpacity style={{ marginTop: 4, gap: 8 }} onPress={() => {
+                            navigation.navigate('LocationScreen', {
+                                currentData: {
+                                    city,
+                                    district,
+                                    ward,
+                                    streetDetails,
+                                },
+                                onSelectLocation: (newLocation: any) => {
+  setCity(newLocation.city);
+  setDistrict(newLocation.district);
+  setWard(newLocation.ward);
+  setStreetDetails(newLocation.streetDetails);
+  setIsManuallyUpdated(true); // ✅ Đánh dấu là user đã chỉnh
+}
+
+                            });
+                        }}
+
+                        >
+
+                            <Text style={styles.infoText}>{city}</Text>
+                            <View style={styles.rowWithIcon}>
+                                <Text style={styles.infoText}>{district}</Text>
+                                <Ionicons name="chevron-forward-outline" size={22} color="#C7C7CC" />
+                            </View>
+                            <Text style={styles.infoText}>{ward}</Text>
+
+                        </TouchableOpacity>
+                        <View style={{ marginTop: 4, gap: 5, }}>
+                            <Text style={styles.label}>Tên đường, Tòa nhà, Số nhà</Text>
+                            <Text style={styles.infoText}>{streetDetails}</Text>
+                        </View>
+
+                    </View>
+                    <View style={{ height: 300, borderRadius: 10, overflow: 'hidden', marginTop: 10 }}>
+                        <WebView
+                            source={{ uri: 'https://www.google.com/maps' }}
+                            style={{ flex: 1 }}
+                        />
+                    </View>
+
+                    <SwitchRow
+                        text="Đặt làm địa chỉ mặc định"
+                        icon="checkmark-circle"
+                        value={isEnabled}
+                        onValueChange={setIsEnabled}
+                    />
+                    <View style={styles.btn}>
+                        <TouchableOpacity style={Styles.addButton} onPress={() => { }}>
+                            <Ionicons name="add" size={22} color="#FFFFFF" />
+                            <Text style={Styles.addButtonText}>Lưu địa chỉ</Text>
+                        </TouchableOpacity>
+                    </View>
+                </AddressCard>
+
+            </ScrollView>
+
+        </View>
+    );
+};
+
+export default EditAddressScreen;
 
 const styles = StyleSheet.create({
-    screen: {
+    container: {
         flex: 1,
-        backgroundColor: '#F7F8FA',
-    },
-    listContainer: {
-        padding: 16,
-        paddingBottom: 100, 
     },
     card: {
         backgroundColor: '#FFFFFF',
-        borderRadius: 12,
-        padding: 16,
-        marginBottom: 16,
-        position: 'relative',
-        // Shadow for iOS
+        borderRadius: 10,
+        marginHorizontal: 10,
+        marginTop: 12,
+        paddingHorizontal: 10,
+        paddingTop: 15,
+        paddingBottom: 5,
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.1,
-        shadowRadius: 3,
-        // Shadow for Android
-        elevation: 3,
+        shadowOffset: { width: 0, height: 3 },
+        shadowOpacity: 0.2,
+        shadowRadius: 4,
+
+        // ✅ Shadow Android
+        elevation: 5,
+
     },
-    editButton: {
-        position: 'absolute',
-        top: 16,
-        right: 16,
-    },
-    editButtonText: {
-        color: '#006340', 
-        fontSize: 15,
-        fontWeight: '600',
-    },
-    cardHeader: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 12,
-        paddingRight: 50, 
-    },
-    nameText: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: '#1C1C1E',
-    },
-    defaultTag: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginLeft: 8,
-        paddingHorizontal: 6,
-        paddingVertical: 3,
-        backgroundColor: '#E7FDD8',
-        borderRadius: 6,
-    },
-    defaultTagText: {
-        marginLeft: 4,
-        color: '#34C759',
-        fontSize: 12,
+    cardTitle: {
+        fontSize: 18,
         fontWeight: '500',
+        color: '#000000',
+        textTransform: 'capitalize',
+        marginBottom: 10,
     },
-    cardBody: {
-        borderTopWidth: 1,
-        borderColor: '#F0F0F0',
-        paddingTop: 12,
+    labelValueBox: {
+        marginBottom: 5,
+        paddingVertical: 5,
+    },
+    label: {
+        fontSize: 16,
+        fontWeight: '500',
+        paddingVertical: 7,
+        color: '#000000',
+        opacity: 0.5,
+        borderTopWidth: StyleSheet.hairlineWidth
+    },
+    input: {
+        borderLeftWidth: 1,
+        borderLeftColor: '#ccc',
+        borderRadius: 6,
+        paddingHorizontal: 10,
+        paddingVertical: 10,
+        fontSize: 16,
+        color: '#000',
+        backgroundColor: '#F9F9F9',
+
     },
     infoText: {
-        fontSize: 14,
-        color: '#8A8A8E',
-        lineHeight: 20,
+        fontSize: 16,
+        color: '#000',
+        marginBottom: 4,
+
     },
-    footer: {
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        padding: 16,
+    rowWithIcon: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    touchBox: {
+        paddingVertical: 6,
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        borderColor: '#ddd',
+    },
+    btn: {
+
+        padding: 10,
         paddingBottom: 24, // Thêm padding cho các thiết bị có tai thỏ
         backgroundColor: '#FFFFFF',
         borderTopWidth: 1,
         borderColor: '#E5E5EA',
-    },
-    addButton: {
-        backgroundColor: '#00796B',
-        borderRadius: 12,
-        paddingVertical: 15,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        gap: 8,
-    },
-    addButtonText: {
-        color: '#FFFFFF',
-        fontSize: 16,
-        fontWeight: 'bold',
-    },
-    emptyContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 20,
-    },
-    emptyImage: {
-        width: 150,
-        height: 150,
-        resizeMode: 'contain',
-        marginBottom: 20,
-    },
-    emptyTitle: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        color: '#1C1C1E',
-        marginBottom: 8,
-    },
-    emptySubtitle: {
-        fontSize: 16,
-        color: '#8A8A8E',
-        textAlign: 'center',
-        marginBottom: 24,
-    },
+    }
 });

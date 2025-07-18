@@ -14,7 +14,7 @@ const API_URL = 'https://trendsetter-backend.onrender.com/api';
 const apiClient = axios.create({
     baseURL: API_URL,
     headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json', 
     },
 });
 
@@ -40,6 +40,7 @@ apiClient.interceptors.request.use(async (config) => {
     if (token) {
 
         config.headers.Authorization = `Bearer ${token}`;
+        
 
     }
     return config;

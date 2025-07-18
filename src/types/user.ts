@@ -1,4 +1,5 @@
 // Định nghĩa kiểu dữ liệu cho User
+import { Addresses } from "./shippingAddresses";
 export type User = {
     _id: string;
     fullName: string;
@@ -9,5 +10,6 @@ export type User = {
     role?: string;
     createdAt?: string;
     updatedAt?: string;
+    ShippingAddress: Addresses[];
     __v?: number;
 };

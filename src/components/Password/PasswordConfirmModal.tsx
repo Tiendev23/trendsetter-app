@@ -19,7 +19,7 @@ import { Ionicons } from '@expo/vector-icons';
 interface Props {
   visible: boolean;
   onClose: () => void;
-  onSuccess: () => void;
+  onSuccess: (password: string) => void;
   onForgotPassword: () => void;
 }
 
@@ -48,7 +48,7 @@ const PasswordConfirmModal: React.FC<Props> = ({
 
   useEffect(() => {
     if (status === 'succeeded' && password) { 
-      onSuccess();
+      onSuccess(password);
     } else if (status === 'failed' && authError) {
       setError('Mật khẩu không đúng. Vui lòng thử lại.');
     }
