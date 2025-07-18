@@ -34,6 +34,20 @@ export default function SearchScreen() {
   const { cateList , cateStatus, cateError } = useAppSelector(
     (state) => state.categories || { cateList: [], cateStatus: false, cateError: null }
   );
+
+  const priceFilters = [
+    { label: "Tất cả", min: 0, max: Infinity },
+    { label: "0 - 5 triệu", min: 0, max: 5_000_000 },
+    { label: "3 triệu - 20 triệu", min: 3_000_000, max: 20_000_000 },
+   { label: "15 triệu - 30 triệu", min: 15_000_000, max: 30_000_000 },
+    // Giá cao nhất sẽ được cập nhật động phía dưới
+  ];
+  const [activePriceFilter, setActivePriceFilter] = useState(priceFilters[0]);
+
+  // Tìm giá cao nhất trong list
+  const maxPrice = items && items.length > 0 ? Math.max(...items.map(p => p.price || 0)) : 0;
+  const dynamicPriceFilters = priceFilters;
+
   useEffect(() => {
     dispatch(getAllProducts());
     dispatch(fetchCategories());
@@ -49,7 +63,8 @@ export default function SearchScreen() {
       (product.brand?.name?.toLowerCase() || "").includes(
         searchQuery.toLowerCase()
       );
-    return matchCategory && matchSearch;
+    const matchPrice = product.price >= activePriceFilter.min && product.price <= activePriceFilter.max;
+    return matchCategory && matchSearch && matchPrice;
   });
 
   const renderProductItem = ({ item }: { item: Product }) => (
@@ -76,7 +91,10 @@ export default function SearchScreen() {
       </View>
     </TouchableOpacity>
   );
-  // rồi vậy thôi
+
+  // State cho dropdown filter giá
+  const [dropdownVisiblePrice, setDropdownVisiblePrice] = useState(false);
+
   return (
     <View style={styles.container}>
       {/* Search */}
@@ -145,6 +163,57 @@ export default function SearchScreen() {
         </Modal>
       </View>
 
+      {/* Dropdown filter giá - dùng cùng style với filter danh mục */}
+      <View style={styles.dropdownWrapper}>
+        <TouchableOpacity
+          style={styles.dropdownHeader}
+          onPress={() => setDropdownVisiblePrice(!dropdownVisiblePrice)}
+        >
+          <Text style={styles.dropdownHeaderText}>{activePriceFilter.label}</Text>
+          <Text style={styles.dropdownArrow}>{dropdownVisiblePrice ? "▲" : "▼"}</Text>
+        </TouchableOpacity>
+        <Modal
+          transparent
+          visible={dropdownVisiblePrice}
+          animationType="fade"
+          onRequestClose={() => setDropdownVisiblePrice(false)}
+        >
+          <TouchableOpacity
+            style={styles.dropdownOverlay}
+            activeOpacity={1}
+            onPress={() => setDropdownVisiblePrice(false)}
+          >
+            <View style={styles.dropdownMenu}>
+              <FlatList
+                data={dynamicPriceFilters}
+                keyExtractor={(item) => item.label}
+                renderItem={({ item }) => (
+                  <TouchableOpacity
+                    style={[
+                      styles.dropdownItem,
+                      activePriceFilter.label === item.label && styles.activeDropdownItem,
+                    ]}
+                    onPress={() => {
+                      setActivePriceFilter(item);
+                      setDropdownVisiblePrice(false);
+                    }}
+                  >
+                    <Text
+                      style={[
+                        styles.dropdownItemText,
+                        activePriceFilter.label === item.label && styles.activeDropdownItemText,
+                      ]}
+                    >
+                      {item.label}
+                    </Text>
+                  </TouchableOpacity>
+                )}
+              />
+            </View>
+          </TouchableOpacity>
+        </Modal>
+      </View>
+
       {/* Loading state */}
       {loading === 'loading' && (
         <View style={styles.centerContainer}>
@@ -199,23 +268,29 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   dropdownWrapper: {
-    marginBottom: 20,
-    zIndex: 10,
+    marginBottom: 18,
   },
   dropdownHeader: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     backgroundColor: "#f5f5f5",
-    borderRadius: 8,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
+    borderRadius: 10,
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: "#DDD",
+    paddingHorizontal: 18,
+    paddingVertical: 14,
+    marginBottom: 0,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 4,
+    elevation: 2,
   },
   dropdownHeaderText: {
     fontSize: 16,
-    color: "#333",
+    fontWeight: "500",
+    color: "#222",
   },
   dropdownArrow: {
     fontSize: 14,
