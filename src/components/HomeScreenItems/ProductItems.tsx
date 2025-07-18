@@ -7,20 +7,23 @@ import { getAllProducts } from '../../redux/features/product/productsSlice';
 import { AppDispatch, RootState } from '../../redux/store';
 import { formatCurrency } from '../../utils/formatForm';
 import { ProductsItem } from '../../navigation/NavigationTypes';
-import { IMAGE_NOT_FOUND } from '../../types';
+import { IMAGE_NOT_FOUND } from '../../types/models';
 
 
 const { width, height } = Dimensions.get('window');
 
-const ProductItem: React.FC<ProductsItem> = ({ navigation,items}) => {
-    
-    
+const ProductItem: React.FC<ProductsItem> = ({ navigation, items }) => {
+
+
     const renderProduct = ({ item }) => {
 
         return (
             <TouchableOpacity
                 style={styles.card}
-                onPress={() => navigation.navigate('ProductDetail', { item })}
+                onPress={() => navigation.navigate('ProductDetail', {
+                    productId: item._id,
+                    // variantId: item.variants[0]._id
+                })}
             >
                 <Image
                     source={{ uri: item.image || IMAGE_NOT_FOUND }}

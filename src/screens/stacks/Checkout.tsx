@@ -9,7 +9,7 @@ import InfoContainer from '../../components/InfoContainer';
 import { AuthContext } from '../../contexts/AuthContext';
 import OrderDetailsItem from '../../components/listItems/OrderDetail';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { CreateOrderReq } from '../../types';
+import { CreateOrderReq } from '../../types/models';
 import PaymentMethod from '../../components/listItems/PaymentMethod';
 import { fetchAllMethods, refresh as paymentsRefresh, setSelectedMethod } from '../../redux/features/payment/paymentsSlice';
 import Skeleton from '../../components/loaders/Skeleton';

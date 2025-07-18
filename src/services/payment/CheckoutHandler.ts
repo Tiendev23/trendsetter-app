@@ -7,7 +7,7 @@ import {
     PayosCreateRes,
     ZalopayCreateReq,
     ZalopayCreateRes,
-} from "../../types";
+} from "../../types/models";
 
 export const getProviderFromMethod = (methodName: string): PaymentProvider => {
     const lower = methodName.toLowerCase();

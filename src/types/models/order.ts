@@ -1,3 +1,4 @@
+import { ObjectId } from "../common";
 import { CartItem } from "./cartItem";
 import { Product } from "./product";
 import { User } from "./user";
@@ -9,13 +10,13 @@ export type OrderItem = {
     price: number;
     size: string;
     color: string;
-    _id: string;
+    _id: ObjectId;
 };
 
 export type Order = {
-    _id: string;
-    user: User | string;
-    items: Array<OrderItem | CartItem>;
+    _id: ObjectId;
+    user: User | ObjectId;
+    items: OrderItem[] | CartItem[];
     totalPrice: number;
     status?: "pending" | "confirmed" | "shipping" | "delivered" | "cancelled";
     shippingAddress: string;
@@ -25,7 +26,7 @@ export type Order = {
 };
 
 export type OrderBody = {
-    user: string;
+    user: ObjectId;
     items: CartItem[];
     totalPrice: number;
     shippingAddress: string;

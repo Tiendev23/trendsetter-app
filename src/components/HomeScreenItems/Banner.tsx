@@ -8,7 +8,7 @@ import { RootState, AppDispatch } from '../../redux/store';
 import eventBus from '../../utils/Evenbus';
 import { formatCurrency } from '../../utils/formatForm';
 import { ProductsItem } from '../../navigation/NavigationTypes';
-import { IMAGE_NOT_FOUND } from '../../types';
+import { IMAGE_NOT_FOUND } from '../../types/models';
 
 const { width } = Dimensions.get('window');
 const WinterBanner: React.FC<ProductsItem> = ({ navigation, items }) => {

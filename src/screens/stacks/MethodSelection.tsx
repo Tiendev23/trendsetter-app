@@ -4,7 +4,7 @@ import ScreenHeader from '../../components/ScreenHeader';
 import { MethodSelectionNav, MethodSelectionRoute } from '../../navigation/NavigationTypes';
 import { FlatList } from 'react-native-gesture-handler';
 import PaymentMethod from '../../components/listItems/PaymentMethod';
-import { Payment } from '../../types';
+import { Payment } from '../../types/models';
 import CustomButton from '../../components/buttons/CustomButton';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { setSelectedMethod } from '../../redux/features/payment/paymentsSlice';

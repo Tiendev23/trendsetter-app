@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { createOrder, refresh as refreshOrder } from '../../redux/features/order/orderSlice';
 import { refresh as refreshZalopay } from '../../redux/features/payment/zalopaySlice';
 import { AuthContext } from '../../contexts/AuthContext';
-import { CreateOrderReq } from '../../types';
+import { CreateOrderReq } from '../../types/models';
 import { CheckoutNav } from '../../navigation/NavigationTypes';
 import { CartContext } from '../../contexts/CartContext';
 import * as Linking from 'expo-linking';

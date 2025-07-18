@@ -1,4 +1,4 @@
-import { CreateOrderReq, Payment, PaymentProvider } from "../../types";
+import { CreateOrderReq, Payment, PaymentProvider } from "../../types/models";
 import { Text } from "react-native";
 import { CheckoutNav } from "../../navigation/NavigationTypes";
 import ZalopayWebView from "./ZalopayWebView";

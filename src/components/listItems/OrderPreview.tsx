@@ -1,6 +1,6 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, { useState } from 'react';
-import { IMAGE_NOT_FOUND, Order, OrderItem, User } from '../../types';
+import { IMAGE_NOT_FOUND, Order, OrderItem, User } from '../../types/models';
 import { formatCurrency, formatDate, formatOrderStatus } from '../../utils/formatForm';
 import CustomDirectionButton from '../buttons/ChevronButton';
 import CustomButton from '../buttons/CustomButton';

@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import apiClient from "../../../api/apiClient";
-import { BaseState, ErrorResponse } from "../../../types";
+import { BaseState, ErrorResponse } from "../../../types/models";
 import { ZalopayCreateReq, ZalopayCreateRes } from "../../../types/payments";
 import { AxiosError } from "axios";
 

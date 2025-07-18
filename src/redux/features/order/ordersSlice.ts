@@ -1,8 +1,8 @@
-import { BaseState, ErrorResponse } from "../../../types/baseRedux";
+import { BaseState, ErrorResponse } from "../../../types/redux";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import apiClient from "../../../api/apiClient";
 import { AxiosError } from "axios";
-import { Order } from "../../../types";
+import { Order } from "../../../types/models";
 
 export const fetchOrdersByUser = createAsyncThunk<
     Order[], // kiểu dữ liệu khi thành công

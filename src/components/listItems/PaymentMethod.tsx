@@ -1,7 +1,7 @@
 import { Button, Image, StyleProp, StyleSheet, Text, TextInput, TouchableOpacity, View, ViewStyle } from 'react-native';
 import React from 'react';
 
-import { IMAGE_NOT_FOUND, Payment } from '../../types';
+import { IMAGE_NOT_FOUND, Payment } from '../../types/models';
 import RadioButton from '../buttons/RadioButton';
 
 type Props = {

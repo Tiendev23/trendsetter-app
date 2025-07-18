@@ -4,25 +4,29 @@ import {
     createEntityAdapter,
 } from "@reduxjs/toolkit";
 import apiClient from "../../../api/apiClient";
-// import { Brand, Category } from "../../../types";
+import { BaseState, ErrorResponse, ProductDetails } from "../../../types";
+import { AxiosError } from "axios";
 
-export const fetchProductById = createAsyncThunk(
-    "product/fetchById",
-    async (productId: string, { rejectWithValue }) => {
-        try {
-            const response = await apiClient.get(`/products/${productId}`);
-            return response.data;
-        } catch (error) {
-            console.log(error);            
-            return rejectWithValue(error.response?.data?.message);
-        }
+export const fetchProductById = createAsyncThunk<
+    ProductDetails, // kiểu dữ liệu khi thành công
+    string, // kiểu dữ liệu truyền vào (nếu có)
+    { rejectValue: ErrorResponse } // kiểu dữ liệu khi thất bại
+>("product/fetchById", async (productId, { rejectWithValue }) => {
+    try {
+        const response = await apiClient.get(`/products/${productId}`);
+        return response.data;
+    } catch (err) {
+        const error = err as AxiosError<{ message: string }>;
+        return rejectWithValue(
+            error.response?.data || { message: "Lỗi Server" + error.message }
+        );
     }
-);
+});
 
-const initialState = {
-    data: {},
-    status: {},
-    error: {},
+const initialState: BaseState<ProductDetails> = {
+    data: null,
+    status: "idle",
+    error: null,
 };
 // interface Product {
 //     id: string;
@@ -49,24 +53,31 @@ const productSlice = createSlice({
 
     reducers: {
         refresh: (state) => {
-            state.data = {};
-            state.status = {};
-            state.error = {};
+            state.data = null;
+            state.status = "idle";
+            state.error = null;
         },
     },
     extraReducers: (builder) => {
         builder
             .addCase(fetchProductById.pending, (state, action) => {
-                state.status[action.meta.arg] = "loading";
+                state.status = "loading";
+                // state.status[action.meta.arg] = "loading";
             })
             .addCase(fetchProductById.fulfilled, (state, action) => {
-                state.status[action.meta.arg] = "succeeded";
-                state.data[action.meta.arg] = action.payload;
+                state.status = "succeeded";
+                console.log("action.payload", action.payload);
+
+                // state.status[action.meta.arg] = "succeeded";
+                state.data = action.payload;
+                // state.data[action.meta.arg] = action.payload;
                 // productAdapter.upsertOne(state, action.payload); // Lưu trữ sản phẩm vào adapter
             })
             .addCase(fetchProductById.rejected, (state, action) => {
-                state.status[action.meta.arg] = "failed";
-                state.error[action.meta.arg] = action.payload;                
+                state.status = "failed";
+                // state.status[action.meta.arg] = "failed";
+                state.error = action.payload;
+                // state.error[action.meta.arg] = action.payload;
             });
     },
 });

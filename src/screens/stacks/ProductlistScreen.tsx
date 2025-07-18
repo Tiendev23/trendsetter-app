@@ -10,7 +10,7 @@ import { getAllProducts } from '../../redux/features/product/productsSlice';
 import eventBus from '../../utils/Evenbus';
 
 const { width } = Dimensions.get("window");
-import { IMAGE_NOT_FOUND } from '../../types';
+import { IMAGE_NOT_FOUND } from '../../types/models';
 
 const ProductlistScreen = ({ navigation, route }) => {
     const { brandId, title } = route.params;

@@ -1,6 +1,6 @@
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteProp } from '@react-navigation/native';
-import { Payment, Product } from '../types';
+import { Payment, Product } from '../types/models';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 
 // Danh sách màn hình
@@ -9,9 +9,9 @@ export type AuthStackParamList = {
     Login: { email?: string }; // Có thể nhận email từ bất kỳ màn hình nào
     SignUp: undefined;
     ForgotPasswordScreen: undefined;
-    ProductDetail: { item?: Product };
+    ProductDetail: { productId?: string, variantId?: string };
     Checkout: undefined;
-    Profile: {title?:string};
+    Profile: { title?: string };
     Cart: undefined;
     OrderHistory: undefined;
     MethodSelection: { method?: Payment, paymentMethods: Payment[] };
@@ -30,9 +30,9 @@ export type ProductsItem = {
     items: any[];
 
 }
-export type BannerItem={
+export type BannerItem = {
     navigation: any;
-    brands :any []; 
+    brands: any[];
 
 }
 // Định nghĩa kiểu navigation, route cho từng màn hình

@@ -3,7 +3,7 @@ import { Text, StyleSheet, View, Image, ActivityIndicator, TouchableOpacity } fr
 import ReanimatedSwipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
 import Reanimated, { SharedValue, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import { CartItem as Cart, IMAGE_NOT_FOUND, Product } from '../../types';
+import { CartItem as Cart, IMAGE_NOT_FOUND, Product } from '../../types/models';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { fetchProductById } from '../../redux/features/product/productSlice';
 import { formatCurrency } from '../../utils/formatForm';

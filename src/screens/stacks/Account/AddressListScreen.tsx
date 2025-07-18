@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, FlatList, Image, } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Backnav from '../../../components/Tabbar/Backnav';
-import { Addresses } from '../../../types';
+import { Addresses } from '../../../types/models';
 import { useDispatch, useSelector, UseSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../../redux/store';
 import { fetchAddress } from '../../../redux/features/addresses/addressesSlice';

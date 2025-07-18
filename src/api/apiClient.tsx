@@ -3,19 +3,17 @@ import axios from 'axios';
 import Toast from 'react-native-toast-message';
 import { showErrorToast } from '../utils/toast';
 
-const API_URL = 'http://192.168.2.7:5000/api';
-//const API_URL = 'http://192.168.10.34:5000/api';
 //const API_URL = 'https://trendsetter-backend.onrender.com/api';
 /** localhost:5000 cho máy ảo
  *  <IPv4 Address>:5000 khi chạy máy thật
  */
 
-// const API_URL = 'https://ad74-116-110-41-68.ngrok-free.app/api';
+const API_URL = 'https://17c98d7d95ae.ngrok-free.app/api';
 
 const apiClient = axios.create({
     baseURL: API_URL,
     headers: {
-        'Content-Type': 'application/json', 
+        'Content-Type': 'application/json',
     },
 });
 
@@ -41,7 +39,7 @@ apiClient.interceptors.request.use(async (config) => {
     if (token) {
 
         config.headers.Authorization = `Bearer ${token}`;
-        
+
 
     }
     return config;

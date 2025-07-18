@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import apiClient from "../../../api/apiClient";
-import { BaseState, Payment } from "../../../types";
+import { BaseState, Payment } from "../../../types/models";
 
 export const fetchAllMethods = createAsyncThunk(
     "payments/fetchAll",

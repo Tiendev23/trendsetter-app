@@ -6,7 +6,7 @@ import { refresh } from '../../redux/features/auth/loginSlice';
 import { TabsNav } from '../../navigation/NavigationTypes';
 import CustomButton from '../../components/buttons/CustomButton';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import { User } from '../../types';
+import { User } from '../../types/models';
 
 // Dữ liệu cho các mục menu
 const myAccountItems = [
@@ -34,7 +34,7 @@ const purchaseItems = [
 const UserProfileHeader = ({ user }: { user: User }) => (
     <View style={styles.headerContainer}>
         <Image
-            source={{ uri: 'https://i.pravatar.cc/150' }}
+            source={{ uri: user.avatar }}
             style={styles.headerAvatar}
         />
         <View>
