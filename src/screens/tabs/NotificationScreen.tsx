@@ -184,20 +184,3 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18,
   },
 });
-
-const list = [
-  {
-    img: require("../../../assets/images/anh2.png"),
-    title: "Admin",
-    nd: "Chào bạn, đây là tin nhắn chưa đọc. Hãy kiểm tra ngay!",
-    read: false,
-    time: "10:45 AM",
-  },
-  {
-    img: require("../../../assets/images/anh2.png"),
-    title: "Shop thời trang",
-    nd: "Đơn hàng của bạn đã được giao thành công. Cảm ơn bạn!",
-    read: true,
-    time: "Hôm qua",
-  },
-];
