@@ -51,7 +51,7 @@ const EditAddressScreen = ({ navigation, route }) => {
 
     const [ShowEditadd, setShowEditadd] = useState(false)
     const { addressId, userId } = route.params;
-const [isManuallyUpdated, setIsManuallyUpdated] = useState(false);
+    const [isManuallyUpdated, setIsManuallyUpdated] = useState(false);
 
     const { loading, error, selectedAddress } = useSelector((state: RootState) => state.address)
     const dispatch = useDispatch<AppDispatch>();
@@ -62,22 +62,22 @@ const [isManuallyUpdated, setIsManuallyUpdated] = useState(false);
         return unsubscribe
     }, [navigation, addressId, userId])
 
-useEffect(() => {
-  if (selectedAddress && !isManuallyUpdated) {
-    setFullName(selectedAddress.fullName || '');
-    setPhone(selectedAddress.phone || '');
-    setCity(selectedAddress.city || '');
-    setDistrict(selectedAddress.district || '');
-    setWard(selectedAddress.ward || '');
-    setStreetDetails(selectedAddress.streetDetails || '');
-    setIsEnabled(selectedAddress.isDefault || false);
-  }
-}, [selectedAddress, isManuallyUpdated]);
+    useEffect(() => {
+        if (selectedAddress && !isManuallyUpdated) {
+            setFullName(selectedAddress.fullName || '');
+            setPhone(selectedAddress.phone || '');
+            setCity(selectedAddress.city || '');
+            setDistrict(selectedAddress.district || '');
+            setWard(selectedAddress.ward || '');
+            setStreetDetails(selectedAddress.streetDetails || '');
+            setIsEnabled(selectedAddress.isDefault || false);
+        }
+    }, [selectedAddress, isManuallyUpdated]);
     // useFocusEffect(
     //   useCallback(() => {
     //     if (route.params?.locationData) {
     //       const { city, district, ward, streetDetails } = route.params.locationData;
-    //       console.log("🔁 Nhận lại locationData khi quay về:", route.params.locationData);
+    //       console.log(" Nhận lại locationData khi quay về:", route.params.locationData);
     //       setCity(city);
     //       setDistrict(district);
     //       setWard(ward);
@@ -86,8 +86,6 @@ useEffect(() => {
     //   }, [route.params]) // CHỈ phụ thuộc vào `route.params` hoặc không cần dependency
     // );
 
-    console.log("🔍 State hiện tại:", { city, district, ward, streetDetails });
-    console.log("valu mới ", city, district, ward, streetDetails);
 
 
     return (
@@ -121,12 +119,12 @@ useEffect(() => {
                                     streetDetails,
                                 },
                                 onSelectLocation: (newLocation: any) => {
-  setCity(newLocation.city);
-  setDistrict(newLocation.district);
-  setWard(newLocation.ward);
-  setStreetDetails(newLocation.streetDetails);
-  setIsManuallyUpdated(true); // ✅ Đánh dấu là user đã chỉnh
-}
+                                    setCity(newLocation.city);
+                                    setDistrict(newLocation.district);
+                                    setWard(newLocation.ward);
+                                    setStreetDetails(newLocation.streetDetails);
+                                    setIsManuallyUpdated(true); //  Đánh dấu là user đã chỉnh
+                                }
 
                             });
                         }}
