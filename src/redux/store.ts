@@ -17,8 +17,9 @@ export const store = configureStore({
         zalopayMethod: Reducer.zalopayReducer,
         sendEmail: Reducer.sendEmailReducer,
         changePass: Reducer.ChangePasswordReducer,
-        address : Reducer.addressReducer,
+        address: Reducer.addressReducer,
         location: Reducer.LocationReducer,
+        reviews: Reducer.reviewReducer,
     },
 });
 

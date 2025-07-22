@@ -1,5 +1,5 @@
 import { createContext, useState, ReactNode } from "react";
-import { User } from "../types";
+import { User } from "../types/models";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Định nghĩa kiểu cho Context

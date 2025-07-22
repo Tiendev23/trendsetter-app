@@ -1,27 +1,33 @@
-import { createContext, useState, ReactNode } from "react";
-import { CartItem, Product } from "../types";
+import { createContext, useState, ReactNode, useContext } from "react";
+import { CartItem, Product } from "../types/models";
 
 type CartContextType = {
     items: CartItem[];
+
     status: string;
-    setStatus: (value: string) => void
-    getCartItem: (
-        item: CartItem
-    ) => CartItem;
+
+    setStatus: (value: string) => void;
+
+    // getCartItem: (
+    //     item: CartItem
+    // ) => CartItem;
     getSubtotal: () => number;
+
     addToCart: (
-        product: Product,
-        selectedSize: string,
-        selectedColor: string,
-        quantity?: number
+        variantId: string,
+        sizeId: string,
+        quantity: number
     ) => void;
+
     deleteCartItem: (
         item: CartItem
     ) => void;
+
     updateCartItem: (
         item: CartItem,
         newQuantity: number
     ) => void;
+
     clearCart: () => void;
 };
 
@@ -39,33 +45,31 @@ export function CartProvider({ children }: { children: ReactNode }) {
         // }
     ]);
     const [status, setStatus] = useState('idle');
-    const getCartItem = (item: CartItem) => {
-        return cart.find(
-            (obj) =>
-                obj.product === item.product &&
-                obj.size === item.size &&
-                obj.color === item.color
-        );
-    };
+    // const getCartItem = (item: CartItem) => {
+    //     return cart.find(
+    //         (obj) =>
+    //             obj.product === item.product &&
+    //             obj.size === item.size &&
+    //             obj.color === item.color
+    //     );
+    // };
 
     const getSubtotal = () => {
-        return cart.reduce((subtotal, obj) => subtotal + (obj.price * obj.quantity), 0);
+        return 0 // cart.reduce((subtotal, obj) => subtotal + (obj.price * obj.quantity), 0);
     };
 
-    const addToCart = (product: Product, selectedSize: string, selectedColor: string, quantity: number) => {
+    const addToCart = (variantId: string, sizeId: string, quantity: number) => {
         setCart((prev) => {
             const existingItem = prev.find(
                 (item) =>
-                    item.product === product._id &&
-                    item.size === selectedSize &&
-                    item.color === selectedColor
+                    item.variantId === variantId &&
+                    item.sizeId === sizeId
             );
 
             if (existingItem) {
                 return prev.map((item) =>
-                    item.product === product._id &&
-                        item.size === selectedSize &&
-                        item.color === selectedColor
+                    item.variantId === variantId &&
+                        item.sizeId === sizeId
                         ? { ...item, quantity: item.quantity + quantity }
                         : item
                 );
@@ -73,12 +77,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
                 return [
                     ...prev,
                     {
-                        name: product.name,
-                        product: product._id,
-                        quantity: quantity,
-                        price: product.price,
-                        size: selectedSize,
-                        color: selectedColor,
+                        variantId: variantId,
+                        sizeId: sizeId,
+                        quantity: quantity
                     },
                 ];
             }
@@ -86,27 +87,27 @@ export function CartProvider({ children }: { children: ReactNode }) {
     };
 
     const updateCartItem = (item: CartItem, newQuantity: number) => {
-        setCart((prev) =>
-            prev.map((obj) =>
-                obj.product === item.product &&
-                    obj.size === item.size &&
-                    obj.color === item.color
-                    ? { ...obj, quantity: Math.max(newQuantity, 1) } // Không cho giảm dưới 1
-                    : obj
+        // setCart((prev) =>
+        //     prev.map((obj) =>
+        //         obj.product === item.product &&
+        //             obj.size === item.size &&
+        //             obj.color === item.color
+        //             ? { ...obj, quantity: Math.max(newQuantity, 1) } // Không cho giảm dưới 1
+        //             : obj
 
-            )
-        );
+        //     )
+        // );
     };
 
     const deleteCartItem = (item: CartItem) => {
-        setCart((prev) =>
-            prev.filter(
-                (obj) =>
-                    !(obj.product === item.product &&
-                        obj.size === item.size &&
-                        obj.color === item.color)
-            )
-        );
+        // setCart((prev) =>
+        //     prev.filter(
+        //         (obj) =>
+        //             !(obj.product === item.product &&
+        //                 obj.size === item.size &&
+        //                 obj.color === item.color)
+        //     )
+        // );
     };
 
     const clearCart = () => {
@@ -114,8 +115,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
     };
 
     return (
-        <CartContext.Provider value={{ items: cart, status, setStatus, getCartItem, getSubtotal, addToCart, updateCartItem, deleteCartItem, clearCart }}>
+        <CartContext.Provider value={{ items: cart, status, setStatus, getSubtotal, addToCart, updateCartItem, deleteCartItem, clearCart }}>
             {children}
         </CartContext.Provider>
     );
+};
+
+export const useCartContext = () => {
+    const context = useContext(CartContext);
+    if (!context)
+        throw new Error('useCart must be used within a CartProvider');
+    return context;
 }

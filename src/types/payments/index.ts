@@ -1,4 +1,4 @@
-import { CartItem } from "../cartItem";
+import { CartItem } from "../models/cartItem";
 
 export * from "./payos";
 export * from "./zalopay";

@@ -6,7 +6,7 @@ import { TabBar, TabView } from 'react-native-tab-view';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import OrderScene from '../../components/OrderScene';
 import { fetchOrdersByUser, refresh } from '../../redux/features/order/ordersSlice';
-import { Order } from '../../types';
+import { Order } from '../../types/models';
 import { AuthContext } from '../../contexts/AuthContext';
 
 const routes = [
