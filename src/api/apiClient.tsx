@@ -3,12 +3,12 @@ import axios from 'axios';
 import Toast from 'react-native-toast-message';
 import { showSuccessToast } from '../utils/toast';
 
-//const API_URL = 'https://trendsetter-backend.onrender.com/api';
+const API_URL = 'https://trendsetter-backend.onrender.com/api';
 /** localhost:5000 cho máy ảo
  *  <IPv4 Address>:5000 khi chạy máy thật
  */
 
-const API_URL = 'https://31447356712e.ngrok-free.app/api';
+// const API_URL = 'https://31447356712e.ngrok-free.app/api';
 
 const apiClient = axios.create({
     baseURL: API_URL,
