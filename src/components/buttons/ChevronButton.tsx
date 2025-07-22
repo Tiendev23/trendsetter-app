@@ -3,14 +3,14 @@ import { TouchableOpacity, Text, StyleSheet, OpaqueColorValue } from 'react-nati
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 type Props = {
-    direction?: 'back' | 'forward';
+    direction: 'back' | 'forward';
     size?: number;
     color?: string | OpaqueColorValue;
     onPress?: () => void;
     disabled?: boolean;
 };
 
-export default function CustomDirectionButton({ direction, onPress, size, color, disabled }: Props) {
+export default function ChevronButton({ direction = 'back', onPress, size, color, disabled }: Props) {
     const name = 'chevron-' + direction
     return (
         <TouchableOpacity

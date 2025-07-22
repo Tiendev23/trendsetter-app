@@ -9,7 +9,7 @@ import { CreateOrderReq } from '../../types/models';
 import { CheckoutNav } from '../../navigation/NavigationTypes';
 import { CartContext } from '../../contexts/CartContext';
 import * as Linking from 'expo-linking';
-import { showErrorToast } from '../../utils/toast';
+import { showSuccessToast } from '../../utils/toast';
 
 type Props = {
     navigation: CheckoutNav;
@@ -34,7 +34,7 @@ export default function ZalopayWebView({ navigation, orderData, setPaymentStatus
             setCheckoutUrl(zalopayData.order_url);
         }
         if (zalopayStatus === 'failed') {
-            showErrorToast('Không thể tạo đơn hàng Zalopay', zalopayErr?.message || 'Vui lòng thử lại sau');
+            showSuccessToast('Không thể tạo đơn hàng Zalopay', zalopayErr?.message || 'Vui lòng thử lại sau');
             setTimeout(() => {
                 dispatch(refreshZalopay());
             }, 3000);

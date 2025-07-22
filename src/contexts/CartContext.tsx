@@ -1,26 +1,33 @@
-import { createContext, useState, ReactNode } from "react";
+import { createContext, useState, ReactNode, useContext } from "react";
 import { CartItem, Product } from "../types/models";
 
 type CartContextType = {
     items: CartItem[];
+
     status: string;
-    setStatus: (value: string) => void
+
+    setStatus: (value: string) => void;
+
     // getCartItem: (
     //     item: CartItem
     // ) => CartItem;
     getSubtotal: () => number;
+
     addToCart: (
         variantId: string,
         sizeId: string,
         quantity: number
     ) => void;
+
     deleteCartItem: (
         item: CartItem
     ) => void;
+
     updateCartItem: (
         item: CartItem,
         newQuantity: number
     ) => void;
+
     clearCart: () => void;
 };
 
@@ -112,4 +119,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
             {children}
         </CartContext.Provider>
     );
+};
+
+export const useCartContext = () => {
+    const context = useContext(CartContext);
+    if (!context)
+        throw new Error('useCart must be used within a CartProvider');
+    return context;
 }

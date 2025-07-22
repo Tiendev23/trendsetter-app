@@ -33,8 +33,8 @@ export default function StackNavigator() {
             <Stack.Screen name="Chat" component={ChatScreen} />
             <Stack.Screen name="TermsOfServiceScreen" component={Stacks.TermsOfServiceScreen} />
             <Stack.Screen name="EditAddress" component={Stacks.EditAddress} />
-            <Stack.Screen name="LocationScreen" component={Stacks.LocationScreen}/>
-            
+            <Stack.Screen name="LocationScreen" component={Stacks.LocationScreen} />
+
         </Stack.Navigator>
     );
 }

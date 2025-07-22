@@ -2,6 +2,8 @@ import { Gender, ObjectId } from "../common";
 import { Brand } from "./brand";
 import { Campaign } from "./campaign";
 import { Category } from "./category";
+import { OrderDetail } from "./order";
+import { User } from "./user";
 
 export type Product = {
     _id: string;
@@ -45,7 +47,7 @@ type CategoryLite = Pick<Category, "_id" | "name">;
 
 type BrandLite = Pick<Brand, "_id" | "name">;
 
-type CampaignLite = Pick<
+export type CampaignLite = Pick<
     Campaign,
     "_id" | "type" | "value" | "startDate" | "endDate"
 >;
@@ -69,4 +71,22 @@ export type ProductDetails = {
     campaign: CampaignLite;
     variants: Variant[];
     rating: Rating;
+};
+
+type UserLite = Pick<User, "_id" | "username" | "fullName" | "avatar">;
+
+type OrderDetailLite = Pick<
+    OrderDetail,
+    "_id" | "productSize" | "productColor"
+>;
+
+export type Review = {
+    _id: ObjectId;
+    user: UserLite;
+    orderDetail: OrderDetailLite;
+    rating: number;
+    content: string;
+    createdAt: string;
+    updatedAt: string;
+    __v?: number;
 };

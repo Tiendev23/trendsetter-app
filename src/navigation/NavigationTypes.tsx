@@ -2,14 +2,18 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteProp } from '@react-navigation/native';
 import { Payment, Product } from '../types/models';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
-
+import { ObjectId } from '../types';
 // Danh sách màn hình
 export type AuthStackParamList = {
     Tabs: undefined;
     Login: { email?: string }; // Có thể nhận email từ bất kỳ màn hình nào
     SignUp: undefined;
     ForgotPasswordScreen: undefined;
-    ProductDetail: { productId?: string, variantId?: string };
+    ProductDetail: {
+        category: string;
+        productId: ObjectId;
+        variantId: ObjectId;
+    };
     Checkout: undefined;
     Profile: { title?: string };
     Cart: undefined;

@@ -1,7 +1,7 @@
 import { FlatList, StyleSheet, Text, View } from 'react-native'
 import React, { useContext } from 'react'
 import { CartNav } from '../../navigation/NavigationTypes';
-import CustomDirectionButton from '../../components/buttons/ChevronButton';
+import ChevronButton from '../../components/buttons/ChevronButton';
 import Skeleton from '../../components/loaders/Skeleton';
 import { CartContext } from '../../contexts/CartContext';
 import CartItem from '../../components/listItems/CartItem';

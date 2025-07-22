@@ -13,12 +13,19 @@ export type OrderItem = {
     _id: ObjectId;
 };
 
+type OrderStatus =
+    | "pending"
+    | "confirmed"
+    | "shipping"
+    | "delivered"
+    | "cancelled";
+
 export type Order = {
     _id: ObjectId;
     user: User | ObjectId;
     items: OrderItem[] | CartItem[];
     totalPrice: number;
-    status?: "pending" | "confirmed" | "shipping" | "delivered" | "cancelled";
+    status?: OrderStatus;
     shippingAddress: string;
     createdAt?: string;
     updatedAt?: string;
@@ -31,4 +38,19 @@ export type OrderBody = {
     totalPrice: number;
     shippingAddress: string;
     status?: string;
+};
+
+export type OrderDetail = {
+    _id: ObjectId;
+    order: ObjectId;
+    campaign: ObjectId;
+    productVariant: ObjectId;
+    productName: string;
+    productQuantity: number;
+    productSize: string;
+    productColor: string;
+    productBasePrice: number;
+    productFinalPrice: number;
+    productImageUrl: string;
+    __v?: number;
 };

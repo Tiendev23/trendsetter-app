@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '../../redux/store';
 import { formatCurrency } from '../../utils/formatForm';
-import CustomDirectionButton from '../../components/buttons/ChevronButton';
+import ChevronButton from '../../components/buttons/ChevronButton';
 import ToCartButton from '../../components/ToCartButton';
 import { getAllProducts } from '../../redux/features/product/productsSlice';
 import eventBus from '../../utils/Evenbus';
@@ -69,7 +69,7 @@ const ProductlistScreen = ({ navigation, route }) => {
                 <View style={styles.headerContainer}>
                 </View>
                 <View style={styles.headerActions}>
-                    <CustomDirectionButton direction="back" onPress={() => navigation.goBack()} />
+                    <ChevronButton direction="back" onPress={() => navigation.goBack()} />
                     <Text style={styles.headerTitle}>{brandId?.name ? brandId.name : title}</Text>
 
                     <ToCartButton navigation={navigation} />

@@ -66,8 +66,6 @@ const productSlice = createSlice({
             })
             .addCase(fetchProductById.fulfilled, (state, action) => {
                 state.status = "succeeded";
-                console.log("action.payload", action.payload);
-
                 // state.status[action.meta.arg] = "succeeded";
                 state.data = action.payload;
                 // state.data[action.meta.arg] = action.payload;

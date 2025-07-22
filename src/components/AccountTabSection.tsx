@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, View } from 'react-native';
-import CustomDirectionButton from './buttons/ChevronButton';
+import ChevronButton from './buttons/ChevronButton';
 
 type Props = {
     title: string;
@@ -41,7 +41,7 @@ export default function AccountTabSection({ title, label, onPress }: Props) {
             </View>
             {
                 label === 'Sign Out' ? null : (
-                    <CustomDirectionButton
+                    <ChevronButton
                         direction="forward"
                         onPress={onPress}
                     />
