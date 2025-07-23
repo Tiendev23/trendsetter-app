@@ -3,11 +3,15 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 type Props = {
     data: VariantSize[];
-    selectedSize: ObjectId;
-    onSelectSize: (sizeId: ObjectId) => void;
+    selectedSize: VariantSize | null;
+    onSelectSize: {
+        setSelectedSize: (size: VariantSize | null) => void;
+        setPaddingBottom: (height: number) => void;
+    }
 };
 
 export default function VariantSelector({ data, selectedSize, onSelectSize }: Props) {
+    const { setSelectedSize, setPaddingBottom } = onSelectSize;
     return (
         <View style={styles.container}>
             {
@@ -15,15 +19,19 @@ export default function VariantSelector({ data, selectedSize, onSelectSize }: Pr
                     <TouchableOpacity
                         key={item._id}
                         onPress={() => {
-                            onSelectSize(selectedSize === item._id ? '' : item._id);
+                            if (selectedSize?._id === item._id) {
+                                setSelectedSize(null);
+                                setPaddingBottom(0);
+                            } else
+                                setSelectedSize(item);
                         }}
                         style={[styles.button, {
                             backgroundColor:
-                                selectedSize === item._id ? '#006340' : '#F8F9FA',
+                                selectedSize?._id === item._id ? '#006340' : '#F8F9FA',
                         }]}
                     >
                         <Text style={{
-                            color: selectedSize === item._id ? '#FFFFFF' : '#707B81'
+                            color: selectedSize?._id === item._id ? '#FFFFFF' : '#707B81'
                         }}>{item.size}</Text>
                     </TouchableOpacity>
                 ))

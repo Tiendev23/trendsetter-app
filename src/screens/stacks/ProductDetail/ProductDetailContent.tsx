@@ -14,18 +14,19 @@ export default function ProductDetailContent({ product, initialVariantId }: Prop
         variants.find(v => v._id === initialVariantId) || variants[0]
     );
     const [inventories, setInventories] = useState<VariantSize[]>(selectedVariant.inventories);
-    const [selectedSize, setSelectedSize] = useState<ObjectId>('');
+    const [selectedSize, setSelectedSize] = useState<VariantSize | null>(null);
     const { addToCart } = useCartContext();
+    const [paddingBottom, setPaddingBottom] = useState<number>(0);
 
     useEffect(() => {
         setInventories(selectedVariant.inventories);
-        setSelectedSize('');
+        setSelectedSize(null);
     }, [selectedVariant]);
 
     return (
         <View style={styles.container}>
             <ScrollView>
-                <View>
+                <View style={{ paddingBottom: paddingBottom }}>
                     <View style={styles.sliderWrapper}>
                         <ImageSlider
                             images={selectedVariant.images}
@@ -56,12 +57,15 @@ export default function ProductDetailContent({ product, initialVariantId }: Prop
 
                         <View style={styles.contentWrapper}>
                             <Text style={styles.contentLabel}>
-                                Kích thước
+                                Kích cỡ
                             </Text>
                             <SizeSelector
                                 data={inventories}
                                 selectedSize={selectedSize}
-                                onSelectSize={setSelectedSize}
+                                onSelectSize={{
+                                    setSelectedSize: setSelectedSize,
+                                    setPaddingBottom: setPaddingBottom
+                                }}
                             />
                         </View>
                         {
@@ -81,7 +85,10 @@ export default function ProductDetailContent({ product, initialVariantId }: Prop
                     price: selectedVariant.finalPrice,
                 }}
                 selectedSize={selectedSize}
-                onSelectSize={setSelectedSize}
+                onSelectSize={{
+                    setSelectedSize: setSelectedSize,
+                    setPaddingBottom: setPaddingBottom
+                }}
                 onAddToCart={addToCart}
             />
         </View >

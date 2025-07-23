@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { FontAwesome5 } from '@expo/vector-icons';
 import CustomButton from '@/components/buttons/CustomButton';
 import { formatCurrency } from '@/utils/formatForm';
-import { ObjectId } from '@/types';
+import { ObjectId, VariantSize } from '@/types';
 import { showSuccessToast } from '@/utils/toast';
 
 type Props = {
@@ -11,28 +11,44 @@ type Props = {
         id: ObjectId;
         price: number;
     };
-    selectedSize: ObjectId;
-    onSelectSize: (sizeId: ObjectId) => void;
+    selectedSize: VariantSize | null;
+    onSelectSize: {
+        setSelectedSize: (size: VariantSize | null) => void;
+        setPaddingBottom: (height: number) => void;
+    };
     onAddToCart: (
         variantId: ObjectId,
         sizeId: ObjectId,
         quantity: number
     ) => void;
+
 };
 
-export default function PriceDisplay({ variant, selectedSize, onSelectSize, onAddToCart }: Props) {
+export default function PriceDisplay({ variant, selectedSize, onSelectSize, onAddToCart, }: Props) {
     if (!selectedSize) return null;
+    const { setSelectedSize, setPaddingBottom } = onSelectSize;
     const [quantity, setQuantity] = useState<number>(1);
     const subtotal = variant.price * quantity;
 
     return (
-        <View style={[styles.subtotalPopup, styles.shadow]}>
+        <View
+            style={[styles.subtotalPopup, styles.shadow]}
+            onLayout={(event) => {
+                const { height } = event.nativeEvent.layout;
+                setPaddingBottom(height);
+            }}
+        >
             <View style={{
                 flexDirection: 'row'
             }}>
                 <View style={styles.subtotalTextContainer}>
-                    <Text style={styles.subtotalTitle}>Giá</Text>
-                    <Text style={styles.subtotalPrice}>{formatCurrency(subtotal)}</Text>
+                    <Text style={styles.subtotalTitle}>
+                        Kho: {selectedSize.stock}
+                    </Text>
+                    <View>
+                        <Text style={styles.subtotalTitle}>Giá</Text>
+                        <Text style={styles.subtotalPrice}>{formatCurrency(subtotal)}</Text>
+                    </View>
                 </View>
                 <View style={[styles.quantityWrapper, styles.buttonOutline]}>
                     <TouchableOpacity style={styles.quantityWrapper}
@@ -64,8 +80,8 @@ export default function PriceDisplay({ variant, selectedSize, onSelectSize, onAd
             <CustomButton
                 title="Thêm vào giỏ hàng"
                 onPress={() => {
-                    onAddToCart(variant.id, selectedSize, quantity);
-                    onSelectSize('');
+                    onAddToCart(variant.id, selectedSize._id, quantity);
+                    setSelectedSize(null);
                     showSuccessToast({
                         title: "Đã thêm vào giỏ hàng"
                     })
@@ -102,7 +118,7 @@ const styles = StyleSheet.create({
         gap: 4,
     },
     subtotalTitle: {
-        fontSize: 18,
+        fontSize: 16,
         color: '#707B81',
     },
     subtotalPrice: {
@@ -114,8 +130,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        height: '100%',
-        overflow: 'hidden'
+        height: '80%',
+        overflow: 'hidden',
+        alignSelf: 'center',
     },
     quantity: {
         position: 'absolute',
