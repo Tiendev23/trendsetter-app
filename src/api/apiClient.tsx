@@ -44,6 +44,9 @@ apiClient.interceptors.request.use(async (config) => {
         
 
     }
+      if (config.data instanceof FormData) {
+        config.headers['Content-Type'] = 'multipart/form-data';
+    }
     return config;
 });
 

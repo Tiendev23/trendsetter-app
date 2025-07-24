@@ -1,16 +1,12 @@
-import { ScrollView, StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
-import React, { useCallback, useEffect, useState } from 'react';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import React, { useState } from 'react';
+import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { useDispatch } from 'react-redux';
 import ScreenHeader from '../../../components/ScreenHeader';
-import { SwitchRow, SwitchRowProps } from '../Account/Profile'
-import { WebView } from 'react-native-webview';
+import { createAddress, fetchAddress } from '../../../redux/features/addresses/addressesSlice';
+import { AppDispatch } from '../../../redux/store';
 import { styles as Styles } from '../Account/AddressListScreen';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../../redux/store';
-import { deleteAddress, fetchAddress } from '../../../redux/features/addresses/addressesSlice';
-import { useFocusEffect } from '@react-navigation/native';
-import { updateAddress } from '../../../redux/features/addresses/addressesSlice';
-import { Alert } from 'react-native';
+import { SwitchRow } from '../Account/Profile';
 
 
 export const AddressCard = ({ title, children }: { title: string, children: React.ReactNode }) => {
@@ -41,27 +37,22 @@ export const LabelValueBox: React.FC<LabelValueProps> = ({ label, value, onChang
         </View>
     );
 };
+const AddAddressScreen = ({ navigation, route }) => {
+    const { _id } = route.params;
 
-const EditAddressScreen = ({ navigation, route }) => {
-    const { item, _id } = route.params;
-    const [fullName, setFullName] = useState(item.fullName || '');
-    const [phone, setPhone] = useState(item.phone || '');
-    const [city, setCity] = useState(item.city || '');
-    const [district, setDistrict] = useState(item.district || '');
-    const [ward, setWard] = useState(item.ward || '');
-    const [streetDetails, setStreetDetails] = useState(item.streetDetails || '');
-    const [isEnabled, setIsEnabled] = useState(item.isDefault || false);
-
-    const [isManuallyUpdated, setIsManuallyUpdated] = useState(false);
-    const [showSuccess, setShowSuccess] = useState(false);
-    const [showSuccessremove, setShowSuccessremove] = useState(false);
-
+    const [fullName, setFullName] = useState('');
+    const [phone, setPhone] = useState('');
+    const [city, setCity] = useState('');
+    const [district, setDistrict] = useState('');
+    const [ward, setWard] = useState('');
+    const [streetDetails, setStreetDetails] = useState('');
+    const [isEnabled, setIsEnabled] = useState(false);
 
     const dispatch = useDispatch<AppDispatch>();
-    const addresses = useSelector((state: RootState) => state.address);
+    const [showSuccess, setShowSuccess] = useState(false);
 
-    const handleUpdateAddress = async () => {
-        const updatedData = {
+    const handleAddAddress = async () => {
+        const newAddressData = {
             fullName,
             phone,
             city,
@@ -72,10 +63,9 @@ const EditAddressScreen = ({ navigation, route }) => {
         };
 
         try {
-            await dispatch(updateAddress({
+            await dispatch(createAddress({
                 userId: _id,
-                addressId: item._id,
-                addressData: updatedData
+                addressData: newAddressData
             })).unwrap();
             setShowSuccess(true);
             setTimeout(() => {
@@ -83,23 +73,7 @@ const EditAddressScreen = ({ navigation, route }) => {
                 navigation.goBack();
             }, 2000);
         } catch (error) {
-            console.error("Lỗi cập nhật địa chỉ:", error);
-        }
-    };
-    const handleDeleteAddress = async () => {
-        try {
-            await dispatch(deleteAddress({
-                userId: _id,
-                addressId: item._id
-            })).unwrap();
-            setShowSuccessremove(true);
-
-            setTimeout(() => {
-                dispatch(fetchAddress({ _id }));
-                navigation.goBack();
-            }, 2000);
-        } catch (error) {
-            console.error("Lỗi cập nhật địa chỉ:", error);
+            console.error("Lỗi thêm địa chỉ:", error);
         }
     };
 
@@ -109,93 +83,46 @@ const EditAddressScreen = ({ navigation, route }) => {
                 <View style={styles.successCircle}>
                     <MaterialCommunityIcons name="check" size={60} color="#088A2D" />
                 </View>
-                <Text style={styles.Circletitle}>Lưu địa chỉ thành công!</Text>
+                <Text style={styles.Circletitle}>Thêm địa chỉ thành công!</Text>
             </View>
         );
-    };
+    }
 
-    if (showSuccessremove) {
-        return (
-            <View style={styles.successContainer}>
-                <View style={styles.successCircle}>
-                    <MaterialCommunityIcons name="check" size={60} color="#088A2D" />
-                </View>
-                <Text style={styles.Circletitle}>Xóa địa chỉ thành công!</Text>
-            </View>
-        );
-    };
-    const confirmDelete = () => {
-        Alert.alert(
-            "Xác nhận xóa",
-            "Bạn có chắc chắn muốn xóa địa chỉ này?",
-            [
-                { text: "Hủy", style: "cancel" },
-                { text: "Xóa", style: "destructive", onPress: handleDeleteAddress }
-            ]
-        );
-    };
     return (
         <View style={styles.container}>
-            <ScreenHeader
-                title="Sửa địa chỉ"
-                titleStyle={{
-                    fontWeight: 'bold',
-                    letterSpacing: 1
-                }}
-            />
+            <ScreenHeader title="Thêm địa chỉ" />
             <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
                 <AddressCard title="Thông tin người nhận">
                     <LabelValueBox label='Họ tên' value={fullName} onChangeText={setFullName} />
                     <LabelValueBox label="Số điện thoại" value={phone} onChangeText={setPhone} />
-
                 </AddressCard>
-                <AddressCard title="Địa chỉ giao hàng">
 
+                <AddressCard title="Địa chỉ giao hàng">
                     <View style={styles.labelValueBox}>
-                        <Text style={styles.label}>
-                            Tỉnh / Thành, Quận / Huyện, Phường / Xã
-                        </Text>
-                        <TouchableOpacity style={{ marginTop: 4, gap: 8 }} onPress={() => {
+                        <Text style={styles.label}>Tỉnh / Thành, Quận / Huyện, Phường / Xã</Text>
+                        <TouchableOpacity style={{ marginTop: 4, gap: 8 }}   onPress={() => {
                             navigation.navigate('LocationScreen', {
-                                currentData: {
-                                    city,
-                                    district,
-                                    ward,
-                                    streetDetails,
-                                },
+                                currentData: { city, district, ward, streetDetails },
                                 onSelectLocation: (newLocation: any) => {
                                     setCity(newLocation.city);
                                     setDistrict(newLocation.district);
                                     setWard(newLocation.ward);
                                     setStreetDetails(newLocation.streetDetails);
-                                    setIsManuallyUpdated(true); //  Đánh dấu là user đã chỉnh
                                 }
-
                             });
-                        }}
-
-                        >
-
-                            <Text style={styles.infoText}>{city}</Text>
+                        }}>
+                            <Text style={styles.infoText}>{city || 'Chọn thành phố'}</Text>
                             <View style={styles.rowWithIcon}>
-                                <Text style={styles.infoText}>{district}</Text>
+                                <Text style={styles.infoText}>{district || 'Chọn quận/huyện'}</Text>
                                 <Ionicons name="chevron-forward-outline" size={22} color="#C7C7CC" />
                             </View>
-                            <Text style={styles.infoText}>{ward}</Text>
-
+                            <Text style={styles.infoText}>{ward || 'Chọn phường/xã'}</Text>
                         </TouchableOpacity>
-                        <View style={{ marginTop: 4, gap: 5, }}>
+                        <View style={{ marginTop: 4, gap: 5 }}>
                             <Text style={styles.label}>Tên đường, Tòa nhà, Số nhà</Text>
                             <Text style={styles.infoText}>{streetDetails}</Text>
                         </View>
-
                     </View>
-                    {/* <View style={{ height: 300, borderRadius: 10, overflow: 'hidden', marginTop: 10 }}>
-                        <WebView
-                            source={{ uri: 'https://www.google.com/maps' }}
-                            style={{ flex: 1 }}
-                        />
-                    </View> */}
 
                     <SwitchRow
                         text="Đặt làm địa chỉ mặc định"
@@ -203,25 +130,21 @@ const EditAddressScreen = ({ navigation, route }) => {
                         value={isEnabled}
                         onValueChange={setIsEnabled}
                     />
+
                     <View style={styles.btn}>
-                        <TouchableOpacity style={Styles.addButton} onPress={confirmDelete}>
-                            <Ionicons name="remove" size={22} color="#FFFFFF" />
-                            <Text style={Styles.addButtonText}>Xóa địa chỉ</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={Styles.addButton} onPress={handleUpdateAddress}>
+                        <TouchableOpacity style={Styles.addButton} onPress={handleAddAddress}>
                             <Ionicons name="add" size={22} color="#FFFFFF" />
                             <Text style={Styles.addButtonText}>Lưu địa chỉ</Text>
                         </TouchableOpacity>
                     </View>
                 </AddressCard>
-
             </ScrollView>
-
         </View>
     );
 };
 
-export default EditAddressScreen;
+
+export default AddAddressScreen
 
 const styles = StyleSheet.create({
     container: {
@@ -240,7 +163,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.2,
         shadowRadius: 4,
 
-        //  Shadow Android
+        // ✅ Shadow Android
         elevation: 5,
 
     },

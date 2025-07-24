@@ -16,7 +16,8 @@ import AddressListScreen from "./Account/AddressListScreen"
 import EditAddress from "./EditProfile/EditAddressScreen"
 import ProfileEdit from "./EditProfile/editProfile";
 import TermsOfServiceScreen from "./Account/TermsOfServiceScreen";
-import LocationScreen from "./EditProfile/LocationScreen";
+import LocationScreen from "./EditProfile/Map/LocationScreen";
+import AddAddressScreen from "./EditProfile/AddAddressScreen";
 export {
     ForgotPasswordScreen,
     ChangePasswordScreen,
@@ -36,4 +37,5 @@ export {
     TermsOfServiceScreen,
     EditAddress,
     LocationScreen,
+    AddAddressScreen
 };

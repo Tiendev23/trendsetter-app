@@ -1,27 +1,69 @@
 import { useNavigation } from '@react-navigation/native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Image, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View, ActivityIndicator } from 'react-native'
 import WinterBanner from '../../components/HomeScreenItems/Banner'
 import Menubar from '../../components/HomeScreenItems/Menubar'
 import ProductItem from '../../components/HomeScreenItems/ProductItems'
 import { HomeNav, TabsNav } from '../../navigation/NavigationTypes'
 import eventBus from '../../utils/Evenbus'
-import { getAllProducts, getBrand } from '../../redux/features/product/productsSlice'
+import { getAllProducts, getAllRating, getBrand, getCampaigns } from '../../redux/features/product/productsSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../../redux/store'
 import ScreenHeader from '../../components/ScreenHeader'
 import ToCartButton from '../../components/ToCartButton'
+import ProductItemsbyRating from '../../components/HomeScreenItems/ProductItemsbyRating'
+import { FlatList } from 'react-native-gesture-handler'
+import { Campaign } from '../../types/Campaign'
+export const useCampaignProducts = (): Campaign[] => {
+    const campaigns = useSelector((state: RootState) => state.products.campaigns);
+    const variants = useSelector((state: RootState) => state.products.items);
+
+    const matchedVariants: Campaign[] = [];
+
+    campaigns.forEach((campaign) => {
+        const matched = variants.filter((variant) => {
+            const matchByBrand = campaign.brands?.some((b) => b._id === variant?.brand?._id);
+            const matchByCategory = campaign.categories?.some((c) => c._id === variant?.category?._id);
+            const matchByProduct = campaign.products?.some((p) => p._id === variant?.product?._id);
+
+            return matchByBrand || matchByCategory || matchByProduct;
+        });
+
+        matched.forEach((v) => {
+            matchedVariants.push({
+                ...v,
+                discountValue: campaign.value,
+                discountType: campaign.type,
+                campaignId: campaign._id,
+            });
+        });
+    });
+    //log data
+    // matchedVariants.forEach((item, index) => {
+    //     console.log(`Sản phẩm ${index + 1}:`, {
+    //         id: item._id,
+    //         brand: item.brands,
+    //         category: item.categories,
+    //         product: item.products,
+    //         campaignId: item._id,
+    //         discountValue: item.type,
+    //         discountType: item.value,
+    //     });
+    // });
+    return matchedVariants;
+};
 
 
 export default function HomeScreen({ navigation }) {
     const tabNav = useNavigation<HomeNav>();
     const stackNav = useNavigation<TabsNav>();
     const [refreshing, setRefreshing] = useState(false);
-    const { items, loading, error, brands, brandLoading } = useSelector((state: RootState) => state.products);
+    const { items, loading, error, brands, brandLoading, productsRatingLoading, productsRating, campaignsLoading, campaigns } = useSelector((state: RootState) => state.products);
     //rootstate
     const isLoading = loading === 'loading' || brandLoading === 'loading'
     const isFailed = loading === 'failed' || brandLoading === 'failed';
     const errorMassage = loading === 'failed' ? error : brandLoading === 'failed' ? "lỗi tải brand" : null
+    const campaignProducts = useCampaignProducts();
 
     //api
     const dispatch = useDispatch<AppDispatch>();
@@ -31,7 +73,11 @@ export default function HomeScreen({ navigation }) {
         dispatch(getAllProducts());
         //api brand
         dispatch(getBrand());
+        dispatch(getCampaigns());
+
+        dispatch(getAllRating());
     }, [dispatch]);
+
     // refreshing 
     const onRefresh = () => {
         setRefreshing(true);
@@ -39,7 +85,6 @@ export default function HomeScreen({ navigation }) {
         dispatch(getAllProducts()).finally(() => setRefreshing(false));
     }
     // rootstate product
-
 
 
     return (
@@ -87,7 +132,7 @@ export default function HomeScreen({ navigation }) {
                     </View>
                 ) : (!refreshing && (
                     <>
-                        <WinterBanner navigation={stackNav} items={items} />
+                        <WinterBanner navigation={stackNav} items={campaigns} />
                         <View style={styles.recommend}>
                             <Text style={styles.textRecommend}>Gợi Ý Cho Bạn</Text>
                             <TouchableOpacity
@@ -115,7 +160,7 @@ export default function HomeScreen({ navigation }) {
                                 <Text style={styles.textRecommend}>Xem Thêm</Text>
                             </TouchableOpacity>
                         </View>
-                        <ProductItem navigation={stackNav} items={items} />
+                        <ProductItemsbyRating navigation={stackNav} items={productsRating} />
                         <View style={styles.recommend}>
                             <Text style={styles.textRecommend}>Sản phẩm tiêu biểu</Text>
                             <TouchableOpacity
@@ -127,7 +172,7 @@ export default function HomeScreen({ navigation }) {
                             </TouchableOpacity>
                         </View>
                         <ProductItem navigation={stackNav} items={items} />
-                        <WinterBanner navigation={stackNav} items={items} />
+                        <WinterBanner navigation={stackNav} items={campaigns} />
                         <View style={styles.recommend}>
                             <Text style={styles.textRecommend}>Sản Phẩm giảm giá</Text>
                             <TouchableOpacity
@@ -138,12 +183,12 @@ export default function HomeScreen({ navigation }) {
                                 <Text style={styles.textRecommend}>Xem Thêm</Text>
                             </TouchableOpacity>
                         </View>
-                        <ProductItem navigation={stackNav} items={items} />
+                        <ProductItem navigation={stackNav} items={campaignProducts} />
+
+
+
                     </>
                 ))}
-
-
-
 
 
             </ScrollView >

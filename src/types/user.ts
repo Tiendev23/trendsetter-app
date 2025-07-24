@@ -1,15 +1,18 @@
-// Định nghĩa kiểu dữ liệu cho User
-import { Addresses } from "./shippingAddresses";
+import { Addresses } from './shippingAddresses';
+
 export type User = {
-    _id: string;
-    fullName: string;
-    username: string;
-    email: string;
-    favorites?: string[];
-    password?: string;
-    role?: string;
-    createdAt?: string;
-    updatedAt?: string;
-    ShippingAddress: Addresses[];
-    __v?: number;
+  _id: string;
+  username: string;
+  fullName: string;
+  email: string;
+  password?: string;
+  gender?: 'male' | 'female' | 'other';
+  birthday?: string | Date; 
+  avatar?: string;
+  role?: 'customer' | 'admin';
+  favorites?: string[]; 
+  shippingAddresses?: Addresses[];
+  createdAt?: string;
+  updatedAt?: string;
+  __v?: number;
 };

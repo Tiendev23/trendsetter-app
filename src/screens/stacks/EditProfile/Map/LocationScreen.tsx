@@ -1,14 +1,14 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../../redux/store';
-import { AddressCard, LabelValueBox } from './EditAddressScreen';
-import { AddressContext } from '../../../contexts/AddressContext';
-import { fetchDistricts, fetchProvinces, fetchWards } from '../../../redux/features/addresses/locationSlice';
+import { AppDispatch, RootState } from '../../../../redux/store';
+import { AddressCard, LabelValueBox } from '../EditAddressScreen';
+import { AddressContext } from '../../../../contexts/AddressContext';
+import { fetchDistricts, fetchProvinces, fetchWards } from '../../../../redux/features/addresses/locationSlice';
 import AutoCompleteSelect from './AutoCompleteSelect';
-import { styles as Styles } from '../Account/AddressListScreen';
+import { styles as Styles } from '../../Account/AddressListScreen';
 import { Ionicons } from '@expo/vector-icons';
-import ScreenHeader from '../../../components/ScreenHeader';
+import ScreenHeader from '../../../../components/ScreenHeader';
 import { useFocusEffect } from '@react-navigation/native';
 const LocationScreen = ({ navigation, route }) => {
 

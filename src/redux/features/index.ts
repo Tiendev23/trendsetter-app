@@ -13,6 +13,7 @@ import ChangePasswordReducer from "./auth/ChangePassword";
 import sendEmailReducer from "./forgotPassword/sendEmailSlice"
 import addressReducer from "./addresses/addressesSlice"
 import LocationReducer from "./addresses/locationSlice"
+import updateProfileReducer from './User/userSlice'
 export {
     navigationReducer,
     loginReducer,
@@ -28,5 +29,6 @@ export {
     ChangePasswordReducer,
     sendEmailReducer,
     addressReducer,
-    LocationReducer
+    LocationReducer,
+    updateProfileReducer
 };
