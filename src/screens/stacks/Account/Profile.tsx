@@ -116,7 +116,7 @@ const Profile: React.FC<Props> = ({ navigation, route }) => {
                 <SettingsCard title="Tài khoản">
                     <NavRow text="Thông tin cá nhân" icon="person-outline" onPress={() => navigation.navigate('editProfile')} />
                     <NavRow text="Địa chỉ đã lưu" icon="location-outline" onPress={() => navigation.navigate('addr', { title: "Địa chỉ đã lưu" })} />
-                    <NavRow text="Phương thức thanh toán" icon="card-outline" onPress={() => { /* cap nhat sau */ }} />
+                    <NavRow text="Phương thức thanh toán" icon="card-outline" onPress={() => navigation.navigate('PaymentMethodsScreen', { title: "Phương thức thanh toán" })} />
                 </SettingsCard>
 
                 <SettingsCard title="Bảo mật">
