@@ -23,7 +23,7 @@ const ONBOARD_DATA = [
     key: "onboard1",
     title: "TẠO NÊN XU HƯỚNG TRENDSETTER",
     description: "",
-    image: require("../../../assets/images/1.jpg"),
+    image: require("../../../assets/images/7.png"),
     showButton: true,
     buttonText: "Bắt Đầu Miễn Phí",
   },
@@ -32,7 +32,7 @@ const ONBOARD_DATA = [
     title: "Tỏa sáng mỗi ngày theo cách của riêng bạn",
     description:
       "Bộ sưu tập thời trang thông minh, cuốn hút và đẳng cấp – khám phá ngay",
-    image: require("../../../assets/images/2.jpg"),
+    image: require("../../../assets/images/5.png"),
     showButton: true,
     buttonText: "Next",
   },
@@ -40,7 +40,7 @@ const ONBOARD_DATA = [
     key: "onboard3",
     title: "Bạn Có Thể Tạo Nên Xu Hướng",
     description: "Có rất nhiều trang phục thời thượng và cuốn hút đang chờ bạn",
-    image: require("../../../assets/images/3.jpg"),
+    image: require("../../../assets/images/6.png"),
     showButton: true,
     buttonText: "Next",
   },
@@ -111,11 +111,7 @@ const Onboarding = ({ navigation, onFinish }) => {
         {index === 0 ? (
           <Text style={styles.logoTitle}>TRENDSETTER</Text>
         ) : (
-          <Image
-            source={item.image}
-            style={styles.image}
-            resizeMode="cover"
-          />
+          <Image source={item.image} style={styles.image} resizeMode="cover" />
         )}
       </View>
       {/* Title & Desc */}
@@ -177,14 +173,31 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: width * 0.95,
     height: height * 0.42,
-    overflow: "hidden",
+    // Không có overflow, không có borderRadius
+  },
+  imageOverlayWrap: {
+    width: "100%",
+    height: "100%",
+    position: "relative",
     borderRadius: 24,
+    overflow: "hidden",
   },
   image: {
     width: "100%",
     height: "100%",
-    borderRadius: 24,
     resizeMode: "cover",
+    // Không có borderRadius
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.18,
+    shadowRadius: 16,
+    elevation: 8,
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "#137547",
+    opacity: 0.35,
+    borderRadius: 24,
   },
   logoImage: {
     width: 120,
