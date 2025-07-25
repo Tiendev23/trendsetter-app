@@ -1,53 +1,37 @@
+import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React from 'react'
+import { ProductsItem } from '../../navigation/NavigationTypes'
+import { IMAGE_NOT_FOUND, Product } from '../../types/Products/products';
+import { getGender } from './ProductItems';
 import { Ionicons } from '@expo/vector-icons';
-import React, { useEffect, useMemo } from 'react';
-import { ActivityIndicator, Dimensions, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-// import { getAllProducts } from '../redux/slices/productSlice';
-import { getAllProducts } from '../../redux/features/product/productsSlice';
-import { AppDispatch, RootState } from '../../redux/store';
 import { formatCurrency } from '../../utils/formatForm';
-import { ProductsItem } from '../../navigation/NavigationTypes';
-import { IMAGE_NOT_FOUND, Product } from '@/types/Products/products';
-import { ProductVariant } from '../../types/Products/productVariant';
+import { FlatList } from 'react-native-gesture-handler';
 
 const { width, height } = Dimensions.get('window');
 const ITEM_WIDTH = Math.round(width * 0.43); // hoặc 0.48
-const ITEM_HEIGHT = Math.round(ITEM_WIDTH * 4 / 3);
-export const getGender = (gender?: string) => {
-    if (gender === 'male') return 'Nam';
-    if (gender === 'female') return 'Nữ';
-    return '';
-};
-
-const ProductItem: React.FC<ProductsItem> = ({ navigation, items }) => {
-
-    const randomFiveItems = useMemo(() => {
-        if (!items || items.length === 0) return [];
-        const shuffled = [...items].sort(() => 0.5 - Math.random());
-        return shuffled.slice(0, 5);
-    }, [items]);
-    // console.log(items);
-
-    const renderProduct = ({ item }: { item: Product }) => {
+const ITEM_HEIGHT = Math.round(ITEM_WIDTH * 4 / 3.3);
+const ProductItemsbyRating: React.FC<ProductsItem> = ({ navigation, items }) => {
+    const renderItem = ({ item }: { item: Product }) => {
         const isUnavailable = item.active === false;
         const gender = getGender(item.gender)
         const ProductName = `${item.name}${gender ? `-${gender}` : ``}`;
+        const firstImage = item.variants[0].images?.[1] || IMAGE_NOT_FOUND;
         // console.log('Category:', item.category?.name);
-        //  console.log('ProductId:',  item._id,);
-        // console.log('VariantId:', item.variants?.[0]?.inventories?.[0]?._id);
+        // console.log('ProductId:', item._id);
+        // console.log('VariantId:',item.variants[0].inventories[0]._id);
+
         return (
             <TouchableOpacity
                 style={[styles.card, isUnavailable && styles.unavailableCard]}
                 onPress={() => {
                     navigation.navigate('ProductDetail', {
-                        category: item.category?.name,
-                        productId: item._id,
-                        variantId: item.variants[0].inventories[0]._id
+                        category: item.category?.name, 
+                        productId: item._id, variantId: item.variants[0].inventories[0]._id
                     });
                 }}
             >
                 <Image
-                    source={{ uri: item.variants?.[0]?.images?.[1] || IMAGE_NOT_FOUND }}
+                    source={{ uri: firstImage || IMAGE_NOT_FOUND }}
                     style={styles.image}
                 />
                 {isUnavailable && (
@@ -58,25 +42,27 @@ const ProductItem: React.FC<ProductsItem> = ({ navigation, items }) => {
                 <TouchableOpacity style={styles.heartIcon}>
                     <Ionicons name="heart-outline" size={24} color="#006340" />
                 </TouchableOpacity>
+
                 <View style={styles.infoContainer}>
-                    <Text numberOfLines={2} style={styles.name}>{ProductName}</Text>
-                </View>
-                <View style={styles.priceAndShip}>
-                    <Text style={styles.price}>{formatCurrency(item.variants?.[0].finalPrice)}</Text>
-                    <View style={styles.shipTag}>
-                        <Ionicons name="rocket-outline" size={14} color="#000" />
-                        <Text style={styles.shipText}>Xpress Ship</Text>
+                    <Text numberOfLines={3} style={styles.name}>{ProductName}</Text>
+                    <View style={styles.priceContainer}>
+                        <View style={styles.shipTag}>
+                            <Ionicons name="rocket-outline" size={14} color="#000" />
+                            <Text style={styles.shipText}>Xpress Ship</Text>
+                        </View>
                     </View>
+
                 </View>
             </TouchableOpacity>
-        );
-    };
+
+        )
+    }
 
     return (
         <View style={styles.product}>
             <FlatList
                 data={items}
-                renderItem={renderProduct}
+                renderItem={renderItem}
                 keyExtractor={(item) => item._id}
                 initialNumToRender={4}
                 maxToRenderPerBatch={5}
@@ -87,17 +73,18 @@ const ProductItem: React.FC<ProductsItem> = ({ navigation, items }) => {
     );
 };
 
-export default ProductItem;
-
+export default ProductItemsbyRating
 const styles = StyleSheet.create({
     card: {
-        width: ITEM_WIDTH,
+        width: ITEM_WIDTH,//179-240
         height: ITEM_HEIGHT,
         backgroundColor: '#f9f9f9',
         borderRadius: 10,
         marginRight: 12,
         overflow: 'hidden',
-        position: 'relative', // để shipTag định vị tuyệt đối theo card
+        position: 'static',
+        boxSizing: 'border-box',
+
     },
     unavailableCard: {
         opacity: 0.6,
@@ -134,30 +121,23 @@ const styles = StyleSheet.create({
     },
     infoContainer: {
         padding: 8,
-        flexDirection: 'column',
+        position: 'relative',
+        height: 70, // hoặc bạn có thể tăng lên nếu tên dài
+        justifyContent: 'space-between',
     },
 
     name: {
         fontSize: 14,
         fontWeight: '500',
         color: '#333',
-        marginBottom: 6,
-    },
 
-    priceAndShip: {
-        position: 'absolute',
-        right: 10,
-        bottom: 10,
-        alignItems: 'flex-end',
     },
-
     price: {
         fontSize: 14,
         fontWeight: 'bold',
         color: '#006340',
-        marginBottom: 4,
+        marginVertical: 4,
     },
-
     shipTag: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -172,13 +152,13 @@ const styles = StyleSheet.create({
     shipText: {
         marginLeft: 4,
         fontSize: 12,
-        color: '#006340',
-    },
+        color: '#006340'
 
+    },
     priceContainer: {
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        alignItems: 'flex-end'
+        position: 'absolute',
+        bottom: 0,
+        right: 10,
     },
     product: {
         marginTop: 10,

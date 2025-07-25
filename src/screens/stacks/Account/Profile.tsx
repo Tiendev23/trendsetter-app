@@ -1,9 +1,13 @@
-import React from 'react';
-import {View,Text,StyleSheet,ScrollView,TouchableOpacity,Switch,} from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Switch, Alert, } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import PasswordConfirmModal from '../../../components/Password/PasswordConfirmModal';
 import { AuthContext } from '../../../contexts/AuthContext';
 import Backnav from '../../../components/Tabbar/Backnav';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../../redux/store';
+import { deleteUser } from '../../../redux/features/User/userSlice';
+import { refresh } from '../../../redux/features/auth/loginSlice';
 
 
 export interface Props {
@@ -58,23 +62,60 @@ const Profile: React.FC<Props> = ({ navigation, route }) => {
     const { title } = route.params || {};
     const [modalVisible, setModalVisible] = React.useState<boolean>(false);
     const { user, logout } = React.useContext(AuthContext);
+    const userId = user._id
+    const dispatch = useDispatch<AppDispatch>();
+    const handleLogout = () => {
+        dispatch(refresh());
+        logout();
+    };
 
     // State giả cho các cài đặt thông báo
     const [promoNotif, setPromoNotif] = React.useState(true);
     const [orderNotif, setOrderNotif] = React.useState(true);
+    const [isDeleting, setIsDeleting] = useState(false);
+
+    const handleDeleteAccount = async () => {
+        Alert.alert(
+            'Xác nhận',
+            'Bạn có chắc muốn xoá tài khoản? Hành động này không thể hoàn tác.',
+            [
+                { text: 'Huỷ', style: 'cancel' },
+                {
+                    text: 'Xoá',
+                    style: 'destructive',
+                    onPress: async () => {
+                        try {
+                            setIsDeleting(true);
+                            await dispatch(deleteUser({ userId })).unwrap();
+                            dispatch(refresh());
+                            navigation.reset({
+                                index: 0,
+                                routes: [{ name: 'Login' }],
+                            });
+                            Alert.alert('Tài khoản đã bị xoá');
+                        } catch (err) {
+                            Alert.alert('Lỗi', err as string);
+                        } finally {
+                            setIsDeleting(false);
+                        }
+                    },
+                },
+            ]
+        );
+    };
 
     return (
         <View style={styles.screen}>
-            <Backnav navigation={navigation} route={route}  />
+            <Backnav navigation={navigation} route={route} />
             <ScrollView
                 style={styles.container}
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{ paddingBottom: 40 }}
             >
- 
+
                 <SettingsCard title="Tài khoản">
                     <NavRow text="Thông tin cá nhân" icon="person-outline" onPress={() => navigation.navigate('editProfile')} />
-                    <NavRow text="Địa chỉ đã lưu" icon="location-outline" onPress={() => navigation.navigate('addr',{title:"Địa chỉ đã lưu"})} />
+                    <NavRow text="Địa chỉ đã lưu" icon="location-outline" onPress={() => navigation.navigate('addr', { title: "Địa chỉ đã lưu" })} />
                     <NavRow text="Phương thức thanh toán" icon="card-outline" onPress={() => { /* cap nhat sau */ }} />
                 </SettingsCard>
 
@@ -96,12 +137,15 @@ const Profile: React.FC<Props> = ({ navigation, route }) => {
                 </SettingsCard>
 
                 <View style={styles.dangerZone}>
-                    <TouchableOpacity style={styles.logoutButton} onPress={logout}>
+                    <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
                         <Text style={styles.logoutButtonText}>Đăng xuất</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => { /* Show delete confirmation */ }}>
-                        <Text style={styles.deleteAccountText}>Xóa tài khoản</Text>
+                    <TouchableOpacity onPress={handleDeleteAccount} disabled={isDeleting}>
+                        <Text style={[styles.deleteAccountText, isDeleting && { opacity: 0.5 }]}>
+                            {isDeleting ? 'Đang xoá...' : 'Xoá tài khoản'}
+                        </Text>
                     </TouchableOpacity>
+
                 </View>
 
             </ScrollView>
@@ -112,7 +156,7 @@ const Profile: React.FC<Props> = ({ navigation, route }) => {
                 onClose={() => setModalVisible(false)}
                 onSuccess={(currentPassword) => {
                     setModalVisible(false);
-                    navigation.navigate('ChangePasswordScreen',{currentPassword});
+                    navigation.navigate('ChangePasswordScreen', { currentPassword });
                 }}
                 onForgotPassword={() => {
                     setModalVisible(false);
@@ -138,7 +182,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         marginHorizontal: 16,
         marginTop: 20,
-        paddingLeft: 16, 
+        paddingLeft: 16,
         overflow: 'hidden',
     },
     cardTitle: {
@@ -159,7 +203,7 @@ const styles = StyleSheet.create({
     },
     navRowIcon: {
         marginRight: 12,
-        width: 24, 
+        width: 24,
         textAlign: 'center',
     },
     navRowText: {
@@ -181,7 +225,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     logoutButtonText: {
-        color: '#FF3B30', 
+        color: '#FF3B30',
         fontSize: 16,
         fontWeight: '600',
     },

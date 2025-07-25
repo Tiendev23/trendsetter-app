@@ -31,10 +31,12 @@ export default function StackNavigator() {
             <Stack.Screen name="ForgotPasswordScreen" component={Stacks.ForgotPasswordScreen} />
             <Stack.Screen name="VerifyOtp" component={Stacks.VerifyOtp} />
             <Stack.Screen name="Chat" component={ChatScreen} />
-            <Stack.Screen name="TermsOfServiceScreen" component={Stacks.TermsOfServiceScreen} />
+            <Stack.Screen name="TermsOfServiceScreen"  component={Stacks.TermsOfServiceScreen} />
             <Stack.Screen name="EditAddress" component={Stacks.EditAddress} />
-            <Stack.Screen name="LocationScreen" component={Stacks.LocationScreen} />
+            <Stack.Screen name="LocationScreen" component={Stacks.LocationScreen}/>
+            <Stack.Screen name="AddAddressScreen" component={Stacks.AddAddressScreen}/>
 
+            
         </Stack.Navigator>
     );
 }

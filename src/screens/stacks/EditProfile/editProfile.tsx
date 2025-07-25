@@ -1,21 +1,29 @@
 import React, { useContext, useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, ScrollView, Alert } from 'react-native';
+import {
+    View, Text, StyleSheet, TextInput, TouchableOpacity, Image, ScrollView, Alert,
+} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { AuthContext } from '../../../contexts/AuthContext';
 import { Ionicons } from '@expo/vector-icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../../redux/store';
+import { updateProfile } from '../../../redux/features/User/userSlice';
 
-
-export default function ProfileEdit({ navigation }) {
-    const { user, setUser } = useContext(AuthContext)
+export default function ProfileEdit({ navigation }:{navigation:any}) {
+    const { user, setUser } = useContext(AuthContext);
 
     const [name, setName] = useState(user?.fullName || '');
-    const [email, setEmail] = useState('');
-    const [gender, setGender] = useState<'male' | 'female'>('male');
-    const [dob, setDob] = useState(new Date(1995, 4, 15));
+    const [gender, setGender] = useState<'male' | 'female'>(
+        user?.gender?.toLowerCase() === 'female' ? 'female' : 'male'
+    );
+    const [dob, setDob] = useState(user?.birthday ? new Date(user.birthday) : new Date());
     const [showDatePicker, setShowDatePicker] = useState(false);
-    const [phone, setPhone] = useState('0123456789');
-    const [avatar, setAvatar] = useState<string | null>(null);
+    const [avatar, setAvatar] = useState<string | null>(user?.avatar || null);
+    console.log('Gender from user:', user?.gender);
+
+    const dispatch = useDispatch<AppDispatch>();
+    const loading = useSelector((state: RootState) => state.user.status);
 
     const handleImagePick = async () => {
         const result = await ImagePicker.launchImageLibraryAsync({
@@ -28,55 +36,86 @@ export default function ProfileEdit({ navigation }) {
             setAvatar(result.assets[0].uri);
         }
     };
-    const handleSave = () => {
+
+    const handleSave = async () => {
         if (!user) return;
 
-        const updatedUser = {
-            ...user,
-            fullName: name,
-            email,
-            gender,
-            dob: dob.toISOString(),
-            phone,
-            avatar,
-            updatedAt: new Date().toISOString(),
-        };
+        const formData = new FormData();
+        formData.append('fullName', name);
+        formData.append('gender', gender);
+        formData.append('birthday', dob.toISOString().split('T')[0]);
 
-        Alert.alert(
-            'Thành công',
-            'Thông tin đã được lưu.',
-            [
-                {
-                    text: 'OK',
-                    onPress: () => navigation.goBack(), 
-                },
-            ],
-        );
+        // Chỉ thêm avatar nếu là ảnh mới chọn
+        if (avatar && avatar.startsWith('file')) {
+            const fileName = avatar.split('/').pop();
+            const match = /\.(\w+)$/.exec(fileName ?? '');
+            const ext = match?.[1] ?? 'jpg';
+            const mime = `image/${ext === 'jpg' ? 'jpeg' : ext}`;
+
+            formData.append('avatar', {
+                uri: avatar,
+                name: fileName,
+                type: mime,
+            } as any);
+        }
+        // for (let pair of formData.entries()) {
+        //     console.log(`${pair[0]}:`, pair[1]);
+        // }
+        try {
+            const resultAction = await dispatch(updateProfile({ userId: user._id, formData }));
+
+            if (updateProfile.fulfilled.match(resultAction)) {
+                const updatedUser = resultAction.payload.user;
+                setUser({ ...user, ...updatedUser });
+
+                Alert.alert('Thành công', 'Thông tin đã được cập nhật.', [
+                    { text: 'OK', onPress: () => navigation.goBack() },
+                ]);
+            } else {
+                const errorMsg = (resultAction.payload as string) || 'Đã xảy ra lỗi';
+                Alert.alert('Lỗi', errorMsg);
+            }
+        } catch (error) {
+            Alert.alert('Lỗi', String(error));
+        }
     };
-   
+
+
     return (
         <ScrollView contentContainerStyle={styles.container}>
             <View style={styles.avatarSection}>
-                <Image source={{ uri: avatar? avatar : 'https://i.pravatar.cc/150' }} style={styles.avatar} />
+                <Image
+                    source={{ uri: avatar || 'https://i.pravatar.cc/150' }}
+                    style={styles.avatar}
+                />
                 <TouchableOpacity style={styles.cameraButton} onPress={handleImagePick}>
                     <Ionicons name="camera-reverse-outline" size={24} color="#FFFFFF" />
                 </TouchableOpacity>
             </View>
 
             <Text style={styles.label}>Họ và tên</Text>
-            <TextInput value={name}
-                onChangeText={setName} style={styles.input} />
+            <TextInput value={name} onChangeText={setName} style={styles.input} />
 
             <Text style={styles.label}>Email</Text>
-            <TextInput value={user.email} onChangeText={setEmail} style={[styles.input, { backgroundColor: '#EEE' }]} keyboardType="email-address" editable={false}
+            <TextInput
+                value={user.email}
+                editable={false}
+                style={[styles.input, { backgroundColor: '#EEE' }]}
+                keyboardType="email-address"
             />
 
             <Text style={styles.label}>Giới tính</Text>
             <View style={styles.genderContainer}>
-                <TouchableOpacity onPress={() => setGender('male')} style={[styles.genderButton, gender === 'male' && styles.genderSelected]}>
+                <TouchableOpacity
+                    onPress={() => setGender('male')}
+                    style={[styles.genderButton, gender === 'male' && styles.genderSelected]}
+                >
                     <Text>Nam</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => setGender('female')} style={[styles.genderButton, gender === 'female' && styles.genderSelected]}>
+                <TouchableOpacity
+                    onPress={() => setGender('female')}
+                    style={[styles.genderButton, gender === 'female' && styles.genderSelected]}
+                >
                     <Text>Nữ</Text>
                 </TouchableOpacity>
             </View>
@@ -97,12 +136,15 @@ export default function ProfileEdit({ navigation }) {
                 />
             )}
 
-            <Text style={styles.label}>Số điện thoại</Text>
-            <TextInput value={phone} onChangeText={setPhone} style={styles.input} keyboardType="phone-pad" />
 
-            <TouchableOpacity style={styles.saveButton}
-                onPress={handleSave}>
-                <Text style={styles.saveText}>Lưu thay đổi</Text>
+            <TouchableOpacity
+                style={[styles.saveButton, loading === 'loading' && { opacity: 0.6 }]}
+                onPress={handleSave}
+                disabled={loading === 'loading'}
+            >
+                <Text style={styles.saveText}>
+                    {loading === 'loading' ? 'Đang lưu...' : 'Lưu thay đổi'}
+                </Text>
             </TouchableOpacity>
         </ScrollView>
     );
@@ -112,18 +154,6 @@ const styles = StyleSheet.create({
     container: {
         padding: 20,
         backgroundColor: '#F8F9FA',
-    },
-    avatar1: {
-        width: 100,
-        height: 100,
-        borderRadius: 50,
-        alignSelf: 'center',
-        marginBottom: 8,
-    },
-    avatarText: {
-        textAlign: 'center',
-        color: '#006340',
-        marginBottom: 20,
     },
     label: {
         marginBottom: 6,
