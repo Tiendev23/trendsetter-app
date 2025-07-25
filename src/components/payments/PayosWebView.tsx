@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { createOrder, refresh as refreshOrder } from '../../redux/features/order/orderSlice';
 import { refresh as refreshPayos } from '../../redux/features/payment/payosSlice';
 import { AuthContext } from '../../contexts/AuthContext';
-import { CreateOrderReq } from '../../types';
+import { CreateOrderReq } from '../../types/models';
 import { CheckoutNav } from '../../navigation/NavigationTypes';
 import { CartContext } from '../../contexts/CartContext';
 

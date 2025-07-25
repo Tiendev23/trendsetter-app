@@ -15,12 +15,20 @@ const ProductItemsbyRating: React.FC<ProductsItem> = ({ navigation, items }) => 
         const isUnavailable = item.active === false;
         const gender = getGender(item.gender)
         const ProductName = `${item.name}${gender ? `-${gender}` : ``}`;
-        const firstImage = item.variants?.[0]?.images?.[0] || IMAGE_NOT_FOUND;
+        const firstImage = item.variants[0].images?.[1] || IMAGE_NOT_FOUND;
+        // console.log('Category:', item.category?.name);
+        // console.log('ProductId:', item._id);
+        // console.log('VariantId:',item.variants[0].inventories[0]._id);
 
         return (
             <TouchableOpacity
                 style={[styles.card, isUnavailable && styles.unavailableCard]}
-                onPress={() => navigation.navigate('ProductDetail', { item })}
+                onPress={() => {
+                    navigation.navigate('ProductDetail', {
+                        category: item.category?.name, 
+                        productId: item._id, variantId: item.variants[0].inventories[0]._id
+                    });
+                }}
             >
                 <Image
                     source={{ uri: firstImage || IMAGE_NOT_FOUND }}
@@ -147,7 +155,7 @@ const styles = StyleSheet.create({
         color: '#006340'
 
     },
-     priceContainer: {
+    priceContainer: {
         position: 'absolute',
         bottom: 0,
         right: 10,

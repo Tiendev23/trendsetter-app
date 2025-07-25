@@ -1,4 +1,4 @@
-import { Addresses } from './../../../types/shippingAddresses';
+import { Addresses } from "@/types/models/shippingAddresses";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import apiClient from "../../../api/apiClient";
 
@@ -10,8 +10,8 @@ type SelectedLocation = {
 };
 type AddressState = {
     addressList: Addresses[];
-    selectedAddress: Addresses | null;  // dùng cho 1 địa chỉ
-    loading: 'idle' | 'loading' | 'succeeded' | 'failed';
+    selectedAddress: Addresses | null; // dùng cho 1 địa chỉ
+    loading: "idle" | "loading" | "succeeded" | "failed";
     error: string | null;
     selectedLocation: SelectedLocation | null;
 };
@@ -31,7 +31,7 @@ export const fetchAddress = createAsyncThunk(
             const res = await apiClient.get(`/users/${_id}/addresses`);
             return res.data;
         } catch (error: any) {
-            return rejectWithValue(error.response?.data?.message)
+            return rejectWithValue(error.response?.data?.message);
         }
     }
 );
@@ -87,7 +87,7 @@ export const createAddress = createAsyncThunk(
 
 // 
 const addressSlice = createSlice({
-    name: 'address',
+    name: "address",
     initialState,
     reducers: {
         setSelectedLocation: (state, action) => {
@@ -97,7 +97,7 @@ const addressSlice = createSlice({
     extraReducers(builder) {
         builder
             .addCase(fetchAddress.pending, (state) => {
-                state.loading = 'loading'
+                state.loading = "loading";
             })
             .addCase(fetchAddress.fulfilled, (state, action) => {
                 state.loading = "succeeded";
@@ -111,7 +111,7 @@ const addressSlice = createSlice({
                 }
             })
             .addCase(fetchAddress.rejected, (state, action) => {
-                state.loading = 'failed';
+                state.loading = "failed";
                 state.error = action.payload as string;
             })
             //remove

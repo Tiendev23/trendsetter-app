@@ -12,8 +12,8 @@ import OrderHistory from "./OrderHistory";
 import ProductlistScreen from "./ProductlistScreen";
 import Profile from "./Account/Profile";
 import OrderStatus from "./Account/OrderStatus";
-import AddressListScreen from "./Account/AddressListScreen"
-import EditAddress from "./EditProfile/EditAddressScreen"
+import AddressListScreen from "./Account/AddressListScreen";
+import EditAddress from "./EditProfile/EditAddressScreen";
 import ProfileEdit from "./EditProfile/editProfile";
 import TermsOfServiceScreen from "./Account/TermsOfServiceScreen";
 import LocationScreen from "./EditProfile/Map/LocationScreen";

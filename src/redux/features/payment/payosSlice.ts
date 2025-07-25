@@ -1,6 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import apiClient from "../../../api/apiClient";
-import { CreateOrderReq, BaseState, PayosCreateRes } from "../../../types";
+import {
+    CreateOrderReq,
+    BaseState,
+    PayosCreateRes,
+} from "../../../types/models";
 
 export const createPayosOrder = createAsyncThunk<
     PayosCreateRes,

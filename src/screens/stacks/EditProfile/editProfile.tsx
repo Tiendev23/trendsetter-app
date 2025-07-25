@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../../redux/store';
 import { updateProfile } from '../../../redux/features/User/userSlice';
 
-export default function ProfileEdit({ navigation }) {
+export default function ProfileEdit({ navigation }:{navigation:any}) {
     const { user, setUser } = useContext(AuthContext);
 
     const [name, setName] = useState(user?.fullName || '');

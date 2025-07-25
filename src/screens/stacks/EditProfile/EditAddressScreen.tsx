@@ -42,7 +42,7 @@ export const LabelValueBox: React.FC<LabelValueProps> = ({ label, value, onChang
     );
 };
 
-const EditAddressScreen = ({ navigation, route }) => {
+const EditAddressScreen = ({ navigation, route }:{navigation:any,route:any}) => {
     const { item, _id } = route.params;
     const [fullName, setFullName] = useState(item.fullName || '');
     const [phone, setPhone] = useState(item.phone || '');

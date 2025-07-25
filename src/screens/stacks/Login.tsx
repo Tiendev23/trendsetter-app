@@ -11,11 +11,11 @@ import ErrorWarnBox from '../../components/ErrorWarnBox';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import ScreenHeader from '../../components/ScreenHeader';
 import { resetPreRoute, setPrevRoute } from '../../redux/features/navigation/navigateSlice';
-import CustomDirectionButton from '../../components/buttons/ChevronButton';
+import ChevronButton from '../../components/buttons/ChevronButton';
 
 export default function Login({ navigation, route }: { navigation: LoginNav; route: LoginRoute }) {
     const { email } = route.params || {};
-    const {setEmail} = useContext(AuthContext)
+    const { setEmail } = useContext(AuthContext)
     const [inputValue, setInputValue] = useState(route.params?.email || '');
     const [password, setPassword] = useState('');
     const [errorMess, setErrorMess] = useState('');
@@ -62,11 +62,18 @@ export default function Login({ navigation, route }: { navigation: LoginNav; rou
                     fontStyle: 'italic'
                 }}
                 leftButton={
-                    <CustomDirectionButton
+                    <ChevronButton
                         direction="back"
                         onPress={() => {
-                            const tabState = prevRoute.state;
+                            const tabState = prevRoute?.state;
                             const activeIndex = tabState?.index ?? 0;
+                            if (!prevRoute || !tabState || !tabState.routes) {
+                                navigation.reset({
+                                    index: 0,
+                                    routes: [{ name: 'Tabs' }],
+                                });
+                                return;
+                            }
                             dispatch(resetPreRoute())
                             navigation.reset({
                                 index: 0,

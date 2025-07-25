@@ -1,13 +1,13 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, View, StyleProp, TextStyle } from 'react-native';
-import CustomDirectionButton from './buttons/ChevronButton';
+import ChevronButton from './buttons/ChevronButton';
 import { useNavigation } from '@react-navigation/native';
 
 type Props = {
     title: string;
     titleStyle?: StyleProp<TextStyle>;
-    rightButton?, leftButton?: React.JSX.Element;
-    // leftButton?: React.JSX.Element;
+    rightButton?: React.JSX.Element;
+    leftButton?: React.JSX.Element;
 };
 
 export default function ScreenHeader({ title, titleStyle, rightButton, leftButton }: Props) {
@@ -23,7 +23,7 @@ export default function ScreenHeader({ title, titleStyle, rightButton, leftButto
             <View style={styles.headerActions}>
                 {
                     leftButton ??
-                    <CustomDirectionButton
+                    <ChevronButton
                         direction="back"
                         onPress={() => navigation.goBack()}
                     />

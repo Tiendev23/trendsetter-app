@@ -2,12 +2,16 @@
     "extends": "expo/tsconfig.base",
     "compilerOptions": {
         "module": "ESNext",
+        "baseUrl": "./src",
+        "paths": {
+            "@/*": ["*"]
+        },
         "strict": true, // Bật toàn bộ các tùy chọn strict bên dưới
-        "strictNullChecks": false, // Phải kiểm tra giá trị có thể `null`/`undefined`
-        "noImplicitAny": false, // Mọi biến phải có kiểu rõ ràng – không được để mặc định là `any`
-        "strictFunctionTypes": false, // Bắt kiểm tra chặt giữa các hàm có tham số và kiểu dữ liệu trả về
-        "strictBindCallApply": true, // Bắt sai kiểu khi gọi `.bind()`, `.call()`, `.apply()`
+        // "strictNullChecks": false, // Phải kiểm tra giá trị có thể `null`/`undefined`
+        // "noImplicitAny": false, // Mọi biến phải có kiểu rõ ràng – không được để mặc định là `any`
+        // "strictFunctionTypes": false, // Bắt kiểm tra chặt giữa các hàm có tham số và kiểu dữ liệu trả về
+        // "strictBindCallApply": true, // Bắt sai kiểu khi gọi `.bind()`, `.call()`, `.apply()`
         "forceConsistentCasingInFileNames": true, // Tránh lỗi không tương thích giữa Windows/Linux
-        "skipLibCheck": true // Giảm thời gian build nếu dùng thư viện nhiều
+        // "skipLibCheck": true // Giảm thời gian build nếu dùng thư viện nhiều
     }
 }

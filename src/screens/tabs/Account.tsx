@@ -6,7 +6,7 @@ import { refresh } from '../../redux/features/auth/loginSlice';
 import { TabsNav } from '../../navigation/NavigationTypes';
 import CustomButton from '../../components/buttons/CustomButton';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import { User } from '../../types';
+import { User } from '../../types/models';
 
 // Dữ liệu cho các mục menu
 const myAccountItems = [
@@ -188,8 +188,6 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
     authLogo: {
-        width: 150,
-        height: 150,
         resizeMode: 'contain',
         marginBottom: 20,
     },

@@ -8,7 +8,7 @@ import { RootState, AppDispatch } from '../../redux/store';
 import eventBus from '../../utils/Evenbus';
 import { formatCurrency } from '../../utils/formatForm';
 import { ProductsItem } from '../../navigation/NavigationTypes';
-import { IMAGE_NOT_FOUND } from '../../types';
+import { IMAGE_NOT_FOUND } from '@/types/Products/products';
 import { Campaign } from '../../types/Campaign';
 
 type WinterBannerProps = {
@@ -32,12 +32,12 @@ const WinterBanner: React.FC<WinterBannerProps> = ({ navigation, items }) => {
     const scrollX = useRef(new Animated.Value(0)).current;
     const [currentIndex, setCurrentIndex] = useState(0);
 
-    const handleMomentumScrollEnd = (event) => {
+    const handleMomentumScrollEnd = (event: { nativeEvent: { contentOffset: { x: number; }; }; }) => {
         const index = Math.round(event.nativeEvent.contentOffset.x / width);
         setCurrentIndex(index);
     };
 
-    const shuffleArray = (array) => {
+    const shuffleArray = (array: Campaign[]) => {
         return [...array].sort(() => Math.random() - 0.5);
     };
 
@@ -78,9 +78,8 @@ const WinterBanner: React.FC<WinterBannerProps> = ({ navigation, items }) => {
                     <Text style={styles.smallText} numberOfLines={1}>{item.title}</Text>
                     <Text style={styles.bigText} numberOfLines={2}>{item.description}</Text>
                     <Text style={styles.smallText} numberOfLines={1}>
-                        {Array.isArray(item.brands)
-                            ? item.brands.map(b => b.name).join(', ')
-                            : item.brands?.name || ''}
+                        {item.brands.map(b => b.name).join(', ')}
+
                     </Text>
 
                 </View>

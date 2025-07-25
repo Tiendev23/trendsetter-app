@@ -1,7 +1,7 @@
 import { ActivityIndicator, FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import { CheckoutNav } from '../../navigation/NavigationTypes';
-import CustomDirectionButton from '../../components/buttons/ChevronButton';
+import ChevronButton from '../../components/buttons/ChevronButton';
 import { CartContext } from '../../contexts/CartContext';
 import { formatCurrency } from '../../utils/formatForm';
 import CustomButton from '../../components/buttons/CustomButton';
@@ -9,7 +9,7 @@ import InfoContainer from '../../components/InfoContainer';
 import { AuthContext } from '../../contexts/AuthContext';
 import OrderDetailsItem from '../../components/listItems/OrderDetail';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { CreateOrderReq } from '../../types';
+import { CreateOrderReq } from '../../types/models';
 import PaymentMethod from '../../components/listItems/PaymentMethod';
 import { fetchAllMethods, refresh as paymentsRefresh, setSelectedMethod } from '../../redux/features/payment/paymentsSlice';
 import Skeleton from '../../components/loaders/Skeleton';
@@ -134,7 +134,7 @@ export default function Checkout({ navigation }: { navigation: CheckoutNav }) {
                                             isHideRadio
                                             disabled
                                         />
-                                        <CustomDirectionButton
+                                        <ChevronButton
                                             direction='forward'
                                             size={18}
                                             color={'#707B81'}

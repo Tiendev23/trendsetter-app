@@ -1,5 +1,6 @@
-import { Brand } from "./brand";
-import { Category } from "./category";
+import { ObjectId } from "./common";
+import { Brand } from "./models";
+import { Category } from "./models";
 import { Product } from "./Products/products";
 
 export type Campaign = {
@@ -15,7 +16,17 @@ export type Campaign = {
   manualOverride: boolean;
   createdAt: string;
   updatedAt: string;
-  products: Product[]; 
+  products: Product[];
   categories: Category[];
-  brands:Brand[];
+  brands: Brand[];
 };
+import { Variant } from "./models";
+import { ProductVariant } from "./Products/productVariant";
+
+
+export interface ProductWithCampaign extends ProductVariant {
+  discountValue: number;
+  discountType: 'percentage' | 'fixed';
+  campaignId: string;
+}
+

@@ -1,6 +1,8 @@
+type Status = "idle" | "loading" | "succeeded" | "failed";
+
 export type BaseState<T = any> = {
     data: T | null;
-    status: "idle" | "loading" | "succeeded" | "failed";
+    status: Status;
     error: string | any | null;
 };
 

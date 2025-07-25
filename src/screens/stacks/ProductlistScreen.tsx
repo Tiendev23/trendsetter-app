@@ -4,13 +4,14 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '../../redux/store';
 import { formatCurrency } from '../../utils/formatForm';
-import CustomDirectionButton from '../../components/buttons/ChevronButton';
+import ChevronButton from '../../components/buttons/ChevronButton';
 import ToCartButton from '../../components/ToCartButton';
 import { getAllProducts } from '../../redux/features/product/productsSlice';
 import eventBus from '../../utils/Evenbus';
 
 const { width } = Dimensions.get("window");
-import { Brand, IMAGE_NOT_FOUND } from '../../types';
+import { Brand } from '../../types';
+import { IMAGE_NOT_FOUND } from '@/types/Products/products';
 import { ProductVariant } from '../../types/Products/productVariant';
 import { Props } from './Account/Profile';
 const getGender = (gender?: string) => {
@@ -89,7 +90,7 @@ const dataToRender: ProductVariant[] = brandId?._id
             <View>
                 <View style={styles.headerContainer} />
                 <View style={styles.headerActions}>
-                    <CustomDirectionButton direction="back" onPress={() => navigation.goBack()} />
+                    <ChevronButton direction="back" onPress={() => navigation.goBack()} />
                     <Text style={styles.headerTitle}>{brandId?.name || title}</Text>
                     <ToCartButton navigation={navigation} />
                 </View>

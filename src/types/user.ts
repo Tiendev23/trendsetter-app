@@ -1,4 +1,4 @@
-import { Addresses } from './shippingAddresses';
+import { Addresses } from "./models/shippingAddresses";
 
 export type User = {
   _id: string;

@@ -1,5 +1,5 @@
-import { Brand } from "../brand";
-import { Category } from "../category";
+import { Brand } from "../models";
+import { Category } from "../models";
 import { Inventory } from "./inventory";
 
 export type ProductInVariant = {

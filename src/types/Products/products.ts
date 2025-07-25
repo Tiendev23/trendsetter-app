@@ -1,5 +1,5 @@
-import { Brand } from "../brand";
-import { Category } from "../category";
+import { Brand } from "../models";
+import { Category } from "../models";
 import { ProductVariant } from "./productVariant";
 
 export type Product = {
@@ -10,7 +10,7 @@ export type Product = {
   gender?: string;
   description?: string;
   active: boolean;
-  variants: ProductVariant;
+  variants: ProductVariant[];
   rating: {
     average: string;
     count: number;

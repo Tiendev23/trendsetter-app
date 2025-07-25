@@ -7,7 +7,7 @@ import { getAllProducts } from '../../redux/features/product/productsSlice';
 import { AppDispatch, RootState } from '../../redux/store';
 import { formatCurrency } from '../../utils/formatForm';
 import { ProductsItem } from '../../navigation/NavigationTypes';
-import { IMAGE_NOT_FOUND } from '../../types';
+import { IMAGE_NOT_FOUND, Product } from '@/types/Products/products';
 import { ProductVariant } from '../../types/Products/productVariant';
 
 const { width, height } = Dimensions.get('window');
@@ -26,52 +26,56 @@ const ProductItem: React.FC<ProductsItem> = ({ navigation, items }) => {
         const shuffled = [...items].sort(() => 0.5 - Math.random());
         return shuffled.slice(0, 5);
     }, [items]);
-    const renderProduct = ({ item }: { item: ProductVariant }) => {
-        const isUnavailable = item.active === false;
-        const gender = getGender(item.product.gender)
-        const ProductName = `${item.product.name}${gender ? `-${gender}` : ``} ${item.color}`;
+    // console.log(items);
 
+    const renderProduct = ({ item }: { item: Product }) => {
+        const isUnavailable = item.active === false;
+        const gender = getGender(item.gender)
+        const ProductName = `${item.name}${gender ? `-${gender}` : ``}`;
+        // console.log('Category:', item.category?.name);
+        //  console.log('ProductId:',  item._id,);
+        // console.log('VariantId:', item.variants?.[0]?.inventories?.[0]?._id);
         return (
-            <TouchableOpacity style={[styles.card, isUnavailable && styles.unavailableCard]} onPress={() => navigation.navigate('ProductDetail', { item })}>
+            <TouchableOpacity
+                style={[styles.card, isUnavailable && styles.unavailableCard]}
+                onPress={() => {
+                    navigation.navigate('ProductDetail', {
+                        category: item.category?.name,
+                        productId: item._id,
+                        variantId: item.variants[0].inventories[0]._id
+                    });
+                }}
+            >
                 <Image
-                    source={{ uri: item.images?.[0] || IMAGE_NOT_FOUND }}
+                    source={{ uri: item.variants?.[0]?.images?.[1] || IMAGE_NOT_FOUND }}
                     style={styles.image}
                 />
-
                 {isUnavailable && (
                     <View style={styles.unavailableOverlay}>
                         <Text style={styles.unavailableText}>Tạm hết hàng</Text>
                     </View>
                 )}
-
                 <TouchableOpacity style={styles.heartIcon}>
                     <Ionicons name="heart-outline" size={24} color="#006340" />
                 </TouchableOpacity>
-
                 <View style={styles.infoContainer}>
                     <Text numberOfLines={2} style={styles.name}>{ProductName}</Text>
                 </View>
-
                 <View style={styles.priceAndShip}>
-                    <Text style={styles.price}>{formatCurrency(item.finalPrice)}</Text>
+                    <Text style={styles.price}>{formatCurrency(item.variants?.[0].finalPrice)}</Text>
                     <View style={styles.shipTag}>
                         <Ionicons name="rocket-outline" size={14} color="#000" />
                         <Text style={styles.shipText}>Xpress Ship</Text>
                     </View>
                 </View>
-
             </TouchableOpacity>
-
-
-
-
-        )
-    }
+        );
+    };
 
     return (
         <View style={styles.product}>
             <FlatList
-                data={randomFiveItems}
+                data={items}
                 renderItem={renderProduct}
                 keyExtractor={(item) => item._id}
                 initialNumToRender={4}

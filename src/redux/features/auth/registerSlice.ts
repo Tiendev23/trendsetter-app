@@ -5,7 +5,7 @@ export const register = createAsyncThunk(
     "user/register",
     async (body: any, { rejectWithValue }) => {
         try {
-            const response = await apiClient.post("/users", body);
+            const response = await apiClient.post("/auth/signup", body);
             console.log("response.data:", response.data);
 
             return response.data;
