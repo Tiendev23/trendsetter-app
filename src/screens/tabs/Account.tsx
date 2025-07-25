@@ -12,8 +12,8 @@ import { User } from '../../types/models';
 const myAccountItems = [
     { id: 'profile', icon: 'user-cog', title: 'Thiết lập tài khoản', screen: 'Profile' },
     { id: 'cart', icon: 'shopping-cart', title: 'Giỏ hàng', screen: 'Cart' },
-    { id: 'favorite', icon: 'heart', title: 'Yêu thích', screen: 'Favorites' },
-    { id: 'wallet', icon: 'wallet', title: 'Ví', screen: 'Wallet' },
+    { id: 'favorite', icon: 'heart', title: 'Yêu thích', screen: 'FavoritesScreen' },
+    { id: 'wallet', icon: 'wallet', title: 'Ví', screen: 'WalletScreen' },
 ];
 
 const appSettingsItems = [
