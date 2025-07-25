@@ -37,7 +37,6 @@ const styles = StyleSheet.create({
     },
     titleText: {
         fontWeight: '600',
-        fontStyle: 'italic',
         fontSize: 20,
         color: '#006340',
         textAlign: 'center',
