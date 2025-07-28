@@ -1,34 +1,38 @@
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { FontAwesome5 } from '@expo/vector-icons';
 import CustomButton from '@/components/buttons/CustomButton';
 import { formatCurrency } from '@/utils/formatForm';
-import { ObjectId, VariantSize } from '@/types';
-import { showSuccessToast } from '@/utils/toast';
+import { CampaignLite, CartItem, CartItemDemo, CartItemLite, ObjectId, VariantSize } from '@/types';
 
 type Props = {
+    product: {
+        _id: ObjectId;
+        campaign: CampaignLite | null;
+        name: string;
+    };
     variant: {
-        id: ObjectId;
-        price: number;
+        _id: ObjectId;
+        color: string;
+        basePrice: number;
+        finalPrice: number;
+        images: string[];
     };
     selectedSize: VariantSize | null;
     onSelectSize: {
         setSelectedSize: (size: VariantSize | null) => void;
         setPaddingBottom: (height: number) => void;
     };
-    onAddToCart: (
-        variantId: ObjectId,
-        sizeId: ObjectId,
-        quantity: number
-    ) => void;
-
+    onAddToCart: (item: CartItem) => void;
 };
 
-export default function PriceDisplay({ variant, selectedSize, onSelectSize, onAddToCart, }: Props) {
+export default function PriceDisplay({ product, variant, selectedSize, onSelectSize, onAddToCart, }: Props) {
     if (!selectedSize) return null;
+    const { _id: productId, campaign, name } = product;
+    const { _id: variantId, color, basePrice, finalPrice, images } = variant
     const { setSelectedSize, setPaddingBottom } = onSelectSize;
     const [quantity, setQuantity] = useState<number>(1);
-    const subtotal = variant.price * quantity;
+    const subtotal = finalPrice * quantity;
 
     return (
         <View
@@ -80,11 +84,21 @@ export default function PriceDisplay({ variant, selectedSize, onSelectSize, onAd
             <CustomButton
                 title="Thêm vào giỏ hàng"
                 onPress={() => {
-                    onAddToCart(variant.id, selectedSize._id, quantity);
-                    setSelectedSize(null);
-                    showSuccessToast({
-                        title: "Đã thêm vào giỏ hàng"
-                    })
+                    onAddToCart({
+                        product: productId,
+                        variant: variantId,
+                        size: {
+                            _id: selectedSize._id,
+                            size: selectedSize.size,
+                        },
+                        campaign: campaign?._id || null,
+                        name,
+                        color,
+                        basePrice,
+                        finalPrice,
+                        imageUrl: images[0],
+                        quantity,
+                    });
                 }}
             />
         </View>

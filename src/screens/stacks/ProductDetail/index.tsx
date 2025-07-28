@@ -35,7 +35,6 @@ export default function ProductDetail({ navigation, route }: { navigation: ProDe
 
     return (
         <View style={styles.container}>
-            {/* header */}
             <ScreenHeader
                 title={category}
                 rightButton={
