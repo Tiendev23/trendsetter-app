@@ -19,7 +19,7 @@ export type Product = {
     __v: number;
 };
 
-export type VariantSize = {
+export interface VariantSize {
     _id: ObjectId; // "686e65c09d70cd16504feead";
     productVariant: ObjectId; // "686e65c09d70cd16504feeab";
     size: string; // "39";
@@ -28,9 +28,9 @@ export type VariantSize = {
     createdAt: string; // "2025-07-09T12:51:12.218Z";
     updatedAt: string; // "2025-07-09T12:51:12.218Z";
     __v?: number; // 0;
-};
+}
 
-export type Variant = {
+export interface Variant {
     _id: ObjectId; // "686e65c09d70cd16504feeab";
     product: ObjectId; // "686e65c09d70cd16504feea9";
     color: string; // "Đen";
@@ -42,7 +42,8 @@ export type Variant = {
     __v?: number; // 0;
     finalPrice: number; // 728000;
     inventories: VariantSize[];
-};
+}
+
 type CategoryLite = Pick<Category, "_id" | "name">;
 
 type BrandLite = Pick<Brand, "_id" | "name">;
@@ -57,7 +58,7 @@ type Rating = {
     count: number;
 };
 
-export type ProductDetails = {
+export interface ProductDetails {
     _id: ObjectId; // "686e65c09d70cd16504feea9";
     category: CategoryLite;
     brand: BrandLite;
@@ -68,10 +69,10 @@ export type ProductDetails = {
     createdAt: string; // "2025-07-09T12:51:12.210Z";
     updatedAt: string; // "2025-07-09T12:51:12.210Z";
     __v?: number; // 0;
-    campaign: CampaignLite;
+    campaign: CampaignLite | null;
     variants: Variant[];
     rating: Rating;
-};
+}
 
 type UserLite = Pick<User, "_id" | "username" | "fullName" | "avatar">;
 
@@ -80,7 +81,7 @@ type OrderDetailLite = Pick<
     "_id" | "productSize" | "productColor"
 >;
 
-export type Review = {
+export interface Review {
     _id: ObjectId;
     user: UserLite;
     orderDetail: OrderDetailLite;
@@ -89,4 +90,4 @@ export type Review = {
     createdAt: string;
     updatedAt: string;
     __v?: number;
-};
+}

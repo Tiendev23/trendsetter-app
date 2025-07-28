@@ -91,7 +91,7 @@ export default function OrderPreview({ order, navigation }: Props) {
                     <View style={{ flex: 1 / 3.25 }}>
                         <CustomButton
                             title='Đánh giá'
-                            outlineStyle
+                            outline
                             onPress={() => { }}
                         />
                     </View>
@@ -101,7 +101,7 @@ export default function OrderPreview({ order, navigation }: Props) {
                     <View style={{ flex: 1 / 3.25 }}>
                         <CustomButton
                             title='Huỷ đơn'
-                            outlineStyle
+                            outline
                             onPress={() => { }}
                         />
                     </View>

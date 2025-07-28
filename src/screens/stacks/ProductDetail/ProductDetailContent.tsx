@@ -1,8 +1,10 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { useEffect, useState } from "react";
+import { Animated, ScrollView, StyleSheet, Text, View } from "react-native";
+import { useEffect, useRef, useState } from "react";
 import { CampaignBanner, DescRender, ImageSlider, PriceDisplay, ReviewHeader, ReviewsRender, SizeSelector, VariantSelector } from "./components";
 import { useCartContext } from "@/contexts/CartContext";
-import { ObjectId, ProductDetails, Review, Variant, VariantSize } from "@/types";
+import { CartItem, ObjectId, ProductDetails, Review, Variant, VariantSize } from "@/types";
+import { Dimensions } from 'react-native';
+const screenHeight = Dimensions.get('window').height;
 
 type Props = {
     product: ProductDetails;
@@ -14,18 +16,60 @@ export default function ProductDetailContent({ product, initialVariantId }: Prop
         variants.find(v => v._id === initialVariantId) || variants[0]
     );
     const [inventories, setInventories] = useState<VariantSize[]>(selectedVariant.inventories);
-    const [selectedSize, setSelectedSize] = useState<ObjectId>('');
+    const [selectedSize, setSelectedSize] = useState<VariantSize | null>(null);
     const { addToCart } = useCartContext();
+    const [paddingBottom, setPaddingBottom] = useState<number>(0);
 
     useEffect(() => {
         setInventories(selectedVariant.inventories);
-        setSelectedSize('');
+        setSelectedSize(null);
     }, [selectedVariant]);
+
+    const scrollRef = useRef<ScrollView>(null);
+    const sizesViewRef = useRef<View>(null);
+
+    function handleSelectVariant(item: Variant) {
+        setSelectedVariant(item);
+        setPaddingBottom(0);
+    }
+
+    function handleSelectVariantSize(item: VariantSize) {
+        if (selectedSize?._id === item._id) {
+            setSelectedSize(null);
+            setPaddingBottom(0);
+        } else {
+            setSelectedSize(item);
+            setTimeout(() => {
+                if (sizesViewRef.current && scrollRef.current) {
+                    /**
+                     *  Đo khoảng cách từ sizesViewRef đến vị trí của scrollView
+                     *  @value x là khoảng cách từ trái của sizesViewRef đến trái của scrollRef
+                     *  @value y là khoảng cách từ trên của sizesViewRef đến trên của scrollRef
+                     *  @value width là chiều rộng của sizesViewRef
+                     *  @value height là chiều cao của sizesViewRef
+                     */
+                    sizesViewRef.current.measureLayout(
+                        scrollRef.current as unknown as View,
+                        (x, y, width, height) => {
+                            const scrollOffset = Math.max(y + (height / 2) - (screenHeight / 2), 0);
+                            scrollRef.current?.scrollTo({ y: scrollOffset, animated: true });
+                        }
+                    );
+                }
+            }, 100);
+        }
+    };
+    
+    function handleAddToCart(item: CartItem) {
+        addToCart(item);
+        setSelectedSize(null);
+        setPaddingBottom(0);
+    };
 
     return (
         <View style={styles.container}>
-            <ScrollView>
-                <View>
+            <Animated.ScrollView ref={scrollRef}>
+                <View style={{ paddingBottom: paddingBottom }}>
                     <View style={styles.sliderWrapper}>
                         <ImageSlider
                             images={selectedVariant.images}
@@ -50,18 +94,21 @@ export default function ProductDetailContent({ product, initialVariantId }: Prop
                             <VariantSelector
                                 data={product.variants}
                                 selectedVariant={selectedVariant}
-                                onSelectVariant={setSelectedVariant}
+                                onSelectVariant={handleSelectVariant}
                             />
                         </View>
 
-                        <View style={styles.contentWrapper}>
+                        <View
+                            ref={sizesViewRef}
+                            style={styles.contentWrapper}
+                        >
                             <Text style={styles.contentLabel}>
-                                Kích thước
+                                Kích cỡ
                             </Text>
                             <SizeSelector
                                 data={inventories}
                                 selectedSize={selectedSize}
-                                onSelectSize={setSelectedSize}
+                                onSelectSize={handleSelectVariantSize}
                             />
                         </View>
                         {
@@ -73,16 +120,17 @@ export default function ProductDetailContent({ product, initialVariantId }: Prop
                         }
                     </View>
                 </View>
-            </ScrollView>
+            </Animated.ScrollView>
 
             <PriceDisplay
-                variant={{
-                    id: selectedVariant._id,
-                    price: selectedVariant.finalPrice,
-                }}
+                product={product}
+                variant={selectedVariant}
                 selectedSize={selectedSize}
-                onSelectSize={setSelectedSize}
-                onAddToCart={addToCart}
+                onSelectSize={{
+                    setSelectedSize: setSelectedSize,
+                    setPaddingBottom: setPaddingBottom
+                }}
+                onAddToCart={handleAddToCart}
             />
         </View >
     )

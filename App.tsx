@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
 import { AppProviders as ContextProvider } from './src/contexts';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { default as AppNavigation } from './src/navigation/StackNavigator';
@@ -21,10 +21,10 @@ const linking = {
 export default function App() {
     return (
         <SafeAreaProvider>
-            <GestureHandlerRootView style={{ flex: 1 }}>
-                <SafeAreaView style={{ flex: 1 }} edges={['top']}>
-                    <ContextProvider>
-                        <Provider store={store}>
+            <Provider store={store}>
+                <ContextProvider>
+                    <GestureHandlerRootView style={{ flex: 1 }}>
+                        <SafeAreaView style={{ flex: 1 }} edges={['top']}>
                             <KeyboardAvoidingView
                                 style={{ flex: 1 }}
                                 behavior={'padding'}
@@ -35,10 +35,10 @@ export default function App() {
                                     <Toast />
                                 </NavigationContainer>
                             </KeyboardAvoidingView>
-                        </Provider>
-                    </ContextProvider>
-                </SafeAreaView>
-            </GestureHandlerRootView>
-        </SafeAreaProvider >
+                        </SafeAreaView>
+                    </GestureHandlerRootView>
+                </ContextProvider>
+            </Provider>
+        </SafeAreaProvider>
     );
 }

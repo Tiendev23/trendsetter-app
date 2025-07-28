@@ -16,6 +16,8 @@ import LocationReducer from "./addresses/locationSlice"
 import updateProfileReducer from './User/userSlice'
 
 export { default as reviewReducer } from "./product/reviewsSlice";
+export { default as cartsReducer } from "./cart/cartsSlice";
+export { default as cartReducer } from "./cart/cartSlice";
 
 export {
     navigationReducer,
