@@ -75,11 +75,11 @@ export default function PayosWebView({ navigation, orderData, setPaymentStatus, 
         setUrlResult(url);
         if (isPaid) return
         if (url.includes('/succeeded')) {
-            cart.clearCart();
+            cart.clearAllItems();
             setPaid(true);
             createOrderWithStatus(true);
         } else if (url.includes('/cancelled')) {
-            cart.clearCart();
+            cart.clearAllItems();
             setPaid(true);
             createOrderWithStatus(false);
         }
