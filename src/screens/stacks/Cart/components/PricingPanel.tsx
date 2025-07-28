@@ -6,16 +6,17 @@ import { CartNav } from '@/navigation/NavigationTypes';
 import { CartItem } from '@/types';
 
 type Props = {
+    invisible: boolean;
     checkedItems: CartItem[];
     onBuying: () => void;
 };
 
-export default function PricingPanel({ checkedItems, onBuying }: Props) {
-    if (checkedItems.length == 0) return null;
+export default function PricingPanel({ invisible, checkedItems, onBuying }: Props) {
+    if (invisible) return null;
 
     const subtotal = checkedItems.reduce((subtotal, item) =>
         subtotal + (item.finalPrice * item.quantity), 0);
-    
+
     return (
         <View style={styles.pricingPanel}>
             <View style={styles.priceWrapper}>

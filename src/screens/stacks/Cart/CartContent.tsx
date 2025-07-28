@@ -37,7 +37,6 @@ export default function CartContent({ navigation, cartContext, isEditable, user,
 
     function handleDeleteItem(sizeId: ObjectId) {
         cart.removeItem(sizeId);
-        toggleCheckItem(sizeId);
     };
 
     function toggleCheckItem(sizeId: ObjectId) {
@@ -78,6 +77,9 @@ export default function CartContent({ navigation, cartContext, isEditable, user,
         }
     };
 
+    const isCartEmpty = cart.items.length === 0;
+    const isCheckedEmpty = checkedItems.length === 0;
+
     return (
         <View style={styles.container}>
             <CartItemsRender
@@ -88,10 +90,11 @@ export default function CartContent({ navigation, cartContext, isEditable, user,
                 onUpdateItem={handleUpdateItem}
                 onDeleteItem={handleDeleteItem}
             />
+
             {
                 isEditable ?
                     <DeletionCountPanel
-                        isEmpty={cart.items.length == 0}
+                        invisible={isCartEmpty}
                         checkedIds={checkedIds}
                         isCheckedAll={isCheckedAll}
                         onCheckedAll={toggleCheckAll}
@@ -99,6 +102,7 @@ export default function CartContent({ navigation, cartContext, isEditable, user,
                     />
                     :
                     <PricingPanel
+                        invisible={isCartEmpty || isCheckedEmpty}
                         checkedItems={checkedItems}
                         onBuying={handleOnBuying}
                     />

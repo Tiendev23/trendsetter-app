@@ -6,15 +6,15 @@ import { showInfoToast } from '@/utils/toast';
 import { FontAwesome5 } from '@expo/vector-icons';
 
 type Props = {
-    isEmpty: boolean;
+    invisible: boolean;
     checkedIds: ObjectId[];
     isCheckedAll: boolean;
     onCheckedAll: () => void;
     onDeleting: () => void;
 };
 
-export default function DeletionCountPanel({ isEmpty, checkedIds, isCheckedAll, onCheckedAll, onDeleting }: Props) {
-    if (isEmpty) return null;
+export default function DeletionCountPanel({ invisible, checkedIds, isCheckedAll, onCheckedAll, onDeleting }: Props) {
+    if (invisible) return null;
     const buttonStyle = isCheckedAll ? styles.checked : styles.unchecked;
 
     const DeletionHandler = () => {
