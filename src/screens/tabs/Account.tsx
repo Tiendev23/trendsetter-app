@@ -1,12 +1,13 @@
 import React, { useContext } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native';
-import { AuthContext, } from '../../contexts/AuthContext';
+import { AuthContext, useAuthContext, } from '../../contexts/AuthContext';
 import { useAppDispatch } from '../../redux/hooks';
 import { refresh } from '../../redux/features/auth/loginSlice';
 import { TabsNav } from '../../navigation/NavigationTypes';
 import CustomButton from '../../components/buttons/CustomButton';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { User } from '../../types/models';
+import { useCartContext } from '@/contexts/CartContext';
 
 // Dữ liệu cho các mục menu
 const myAccountItems = [
@@ -98,12 +99,14 @@ const MenuSection = ({ title, items, onItemPress, hideTitle = false }: {
 
 
 export default function AccountScreen({ navigation }: { navigation: TabsNav }) {
-    const { user, logout } = useContext(AuthContext);
+    const { user, logout } = useAuthContext();
+    const { clearAllItems: clearCart } = useCartContext();
     const dispatch = useAppDispatch();
 
     const handleLogout = () => {
         dispatch(refresh());
         logout();
+        clearCart();
     };
 
     const handleNavigation = (item: { screen: string | null, title?: string }) => {
@@ -153,7 +156,7 @@ export default function AccountScreen({ navigation }: { navigation: TabsNav }) {
             </Text>
             <View style={styles.authButtonContainer}>
                 <CustomButton title='Đăng ký' onPress={() => navigation.navigate('SignUp')} />
-                <CustomButton title='Đăng nhập' outlineStyle onPress={() => navigation.navigate('Login')} />
+                <CustomButton title='Đăng nhập' outline onPress={() => navigation.navigate('Login')} />
             </View>
         </View>
     );
