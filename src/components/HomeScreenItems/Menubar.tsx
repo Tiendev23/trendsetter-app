@@ -6,10 +6,11 @@ import { BannerItem } from '../../navigation/NavigationTypes';
 
 
 const Menubar: React.FC<BannerItem> = ({ navigation, brands }) => {
-    const renderItem = ({ item }) => {
+    const renderItem = ({ item }:{item:any}) => {
         return (
             <TouchableOpacity style={[styles.menuItem, { backgroundColor: '#111' }]}
                 onPress={() => {
+                    
                     navigation.navigate('ProductlistScreen', { brandId: item })
                 }}>
                 <ImageBackground

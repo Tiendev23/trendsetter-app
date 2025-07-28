@@ -1,27 +1,65 @@
 import { useNavigation } from '@react-navigation/native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Image, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View, ActivityIndicator } from 'react-native'
 import WinterBanner from '../../components/HomeScreenItems/Banner'
 import Menubar from '../../components/HomeScreenItems/Menubar'
 import ProductItem from '../../components/HomeScreenItems/ProductItems'
 import { HomeNav, TabsNav } from '../../navigation/NavigationTypes'
 import eventBus from '../../utils/Evenbus'
-import { getAllProducts, getBrand } from '../../redux/features/product/productsSlice'
+import { getAllProducts, getAllRating, getBrand, getCampaigns } from '../../redux/features/product/productsSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../../redux/store'
 import ScreenHeader from '../../components/ScreenHeader'
 import ToCartButton from '../../components/ToCartButton'
+import ProductItemsbyRating from '../../components/HomeScreenItems/ProductItemsbyRating'
+import { FlatList } from 'react-native-gesture-handler'
+import { Campaign, ProductWithCampaign } from '../../types/Campaign'
+export const useCampaignProducts = (): ProductWithCampaign[] => {
+    const campaigns = useSelector((state: RootState) => state.products.campaigns);
+    const variants = useSelector((state: RootState) => state.products.items);
+
+    // Sử dụng Map để đảm bảo mỗi sản phẩm chỉ xuất hiện một lần
+    const matchedVariantsMap = new Map<string, ProductWithCampaign>();
+
+    campaigns.forEach((campaign) => {
+        const matched = variants.filter((variant) => {
+            const matchByBrand = campaign.brands?.some((b) => b._id === variant.product?.brand?._id);
+            const matchByCategory = campaign.categories?.some((c) => c._id === variant.product?.category?._id);
+            const matchByProduct = campaign.products?.some((p) => p._id === variant.product?._id);
+
+            return matchByBrand || matchByCategory || matchByProduct;
+        });
+
+        matched.forEach((v) => {
+            // Dùng ID của variant làm key cho Map.
+            // Nếu một sản phẩm đã có trong Map, nó sẽ được ghi đè.
+            matchedVariantsMap.set(v._id, {
+                ...v,
+                discountValue: campaign.value,
+                discountType:
+                    campaign.type === 'percentage' || campaign.type === 'fixed'
+                        ? campaign.type
+                        : 'percentage',
+                campaignId: campaign._id,
+            });
+        });
+    });
+
+    // Chuyển Map về lại thành mảng
+    return Array.from(matchedVariantsMap.values());
+};
 
 
-export default function HomeScreen({ navigation }) {
+export default function HomeScreen({ navigation }: { navigation: any }) {
     const tabNav = useNavigation<HomeNav>();
     const stackNav = useNavigation<TabsNav>();
     const [refreshing, setRefreshing] = useState(false);
-    const { items, loading, error, brands, brandLoading } = useSelector((state: RootState) => state.products);
+    const { items, loading, error, brands, brandLoading, productsRatingLoading, productsRating, campaignsLoading, campaigns } = useSelector((state: RootState) => state.products);
     //rootstate
     const isLoading = loading === 'loading' || brandLoading === 'loading'
     const isFailed = loading === 'failed' || brandLoading === 'failed';
     const errorMassage = loading === 'failed' ? error : brandLoading === 'failed' ? "lỗi tải brand" : null
+    const campaignProducts = useCampaignProducts();
 
     //api
     const dispatch = useDispatch<AppDispatch>();
@@ -31,7 +69,11 @@ export default function HomeScreen({ navigation }) {
         dispatch(getAllProducts());
         //api brand
         dispatch(getBrand());
+        dispatch(getCampaigns());
+
+        dispatch(getAllRating());
     }, [dispatch]);
+
     // refreshing 
     const onRefresh = () => {
         setRefreshing(true);
@@ -39,7 +81,6 @@ export default function HomeScreen({ navigation }) {
         dispatch(getAllProducts()).finally(() => setRefreshing(false));
     }
     // rootstate product
-
 
 
     return (
@@ -87,7 +128,7 @@ export default function HomeScreen({ navigation }) {
                     </View>
                 ) : (!refreshing && (
                     <>
-                        <WinterBanner navigation={stackNav} items={items} />
+                        <WinterBanner navigation={stackNav} items={campaigns} />
                         <View style={styles.recommend}>
                             <Text style={styles.textRecommend}>Gợi Ý Cho Bạn</Text>
                             <TouchableOpacity
@@ -99,7 +140,7 @@ export default function HomeScreen({ navigation }) {
                             </TouchableOpacity>
                         </View>
                         {/* Flatlist Product */}
-                        <ProductItem navigation={stackNav} items={items} />
+                        <ProductItem navigation={stackNav} items={productsRating} />
 
                         <View style={styles.recommend}>
                             <Text style={styles.textRecommend}>Thương hiệu yêu thích </Text>
@@ -115,7 +156,7 @@ export default function HomeScreen({ navigation }) {
                                 <Text style={styles.textRecommend}>Xem Thêm</Text>
                             </TouchableOpacity>
                         </View>
-                        <ProductItem navigation={stackNav} items={items} />
+                        <ProductItemsbyRating navigation={stackNav} items={productsRating} />
                         <View style={styles.recommend}>
                             <Text style={styles.textRecommend}>Sản phẩm tiêu biểu</Text>
                             <TouchableOpacity
@@ -126,8 +167,8 @@ export default function HomeScreen({ navigation }) {
                                 <Text style={styles.textRecommend}>Xem Thêm</Text>
                             </TouchableOpacity>
                         </View>
-                        <ProductItem navigation={stackNav} items={items} />
-                        <WinterBanner navigation={stackNav} items={items} />
+                        <ProductItem navigation={stackNav} items={productsRating} />
+                        <WinterBanner navigation={stackNav} items={campaigns} />
                         <View style={styles.recommend}>
                             <Text style={styles.textRecommend}>Sản Phẩm giảm giá</Text>
                             <TouchableOpacity
@@ -138,12 +179,17 @@ export default function HomeScreen({ navigation }) {
                                 <Text style={styles.textRecommend}>Xem Thêm</Text>
                             </TouchableOpacity>
                         </View>
-                        <ProductItem navigation={stackNav} items={items} />
+                        <ProductItem
+                            navigation={stackNav}
+                            items={
+                                productsRating
+                            }
+                        />
+
+
+
                     </>
                 ))}
-
-
-
 
 
             </ScrollView >

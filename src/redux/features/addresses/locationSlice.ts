@@ -21,6 +21,7 @@ const initialState: LocationState = {
     loadingDistricts: false,
     loadingWards: false,
     error: null,
+    
 }
 
 // lấy danh sách tỉnh

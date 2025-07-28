@@ -10,9 +10,11 @@ import zalopayReducer from "./payment/zalopaySlice";
 import payosReducer from "./payment/payosSlice";
 import categoriesReducer from "./category/categoriesSlice";
 import ChangePasswordReducer from "./auth/ChangePassword";
-import sendEmailReducer from "./forgotPassword/sendEmailSlice";
-import addressReducer from "./addresses/addressesSlice";
-import LocationReducer from "./addresses/locationSlice";
+import sendEmailReducer from "./forgotPassword/sendEmailSlice"
+import addressReducer from "./addresses/addressesSlice"
+import LocationReducer from "./addresses/locationSlice"
+import updateProfileReducer from './User/userSlice'
+
 export { default as reviewReducer } from "./product/reviewsSlice";
 export { default as cartsReducer } from "./cart/cartsSlice";
 export { default as cartReducer } from "./cart/cartSlice";
@@ -33,4 +35,5 @@ export {
     sendEmailReducer,
     addressReducer,
     LocationReducer,
+    updateProfileReducer
 };

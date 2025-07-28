@@ -8,10 +8,15 @@ import { RootState, AppDispatch } from '../../redux/store';
 import eventBus from '../../utils/Evenbus';
 import { formatCurrency } from '../../utils/formatForm';
 import { ProductsItem } from '../../navigation/NavigationTypes';
-import { IMAGE_NOT_FOUND } from '../../types/models';
+import { IMAGE_NOT_FOUND } from '@/types/Products/products';
+import { Campaign } from '../../types/Campaign';
 
+type WinterBannerProps = {
+    navigation: any;
+    items: Campaign[];
+};
 const { width } = Dimensions.get('window');
-const WinterBanner: React.FC<ProductsItem> = ({ navigation, items }) => {
+const WinterBanner: React.FC<WinterBannerProps> = ({ navigation, items }) => {
     const flatListRef = useRef<FlatList>(null);
     // // refeshing
     // useEffect(() => {
@@ -27,17 +32,18 @@ const WinterBanner: React.FC<ProductsItem> = ({ navigation, items }) => {
     const scrollX = useRef(new Animated.Value(0)).current;
     const [currentIndex, setCurrentIndex] = useState(0);
 
-    const handleMomentumScrollEnd = (event) => {
+    const handleMomentumScrollEnd = (event: { nativeEvent: { contentOffset: { x: number; }; }; }) => {
         const index = Math.round(event.nativeEvent.contentOffset.x / width);
         setCurrentIndex(index);
     };
 
-    const shuffleArray = (array) => {
+    const shuffleArray = (array: Campaign[]) => {
         return [...array].sort(() => Math.random() - 0.5);
     };
 
 
     const shuffledItems = useMemo(() => shuffleArray(items), [items]);
+
     // const shuffledItems = useMemo(() => {
     //     const filtered = items.filter(item => item.banner); // lọc trước
     //     return shuffleArray(filtered);
@@ -60,24 +66,27 @@ const WinterBanner: React.FC<ProductsItem> = ({ navigation, items }) => {
 
 
 
-    const BannerItem = ({ item }) => {
+    const BannerItem = ({ item }: { item: Campaign }) => {
+
         return (
             <ImageBackground
-                source={{ uri: item.banner || IMAGE_NOT_FOUND }}
+                source={{ uri: item.imageUrl || IMAGE_NOT_FOUND }}
                 style={styles.bannerItem}
                 imageStyle={{ borderRadius: 12, resizeMode: 'cover', opacity: 0.9 }}
             >
                 <View style={styles.textContainer}>
-                    <Text style={styles.smallText} numberOfLines={1}>{item.name}</Text>
-                    <Text style={styles.bigText} numberOfLines={1}>{formatCurrency(item.price)}</Text>
-                    <Text style={styles.smallText} numberOfLines={1}>{item.description}</Text>
+                    <Text style={styles.smallText} numberOfLines={1}>{item.title}</Text>
+                    <Text style={styles.bigText} numberOfLines={2}>{item.description}</Text>
+                    <Text style={styles.smallText} numberOfLines={1}>
+                        {item.brands.map(b => b.name).join(', ')}
+
+                    </Text>
 
                 </View>
 
-
                 <TouchableOpacity
                     style={styles.button}
-                    onPress={() => navigation.navigate('ProductDetail', { item })}
+                    onPress={() => navigation.navigate('CampaignDetail', { item })}
                 >
                     <Text style={styles.buttonText}>Xem ngay</Text>
                 </TouchableOpacity>

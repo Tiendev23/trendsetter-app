@@ -13,12 +13,12 @@ export interface Props {
     route?: any;
 }
 
-const AddressCard = ({ address, onEdit }: { address: Addresses, onEdit: (_id: string,) => void }) => {
+const AddressCard = ({ address, onEdit }: { address: Addresses, onEdit: () => void }) => {
     const fullAddress: string = `${address.streetDetails}, ${address.ward}, ${address.district}, ${address.city}`;
 
     return (
         <View style={styles.card}>
-            <TouchableOpacity style={styles.editButton} onPress={() => onEdit(address._id)}>
+            <TouchableOpacity style={styles.editButton} onPress={onEdit}>
                 <Text style={styles.editButtonText}>Sửa</Text>
             </TouchableOpacity>
             <View style={styles.cardHeader}>
@@ -72,17 +72,16 @@ const AddressListScreen: React.FC<Props> = ({ navigation, route }) => {
 
         return unsubscribe; // cleanup khi component unmount
     }, [navigation]);
-    const handleEditAddress = (addressId: string) => {
-        navigation.navigate('EditAddress', { addressId, userId: user._id });
+    const handleEditAddress = (item: Addresses) => {
+        navigation.navigate('EditAddress', { item, _id: user._id });
     };
-
     const handleAddAddress = () => {
-        navigation.navigate(/** them sau */);
+        navigation.navigate('AddAddressScreen', { _id: user._id });
         console.log('Add new address');
     };
 
-    const renderAddress = ({ item }: { item: Addresses }) => (
-        <AddressCard address={item} onEdit={handleEditAddress} />
+    const renderAddress = ({ item }) => (
+        <AddressCard address={item} onEdit={() => handleEditAddress(item)} />
     );
 
     return (

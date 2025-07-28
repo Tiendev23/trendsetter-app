@@ -16,7 +16,11 @@ import AddressListScreen from "./Account/AddressListScreen";
 import EditAddress from "./EditProfile/EditAddressScreen";
 import ProfileEdit from "./EditProfile/editProfile";
 import TermsOfServiceScreen from "./Account/TermsOfServiceScreen";
-import LocationScreen from "./EditProfile/LocationScreen";
+import LocationScreen from "./EditProfile/Map/LocationScreen";
+import AddAddressScreen from "./EditProfile/AddAddressScreen";
+import FavoritesScreen from "../stacks/Account/FavoritesScreen";
+import WalletScreen from '../stacks/Account/WalletScreen'
+import PaymentMethodsScreen from "./Account/PaymentMethodsScreen";
 export {
     ForgotPasswordScreen,
     ChangePasswordScreen,
@@ -36,4 +40,8 @@ export {
     TermsOfServiceScreen,
     EditAddress,
     LocationScreen,
+    AddAddressScreen,
+    FavoritesScreen,
+    WalletScreen,
+    PaymentMethodsScreen
 };

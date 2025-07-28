@@ -18,6 +18,7 @@ export const store = configureStore({
         changePass: Reducer.ChangePasswordReducer,
         address: Reducer.addressReducer,
         location: Reducer.LocationReducer,
+        user: Reducer.updateProfileReducer,
         reviews: Reducer.reviewReducer,
         carts: Reducer.cartsReducer,
         cart: Reducer.cartReducer,

@@ -13,8 +13,8 @@ import { useCartContext } from '@/contexts/CartContext';
 const myAccountItems = [
     { id: 'profile', icon: 'user-cog', title: 'Thiết lập tài khoản', screen: 'Profile' },
     { id: 'cart', icon: 'shopping-cart', title: 'Giỏ hàng', screen: 'Cart' },
-    { id: 'favorite', icon: 'heart', title: 'Yêu thích', screen: 'Favorites' },
-    { id: 'wallet', icon: 'wallet', title: 'Ví', screen: 'Wallet' },
+    { id: 'favorite', icon: 'heart', title: 'Yêu thích', screen: 'FavoritesScreen' },
+    { id: 'wallet', icon: 'wallet', title: 'Ví', screen: 'WalletScreen' },
 ];
 
 const appSettingsItems = [
@@ -32,18 +32,30 @@ const purchaseItems = [
 // --- REUSABLE LOCAL COMPONENTS ---
 // Component con chỉ dùng trong file này
 
-const UserProfileHeader = ({ user }: { user: User }) => (
-    <View style={styles.headerContainer}>
-        <Image
-            source={{ uri: user.avatar }}
-            style={styles.headerAvatar}
-        />
-        <View>
-            <Text style={styles.headerUserName}>{user.fullName}</Text>
-            <Text style={styles.headerUserSubtitle}>{user.role}</Text>
+const UserProfileHeader = ({ user }: { user: User }) => {
+    const getRole = (role: string) => {
+        switch (role) {
+            case 'admin':
+                return 'Quản trị viên'
+            case 'customer':
+                return 'Thành viên'
+        }
+    }
+    return (
+        <View style={styles.headerContainer}>
+            <Image
+                source={user?.avatar ? { uri: user.avatar } : { uri: 'https://i.pravatar.cc/150' }}
+                style={styles.headerAvatar}
+            />
+            <View>
+                <Text style={styles.headerUserName}>{user.fullName}</Text>
+                <Text style={styles.headerUserSubtitle}>{getRole(user.role)}</Text>
+            </View>
         </View>
-    </View>
-);
+    )
+}
+
+
 
 const MyPurchasesSection = ({ onViewAll }: { onViewAll: () => void }) => (
     <View style={styles.purchasesContainer}>

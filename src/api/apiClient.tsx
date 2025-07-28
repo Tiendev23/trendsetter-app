@@ -4,7 +4,9 @@ import Toast from 'react-native-toast-message';
 import { showSuccessToast } from '../utils/toast';
 import * as Storage from '@/services/asyncStorage.service';
 
-const API_URL = 'https://trendsetter-backend.onrender.com/api';
+//const API_URL = 'https://trendsetter-backend.onrender.com/api';
+const API_URL = 'http://192.168.2.7:5000/api';
+
 /** localhost:5000 cho máy ảo
  *  <IPv4 Address>:5000 khi chạy máy thật
  */
@@ -40,6 +42,9 @@ apiClient.interceptors.request.use(async (config) => {
     const token = await Storage.getItem('@token');
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
+    }
+      if (config.data instanceof FormData) {
+        config.headers['Content-Type'] = 'multipart/form-data';
     }
     return config;
 });

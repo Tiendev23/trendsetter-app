@@ -1,18 +1,31 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import apiClient from '../../../api/apiClient';
+import { ProductVariant } from "@/types/Products/productVariant";
+import { Campaign } from "@/types/Campaign";
 
 export const getAllProducts = createAsyncThunk(
     'products/getAll',
     async (_, { rejectWithValue }) => {
         try {
-            const res = await apiClient.get('products');
+            const res = await apiClient.get('variants');
             return res.data;
         } catch (err: any) {
             return rejectWithValue(err.response?.data?.message || 'Lỗi gọi API');
         }
     }
-);
 
+);
+export const getAllRating = createAsyncThunk(
+    'products/getRatting',
+    async (_, { rejectWithValue }) => {
+        try {
+            const res = await apiClient.get('products');
+            return res.data;
+        } catch (err: any) {
+            return rejectWithValue(err.response?.data?.message || 'Lỗi gọi API sản phẩm');
+        }
+    }
+);
 
 export const getBrand = createAsyncThunk(
     'brand/getBrand',
@@ -25,26 +38,53 @@ export const getBrand = createAsyncThunk(
         }
     }
 )
+
+export const getCampaigns = createAsyncThunk(
+    'campaigns/getAll',
+    async (_, { rejectWithValue }) => {
+        try {
+            const res = await apiClient.get('campaigns');
+            return res.data;
+        } catch (err: any) {
+            return rejectWithValue(err.response?.data?.message || 'Lỗi gọi API chiến dịch');
+        }
+    }
+);
+type ProductsState = {
+    items: ProductVariant[];
+    loading: "idle" | "loading" | "succeeded" | "failed";
+    error: string | null;
+    brands: ProductVariant[];
+    brandLoading: "idle" | "loading" | "succeeded" | "failed";
+    filteredItems: any[];
+    selectedBrand: string | null;
+    productsRating: ProductVariant[];
+    productsRatingLoading: "idle" | "loading" | "succeeded" | "failed";
+    campaigns: Campaign[];
+    campaignsLoading: "idle" | "loading" | "succeeded" | "failed";
+};
+
+const initialState: ProductsState = {
+    items: [],
+    loading: "idle",
+    error: null,
+    brands: [],
+    brandLoading: "idle",
+    filteredItems: [],
+    selectedBrand: null,
+    productsRating: [],
+    productsRatingLoading: "idle",
+    campaigns: [],
+    campaignsLoading: "idle",
+};
 const productsSlice = createSlice({
     name: 'products',
-    initialState: {
-        // trang thái all product
-        items: [],
-        loading: "idle",
-        error: null,
-        // trang thái brand
-        brands: [],
-        brandLoading: 'idle',
-        // productbyid
-        filteredItems: [],
-        selectedBrand: null,
-
-    },
+    initialState,
     reducers: {
         setSelectedBrand: (state, action) => {
             state.selectedBrand = action.payload;
             state.filteredItems = action.payload
-                ? state.items.filter((p) => p.brand === action.payload)
+                ? state.items.filter((p) => p.product.brand._id === action.payload)
                 : state.items;
         }
     }, // nếu cần xử lý thêm (xóa sp, v.v.)
@@ -62,7 +102,7 @@ const productsSlice = createSlice({
             })
             .addCase(getAllProducts.rejected, (state, action) => {
                 state.loading = 'failed';
-                state.error = action.payload || 'Đã xảy ra lỗi';
+                state.error = action.payload as string;
             });
         builder
             .addCase(getBrand.pending, (state) => {
@@ -74,9 +114,32 @@ const productsSlice = createSlice({
             })
             .addCase(getBrand.rejected, (state, action) => {
                 state.brandLoading = 'failed';
-                state.error = action.payload || 'Đã xảy ra lỗi';
+                state.error = action.payload as string;
             });
-
+        builder
+            .addCase(getAllRating.pending, (state) => {
+                state.productsRatingLoading = 'loading';
+            })
+            .addCase(getAllRating.fulfilled, (state, action) => {
+                state.productsRatingLoading = 'succeeded';
+                state.productsRating = action.payload;
+            })
+            .addCase(getAllRating.rejected, (state, action) => {
+                state.productsRatingLoading = 'failed';
+                state.error = action.payload as string;
+            });
+        builder
+            .addCase(getCampaigns.pending, (state) => {
+                state.campaignsLoading = 'loading';
+            })
+            .addCase(getCampaigns.fulfilled, (state, action) => {
+                state.campaignsLoading = 'succeeded';
+                state.campaigns = action.payload;
+            })
+            .addCase(getCampaigns.rejected, (state, action) => {
+                state.campaignsLoading = 'failed';
+                state.error = action.payload as string;
+            });
 
 
     },
