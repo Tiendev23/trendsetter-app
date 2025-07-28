@@ -1,12 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import apiClient from "@/api/apiClient";
-import { BaseState, ErrorResponse, ObjectId, Review } from "@/types";
+import { BaseState, APIError, ObjectId, Review } from "@/types";
 import { AxiosError } from "axios";
 
 export const fetchReviewsByProductId = createAsyncThunk<
     Review[], // kiểu dữ liệu khi thành công
     ObjectId, // kiểu dữ liệu truyền vào (nếu có)
-    { rejectValue: ErrorResponse } // kiểu dữ liệu khi thất bại
+    { rejectValue: APIError } // kiểu dữ liệu khi thất bại
 >("reviews/fetchByProduct", async (productId, { rejectWithValue }) => {
     try {
         const response = await apiClient.get(`/products/${productId}/reviews`);

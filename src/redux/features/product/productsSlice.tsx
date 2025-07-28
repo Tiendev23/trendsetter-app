@@ -8,8 +8,6 @@ export const getAllProducts = createAsyncThunk(
             const res = await apiClient.get('products');
             return res.data;
         } catch (err: any) {
-            console.log("error", err);
-
             return rejectWithValue(err.response?.data?.message || 'Lỗi gọi API');
         }
     }

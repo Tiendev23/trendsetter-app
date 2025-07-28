@@ -14,6 +14,8 @@ import sendEmailReducer from "./forgotPassword/sendEmailSlice";
 import addressReducer from "./addresses/addressesSlice";
 import LocationReducer from "./addresses/locationSlice";
 export { default as reviewReducer } from "./product/reviewsSlice";
+export { default as cartsReducer } from "./cart/cartsSlice";
+export { default as cartReducer } from "./cart/cartSlice";
 
 export {
     navigationReducer,
