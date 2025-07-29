@@ -25,14 +25,17 @@ const ProductItemsbyRating: React.FC<ProductsItem> = ({ navigation, items }) => 
         const isUnavailable = item.active === false;
         const gender = getGender(item.gender)
         const ProductName = `${item.name}${gender ? `-${gender}` : ``}`;
-        const firstImage = item.variants[0].images?.[1] || IMAGE_NOT_FOUND;
+        const firstImage = item.variants.images?.[1] || IMAGE_NOT_FOUND;
         const liked = likedIds.includes(item._id);
 
         return (
             <Pressable
                 style={[styles.card, isUnavailable && styles.unavailableCard]}
                 onPress={() => {
-                    navigation.navigate('ProductDetail', { category: item.category?.name, productId: item._id, variantId: item.variants[0].inventories[0]._id });
+                    navigation.navigate('ProductDetail', {
+                        productId: item._id,
+                        variantId: item.variants._id
+                    });
                 }}
             >
                 <Image

@@ -22,7 +22,7 @@ export type ProductVariant = {
     basePrice: number;
     finalPrice: number;
     active: boolean;
-    inventories: Inventory[];
+    inventories: Inventory;
     createdAt: string;
     updatedAt: string;
 };

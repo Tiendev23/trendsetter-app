@@ -12,6 +12,7 @@ import {
 import { formatCurrency } from '../../utils/formatForm';
 import { ProductsItem } from '../../navigation/NavigationTypes';
 import { IMAGE_NOT_FOUND, Product } from '@/types/Products/products';
+import { ProductVariant } from '@/types/Products/productVariant';
 
 const { width } = Dimensions.get('window');
 const ITEM_WIDTH = Math.round(width * 0.43);
@@ -35,25 +36,30 @@ const ProductItem: React.FC<ProductsItem> = ({ navigation, items }) => {
     );
   };
 
-  const renderProduct = ({ item }: { item: Product }) => {
+  const shuffle = useMemo(() => {
+    return [...items].sort(() => Math.random() - 0.5);
+  }, [items])
+  const renderProduct = ({ item }: { item: ProductVariant }) => {
     const isUnavailable = item.active === false;
-    const gender = getGender(item.gender);
-    const ProductName = `${item.name}${gender ? `-${gender}` : ``}`;
+    const gender = getGender(item.product?.gender);
+
+    const ProductName = `${item.product?.name}${gender ? `-${gender}` : ``}`;
     const liked = likedIds.includes(item._id);
+
 
     return (
       <Pressable
         style={[styles.card, isUnavailable && styles.unavailableCard]}
         onPress={() => {
+
           navigation.navigate('ProductDetail', {
-            category: item.category?.name,
             productId: item._id,
-            variantId: item.variants[0].inventories[0]._id,
+            variantId: item.product._id,
           });
         }}
       >
         <Image
-          source={{ uri: item.variants?.[0]?.images?.[1] || IMAGE_NOT_FOUND }}
+          source={{ uri: item.images?.[0] || IMAGE_NOT_FOUND }}
           style={styles.image}
         />
         {isUnavailable && (
@@ -87,7 +93,7 @@ const ProductItem: React.FC<ProductsItem> = ({ navigation, items }) => {
         </View>
 
         <View style={styles.priceAndShip}>
-          <Text style={styles.price}>{formatCurrency(item.variants?.[0].finalPrice)}</Text>
+          <Text style={styles.price}>{formatCurrency(item.finalPrice)}</Text>
           <View style={styles.shipTag}>
             <Ionicons name="rocket-outline" size={14} color="#000" />
             <Text style={styles.shipText}>Xpress Ship</Text>
@@ -100,7 +106,7 @@ const ProductItem: React.FC<ProductsItem> = ({ navigation, items }) => {
   return (
     <View style={styles.product}>
       <FlatList
-        data={items}
+        data={shuffle}
         renderItem={renderProduct}
         keyExtractor={(item) => item._id}
         initialNumToRender={4}

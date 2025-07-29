@@ -80,9 +80,9 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
         eventBus.emit('REFRESH_ALL');
         dispatch(getAllProducts()).finally(() => setRefreshing(false));
     }
-    // rootstate product
-
-
+    //
+    const ProductRating = productsRating.filter(p => Number(p.rating?.average || 0) >= 4);
+    
     return (
         <View style={styles.container}>
             <ScreenHeader
@@ -140,7 +140,7 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
                             </TouchableOpacity>
                         </View>
                         {/* Flatlist Product */}
-                        <ProductItem navigation={stackNav} items={productsRating} />
+                        <ProductItem navigation={stackNav} items={items} />
 
                         <View style={styles.recommend}>
                             <Text style={styles.textRecommend}>Thương hiệu yêu thích </Text>
@@ -156,7 +156,7 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
                                 <Text style={styles.textRecommend}>Xem Thêm</Text>
                             </TouchableOpacity>
                         </View>
-                        <ProductItemsbyRating navigation={stackNav} items={productsRating} />
+                        <ProductItemsbyRating navigation={stackNav} items={ProductRating} />
                         <View style={styles.recommend}>
                             <Text style={styles.textRecommend}>Sản phẩm tiêu biểu</Text>
                             <TouchableOpacity
@@ -167,7 +167,7 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
                                 <Text style={styles.textRecommend}>Xem Thêm</Text>
                             </TouchableOpacity>
                         </View>
-                        <ProductItem navigation={stackNav} items={productsRating} />
+                        <ProductItem navigation={stackNav} items={items} />
                         <WinterBanner navigation={stackNav} items={campaigns} />
                         <View style={styles.recommend}>
                             <Text style={styles.textRecommend}>Sản Phẩm giảm giá</Text>

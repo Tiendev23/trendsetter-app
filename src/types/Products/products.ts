@@ -10,7 +10,7 @@ export type Product = {
   gender?: string;
   description?: string;
   active: boolean;
-  variants: ProductVariant[];
+  variants: ProductVariant;
   rating: {
     average: string;
     count: number;
