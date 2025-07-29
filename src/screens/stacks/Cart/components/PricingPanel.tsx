@@ -1,8 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
-import React, { useMemo } from 'react';
+import React from 'react';
 import { formatCurrency } from '@/utils/formatForm';
 import CustomButton from '@/components/buttons/CustomButton';
-import { CartNav } from '@/navigation/NavigationTypes';
 import { CartItem } from '@/types';
 
 type Props = {

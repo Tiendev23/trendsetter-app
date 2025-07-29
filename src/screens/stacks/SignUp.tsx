@@ -5,7 +5,7 @@ import CustomButton from '../../components/buttons/CustomButton';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { refresh, register } from '../../redux/features/auth/registerSlice';
-import { SignUpNav } from '../../navigation/NavigationTypes';
+import { SignUpNav } from '../../types/navigation';
 import ErrorWarnBox from '../../components/ErrorWarnBox';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { validateEmail, validateFullName, validatePassword, validateUsername } from '../../utils/validateForm';

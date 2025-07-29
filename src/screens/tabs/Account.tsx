@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from 'rea
 import { AuthContext, useAuthContext, } from '../../contexts/AuthContext';
 import { useAppDispatch } from '../../redux/hooks';
 import { refresh } from '../../redux/features/auth/loginSlice';
-import { TabsNav } from '../../navigation/NavigationTypes';
+import { TabsNav } from '../../types/navigation';
 import CustomButton from '../../components/buttons/CustomButton';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { User } from '../../types/models';

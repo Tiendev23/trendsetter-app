@@ -1,6 +1,6 @@
 import { Dimensions, Image, StyleSheet, Text, Pressable, View } from 'react-native'
 import React, { useState } from 'react'
-import { ProductsItem } from '../../navigation/NavigationTypes'
+import { ProductsItem } from '../../types/navigation'
 import { IMAGE_NOT_FOUND, Product } from '../../types/Products/products';
 import { getGender } from './ProductItems';
 import { Ionicons } from '@expo/vector-icons';

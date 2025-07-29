@@ -4,7 +4,7 @@ import { Image, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, 
 import WinterBanner from '../../components/HomeScreenItems/Banner'
 import Menubar from '../../components/HomeScreenItems/Menubar'
 import ProductItem from '../../components/HomeScreenItems/ProductItems'
-import { HomeNav, TabsNav } from '../../navigation/NavigationTypes'
+import { HomeNav, TabsNav } from '../../types/navigation'
 import eventBus from '../../utils/Evenbus'
 import { getAllProducts, getAllRating, getBrand, getCampaigns } from '../../redux/features/product/productsSlice'
 import { useDispatch, useSelector } from 'react-redux'

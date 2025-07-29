@@ -1,5 +1,5 @@
 import { ActivityIndicator, StyleSheet, View } from "react-native";
-import { ProDetailNav, ProDetailRoute } from "@/navigation/NavigationTypes";
+import { ProDetailNav, ProDetailRoute } from "@/types";
 import { useEffect } from "react";
 import { ToCartButton, ScreenHeader } from "@/components";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
@@ -8,8 +8,12 @@ import { BlurView } from "expo-blur";
 import { showErrorToast } from "@/utils/toast";
 import ProductDetailContent from "./ProductDetailContent";
 
-export default function ProductDetail({ navigation, route }: { navigation: ProDetailNav, route: ProDetailRoute }) {
-    const { category, productId, variantId } = route.params;
+type Props = {
+    navigation: ProDetailNav;
+    route: ProDetailRoute
+};
+export default function ProductDetail({ navigation, route }: Props) {
+    const { productId, variantId } = route.params;
     const dispatch = useAppDispatch();
     const { data: product, status, error } = useAppSelector(state => state.product);
 
@@ -19,10 +23,9 @@ export default function ProductDetail({ navigation, route }: { navigation: ProDe
 
     if (status === 'loading' || status === 'failed' || !product) {
         if (error) {
-            console.error('Error fetching product:', error);
             showErrorToast({
-                title: "Lỗi tải sản phẩm",
-                message: error || 'Không thể tải sản phẩm. Đang thử tải lại.'
+                title: `Lỗi tải sản phẩm ${error.code}`,
+                message: error.message
             });
             dispatch(fetchProductById(productId));
         }
@@ -36,7 +39,7 @@ export default function ProductDetail({ navigation, route }: { navigation: ProDe
     return (
         <View style={styles.container}>
             <ScreenHeader
-                title={category}
+                title={product.category.name}
                 rightButton={
                     <ToCartButton navigation={navigation} />
                 }

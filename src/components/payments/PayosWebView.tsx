@@ -6,7 +6,7 @@ import { createOrder, refresh as refreshOrder } from '../../redux/features/order
 import { refresh as refreshPayos } from '../../redux/features/payment/payosSlice';
 import { AuthContext } from '../../contexts/AuthContext';
 import { CreateOrderReq } from '../../types/models';
-import { CheckoutNav } from '../../navigation/NavigationTypes';
+import { CheckoutNav } from '../../types/navigation';
 import { CartContext } from '../../contexts/CartContext';
 
 type Props = {

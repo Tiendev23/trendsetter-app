@@ -17,7 +17,7 @@ import { Product } from "../../types/models";
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { AuthStackParamList } from '../../navigation/NavigationTypes';
+import { AuthStackParamList } from '../../types/navigation';
 import { formatCurrency } from '../../utils/formatForm';
 
 const { width } = Dimensions.get("window");

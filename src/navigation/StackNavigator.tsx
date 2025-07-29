@@ -11,7 +11,7 @@ export default function StackNavigator() {
 
 
     return (
-        <Stack.Navigator initialRouteName="Onboarding" screenOptions={{ headerShown: false }} id={undefined}>
+        <Stack.Navigator initialRouteName="Tabs" screenOptions={{ headerShown: false }} id={undefined}>
             <Stack.Screen name="Onboarding" component={Onboarding} />
             <Stack.Screen name="Tabs" component={TabNavigator} />
             <Stack.Screen name="Login" component={Stacks.Login} />

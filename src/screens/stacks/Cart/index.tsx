@@ -1,5 +1,5 @@
 import { StyleSheet, TouchableOpacity, View } from "react-native";
-import { CartNav } from "@/navigation/NavigationTypes";
+import { CartNav } from "@/types";
 import { ScreenHeader } from "@/components";
 import CartContent from "./CartContent";
 import { useAuthContext } from "@/contexts/AuthContext";

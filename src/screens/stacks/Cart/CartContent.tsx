@@ -1,7 +1,7 @@
 import { StyleSheet, View } from 'react-native'
 import React, { useEffect, useMemo, useState } from 'react'
-import { CartNav } from '@/navigation/NavigationTypes';
-import { CartItem as CartItem, ObjectId, User } from '@/types';
+import { CartNav } from '@/types';
+import { CartItem, ObjectId, User } from '@/types';
 import { CartItemsRender, ConfirmDeleteModal, ConfirmLoginModal, DeletionCountPanel, PricingPanel } from './components';
 import { CartContextType } from '@/contexts/CartContext';
 
@@ -63,6 +63,20 @@ export default function CartContent({ navigation, cartContext, isEditable, user,
         }
     };
 
+    function handleOnClickedItem(item: CartItem) {
+        if (navigation.canGoBack()) {
+            navigation.navigate('ProductDetail', {
+                productId: item.product,
+                variantId: item.variant,
+            });
+        } else {
+            navigation.replace('ProductDetail', {
+                productId: item.product,
+                variantId: item.variant,
+            })
+        }
+    }
+
     const isCartEmpty = cart.items.length === 0;
     const isCheckedEmpty = checkedItems.length === 0;
 
@@ -72,6 +86,7 @@ export default function CartContent({ navigation, cartContext, isEditable, user,
                 data={cart.items}
                 checkedItems={checkedItems}
                 isEditable={isEditable}
+                handleOnClicked={handleOnClickedItem}
                 handleOnSelect={(sizeId: ObjectId) =>
                     setCheckedIds(prev => prev.includes(sizeId)
                         ? prev.filter(id => id !== sizeId)

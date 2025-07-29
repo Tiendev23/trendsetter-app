@@ -7,13 +7,14 @@ type Props = {
     data: Item[];
     isEditable: boolean;
     checkedItems: Item[];
+    handleOnClicked: (item: Item) => void;
     handleOnSelect: (sizeId: ObjectId) => void;
     handleOnUpdate: (sizeId: ObjectId, newQuantity: number) => void;
     handleOnDelete: (sizeId: ObjectId) => void;
 };
 export default function CartItemsRender({
     data, checkedItems, isEditable,
-    handleOnSelect: onSelect, handleOnUpdate: onUpdateItem, handleOnDelete: onDeleteItem
+    handleOnClicked, handleOnSelect, handleOnUpdate, handleOnDelete
 }: Props) {
 
     return (
@@ -25,11 +26,12 @@ export default function CartItemsRender({
                     return (
                         <CartItem
                             item={item}
-                            onSelect={onSelect}
                             isEditable={isEditable}
                             isSelected={isSelected}
-                            onUpdateItem={onUpdateItem}
-                            onDeleteItem={onDeleteItem}
+                            onItemClicked={handleOnClicked}
+                            onSelectItem={handleOnSelect}
+                            onUpdateItem={handleOnUpdate}
+                            onDeleteItem={handleOnDelete}
                         />
                     );
                 }}

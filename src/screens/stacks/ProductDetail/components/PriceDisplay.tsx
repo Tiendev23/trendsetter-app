@@ -19,29 +19,18 @@ type Props = {
         images: string[];
     };
     selectedSize: VariantSize | null;
-    onSelectSize: {
-        setSelectedSize: (size: VariantSize | null) => void;
-        setPaddingBottom: (height: number) => void;
-    };
     onAddToCart: (item: CartItem) => void;
 };
 
-export default function PriceDisplay({ product, variant, selectedSize, onSelectSize, onAddToCart, }: Props) {
-    if (!selectedSize) return null;
+export default function PriceDisplay({ product, variant, selectedSize, onAddToCart, }: Props) {
+    if (!selectedSize) return;
     const { _id: productId, campaign, name } = product;
-    const { _id: variantId, color, basePrice, finalPrice, images } = variant
-    const { setSelectedSize, setPaddingBottom } = onSelectSize;
+    const { _id: variantId, color, basePrice, finalPrice, images } = variant;
     const [quantity, setQuantity] = useState<number>(1);
     const subtotal = finalPrice * quantity;
 
     return (
-        <View
-            style={[styles.subtotalPopup, styles.shadow]}
-            onLayout={(event) => {
-                const { height } = event.nativeEvent.layout;
-                setPaddingBottom(height);
-            }}
-        >
+        <View style={[styles.subtotalPopup, styles.shadow]}>
             <View style={{
                 flexDirection: 'row'
             }}>

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { AuthStackParamList } from "../../../navigation/NavigationTypes";
+import { AuthStackParamList } from "../../../types/navigation";
 import { NavigationRoute } from "@react-navigation/native";
 
 type NavRoute = {

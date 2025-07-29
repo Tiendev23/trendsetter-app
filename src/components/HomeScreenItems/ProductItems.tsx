@@ -10,7 +10,7 @@ import {
     View,
 } from 'react-native';
 import { formatCurrency } from '../../utils/formatForm';
-import { ProductsItem } from '../../navigation/NavigationTypes';
+import { ProductsItem } from '../../types/navigation';
 import { IMAGE_NOT_FOUND, Product } from '@/types/Products/products';
 
 const { width } = Dimensions.get('window');
@@ -46,7 +46,6 @@ const ProductItem: React.FC<ProductsItem> = ({ navigation, items }) => {
                 style={[styles.card, isUnavailable && styles.unavailableCard]}
                 onPress={() => {
                     navigation.navigate('ProductDetail', {
-                        category: item.category?.name,
                         productId: item._id,
                         variantId: item.variants[0]._id,
                     });

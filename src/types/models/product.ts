@@ -39,7 +39,7 @@ export interface Variant {
     active: boolean; // true;
     createdAt: string; // "2025-07-09T12:51:12.215Z";
     updatedAt: string; // "2025-07-09T12:51:12.215Z";
-    __v?: number; // 0;
+    __v: number; // 0;
     finalPrice: number; // 728000;
     inventories: VariantSize[];
 }
@@ -50,10 +50,10 @@ type BrandLite = Pick<Brand, "_id" | "name">;
 
 export type CampaignLite = Pick<
     Campaign,
-    "_id" | "type" | "value" | "startDate" | "endDate"
+    "_id" | "title" | "type" | "value" | "startDate" | "endDate"
 >;
 
-type Rating = {
+export type Rating = {
     average: string; // "0.0";
     count: number;
 };

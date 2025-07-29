@@ -52,13 +52,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
             dispatch(resetCartsState());
         }
         if (status === 'failed') {
-            console.log(error?.message);
-            console.log(error?.code);
-            
             showErrorToast({
                 title: `Lỗi ${error?.code}`,
                 message: error?.message
-            })
+            });
             dispatch(resetCartsState())
         }
     }, [status]);
@@ -142,7 +139,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     const removeManyItem = async (sizeIds: ObjectId[]) => {
         const sizeIdSet = new Set(sizeIds);
         const updatedCart = cart.filter(item => !sizeIdSet.has(item.size._id));
-        
+
         if (user) {
             dispatch(removeManyCartItem({ userId: user._id, body: sizeIds }))
         } else {
