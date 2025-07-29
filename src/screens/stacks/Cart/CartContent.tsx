@@ -31,20 +31,6 @@ export default function CartContent({ navigation, cartContext, isEditable, user,
         [cart.items, checkedIds]
     );
 
-    function handleUpdateItem(sizeId: ObjectId, newQuantity: number) {
-        cart.updateItem(sizeId, newQuantity)
-    };
-
-    function handleDeleteItem(sizeId: ObjectId) {
-        cart.removeItem(sizeId);
-    };
-
-    function toggleCheckItem(sizeId: ObjectId) {
-        setCheckedIds(prev =>
-            prev.includes(sizeId) ? prev.filter(id => id !== sizeId) : [...prev, sizeId]
-        );
-    };
-
     function toggleCheckAll() {
         if (isCheckedAll) {
             setCheckedIds([]);
@@ -85,10 +71,15 @@ export default function CartContent({ navigation, cartContext, isEditable, user,
             <CartItemsRender
                 data={cart.items}
                 checkedItems={checkedItems}
-                onSelect={toggleCheckItem}
                 isEditable={isEditable}
-                onUpdateItem={handleUpdateItem}
-                onDeleteItem={handleDeleteItem}
+                handleOnSelect={(sizeId: ObjectId) =>
+                    setCheckedIds(prev => prev.includes(sizeId)
+                        ? prev.filter(id => id !== sizeId)
+                        : [...prev, sizeId]
+                    )
+                }
+                handleOnUpdate={(sizeId: ObjectId, newQuantity: number) => cart.updateItem(sizeId, newQuantity)}
+                handleOnDelete={(sizeId: ObjectId) => cart.removeItem(sizeId)}
             />
 
             {

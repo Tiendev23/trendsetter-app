@@ -7,15 +7,15 @@ type Props = {
     data: Item[];
     isEditable: boolean;
     checkedItems: Item[];
-    onSelect: (sizeId: ObjectId) => void;
-    onUpdateItem: (sizeId: ObjectId, newQuantity: number) => void;
-    onDeleteItem: (sizeId: ObjectId) => void;
+    handleOnSelect: (sizeId: ObjectId) => void;
+    handleOnUpdate: (sizeId: ObjectId, newQuantity: number) => void;
+    handleOnDelete: (sizeId: ObjectId) => void;
 };
 export default function CartItemsRender({
     data, checkedItems, isEditable,
-    onSelect, onUpdateItem, onDeleteItem
+    handleOnSelect: onSelect, handleOnUpdate: onUpdateItem, handleOnDelete: onDeleteItem
 }: Props) {
-    
+
     return (
         <View style={{ flex: 1 }}>
             <FlatList
