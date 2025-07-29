@@ -2,7 +2,7 @@ import { Gender, ObjectId } from "../common";
 
 type Role = "customer" | "admin";
 
-export type ShippingAddress = {
+export interface ShippingAddress {
     fullName: string;
     phone: string;
     streetDetails: string;
@@ -11,9 +11,9 @@ export type ShippingAddress = {
     city: string;
     isDefault: boolean;
     _id: ObjectId;
-};
+}
 
-export type User = {
+export interface User {
     _id: ObjectId;
     username: string; // "sang";
     fullName: string; // "sang";
@@ -28,4 +28,4 @@ export type User = {
     createdAt: string; // "2025-07-18T08:57:33.439Z";
     updatedAt: string; // "2025-07-18T08:57:33.439Z";
     __v?: number;
-};
+}

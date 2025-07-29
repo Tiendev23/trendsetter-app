@@ -70,7 +70,7 @@ export default function ZalopayWebView({ navigation, orderData, setPaymentStatus
                 setPaid(true);
                 createOrderWithStatus(true);
             }
-            cart.clearCart();
+            cart.clearAllItems();
             setHandled(true);
         }
         console.log('you here 3');

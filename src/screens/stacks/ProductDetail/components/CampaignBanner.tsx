@@ -71,7 +71,7 @@ const ActiveBanner = ({ campaign, countdown }: ActiveProps) => (
 )
 
 type Props = {
-    campaign: CampaignLite;
+    campaign: CampaignLite | null;
     price: number;
 };
 

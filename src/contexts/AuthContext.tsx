@@ -1,55 +1,36 @@
-import { createContext, useState, ReactNode } from "react";
+import { createContext, useState, ReactNode, useContext } from "react";
 import { User } from "../types/models";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { showErrorToast } from "@/utils/toast";
+import * as Storage from "@/services/asyncStorage.service";
 
 // Định nghĩa kiểu cho Context
 type AuthContextType = {
     user: User | null;
-    login: (userData: User, token: string) => void;
+    login: (userData: User) => void;
     logout: () => void;
     setUser: (user: User | null) => void;
+
+    // ??? Làm vậy chi, lấy email thì trong user có rồi?
     email: string;
     setEmail: (email: string) => void;
 };
 
-// Khởi tạo Context
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Component Provider
 export function AuthProvider({ children }: { children: ReactNode }) {
-    const [user, setUser] = useState<User | null>(
-        null
-        // {
-        //     _id: "684d708f62b10398864096d2",
-        //     username: "thailuan195",
-        //     password: "$2b$10$rjFf8rHQWomJOfjnlFF0UOIhnt5.kxZQ0IzQia6t3ZYhgdJ53r5Me",
-        //     email: "thailuan195@gmail.com",
-        //     fullName: "Thái Luân",
-        //     role: "customer",
-        //     favorites: [],
-        //     createdAt: "2025-06-14T12:52:31.162Z",
-        //     updatedAt: "2025-06-14T12:52:31.162Z",
-        //     __v: 0
-        // }
-    );
+    const [user, setUser] = useState<User | null>(null);
     const [email, setEmail] = useState<string>('')
-    // Hàm đăng nhập
-    const login = async (userData: User, token: string) => {
-        try {
-            setUser(userData);
-            await AsyncStorage.setItem("token", token);
-        } catch (error) {
-            console.error("Lưu token thất bại:", error);
 
-
-        }
+    const login = async (userData: User) => {
+        setUser(userData);
     };
 
     // Hàm đăng xuất
     const logout = async () => {
         try {
             setUser(null);
-            await AsyncStorage.removeItem("token");
+            await Storage.removeItem("@token");
+            await Storage.removeItem("@cart");
         } catch (error) {
             console.error("Xóa token thất bại:", error);
         }
@@ -60,4 +41,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             {children}
         </AuthContext.Provider>
     );
+};
+
+export const useAuthContext = () => {
+    const context = useContext(AuthContext);
+    if (!context)
+        throw new Error('useAuth must be used within a AuthProvider');
+    return context;
 }
