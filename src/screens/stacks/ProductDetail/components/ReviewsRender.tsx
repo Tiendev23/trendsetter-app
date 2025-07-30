@@ -44,7 +44,7 @@ export function ReviewsRender({ productId, handleOnClick }: Props) {
         dispatch(fetchReviewsByProductId(productId));
     }, [productId]);
 
-    if (status === 'loading' || status === 'failed' || !data) {
+    if (status === 'loading' || status === 'failed' || !data?.data) {
         if (error) {
             showErrorToast({
                 title: `Lỗi hiển thị đánh giá ${error.code}`,
@@ -69,7 +69,7 @@ export function ReviewsRender({ productId, handleOnClick }: Props) {
 
     return (
         <FlatList
-            data={data.slice(0, 3)}
+            data={data.data.slice(0, 3)}
             renderItem={({ item }) => (
                 <ReviewForm review={item} onClick={handleOnClick} />
             )}

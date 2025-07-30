@@ -15,7 +15,8 @@ type Props = {
 export default function ProductDetail({ navigation, route }: Props) {
     const { productId, variantId } = route.params;
     const dispatch = useAppDispatch();
-    const { data: product, status, error } = useAppSelector(state => state.product);
+    const { data, status, error } = useAppSelector(state => state.product);
+    const product = data?.data;
 
     useEffect(() => {
         dispatch(fetchProductById(productId));
