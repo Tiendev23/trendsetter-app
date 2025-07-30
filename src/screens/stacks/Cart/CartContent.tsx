@@ -64,17 +64,14 @@ export default function CartContent({ navigation, cartContext, isEditable, user,
     };
 
     function handleOnClickedItem(item: CartItem) {
-        if (navigation.canGoBack()) {
-            navigation.navigate('ProductDetail', {
+        navigation.navigate({
+            name: 'ProductDetail',
+            params: {
                 productId: item.product,
                 variantId: item.variant,
-            });
-        } else {
-            navigation.replace('ProductDetail', {
-                productId: item.product,
-                variantId: item.variant,
-            })
-        }
+            },
+            merge: true,
+        });
     }
 
     const isCartEmpty = cart.items.length === 0;

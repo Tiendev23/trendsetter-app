@@ -13,11 +13,11 @@ export type AuthStackParamList = {
         productId: ObjectId;
         variantId: ObjectId;
     };
+    Cart: undefined;
     Checkout: {
         items: CartItem[];
     };
     Profile: { title?: string };
-    Cart: undefined;
     OrderHistory: undefined;
     MethodSelection: { method?: Payment, paymentMethods: Payment[] };
 };

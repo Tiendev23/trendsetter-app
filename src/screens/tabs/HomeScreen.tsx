@@ -96,7 +96,7 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
                     <Image source={require('../../../assets/images/logo.jpg')} style={styles.logo} resizeMode='contain' />
                 }
                 rightButton={
-                    <ToCartButton navigation={navigation} />
+                    <ToCartButton onPress={() => navigation.navigate("Cart")} />
                 }
             />
             <ScrollView showsHorizontalScrollIndicator={false}

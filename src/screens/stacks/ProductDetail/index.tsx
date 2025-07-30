@@ -41,7 +41,13 @@ export default function ProductDetail({ navigation, route }: Props) {
             <ScreenHeader
                 title={product.category.name}
                 rightButton={
-                    <ToCartButton navigation={navigation} />
+                    <ToCartButton onPress={() =>
+                        navigation.navigate({
+                            name: 'Cart',
+                            params: undefined,
+                            pop: true
+                        })
+                    } />
                 }
             />
             <ProductDetailContent
