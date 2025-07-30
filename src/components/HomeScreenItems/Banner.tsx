@@ -67,7 +67,10 @@ const WinterBanner: React.FC<WinterBannerProps> = ({ navigation, items }) => {
 
 
     const BannerItem = ({ item }: { item: Campaign }) => {
-
+        const BannerId = item.products.map(p => typeof p === 'string' ? p : p._id)
+        
+        
+        
         return (
             <ImageBackground
                 source={{ uri: item.imageUrl || IMAGE_NOT_FOUND }}
@@ -86,7 +89,7 @@ const WinterBanner: React.FC<WinterBannerProps> = ({ navigation, items }) => {
 
                 <TouchableOpacity
                     style={styles.button}
-                    onPress={() => navigation.navigate('CampaignDetail', { item })}
+                    onPress={() => navigation.navigate('ProductlistScreen', { BannerId,title:'Sản phẩm khuyến mãi' })}
                 >
                     <Text style={styles.buttonText}>Xem ngay</Text>
                 </TouchableOpacity>

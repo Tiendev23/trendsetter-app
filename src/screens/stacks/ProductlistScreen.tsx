@@ -14,6 +14,7 @@ import { Brand } from '../../types';
 import { IMAGE_NOT_FOUND } from '@/types/Products/products';
 import { ProductVariant } from '../../types/Products/productVariant';
 import { Props } from './Account/Profile';
+import { Campaign } from '@/types/Campaign';
 const getGender = (gender?: string) => {
     if (gender === 'male') return 'Nam';
     if (gender === 'female') return 'Nữ';
@@ -21,7 +22,7 @@ const getGender = (gender?: string) => {
 };
 
 const ProductlistScreen: React.FC<Props> = ({ navigation, route }) => {
-    const { brandId, title }: { brandId?: Brand; title?: string } = route.params;
+    const { brandId, title, BannerId }: { brandId?: Brand; title?: string, BannerId: string } = route.params;
     const dispatch = useDispatch<AppDispatch>();
     const { items, loading, error } = useSelector((state: RootState) => state.products);
 
@@ -37,7 +38,10 @@ const ProductlistScreen: React.FC<Props> = ({ navigation, route }) => {
     };
     const dataToRender: ProductVariant[] = brandId?._id
         ? items.filter((product) => product.product?.brand?._id === brandId._id)
-        : items;
+        : BannerId && BannerId.length > 0
+            ? items.filter((product) => BannerId.includes(product.product?._id))
+            : items;
+
     if (brandId?._id && dataToRender.length === 0) {
         return (
             <View style={styles.center}>
@@ -54,7 +58,10 @@ const ProductlistScreen: React.FC<Props> = ({ navigation, route }) => {
         return (
             <TouchableOpacity
                 style={styles.card}
-                onPress={() => navigation.navigate('ProductDetail', { item })}
+                onPress={() => navigation.navigate('ProductDetail', {
+                    productId: item.product._id,
+                    variantId: item._id,
+                })}
             >
                 <Image
                     source={{ uri: item.images?.[0] || IMAGE_NOT_FOUND }}
@@ -145,7 +152,6 @@ const styles = StyleSheet.create({
     },
     headerTitle: {
         fontWeight: '600',
-        fontStyle: 'italic',
         fontSize: 20,
         color: '#006340',
         textAlign: 'center',
@@ -172,6 +178,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#f9f9f9',
         borderRadius: 10,
         overflow: 'hidden',
+        marginTop:10
     },
     unavailableOverlay: {
         position: 'absolute',

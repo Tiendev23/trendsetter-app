@@ -53,8 +53,8 @@ const ProductItem: React.FC<ProductsItem> = ({ navigation, items }) => {
         onPress={() => {
 
           navigation.navigate('ProductDetail', {
-            productId: item._id,
-            variantId: item.product._id,
+            productId: item.product._id,
+            variantId: item._id,
           });
         }}
       >
