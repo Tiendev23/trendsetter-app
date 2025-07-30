@@ -35,9 +35,9 @@ const ProductlistScreen: React.FC<Props> = ({ navigation, route }) => {
         setRefreshing(true);
         dispatch(getAllProducts()).finally(() => setRefreshing(false));
     };
-const dataToRender: ProductVariant[] = brandId?._id
-    ? items.filter((product) => product.product?.brand?._id === brandId._id)
-    : items;
+    const dataToRender: ProductVariant[] = brandId?._id
+        ? items.filter((product) => product.product?.brand?._id === brandId._id)
+        : items;
     if (brandId?._id && dataToRender.length === 0) {
         return (
             <View style={styles.center}>

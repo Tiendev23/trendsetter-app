@@ -31,7 +31,7 @@ const purchaseItems = [
 // --- REUSABLE LOCAL COMPONENTS ---
 // Component con chỉ dùng trong file này
 
-const UserProfileHeader = ({ user }: { user: User }) => {
+const UserProfileHeader = ({ user,navigation }: { user: User, navigation:TabsNav }) => {
     const getRole = (role: string) => {
         switch (role) {
             case 'admin':
@@ -41,7 +41,12 @@ const UserProfileHeader = ({ user }: { user: User }) => {
         }
     }
     return (
-        <View style={styles.headerContainer}>
+        <View style={styles.headerContainer} 
+        onStartShouldSetResponder={()=>true}
+        onResponderEnd={()=>{
+            navigation.navigate('editProfile')
+        }}
+        >
             <Image
                 source={user?.avatar ? { uri: user.avatar } : { uri: 'https://i.pravatar.cc/150' }}
                 style={styles.headerAvatar}
@@ -129,7 +134,7 @@ export default function AccountScreen({ navigation }: { navigation: TabsNav }) {
     if (user) {
         return (
             <ScrollView style={styles.screenContainer}>
-                <UserProfileHeader user={user} />
+                <UserProfileHeader user={user}navigation={navigation} />
                 <MyPurchasesSection
                     onViewAll={() => navigation.navigate('OrderHistory')}
                 />

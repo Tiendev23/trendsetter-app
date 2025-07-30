@@ -13,10 +13,11 @@ import Backnav from '../../../components/Tabbar/Backnav';
 import CustomInput from '../../../components/CustomInput';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { AuthContext } from '../../../contexts/AuthContext';
-import { changePass, resetChangePass } from '../../../redux/features/auth/ChangePassword';
+import { changePass, resetChangePass, resetChangePassword } from '../../../redux/features/auth/ChangePassword';
+import { validatePassword } from '@/utils/validateForm';
 
 export default function ChangePasswordScreen({ navigation, route }) {
-    const { currentPassword } = route.params;
+    const currentPassword = route?.params?.currentPassword ?? null;
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [showSuccess, setShowSuccess] = useState(false);
@@ -29,12 +30,26 @@ export default function ChangePasswordScreen({ navigation, route }) {
         dispatch(resetChangePass());
     }, []);
     const handleChangePassword = () => {
+        if (!newPassword || !confirmPassword) {
+            Alert.alert('Lỗi', 'Vui lòng nhập đầy đủ mật khẩu và xác nhận.');
+            return;
+        }
         if (newPassword !== confirmPassword) {
             Alert.alert('Lỗi', 'Mật khẩu xác nhận không khớp.');
             return;
         }
+        if (!validatePassword(newPassword)) {
+            Alert.alert('Lỗi', 'Mật khẩu không hợp lệ.');
+            return;
+        }
 
-        dispatch(changePass({ currentPassword, newPassword }));
+        if (currentPassword) {
+            // Trường hợp đổi mật khẩu khi đã đăng nhập
+            dispatch(changePass({ currentPassword, newPassword }));
+        } else {
+            // Trường hợp đặt lại mật khẩu khi quên
+            dispatch(resetChangePassword(newPassword));
+        }
     };
 
     useEffect(() => {
