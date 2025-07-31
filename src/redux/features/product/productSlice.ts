@@ -13,7 +13,7 @@ import {
     ObjectId,
 } from "../../../types";
 import { AxiosError } from "axios";
-import { addAsyncThunkCases, makeApiThunk } from "@/utils/reduxHelpers";
+import { addAsyncThunkCases, makeApiThunk } from "@/utils/reduxHelper";
 
 // export const fetchProductById = createAsyncThunk<
 //     ProductDetails, // kiểu dữ liệu khi thành công

@@ -41,8 +41,9 @@ export function ReviewsRender({ productId, handleOnClick }: Props) {
     const { data, status, error } = useAppSelector(state => state.reviews);
 
     useEffect(() => {
-        dispatch(fetchReviewsByProductId(productId));
-    }, [productId]);
+        if (status === 'idle')
+            dispatch(fetchReviewsByProductId(productId));
+    }, [dispatch, productId, status]);
 
     if (status === 'loading' || status === 'failed' || !data?.data) {
         if (error) {
@@ -51,12 +52,12 @@ export function ReviewsRender({ productId, handleOnClick }: Props) {
                 message: error.message
             });
             dispatch(fetchReviewsByProductId(productId));
-        }
+        };
         return (
             <View style={{ gap: 4 }}>
                 <View style={styles.row}>
                     <View style={styles.avatar}>
-                        <Skeleton width={35} height={25} />
+                        <Skeleton width={35} height={35} />
                     </View>
                     <Skeleton width={100} height={25} />
                 </View>
@@ -109,7 +110,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white'
     },
     avatar: {
-        borderRadius: 35,
+        borderRadius: 70,
         overflow: 'hidden'
     },
     row: {

@@ -8,7 +8,7 @@ import {
     ObjectId,
     BaseResponse,
 } from "@/types";
-import { addAsyncThunkCases, makeApiThunk } from "@/utils/reduxHelpers";
+import { addAsyncThunkCases, makeApiThunk } from "@/utils/reduxHelper";
 
 export const addCartItem = makeApiThunk<
     BaseResponse<CartItemDB>,

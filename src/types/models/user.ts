@@ -5,10 +5,9 @@ type Role = "customer" | "admin";
 export interface ShippingAddress {
     fullName: string;
     phone: string;
-    streetDetails: string;
+    street: string;
     ward: string;
-    district: string;
-    city: string;
+    province: string;
     isDefault: boolean;
     _id: ObjectId;
 }
@@ -18,7 +17,6 @@ export interface User {
     username: string; // "sang";
     fullName: string; // "sang";
     email: string; // "sang@gmail.com";
-    password?: string; // "$2b$10$/PBtiNqDLaGrJ.H0Pc2Y..LMLMV.kXYV1ltm43oJO1pvQT2Me3TVC";
     gender: Gender; // "unisex";
     birthday: string | null;
     role: Role; // "customer";

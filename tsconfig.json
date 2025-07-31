@@ -13,5 +13,8 @@
         // "strictBindCallApply": true, // Bắt sai kiểu khi gọi `.bind()`, `.call()`, `.apply()`
         "forceConsistentCasingInFileNames": true, // Tránh lỗi không tương thích giữa Windows/Linux
         // "skipLibCheck": true // Giảm thời gian build nếu dùng thư viện nhiều
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
     }
 }

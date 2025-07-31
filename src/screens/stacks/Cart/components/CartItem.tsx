@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { Text, StyleSheet, View, Image, TouchableOpacity } from 'react-native';
 import ReanimatedSwipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
 import Reanimated, { SharedValue, useAnimatedStyle } from 'react-native-reanimated';
-import { CartItem as Item } from '@/types/models';
+import { CartItem as CartItemType } from '@/types/models';
 import { formatCurrency } from '@/utils/formatForm';
 import { FontAwesome5 } from '@expo/vector-icons';
 import Skeleton from '@/components/loaders/Skeleton';
@@ -10,7 +10,7 @@ import { ObjectId } from '@/types';
 import { RectButton } from 'react-native-gesture-handler';
 
 type BaseActionProps = {
-    item: Item;
+    item: CartItemType;
     drag: SharedValue<number>;
 }
 
@@ -90,10 +90,10 @@ function RightAction({ item, drag, onDelete }: RightProps) {
  */
 
 type Props = {
-    item: Item;
+    item: CartItemType;
     isSelected: boolean;
     isEditable: boolean;
-    onItemClicked: (item: Item) => void;
+    onItemClicked: (item: CartItemType) => void;
     onSelectItem: (sizeId: ObjectId) => void;
     onUpdateItem: (sizeId: ObjectId, newQuantity: number) => void;
     onDeleteItem: (sizeId: ObjectId) => void

@@ -1,9 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { AuthStackParamList } from "../../../types/navigation";
+import { RootStackParamList } from "@/types/navigation";
 import { NavigationRoute } from "@react-navigation/native";
 
 type NavRoute = {
-    prevRoute: NavigationRoute<AuthStackParamList, keyof AuthStackParamList>;
+    prevRoute: NavigationRoute<
+        RootStackParamList,
+        keyof RootStackParamList
+    > | null;
 };
 
 const initialState: NavRoute = {

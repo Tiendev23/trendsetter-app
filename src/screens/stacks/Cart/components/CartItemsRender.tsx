@@ -1,13 +1,13 @@
 import { FlatList, View } from 'react-native';
 import React from 'react';
-import { CartItem as Item, ObjectId } from '@/types';
-import CartItem from './CartItem';
+import { CartItem, ObjectId } from '@/types';
+import { default as CartItemRender } from './CartItem';
 
 type Props = {
-    data: Item[];
+    data: CartItem[];
     isEditable: boolean;
-    checkedItems: Item[];
-    handleOnClicked: (item: Item) => void;
+    checkedItems: CartItem[];
+    handleOnClicked: (item: CartItem) => void;
     handleOnSelect: (sizeId: ObjectId) => void;
     handleOnUpdate: (sizeId: ObjectId, newQuantity: number) => void;
     handleOnDelete: (sizeId: ObjectId) => void;
@@ -24,7 +24,7 @@ export default function CartItemsRender({
                 renderItem={({ item }) => {
                     const isSelected = checkedItems.some(i => i.size._id === item.size._id);
                     return (
-                        <CartItem
+                        <CartItemRender
                             item={item}
                             isEditable={isEditable}
                             isSelected={isSelected}

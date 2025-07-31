@@ -52,26 +52,17 @@ export default function CartContent({ navigation, cartContext, isEditable, user,
 
     function handleOnBuying() {
         if (user) {
-            navigation.navigate({
-                name: "Checkout",
-                params: {
-                    items: checkedItems,
-                }
-            });
+            navigation.navigate("Checkout", { items: checkedItems });
         } else {
             setModalVisible(true);
         }
     };
 
     function handleOnClickedItem(item: CartItem) {
-        navigation.navigate({
-            name: 'ProductDetail',
-            params: {
-                productId: item.product,
-                variantId: item.variant,
-            },
-            merge: true,
-        });
+        navigation.navigate("ProductDetail", {
+            productId: item.product,
+            variantId: item.variant,
+        }, { merge: true });
     }
 
     const isCartEmpty = cart.items.length === 0;
@@ -116,10 +107,7 @@ export default function CartContent({ navigation, cartContext, isEditable, user,
                 onClose={() => setModalVisible(false)}
                 onLogin={() => {
                     setModalVisible(false);
-                    navigation.navigate({
-                        name: "Login",
-                        params: {}
-                    });
+                    navigation.navigate("Login", {});
                 }}
             />
 

@@ -7,6 +7,7 @@ import { fetchProductById } from "@/redux/features/product/productSlice";
 import { BlurView } from "expo-blur";
 import { showErrorToast } from "@/utils/toast";
 import ProductDetailContent from "./ProductDetailContent";
+import { useNavigation } from "@react-navigation/native";
 
 type Props = {
     navigation: ProDetailNav;
@@ -43,11 +44,7 @@ export default function ProductDetail({ navigation, route }: Props) {
                 title={product.category.name}
                 rightButton={
                     <ToCartButton onPress={() =>
-                        navigation.navigate({
-                            name: 'Cart',
-                            params: undefined,
-                            pop: true
-                        })
+                        navigation.navigate("Cart", undefined, { pop: true })
                     } />
                 }
             />

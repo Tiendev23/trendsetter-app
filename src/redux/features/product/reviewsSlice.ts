@@ -1,12 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import apiClient from "@/api/apiClient";
-import {
-    ObjectId,
-    Review,
-    AsyncState,
-    BaseResponse,
-} from "@/types";
-import { addAsyncThunkCases, makeApiThunk } from "@/utils/reduxHelpers";
+import { ObjectId, Review, AsyncState, BaseResponse } from "@/types";
+import { addAsyncThunkCases, makeApiThunk } from "@/utils/reduxHelper";
 
 export const fetchReviewsByProductId = makeApiThunk<
     BaseResponse<Review[]>,
