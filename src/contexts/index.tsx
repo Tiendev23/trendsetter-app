@@ -5,7 +5,7 @@ import { CartProvider } from "./CartContext";
 import { MessageProvider } from "./ChatDataContext";
 import { FavoriteProvider } from "./FavoriteContext";
 import { Provider } from 'react-redux';
-import { store } from '../redux/store'; // đường dẫn đúng tới store của bạn
+import { store } from '../redux/store'; 
 
 export function AppProviders({ children }: { children: ReactNode }) {
     return (
