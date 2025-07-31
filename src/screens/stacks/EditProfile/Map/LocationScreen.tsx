@@ -38,7 +38,6 @@ const LocationScreen = ({ navigation, route }) => {
 
     useEffect(() => {
         dispatch(fetchProvinces());
-
     }, [dispatch]);
 
     //  Khi chọn tỉnh => gọi huyện

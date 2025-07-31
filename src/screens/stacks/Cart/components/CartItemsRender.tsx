@@ -6,14 +6,14 @@ import { default as CartItemRender } from './CartItem';
 type Props = {
     data: CartItem[];
     isEditable: boolean;
-    checkedItems: CartItem[];
+    selectedItemIds: ObjectId[];
     handleOnClicked: (item: CartItem) => void;
     handleOnSelect: (sizeId: ObjectId) => void;
     handleOnUpdate: (sizeId: ObjectId, newQuantity: number) => void;
     handleOnDelete: (sizeId: ObjectId) => void;
 };
 export default function CartItemsRender({
-    data, checkedItems, isEditable,
+    data, selectedItemIds, isEditable,
     handleOnClicked, handleOnSelect, handleOnUpdate, handleOnDelete
 }: Props) {
 
@@ -22,16 +22,16 @@ export default function CartItemsRender({
             <FlatList
                 data={data}
                 renderItem={({ item }) => {
-                    const isSelected = checkedItems.some(i => i.size._id === item.size._id);
+                    const isSelected = selectedItemIds.some(id => id === item.size._id);
                     return (
                         <CartItemRender
                             item={item}
                             isEditable={isEditable}
                             isSelected={isSelected}
-                            onItemClicked={handleOnClicked}
-                            onSelectItem={handleOnSelect}
-                            onUpdateItem={handleOnUpdate}
-                            onDeleteItem={handleOnDelete}
+                            handleCartItemClick={() => handleOnClicked(item)}
+                            handleSelectItem={() => handleOnSelect(item.size._id)}
+                            handleUpdateItem={(newQuantity: number) => handleOnUpdate(item.size._id, newQuantity)}
+                            handleDeleteItem={() => handleOnDelete(item.size._id)}
                         />
                     );
                 }}

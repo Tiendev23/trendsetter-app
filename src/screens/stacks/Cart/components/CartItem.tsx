@@ -6,19 +6,18 @@ import { CartItem as CartItemType } from '@/types/models';
 import { formatCurrency } from '@/utils/formatForm';
 import { FontAwesome5 } from '@expo/vector-icons';
 import Skeleton from '@/components/loaders/Skeleton';
-import { ObjectId } from '@/types';
 import { RectButton } from 'react-native-gesture-handler';
 
 type BaseActionProps = {
-    item: CartItemType;
     drag: SharedValue<number>;
 }
 
 type LeftProps = BaseActionProps & {
-    onUpdateQuantity: (sizeId: ObjectId, newQuantity: number) => void;
+    itemQuantity: number;
+    handleQuantityChange: (newQuantity: number) => void;
 }
 
-function LeftAction({ item, drag, onUpdateQuantity }: LeftProps) {
+function LeftAction({ itemQuantity, drag, handleQuantityChange }: LeftProps) {
     const [width, setWidth] = useState(0);
     const styleAnimation = useAnimatedStyle(() => {
         return {
@@ -33,24 +32,15 @@ function LeftAction({ item, drag, onUpdateQuantity }: LeftProps) {
         >
             <View style={[styles.sideActionWrapper, styles.button, styles.leftButton]}>
                 <RectButton style={[styles.button, { width: '100%' }]}
-                    onPress={() => {
-                        onUpdateQuantity(
-                            item.size._id,
-                            item.quantity + 1
-                        )
-                    }}
+                    onPress={() => handleQuantityChange(itemQuantity + 1)}
                 >
                     <FontAwesome5 name="plus" size={24} color="#FFFFFF" />
                 </RectButton>
                 <Text style={{ color: '#FFFFFF' }}>
-                    {item.quantity}
+                    {itemQuantity}
                 </Text>
                 <RectButton style={[styles.button, { width: '100%' }]}
-                    onPress={() => {
-                        onUpdateQuantity(
-                            item.size._id,
-                            item.quantity - 1)
-                    }}
+                    onPress={() => handleQuantityChange(itemQuantity - 1)}
                 >
                     <FontAwesome5 name="minus" size={24} color="#FFFFFF" />
                 </RectButton>
@@ -60,10 +50,10 @@ function LeftAction({ item, drag, onUpdateQuantity }: LeftProps) {
 }
 
 type RightProps = BaseActionProps & {
-    onDelete: (sizeId: ObjectId) => void;
+    handleDelete: () => void;
 }
 
-function RightAction({ item, drag, onDelete }: RightProps) {
+function RightAction({ drag, handleDelete }: RightProps) {
     const [width, setWidth] = useState(0);
     const styleAnimation = useAnimatedStyle(() => {
         return {
@@ -78,7 +68,7 @@ function RightAction({ item, drag, onDelete }: RightProps) {
         >
             <TouchableOpacity
                 style={[styles.sideActionWrapper, styles.button, styles.rightButton]}
-                onPress={() => onDelete(item.size._id)}
+                onPress={handleDelete}
             >
                 <FontAwesome5 name="trash-alt" size={32} color="#FFFFFF" />
             </TouchableOpacity>
@@ -91,16 +81,16 @@ function RightAction({ item, drag, onDelete }: RightProps) {
 
 type Props = {
     item: CartItemType;
-    isSelected: boolean;
     isEditable: boolean;
-    onItemClicked: (item: CartItemType) => void;
-    onSelectItem: (sizeId: ObjectId) => void;
-    onUpdateItem: (sizeId: ObjectId, newQuantity: number) => void;
-    onDeleteItem: (sizeId: ObjectId) => void
+    isSelected: boolean;
+    handleCartItemClick: () => void;
+    handleSelectItem: () => void;
+    handleUpdateItem: (newQuantity: number) => void;
+    handleDeleteItem: () => void
 }
 export default function CartItem({
     item, isSelected, isEditable,
-    onItemClicked, onSelectItem, onUpdateItem, onDeleteItem
+    handleCartItemClick, handleSelectItem, handleUpdateItem, handleDeleteItem
 }: Props) {
 
     const buttonStyle = useMemo(() => {
@@ -118,7 +108,7 @@ export default function CartItem({
         return (
             <TouchableOpacity
                 style={[styles.checkButton, buttonStyle]}
-                onPress={() => onSelectItem(item.size._id)}
+                onPress={() => handleSelectItem()}
             >
                 <FontAwesome5 name="check" size={40}
                     color={iconColor} />
@@ -133,22 +123,16 @@ export default function CartItem({
             enableTrackpadTwoFingerGesture
             rightThreshold={80}
             renderLeftActions={(progress, drag) => (
-                <LeftAction
-                    item={item} drag={drag}
-                    onUpdateQuantity={onUpdateItem}
-                />
+                <LeftAction drag={drag} itemQuantity={item.quantity} handleQuantityChange={handleUpdateItem} />
             )}
             renderRightActions={(progress, drag) => (
-                <RightAction
-                    item={item} drag={drag}
-                    onDelete={onDeleteItem}
-                />
+                <RightAction drag={drag} handleDelete={handleDeleteItem} />
             )}
         >
             <View style={[styles.contentContainer, styles.contentWrapper]}>
                 <TouchableOpacity
                     style={styles.contentWrapper}
-                    onPress={() => onItemClicked(item)}
+                    onPress={() => handleCartItemClick()}
                 >
                     <View style={styles.image}>
                         <Image
@@ -180,19 +164,6 @@ export default function CartItem({
         </ReanimatedSwipeable>
     );
 };
-
-const LoadingItemRender = () => (
-    <View style={[styles.contentContainer, styles.contentWrapper]}>
-        <View style={styles.image}>
-            <Skeleton width={'100%'} height={"100%"} />
-        </View>
-        <View style={styles.infoWrapper}>
-            <Skeleton width={200} height={20} />
-            <Skeleton width={150} height={20} />
-            <Skeleton width={100} height={20} />
-        </View>
-    </View>
-)
 
 const styles = StyleSheet.create({
     checkButton: {

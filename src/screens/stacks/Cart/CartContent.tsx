@@ -66,13 +66,13 @@ export default function CartContent({ navigation, cartContext, isEditable, user,
     }
 
     const isCartEmpty = cart.items.length === 0;
-    const isCheckedEmpty = checkedItems.length === 0;
+    const isNoCheckedItems = checkedItems.length === 0;
 
     return (
         <View style={styles.container}>
             <CartItemsRender
                 data={cart.items}
-                checkedItems={checkedItems}
+                selectedItemIds={checkedIds}
                 isEditable={isEditable}
                 handleOnClicked={handleOnClickedItem}
                 handleOnSelect={(sizeId: ObjectId) =>
@@ -96,7 +96,7 @@ export default function CartContent({ navigation, cartContext, isEditable, user,
                     />
                     :
                     <PricingPanel
-                        invisible={isCartEmpty || isCheckedEmpty}
+                        invisible={isCartEmpty || isNoCheckedItems}
                         checkedItems={checkedItems}
                         onBuying={handleOnBuying}
                     />
