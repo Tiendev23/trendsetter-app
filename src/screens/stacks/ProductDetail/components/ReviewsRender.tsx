@@ -1,33 +1,84 @@
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { fetchReviewsByProductId } from '@/redux/features/product/reviewsSlice';
-import { ObjectId } from '@/types';
+import { ObjectId, Rating } from '@/types';
 import { RatingStars, ReviewForm } from '@/components';
-import { showSuccessToast } from '@/utils/toast';
+import { showErrorToast } from '@/utils/toast';
 import ChevronButton from '@/components/buttons/ChevronButton';
+import Skeleton from '@/components/loaders/Skeleton';
 
-type Props = {
-    rating: {
-        average: string;
-        count: number;
-    };
+type HeaderProps = {
+    rating: Rating;
+    onClick: () => void;
 }
-export function ReviewHeader({ rating }: Props) {
+export function ReviewHeader({ rating, onClick }: HeaderProps) {
     return (
         <View style={styles.reviewHeader}>
-            <TouchableOpacity>
+            <View>
                 <Text style={styles.reviewTitle}>
                     Đánh giá sản phẩm <Text style={styles.subtext}>({rating.count})</Text>
                 </Text>
-            </TouchableOpacity>
-            <View style={styles.reviewScoreWrapper}>
+            </View>
+            <TouchableOpacity
+                style={styles.reviewScoreWrapper}
+                onPress={onClick}
+            >
                 <Text>{rating.average}</Text>
                 <RatingStars rating={Number.parseInt(rating.average || '0')} />
                 <ChevronButton direction="forward" size={12} disabled />
-            </View>
+            </TouchableOpacity>
         </View>
     )
+};
+
+type Props = {
+    productId: ObjectId;
+    handleOnClick: () => void;
+}
+export function ReviewsRender({ productId, handleOnClick }: Props) {
+    const dispatch = useAppDispatch();
+    const { data, status, error } = useAppSelector(state => state.reviews);
+
+    useEffect(() => {
+        if (status === 'idle')
+            dispatch(fetchReviewsByProductId(productId));
+    }, [dispatch, productId, status]);
+
+    if (status === 'loading' || status === 'failed' || !data?.data) {
+        if (error) {
+            showErrorToast({
+                title: `Lỗi hiển thị đánh giá ${error.code}`,
+                message: error.message
+            });
+            dispatch(fetchReviewsByProductId(productId));
+        };
+        return (
+            <View style={{ gap: 4 }}>
+                <View style={styles.row}>
+                    <View style={styles.avatar}>
+                        <Skeleton width={35} height={35} />
+                    </View>
+                    <Skeleton width={100} height={25} />
+                </View>
+                <Skeleton width={100} height={25} />
+                <Skeleton width={200} height={25} />
+                <Skeleton width={50} height={25} />
+            </View>
+        )
+    };
+
+    return (
+        <FlatList
+            data={data.data.slice(0, 3)}
+            renderItem={({ item }) => (
+                <ReviewForm review={item} onClick={handleOnClick} />
+            )}
+            scrollEnabled={false} // Tắt cuộn riêng của FlatList
+            nestedScrollEnabled={true} // Cho phép cuộn bên trong ScrollView
+            contentContainerStyle={{ gap: 10 }}
+        />
+    );
 };
 
 const styles = StyleSheet.create({
@@ -49,44 +100,22 @@ const styles = StyleSheet.create({
         color: "#707B81",
         fontSize: 12,
     },
-})
-
-export function ReviewsRender({ productId }: { productId: ObjectId }) {
-    const dispatch = useAppDispatch();
-    const { data, status, error } = useAppSelector(state => state.reviews);
-
-    useEffect(() => {
-        dispatch(fetchReviewsByProductId(productId));
-    }, [productId]);
-
-    const errorShown = useRef(false);
-
-    useEffect(() => {
-        if (status === 'failed' && !errorShown.current) {
-            errorShown.current = true;
-            showSuccessToast({
-                title: "Lỗi hiển thị đánh giá",
-                message: error
-            });
-            console.error('error', error)
-        }
-    }, [status]);
-
-
-    return (
-        <View>
-            {
-                status === 'succeeded' &&
-                <FlatList
-                    data={data?.slice(0, 3)}
-                    renderItem={({ item }) => (
-                        <ReviewForm review={item} />
-                    )}
-                    scrollEnabled={false} // Tắt cuộn riêng của FlatList
-                    nestedScrollEnabled={true} // Cho phép cuộn bên trong ScrollView
-                    contentContainerStyle={{ gap: 10 }}
-                />
-            }
-        </View>
-    );
-}
+    blurBackground: {
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        overflow: 'hidden',
+        backgroundColor: 'white'
+    },
+    avatar: {
+        borderRadius: 70,
+        overflow: 'hidden'
+    },
+    row: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 10
+    },
+});

@@ -2,8 +2,9 @@ import { Animated, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useEffect, useRef, useState } from "react";
 import { CampaignBanner, DescRender, ImageSlider, PriceDisplay, ReviewHeader, ReviewsRender, SizeSelector, VariantSelector } from "./components";
 import { useCartContext } from "@/contexts/CartContext";
-import { CartItem, ObjectId, ProductDetails, Review, Variant, VariantSize } from "@/types";
+import { CartItem, ObjectId, ProductDetails, Variant, VariantSize } from "@/types";
 import { Dimensions } from 'react-native';
+import { showInfoToast } from "@/utils/toast";
 const screenHeight = Dimensions.get('window').height;
 
 type Props = {
@@ -27,43 +28,62 @@ export default function ProductDetailContent({ product, initialVariantId }: Prop
 
     const scrollRef = useRef<ScrollView>(null);
     const sizesViewRef = useRef<View>(null);
-
-    function handleSelectVariant(item: Variant) {
-        setSelectedVariant(item);
-        setPaddingBottom(0);
-    }
+    const prevOffsetRef = useRef<number>(-1);
 
     function handleSelectVariantSize(item: VariantSize) {
         if (selectedSize?._id === item._id) {
             setSelectedSize(null);
             setPaddingBottom(0);
+            prevOffsetRef.current = -1;
         } else {
             setSelectedSize(item);
             setTimeout(() => {
+                setPaddingBottom(175);
+            }, 300);
+            setTimeout(() => {
                 if (sizesViewRef.current && scrollRef.current) {
-                    /**
-                     *  Đo khoảng cách từ sizesViewRef đến vị trí của scrollView
-                     *  @value x là khoảng cách từ trái của sizesViewRef đến trái của scrollRef
-                     *  @value y là khoảng cách từ trên của sizesViewRef đến trên của scrollRef
-                     *  @value width là chiều rộng của sizesViewRef
-                     *  @value height là chiều cao của sizesViewRef
-                     */
                     sizesViewRef.current.measureLayout(
                         scrollRef.current as unknown as View,
                         (x, y, width, height) => {
-                            const scrollOffset = Math.max(y + (height / 2) - (screenHeight / 2), 0);
-                            scrollRef.current?.scrollTo({ y: scrollOffset, animated: true });
+                            const offset = Math.max(y + height / 2 - screenHeight / 2, 0);
+                            if (Math.abs(offset - prevOffsetRef.current) > 1) {
+                                scrollRef.current?.scrollTo({ y: offset, animated: true });
+                                prevOffsetRef.current = offset;
+                            };
                         }
                     );
-                }
-            }, 100);
+                };
+            }, 150);
         }
     };
-    
+
     function handleAddToCart(item: CartItem) {
         addToCart(item);
         setSelectedSize(null);
         setPaddingBottom(0);
+    };
+
+    function handleOnClick() {
+        showInfoToast({
+            title: "Thông báo",
+            message: "Tính năng đang được phát triển"
+        })
+    }
+
+    const ReviewSection = () => {
+        if (rating.count == 0) return null;
+        return (
+            <View style={styles.contentWrapper}>
+                <ReviewHeader
+                    rating={rating}
+                    onClick={handleOnClick}
+                />
+                <ReviewsRender
+                    productId={product._id}
+                    handleOnClick={handleOnClick}
+                />
+            </View>
+        )
     };
 
     return (
@@ -94,7 +114,11 @@ export default function ProductDetailContent({ product, initialVariantId }: Prop
                             <VariantSelector
                                 data={product.variants}
                                 selectedVariant={selectedVariant}
-                                onSelectVariant={handleSelectVariant}
+                                onSelectVariant={(item: Variant) => {
+                                    setSelectedVariant(item);
+                                    setPaddingBottom(0);
+                                    prevOffsetRef.current = -1;
+                                }}
                             />
                         </View>
 
@@ -111,13 +135,8 @@ export default function ProductDetailContent({ product, initialVariantId }: Prop
                                 onSelectSize={handleSelectVariantSize}
                             />
                         </View>
-                        {
-                            (rating.count != 0) &&
-                            <View style={styles.contentWrapper}>
-                                <ReviewHeader rating={rating} />
-                                <ReviewsRender productId={product._id} />
-                            </View>
-                        }
+
+                        <ReviewSection />
                     </View>
                 </View>
             </Animated.ScrollView>
@@ -126,10 +145,6 @@ export default function ProductDetailContent({ product, initialVariantId }: Prop
                 product={product}
                 variant={selectedVariant}
                 selectedSize={selectedSize}
-                onSelectSize={{
-                    setSelectedSize: setSelectedSize,
-                    setPaddingBottom: setPaddingBottom
-                }}
                 onAddToCart={handleAddToCart}
             />
         </View >

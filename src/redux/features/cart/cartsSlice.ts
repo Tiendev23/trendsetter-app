@@ -7,7 +7,7 @@ import {
     ObjectId,
     BaseResponse,
 } from "@/types";
-import { addAsyncThunkCases, makeApiThunk } from "@/utils/reduxHelpers";
+import { addAsyncThunkCases, makeApiThunk } from "@/utils/reduxHelper";
 
 // export const fetchCart = createAsyncThunk<
 //     BaseResponse<CartItem[]>,
@@ -38,9 +38,12 @@ export const removeManyCartItem = makeApiThunk<
     BaseResponse<CartItem[]>,
     { userId: ObjectId; body: ObjectId[] }
 >("cart/removeMany", ({ userId, body }) =>
-    apiClient.delete<BaseResponse<CartItem[]>>(`/users/${userId}/cart/remove-many`, {
-        data: body,
-    })
+    apiClient.delete<BaseResponse<CartItem[]>>(
+        `/users/${userId}/cart/remove-many`,
+        {
+            data: body,
+        }
+    )
 );
 
 export const clearCart = makeApiThunk<BaseResponse<CartItem[]>, ObjectId>(

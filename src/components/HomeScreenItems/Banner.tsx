@@ -7,7 +7,7 @@ import { getAllProducts } from '../../redux/features/product/productsSlice';
 import { RootState, AppDispatch } from '../../redux/store';
 import eventBus from '../../utils/Evenbus';
 import { formatCurrency } from '../../utils/formatForm';
-import { ProductsItem } from '../../navigation/NavigationTypes';
+import { ProductsItem } from '../../types/navigation';
 import { IMAGE_NOT_FOUND } from '@/types/Products/products';
 import { Campaign } from '../../types/Campaign';
 

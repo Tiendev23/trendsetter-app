@@ -7,3 +7,4 @@ export * from "./order";
 export * from "../payments";
 export * from "./campaign";
 export * from "./user";
+export * from "./location";

@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 import React, { useState } from 'react';
 import ScreenHeader from '../../components/ScreenHeader';
-import { MethodSelectionNav, MethodSelectionRoute } from '../../navigation/NavigationTypes';
+import { MethodSelectionNav, MethodSelectionRoute } from '../../types/navigation';
 import { FlatList } from 'react-native-gesture-handler';
 import PaymentMethod from '../../components/listItems/PaymentMethod';
 import { Payment } from '../../types/models';

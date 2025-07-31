@@ -1,6 +1,6 @@
 import { CreateOrderReq, Payment, PaymentProvider } from "../../types/models";
 import { Text } from "react-native";
-import { CheckoutNav } from "../../navigation/NavigationTypes";
+import { CheckoutNav } from "../../types/navigation";
 import ZalopayWebView from "./ZalopayWebView";
 import PayosWebView from "./PayosWebView";
 

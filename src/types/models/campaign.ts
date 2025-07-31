@@ -17,5 +17,5 @@ export type Campaign = {
     active: boolean; // true;
     createdAt: string; // "2025-07-09T12:51:12.229Z"
     updatedAt: string; // "2025-07-09T12:51:12.229Z"
-    __v?: number; // 0;
+    __v: number; // 0;
 };

@@ -1,16 +1,16 @@
 import MaskedView from '@react-native-masked-view/masked-view';
 import React from 'react';
 import { FlatList, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { BannerItem } from '../../navigation/NavigationTypes';
+import { BannerItem } from '../../types/navigation';
 
 
 
 const Menubar: React.FC<BannerItem> = ({ navigation, brands }) => {
-    const renderItem = ({ item }:{item:any}) => {
+    const renderItem = ({ item }: { item: any }) => {
         return (
             <TouchableOpacity style={[styles.menuItem, { backgroundColor: '#111' }]}
                 onPress={() => {
-                    
+
                     navigation.navigate('ProductlistScreen', { brandId: item })
                 }}>
                 <ImageBackground

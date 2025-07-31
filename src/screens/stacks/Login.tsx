@@ -6,7 +6,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { login, refresh } from '../../redux/features/auth/loginSlice';
 import { AuthContext, useAuthContext } from '../../contexts/AuthContext';
-import { LoginNav, LoginRoute } from '../../navigation/NavigationTypes';
+import { LoginNav, LoginRoute } from '../../types/navigation';
 import ErrorWarnBox from '../../components/ErrorWarnBox';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import ScreenHeader from '../../components/ScreenHeader';
@@ -28,7 +28,7 @@ export default function Login({ navigation, route }: { navigation: LoginNav; rou
         if (prevRoute) return;
         dispatch(setPrevRoute(navigation.getState().routes[0]));
     }, []);
-    
+
     function handleGoBack() {
         const tabState = prevRoute?.state;
         const activeIndex = tabState?.index ?? 0;

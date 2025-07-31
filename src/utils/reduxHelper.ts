@@ -90,6 +90,7 @@ export function addAsyncThunkCases<
     builder
         .addCase(thunk.pending, (state) => {
             state.status = "loading";
+            state.error = null;
         })
         .addCase(thunk.fulfilled, (state, action) => {
             state.status = "succeeded";

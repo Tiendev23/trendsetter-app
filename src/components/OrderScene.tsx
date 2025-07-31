@@ -2,7 +2,7 @@ import { FlatList, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { Order } from '../types/models';
 import OrderPreview from './listItems/OrderPreview';
-import { OrderNav } from '../navigation/NavigationTypes';
+import { OrderNav } from '../types/navigation';
 
 type Props = {
     data: Order[];
