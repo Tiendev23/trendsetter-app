@@ -6,17 +6,17 @@ import { BannerItem } from '../../navigation/NavigationTypes';
 
 
 const Menubar: React.FC<BannerItem> = ({ navigation, brands }) => {
-    const renderItem = ({ item }:{item:any}) => {
+    const renderItem = ({ item }: { item: any }) => {
         return (
             <TouchableOpacity style={[styles.menuItem, { backgroundColor: '#111' }]}
                 onPress={() => {
-                    
+
                     navigation.navigate('ProductlistScreen', { brandId: item })
                 }}>
                 <ImageBackground
                     source={require('../../../assets/images/biti_hunter.png')} // Ảnh nền bên ngoài
                     style={[StyleSheet.absoluteFill, { opacity: 0.7 }]}
-                    resizeMode='repeat'
+                    resizeMode='cover'
                 />
                 <MaskedView
                     style={{ flex: 1 }}
@@ -71,8 +71,10 @@ const styles = StyleSheet.create({
     menuItem: {
         width: 230,
         height: 80,
-        borderRadius: 20,
+        borderRadius: 30,
         overflow: 'hidden',
+        borderWidth: 0.1,
+
     },
     maskedView: {
         flex: 1,

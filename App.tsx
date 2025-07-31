@@ -24,7 +24,6 @@ export default function App() {
             <GestureHandlerRootView style={{ flex: 1 }}>
                 <SafeAreaView style={{ flex: 1 }} edges={['top']}>
                     <ContextProvider>
-                        <Provider store={store}>
                             <KeyboardAvoidingView
                                 style={{ flex: 1 }}
                                 behavior={'padding'}
@@ -35,7 +34,6 @@ export default function App() {
                                     <Toast />
                                 </NavigationContainer>
                             </KeyboardAvoidingView>
-                        </Provider>
                     </ContextProvider>
                 </SafeAreaView>
             </GestureHandlerRootView>

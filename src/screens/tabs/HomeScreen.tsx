@@ -147,11 +147,7 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
                             </TouchableOpacity>
                         </View>
                         <ProductItem
-                            navigation={stackNav}
-                            items={
-                                productsRating
-                            }
-                        />
+                            navigation={stackNav}items={items} />
 
 
 

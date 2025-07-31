@@ -44,10 +44,6 @@ const WinterBanner: React.FC<WinterBannerProps> = ({ navigation, items }) => {
 
     const shuffledItems = useMemo(() => shuffleArray(items), [items]);
 
-    // const shuffledItems = useMemo(() => {
-    //     const filtered = items.filter(item => item.banner); // lọc trước
-    //     return shuffleArray(filtered);
-    // }, [items]);
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -68,9 +64,9 @@ const WinterBanner: React.FC<WinterBannerProps> = ({ navigation, items }) => {
 
     const BannerItem = ({ item }: { item: Campaign }) => {
         const BannerId = item.products.map(p => typeof p === 'string' ? p : p._id)
-        
-        
-        
+
+
+
         return (
             <ImageBackground
                 source={{ uri: item.imageUrl || IMAGE_NOT_FOUND }}
@@ -89,7 +85,7 @@ const WinterBanner: React.FC<WinterBannerProps> = ({ navigation, items }) => {
 
                 <TouchableOpacity
                     style={styles.button}
-                    onPress={() => navigation.navigate('ProductlistScreen', { BannerId,title:'Sản phẩm khuyến mãi' })}
+                    onPress={() => navigation.navigate('ProductlistScreen', { BannerId, title: 'Sản phẩm khuyến mãi' })}
                 >
                     <Text style={styles.buttonText}>Xem ngay</Text>
                 </TouchableOpacity>
@@ -101,7 +97,7 @@ const WinterBanner: React.FC<WinterBannerProps> = ({ navigation, items }) => {
         <View style={styles.listContainer}>
             <Animated.FlatList
                 ref={flatListRef}
-                data={shuffledItems}
+                data={shuffledItems.slice(0, 5)}
                 keyExtractor={(item) => item._id}
                 renderItem={({ item }) => <BannerItem item={item} />}
                 horizontal
@@ -147,6 +143,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         marginHorizontal: 17,
         marginTop: 4,
+        borderWidth: 0.3,
+
     },
     textContainer: {
         flex: 1,

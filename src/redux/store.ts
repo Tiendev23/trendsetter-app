@@ -21,6 +21,7 @@ export const store = configureStore({
         location: Reducer.LocationReducer,
         user: Reducer.updateProfileReducer,
         reviews: Reducer.reviewReducer,
+        favorite: Reducer.FavoriteReducer
     },
 });
 
