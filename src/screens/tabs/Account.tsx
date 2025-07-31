@@ -71,7 +71,7 @@ const MyPurchasesSection = ({ onViewAll }: { onViewAll: () => void }) => (
         </View>
         <View style={styles.purchasesItemsWrapper}>
             {purchaseItems.map(item => (
-                <TouchableOpacity key={item.name} style={styles.purchaseItemContainer}>
+                <TouchableOpacity key={item.name} style={styles.purchaseItemContainer} onPress={onViewAll}>
                     <Icon name={item.icon} size={24} color="#555" />
                     <Text style={styles.purchaseItemText}>{item.name}</Text>
                 </TouchableOpacity>

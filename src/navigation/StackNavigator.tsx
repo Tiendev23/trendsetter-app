@@ -38,6 +38,8 @@ export default function StackNavigator() {
             <Stack.Screen name="PaymentMethodsScreen" component={Stacks.PaymentMethodsScreen} />
             <Stack.Screen name="WalletScreen" component={Stacks.WalletScreen} />
             <Stack.Screen name="FavoritesScreen" component={Stacks.FavoritesScreen} />
+            <Stack.Screen name="PrivacyPolicyScreen" component={Stacks.PrivacyPolicyScreen} />
+            <Stack.Screen name="HelpCenterScreen" component={Stacks.HelpCenterScreen} />
 
 
 

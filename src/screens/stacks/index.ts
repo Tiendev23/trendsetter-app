@@ -21,6 +21,8 @@ import AddAddressScreen from "./EditProfile/AddAddressScreen";
 import FavoritesScreen from "../stacks/Account/FavoritesScreen";
 import WalletScreen from '../stacks/Account/WalletScreen'
 import PaymentMethodsScreen from "./Account/PaymentMethodsScreen";
+import PrivacyPolicyScreen from './Account/PrivacyPolicyScreen';
+import HelpCenterScreen from "./Account/HelpCenterScreen";
 export {
     ForgotPasswordScreen,
     ChangePasswordScreen,
@@ -43,5 +45,7 @@ export {
     AddAddressScreen,
     FavoritesScreen,
     WalletScreen,
-    PaymentMethodsScreen
+    PaymentMethodsScreen,
+    PrivacyPolicyScreen,
+    HelpCenterScreen,
 };
