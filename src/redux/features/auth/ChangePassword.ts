@@ -12,6 +12,17 @@ export const changePass = createAsyncThunk(
     }
   }
 );
+export const resetChangePassword = createAsyncThunk(
+  'users/resetChangePass',
+  async (newPassword:string, { rejectWithValue }) => {
+    try {
+      const res = await apiClient.patch(`auth/reset-password`, { newPassword });
+      return res.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message);
+    }
+  }
+);
 const changePassSlice = createSlice({
   name: "changePass",
   initialState: {

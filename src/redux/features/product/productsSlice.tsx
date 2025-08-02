@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import apiClient from '../../../api/apiClient';
 import { ProductVariant } from "@/types/Products/productVariant";
 import { Campaign } from "@/types/Campaign";
+import { Product } from "@/types/Products/products";
 
 export const getAllProducts = createAsyncThunk(
     'products/getAll',
@@ -58,7 +59,7 @@ type ProductsState = {
     brandLoading: "idle" | "loading" | "succeeded" | "failed";
     filteredItems: any[];
     selectedBrand: string | null;
-    productsRating: ProductVariant[];
+    productsRating: Product[];
     productsRatingLoading: "idle" | "loading" | "succeeded" | "failed";
     campaigns: Campaign[];
     campaignsLoading: "idle" | "loading" | "succeeded" | "failed";

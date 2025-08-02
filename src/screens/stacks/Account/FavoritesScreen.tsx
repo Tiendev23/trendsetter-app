@@ -1,237 +1,340 @@
-// screens/FavoritesScreen.tsx
-
-import React, { useState } from 'react';
-import {
-    View,
-    Text,
-    StyleSheet,
-    FlatList,
-    Image,
-    Dimensions,
-    TouchableOpacity,
-    Alert,
-} from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList, ActivityIndicator, Dimensions, RefreshControl, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { ScreenHeader } from '@/components';
+import React, { useContext, useEffect, useState, useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, AppDispatch } from '../../../redux/store';
+import { formatCurrency } from '../../../utils/formatForm';
+import ChevronButton from '../../../components/buttons/ChevronButton';
+import ToCartButton from '../../../components/ToCartButton';
+
+const { width } = Dimensions.get("window");
 import { IMAGE_NOT_FOUND } from '@/types/Products/products';
+import { ProductVariant } from '../../../types/Products/productVariant';
+import { Props } from './../Account/Profile'; 
+import { AuthContext } from '@/contexts/AuthContext';
+import { addFavorite, removeFavorite, getFavorites } from '@/redux/features/product/favoriteSlice';
 
-const { width } = Dimensions.get('window');
-const FAKE_FAVORITES_PRODUCTS = [
-    {
-        _id: "variant_001",
-        images: ["https://images.unsplash.com/photo-1576566588028-4147f3842f27?q=80&w=2564&auto=format&fit=crop"],
-        finalPrice: 350000,
-        color: "Đen",
-        product: { _id: "prod_123", name: "Sandal Đế Cao Su", active: true },
-        inventories: [{ stock: 10 }],
-        active: true,
-    },
-    {
-        _id: "variant_002",
-        images: ["https://images.unsplash.com/photo-1576566588028-4147f3842f27?q=80&w=2564&auto=format&fit=crop"],
-        finalPrice: 175000,
-        color: "Trắng",
-        product: { _id: "prod_124", name: "Áo Thun Cotton Basic", active: true },
-        inventories: [{ stock: 0 }],
-        active: true,
-    },
-    {
-        _id: "variant_003",
-        images: ["https://images.unsplash.com/photo-1576566588028-4147f3842f27?q=80&w=2564&auto=format&fit=crop"],
-        finalPrice: 210000,
-        color: "Xanh Navy",
-        product: { _id: "prod_125", name: "Áo Thun In Họa Tiết", active: true },
-        inventories: [{ stock: 3 }],
-        active: true,
-    },
-    {
-        _id: "variant_004",
-        images: ["https://images.unsplash.com/photo-1558863695-8f6a39396263?q=80&w=2564&auto=format&fit=crop"],
-        finalPrice: 420000,
-        color: "Nâu",
-        product: { _id: "prod_126", name: "Sandal Da Quai Chéo", active: true },
-        inventories: [{ stock: 0 }],
-        active: true,
-    },
-];
+const getGender = (gender?: string) => {
+    if (gender === 'male') return 'Nam';
+    if (gender === 'female') return 'Nữ';
+    return '';
+};
 
-const FavoriteItemCard = ({ item, onRemove, navigation }) => {
-    const handlePress = () => {
-        navigation.navigate('ProductDetail', {
-            productId: item.product._id,
-            initialVariantId: item._id,
-        });
+const FavoritesScreen: React.FC<Props> = ({ navigation }) => {
+    const dispatch = useDispatch<AppDispatch>();
+    const { user } = useContext(AuthContext)!;
+
+   
+    const { favorites, status } = useSelector((state: RootState) => state.favorite);
+
+    const [refreshing, setRefreshing] = useState(false);
+    const [likingId, setLikingId] = useState<string | null>(null);
+
+    // Fetch dữ liệu khi màn hình được focus 
+    useFocusEffect(
+        useCallback(() => {
+            if (user?._id) {
+                dispatch(getFavorites({ _id: user._id }));
+            }
+        }, [dispatch, user?._id])
+    );
+
+    // kéo để làm mới" 
+    const onRefresh = useCallback(() => {
+        if (user?._id) {
+            setRefreshing(true);
+            dispatch(getFavorites({ _id: user._id })).finally(() => setRefreshing(false));
+        }
+    }, [dispatch, user?._id]);
+
+    //   xử lý bỏ thích
+    const handleToggleLike = async (variant: ProductVariant) => {
+        if (!user?._id || likingId) return;
+
+        const { _id: variantId } = variant;
+        setLikingId(variantId);
+
+        try {
+            // Màn hình này chỉ có sản phẩm đã thích, nên mặc định là hành động xóa
+            await dispatch(removeFavorite({ _id: user._id, variantId })).unwrap();
+            // Sau khi xóa thành công, fetch lại danh sách mới
+            await dispatch(getFavorites({ _id: user._id }));
+        } catch (err) {
+            console.error("Failed to remove favorite:", err);
+        } finally {
+            setLikingId(null);
+        }
     };
 
-    const handleRemovePress = () => {
-        Alert.alert(
-            "Xác nhận",
-            "Bạn có chắc muốn xóa sản phẩm này khỏi danh sách yêu thích?",
-            [
-                { text: "Hủy", style: "cancel" },
-                { text: "Xóa", onPress: () => onRemove(item._id), style: "destructive" },
-            ]
+
+    const renderProduct = ({ item }: { item: ProductVariant }) => {
+        // Kiểm tra xem item có tồn tại không
+        if (!item || !item.product) {
+            return null; // Không render gì nếu item không hợp lệ
+        }
+
+        const isUnavailable = item.active === false;
+        const gender = getGender(item.product?.gender);
+        const ProductName = `${item.product?.name || 'Sản phẩm'}${gender ? `-${gender}` : ''} ${item.color}`;
+        const isLiking = likingId === item._id;
+
+        return (
+            <TouchableOpacity
+                style={styles.card}
+                onPress={() => navigation.navigate('ProductDetail', {
+                    productId: item.product._id,
+                    variantId: item._id,
+                })}
+            >
+                <Image
+                    source={{ uri: item.images?.[0] || IMAGE_NOT_FOUND }}
+                    style={styles.image}
+                    resizeMode="cover"
+                />
+                {isUnavailable && (
+                    <View style={styles.unavailableOverlay}>
+                        <Text style={styles.unavailableText}>Tạm hết hàng</Text>
+                    </View>
+                )}
+
+                <Pressable
+                    style={({ pressed }) => [
+                        styles.heartIcon,
+                        pressed && styles.heartIconPressed,
+                    ]}
+                    onPress={(e) => {
+                        e.stopPropagation();
+                        handleToggleLike(item);
+                    }}
+                    disabled={isLiking}
+                >
+                    {isLiking ? (
+                         <ActivityIndicator size="small" color="#006340" />
+                    ) : (
+                        <Ionicons
+                            name={'heart'} 
+                            size={24}
+                            color={'#ff0000'} 
+                        />
+                    )}
+                </Pressable>
+                <View style={styles.infoContainer}>
+                    <Text numberOfLines={2} style={styles.name}>
+                        {ProductName}
+                    </Text>
+                    <View style={styles.priceContainer}>
+                        <Text style={styles.price}>{formatCurrency(item.finalPrice)}</Text>
+                        <View style={styles.shipTag}>
+                            <Ionicons name="rocket-outline" size={14} color="#000" />
+                            <Text style={styles.shipText}>Xpress Ship</Text>
+                        </View>
+                    </View>
+                </View>
+            </TouchableOpacity>
         );
     };
 
-    const isOutOfStock = item.inventories?.reduce((acc, inv) => acc + inv.stock, 0) === 0;
+    //  Render Giao Diện 
 
-    return (
-        <TouchableOpacity style={cardStyles.card} onPress={handlePress} activeOpacity={0.85}>
-            <Image
-                source={{ uri: item.images?.[0] || IMAGE_NOT_FOUND }}
-                style={[cardStyles.image, isOutOfStock && { opacity: 0.4 }]}
-            />
-
-            {isOutOfStock && (
-                <View style={cardStyles.outOfStockOverlay}>
-                    <Text style={cardStyles.outOfStockText}>Hết hàng</Text>
+    const renderContent = () => {
+        if (status === 'loading' && !refreshing) {
+            return (
+                <View style={styles.center}>
+                    <ActivityIndicator size="large" color="#006340" />
+                    <Text>Đang tải danh sách yêu thích...</Text>
                 </View>
-            )}
+            );
+        }
 
-            <TouchableOpacity style={cardStyles.heartButton} onPress={handleRemovePress}>
-                <Ionicons name="heart" size={22} color="red" />
-            </TouchableOpacity>
+        if (status === 'failed') {
+            return (
+                 <View style={styles.center}>
+                    <Text style={{color: 'red'}}>Lỗi khi tải dữ liệu.</Text>
+                    <TouchableOpacity onPress={onRefresh}><Text style={{color: '#006340'}}>Thử lại</Text></TouchableOpacity>
+                </View>
+            );
+        }
 
-            <View style={cardStyles.infoContainer}>
-                <Text numberOfLines={2} style={cardStyles.name}>
-                    {`${item.product.name} - ${item.color}`}
-                </Text>
-                <Text style={cardStyles.price}>{item.finalPrice.toLocaleString('vi-VN')}đ</Text>
-            </View>
-        </TouchableOpacity>
-    );
-};
+        if (favorites.length === 0) {
+            return (
+                <View style={styles.center}>
+                    <Ionicons name="heart-dislike-outline" size={60} color="#ccc" />
+                    <Text style={styles.emptyText}>Chưa có sản phẩm yêu thích</Text>
+                    <Text style={styles.emptySubText}>Hãy lướt và tìm sản phẩm bạn thích nhé!</Text>
+                </View>
+            );
+        }
 
-
-export default function FavoritesScreen({ navigation }) {
-    const [favorites, setFavorites] = useState(FAKE_FAVORITES_PRODUCTS);
-
-    const handleRemoveFavorite = (variantId: string) => {
-        setFavorites((prev) => prev.filter((item) => item._id !== variantId));
-    };
+        return (
+            <FlatList
+                data={favorites} 
+                extraData={{ favorites, likingId }}
+                keyExtractor={(item) => item._id}
+                numColumns={2}
+                columnWrapperStyle={styles.row}
+                renderItem={renderProduct}
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={styles.listContent}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                    />
+                }
+            />
+        );
+    }
 
     return (
         <View style={styles.container}>
-            <ScreenHeader title="Sản phẩm Yêu thích" showBackButton navigation={navigation} />
-            <FlatList
-                data={favorites}
-                keyExtractor={(item) => item._id}
-                numColumns={2}
-                contentContainerStyle={styles.listContent}
-                renderItem={({ item }) => (
-                    <View style={styles.itemWrapper}>
-                        <FavoriteItemCard
-                            item={item}
-                            onRemove={handleRemoveFavorite}
-                            navigation={navigation}
-                        />
-                    </View>
-                )}
-                ListEmptyComponent={
-                    <View style={styles.emptyContainer}>
-                        <Ionicons name="heart-dislike-outline" size={64} color="#ccc" />
-                        <Text style={styles.emptyText}>Danh sách yêu thích trống</Text>
-                        <Text style={styles.emptySubText}>
-                            Hãy "thả tim" các sản phẩm bạn yêu thích để xem lại sau nhé!
-                        </Text>
-                    </View>
-                }
-            />
+            <View>
+                <View style={styles.headerContainer} />
+                <View style={styles.headerActions}>
+                    <ChevronButton direction="back" onPress={() => navigation.goBack()} />
+                    <Text style={styles.headerTitle}>Sản phẩm yêu thích</Text>
+                    <ToCartButton navigation={navigation} />
+                </View>
+            </View>
+            {renderContent()}
         </View>
     );
-}
+};
 
+export default FavoritesScreen;
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#fff', 
     },
-    listContent: {
-        paddingHorizontal: 8,
-        paddingTop: 8,
-        paddingBottom: 80,
+    headerContainer: {
+        backgroundColor: '#FFF',
+        paddingVertical: 22,
+        paddingHorizontal: 18,
+        borderBottomWidth: 1,
+        borderBottomColor: '#eee',
     },
-    itemWrapper: {
-        flex: 1 / 2,
-        padding: 8,
-    },
-    emptyContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: width * 0.3,
-    },
-    emptyText: {
-        fontSize: 18,
+    headerTitle: {
         fontWeight: '600',
-        color: '#555',
-        marginTop: 16,
-    },
-    emptySubText: {
-        fontSize: 14,
-        color: '#888',
-        marginTop: 8,
-        paddingHorizontal: 32,
+        fontSize: 20,
+        color: '#006340',
         textAlign: 'center',
     },
-});
-
-const cardStyles = StyleSheet.create({
+    headerActions: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        paddingHorizontal: 18,
+    },
+    listContent: {
+        paddingHorizontal: 12,
+        paddingBottom: 20,
+        paddingTop: 10,
+    },
+    row: {
+        justifyContent: 'space-between',
+        marginBottom: 12,
+    },
     card: {
-        backgroundColor: '#fdfdfd',
-        borderRadius: 12,
+        width: (width - 36) / 2,
+        backgroundColor: '#f9f9f9',
+        borderRadius: 20,
         overflow: 'hidden',
         borderWidth: 1,
-        borderColor: '#eee',
-        position: 'relative',
+        borderColor: '#f0f0f0',
     },
     image: {
         width: '100%',
-        aspectRatio: 1,
+        height: 140,
     },
-    outOfStockOverlay: {
+    heartIcon: {
+        position: 'absolute',
+        top: 7,
+        right: 10,
+        padding: 5,
+        borderRadius: 20,
+        backgroundColor: '#FFFFFF', 
+        elevation: 2, //  shadow cho Android
+        shadowColor: '#000', //  shadow cho iOS
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.2,
+        shadowRadius: 1.41,
+    },
+    heartIconPressed: {
+        backgroundColor: '#e0e0e0',
+    },
+    infoContainer: {
+        padding: 8,
+    },
+    name: {
+        fontSize: 14,
+        fontWeight: '500',
+        color: '#333',
+        height: 34, 
+    },
+    priceContainer: {
+        marginTop: 6,
+        alignItems: 'flex-end'
+    },
+    price: {
+        fontSize: 14,
+        fontWeight: 'bold',
+        color: '#006340',
+    },
+    shipTag: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: '#006340',
+        paddingHorizontal: 6,
+        paddingVertical: 2,
+        borderRadius: 5,
+        marginTop: 8,
+    },
+    shipText: {
+        marginLeft: 4,
+        fontSize: 12,
+        color: '#006340',
+    },
+    center: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingHorizontal: 20,
+    },
+    unavailableOverlay: {
         position: 'absolute',
         top: 0,
         left: 0,
         width: '100%',
         height: '100%',
-        backgroundColor: 'rgba(255,255,255,0.6)',
+        backgroundColor: 'rgba(255, 255, 255, 0.7)',
         justifyContent: 'center',
         alignItems: 'center',
     },
-    outOfStockText: {
+    unavailableText: {
+        color: '#a8a8a8',
+        fontWeight: 'bold',
         fontSize: 16,
-        fontWeight: 'bold',
-        color: 'green',
+        backgroundColor: '#eee',
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+        borderRadius: 5
     },
-    heartButton: {
-        position: 'absolute',
-        top: 8,
-        right: 8,
-        backgroundColor: '#fff',
-        borderRadius: 20,
-        padding: 6,
-        shadowColor: '#000',
-        shadowOpacity: 0.1,
-        shadowOffset: { width: 0, height: 2 },
-        shadowRadius: 4,
-        elevation: 3,
+    emptyText: {
+        marginTop: 15,
+        fontSize: 18,
+        fontWeight: '600',
+        color: '#555',
     },
-    infoContainer: {
-        padding: 10,
-    },
-    name: {
+    emptySubText: {
+        marginTop: 5,
         fontSize: 14,
-        fontWeight: '500',
-        minHeight: 36,
-        color: '#333',
-    },
-    price: {
-        fontSize: 15,
-        fontWeight: 'bold',
-        color: '#007f5f',
-        marginTop: 4,
-    },
+        color: '#888',
+        textAlign: 'center',
+    }
 });

@@ -2,6 +2,7 @@ import { Brand } from "../models";
 import { Category } from "../models";
 import { Inventory } from "./inventory";
 
+// Type này dùng để tránh lỗi tham chiếu vòng tròn, đã đúng
 export type ProductInVariant = {
     _id: string;
     category: Category;
@@ -22,7 +23,7 @@ export type ProductVariant = {
     basePrice: number;
     finalPrice: number;
     active: boolean;
-    inventories: Inventory[];
+    inventories: Inventory[]; 
     createdAt: string;
     updatedAt: string;
 };

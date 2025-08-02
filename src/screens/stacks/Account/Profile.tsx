@@ -131,9 +131,9 @@ const Profile: React.FC<Props> = ({ navigation, route }) => {
                 </SettingsCard>
 
                 <SettingsCard title="Thông tin & Hỗ trợ">
-                    <NavRow text="Trung tâm hỗ trợ" icon="help-buoy-outline" onPress={() => { /* Navigate to Help Center */ }} />
+                    <NavRow text="Trung tâm hỗ trợ" icon="help-buoy-outline" onPress={() => navigation.navigate('HelpCenterScreen')} />
                     <NavRow text="Điều khoản dịch vụ" icon="document-text-outline" onPress={() => navigation.navigate('TermsOfServiceScreen')} />
-                    <NavRow text="Chính sách bảo mật" icon="document-lock-outline" onPress={() => { /* Navigate to Privacy Policy */ }} />
+                    <NavRow text="Chính sách bảo mật" icon="document-lock-outline" onPress={() => { navigation.navigate("PrivacyPolicyScreen")}} />
                 </SettingsCard>
 
                 <View style={styles.dangerZone}>

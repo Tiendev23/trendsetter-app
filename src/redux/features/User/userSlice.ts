@@ -69,8 +69,6 @@ const userSlice = createSlice({
                 state.status = 'loading';
             })
             .addCase(updateProfile.fulfilled, (state, action) => {
-                    console.log('✅ API trả về user:', action.payload); // ← Xem gender ở đây
-
                 state.status = 'succeeded';
                 state.profile = action.payload;
             })

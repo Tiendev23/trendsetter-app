@@ -1,42 +1,83 @@
-import { Dimensions, Image, StyleSheet, Text, Pressable, View } from 'react-native'
-import React, { useState } from 'react'
-import { ProductsItem } from '../../types/navigation'
+import { Dimensions, Image, StyleSheet, Text, Pressable, View } from 'react-native';
+import React, { useContext } from 'react'; 
+import { FlatList } from 'react-native-gesture-handler';
+import { Ionicons } from '@expo/vector-icons';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { ProductsItem } from '@/types';
 import { IMAGE_NOT_FOUND, Product } from '../../types/Products/products';
 import { getGender } from './ProductItems';
-import { Ionicons } from '@expo/vector-icons';
-import { FlatList } from 'react-native-gesture-handler';
+import { AppDispatch, RootState } from '@/redux/store';
+import { AuthContext } from '@/contexts/AuthContext';
+import { FavoriteContext } from '@/contexts/FavoriteContext';
+
+import {
+    addFavorite,
+    removeFavorite,
+    optimisticAddFavorite,
+    optimisticRemoveFavorite
+} from '@/redux/features/product/favoriteSlice';
+import { ProductVariant } from '@/types/Products/productVariant';
+
 
 const { width } = Dimensions.get('window');
-const ITEM_WIDTH = Math.round(width * 0.43); // hoặc 0.48
+const ITEM_WIDTH = Math.round(width * 0.43);
 const ITEM_HEIGHT = Math.round(ITEM_WIDTH * 4 / 3.3);
 
 const ProductItemsbyRating: React.FC<ProductsItem> = ({ navigation, items }) => {
-    const [likedIds, setLikedIds] = useState<string[]>([]);
+    const dispatch = useDispatch<AppDispatch>();
+    const { user } = useContext(AuthContext)!;
+    const { isLiked, toggleLike: toggleLikeGuest } = useContext(FavoriteContext)!;
+    const { favorites } = useSelector((state: RootState) => state.favorite);
 
-    const toggleLike = (productId: string) => {
-        setLikedIds(prev =>
-            prev.includes(productId)
-                ? prev.filter(id => id !== productId)
-                : [...prev, productId]
-        );
+    const handleToggleLike = (variant: ProductVariant) => {
+        if (!variant) return; 
+
+        if (user?._id) {
+            const { _id: variantId } = variant;
+            const isAlreadyLiked = favorites.some((f) => f._id === variantId);
+
+            if (isAlreadyLiked) {
+                dispatch(optimisticRemoveFavorite({ variantId }));
+                dispatch(removeFavorite({ _id: user._id, variantId }));
+            } else {
+                dispatch(optimisticAddFavorite(variant));
+                dispatch(addFavorite({ _id: user._id, variantId }));
+            }
+        } else {
+            toggleLikeGuest(variant._id);
+        }
     };
 
+
     const renderItem = ({ item }: { item: Product }) => {
-        const isUnavailable = item.active === false;
-        const gender = getGender(item.gender)
-        const ProductName = `${item.name}${gender ? `-${gender}` : ``}`;
-        const firstImage = item.variants[0].images?.[1] || IMAGE_NOT_FOUND;
-        const liked = likedIds.includes(item._id);
+       
+        const firstVariant = item.variants?.[0];
+        if (!firstVariant) {
+            return null;
+        }
+
+        const isUnavailable = firstVariant.active === false;
+        const gender = getGender(item.gender);
+        const ProductName = `${item.name}${gender ? `-${gender}` : ``} - ${firstVariant.color}`;
+        const firstImage = firstVariant.images?.[0] || IMAGE_NOT_FOUND;
+
+        const liked = user?._id
+            ? favorites.some((f) => f._id === firstVariant._id)
+            : isLiked(firstVariant._id);
 
         return (
             <Pressable
                 style={[styles.card, isUnavailable && styles.unavailableCard]}
                 onPress={() => {
-                    navigation.navigate('ProductDetail', { category: item.category?.name, productId: item._id, variantId: item.variants[0].inventories[0]._id });
+                    navigation.navigate('ProductDetail', {
+                        productId: item._id,
+                        variantId: firstVariant._id 
+                    });
                 }}
             >
                 <Image
-                    source={{ uri: firstImage || IMAGE_NOT_FOUND }}
+                    source={{ uri: firstImage }}
                     style={styles.image}
                 />
                 {isUnavailable && (
@@ -45,15 +86,14 @@ const ProductItemsbyRating: React.FC<ProductsItem> = ({ navigation, items }) => 
                     </View>
                 )}
 
-                {/* Nút trái tim đổi màu khi bấm */}
                 <Pressable
                     style={({ pressed }) => [
                         styles.heartIcon,
                         pressed && styles.heartIconPressed,
                     ]}
                     onPress={e => {
-                        e.stopPropagation(); // tránh kích hoạt onPress cha
-                        toggleLike(item._id);
+                        e.stopPropagation();
+                        handleToggleLike(firstVariant);
                     }}
                 >
                     <Ionicons
@@ -73,36 +113,39 @@ const ProductItemsbyRating: React.FC<ProductsItem> = ({ navigation, items }) => 
                     </View>
                 </View>
             </Pressable>
-
-        )
+        );
     }
 
     return (
         <View style={styles.product}>
             <FlatList
-                data={items}
+                // Lọc ra các sản phẩm có ít nhất một variant
+                data={items.filter(p => p.variants && p.variants.length > 0).slice(0, 5)}
                 renderItem={renderItem}
                 keyExtractor={(item) => item._id}
                 initialNumToRender={4}
                 maxToRenderPerBatch={5}
                 horizontal
                 showsHorizontalScrollIndicator={false}
+                extraData={favorites}
             />
         </View>
     );
 };
 
-export default ProductItemsbyRating
+export default ProductItemsbyRating;
 
 const styles = StyleSheet.create({
     card: {
-        width: ITEM_WIDTH,//179-240
+        width: ITEM_WIDTH,
         height: ITEM_HEIGHT,
         backgroundColor: '#f9f9f9',
-        borderRadius: 10,
+        borderRadius: 20,
         marginRight: 12,
         overflow: 'hidden',
-        position: 'relative',  // đổi thành relative để position tuyệt đối con bên trong chuẩn
+        position: 'relative',
+        borderWidth: 0.1,
+
     },
     unavailableCard: {
         opacity: 0.6,

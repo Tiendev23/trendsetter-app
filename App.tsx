@@ -21,24 +21,22 @@ const linking = {
 export default function App() {
     return (
         <SafeAreaProvider>
-            <Provider store={store}>
-                <ContextProvider>
-                    <GestureHandlerRootView style={{ flex: 1 }}>
-                        <SafeAreaView style={{ flex: 1 }} edges={['top']}>
-                            <KeyboardAvoidingView
-                                style={{ flex: 1 }}
-                                behavior={'padding'}
-                                keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : -45} // điều chỉnh nếu bạn có header
-                            >
-                                <NavigationContainer linking={linking}>
-                                    <AppNavigation />
-                                    <Toast />
-                                </NavigationContainer>
-                            </KeyboardAvoidingView>
-                        </SafeAreaView>
-                    </GestureHandlerRootView>
-                </ContextProvider>
-            </Provider>
-        </SafeAreaProvider>
+            <ContextProvider>
+                <GestureHandlerRootView style={{ flex: 1 }}>
+                    <SafeAreaView style={{ flex: 1 }} edges={['top']}>
+                        <KeyboardAvoidingView
+                            style={{ flex: 1 }}
+                            behavior={'padding'}
+                            keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : -45} // điều chỉnh nếu bạn có header
+                        >
+                            <NavigationContainer linking={linking}>
+                                <AppNavigation />
+                                <Toast />
+                            </NavigationContainer>
+                        </KeyboardAvoidingView>
+                    </SafeAreaView>
+                </GestureHandlerRootView>
+            </ContextProvider>
+        </SafeAreaProvider >
     );
 }
