@@ -1,8 +1,11 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { useEffect, useState } from "react";
+import { Animated, ScrollView, StyleSheet, Text, View } from "react-native";
+import { useEffect, useRef, useState } from "react";
 import { CampaignBanner, DescRender, ImageSlider, PriceDisplay, ReviewHeader, ReviewsRender, SizeSelector, VariantSelector } from "./components";
 import { useCartContext } from "@/contexts/CartContext";
-import { ObjectId, ProductDetails, Review, Variant, VariantSize } from "@/types";
+import { CartItem, ObjectId, ProductDetails, Variant, VariantSize } from "@/types";
+import { Dimensions } from 'react-native';
+import { showInfoToast } from "@/utils/toast";
+const screenHeight = Dimensions.get('window').height;
 
 type Props = {
     product: ProductDetails;
@@ -14,18 +17,79 @@ export default function ProductDetailContent({ product, initialVariantId }: Prop
         variants.find(v => v._id === initialVariantId) || variants[0]
     );
     const [inventories, setInventories] = useState<VariantSize[]>(selectedVariant.inventories);
-    const [selectedSize, setSelectedSize] = useState<ObjectId>('');
+    const [selectedSize, setSelectedSize] = useState<VariantSize | null>(null);
     const { addToCart } = useCartContext();
+    const [paddingBottom, setPaddingBottom] = useState<number>(0);
 
     useEffect(() => {
         setInventories(selectedVariant.inventories);
-        setSelectedSize('');
+        setSelectedSize(null);
     }, [selectedVariant]);
+
+    const scrollRef = useRef<ScrollView>(null);
+    const sizesViewRef = useRef<View>(null);
+    const prevOffsetRef = useRef<number>(-1);
+
+    function handleSelectVariantSize(item: VariantSize) {
+        if (selectedSize?._id === item._id) {
+            setSelectedSize(null);
+            setPaddingBottom(0);
+            prevOffsetRef.current = -1;
+        } else {
+            setSelectedSize(item);
+            setTimeout(() => {
+                setPaddingBottom(175);
+            }, 300);
+            setTimeout(() => {
+                if (sizesViewRef.current && scrollRef.current) {
+                    sizesViewRef.current.measureLayout(
+                        scrollRef.current as unknown as View,
+                        (x, y, width, height) => {
+                            const offset = Math.max(y + height / 2 - screenHeight / 2, 0);
+                            if (Math.abs(offset - prevOffsetRef.current) > 1) {
+                                scrollRef.current?.scrollTo({ y: offset, animated: true });
+                                prevOffsetRef.current = offset;
+                            };
+                        }
+                    );
+                };
+            }, 150);
+        }
+    };
+
+    function handleAddToCart(item: CartItem) {
+        addToCart(item);
+        setSelectedSize(null);
+        setPaddingBottom(0);
+    };
+
+    function handleOnClick() {
+        showInfoToast({
+            title: "Thông báo",
+            message: "Tính năng đang được phát triển"
+        })
+    }
+
+    const ReviewSection = () => {
+        if (rating.count == 0) return null;
+        return (
+            <View style={styles.contentWrapper}>
+                <ReviewHeader
+                    rating={rating}
+                    onClick={handleOnClick}
+                />
+                <ReviewsRender
+                    productId={product._id}
+                    handleOnClick={handleOnClick}
+                />
+            </View>
+        )
+    };
 
     return (
         <View style={styles.container}>
-            <ScrollView>
-                <View>
+            <Animated.ScrollView ref={scrollRef}>
+                <View style={{ paddingBottom: paddingBottom }}>
                     <View style={styles.sliderWrapper}>
                         <ImageSlider
                             images={selectedVariant.images}
@@ -50,39 +114,38 @@ export default function ProductDetailContent({ product, initialVariantId }: Prop
                             <VariantSelector
                                 data={product.variants}
                                 selectedVariant={selectedVariant}
-                                onSelectVariant={setSelectedVariant}
+                                onSelectVariant={(item: Variant) => {
+                                    setSelectedVariant(item);
+                                    setPaddingBottom(0);
+                                    prevOffsetRef.current = -1;
+                                }}
                             />
                         </View>
 
-                        <View style={styles.contentWrapper}>
+                        <View
+                            ref={sizesViewRef}
+                            style={styles.contentWrapper}
+                        >
                             <Text style={styles.contentLabel}>
-                                Kích thước
+                                Kích cỡ
                             </Text>
                             <SizeSelector
                                 data={inventories}
                                 selectedSize={selectedSize}
-                                onSelectSize={setSelectedSize}
+                                onSelectSize={handleSelectVariantSize}
                             />
                         </View>
-                        {
-                            (rating.count != 0) &&
-                            <View style={styles.contentWrapper}>
-                                <ReviewHeader rating={rating} />
-                                <ReviewsRender productId={product._id} />
-                            </View>
-                        }
+
+                        <ReviewSection />
                     </View>
                 </View>
-            </ScrollView>
+            </Animated.ScrollView>
 
             <PriceDisplay
-                variant={{
-                    id: selectedVariant._id,
-                    price: selectedVariant.finalPrice,
-                }}
+                product={product}
+                variant={selectedVariant}
                 selectedSize={selectedSize}
-                onSelectSize={setSelectedSize}
-                onAddToCart={addToCart}
+                onAddToCart={handleAddToCart}
             />
         </View >
     )

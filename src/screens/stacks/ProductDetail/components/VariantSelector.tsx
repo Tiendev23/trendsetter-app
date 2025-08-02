@@ -15,11 +15,13 @@ export default function VariantSelector({ data, selectedVariant, onSelectVariant
                     <TouchableOpacity
                         key={variant._id}
                         onPress={() => onSelectVariant(variant)}
-                        style={[styles.button, (variant._id === selectedVariant._id) && styles.shadow]}
+                        style={[styles.button,
+                        (variant._id === selectedVariant._id) && styles.shadow
+                        ]}
                     >
                         <Image
                             source={{ uri: variant.images[0] }}
-                            style={[styles.image, styles.shadow]}
+                            style={[styles.image]}
                         />
                     </TouchableOpacity>
                 ))
@@ -35,6 +37,7 @@ const styles = StyleSheet.create({
     },
     button: {
         width: 70,
+        borderRadius: 140,
         aspectRatio: 1,
         justifyContent: 'center',
         alignItems: 'center',
@@ -42,11 +45,11 @@ const styles = StyleSheet.create({
     image: {
         flex: 1,
         width: '100%',
-        borderRadius: 100,
+        borderRadius: 140,
     },
     shadow: {
         // shadow cho Android
-        elevation: 3,
+        elevation: 5,
         // shadow cho IOS
         shadowColor: '#000', // Màu bóng
         shadowOffset: { width: 5, height: 5 }, // Độ lệch của bóng

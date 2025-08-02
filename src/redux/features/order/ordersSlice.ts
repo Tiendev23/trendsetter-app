@@ -1,4 +1,4 @@
-import { BaseState, ErrorResponse } from "../../../types/redux";
+import { BaseState, APIError } from "../../../types/redux";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import apiClient from "../../../api/apiClient";
 import { AxiosError } from "axios";
@@ -7,7 +7,7 @@ import { Order } from "../../../types/models";
 export const fetchOrdersByUser = createAsyncThunk<
     Order[], // kiểu dữ liệu khi thành công
     string, // kiểu dữ liệu truyền vào (nếu có)
-    { rejectValue: ErrorResponse } // kiểu dữ liệu khi thất bại
+    { rejectValue: APIError } // kiểu dữ liệu khi thất bại
 >("order/fetchByUser", async (userId, { rejectWithValue }) => {
     try {
         const response = await apiClient.get(`/orders/user/${userId}`);

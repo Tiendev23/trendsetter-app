@@ -4,7 +4,7 @@ import { IMAGE_NOT_FOUND, Order, OrderItem, User } from '../../types/models';
 import { formatCurrency, formatDate, formatOrderStatus } from '../../utils/formatForm';
 import ChevronButton from '../buttons/ChevronButton';
 import CustomButton from '../buttons/CustomButton';
-import { OrderNav } from '../../navigation/NavigationTypes';
+import { OrderNav } from '../../types/navigation';
 
 
 type Props = {
@@ -91,7 +91,7 @@ export default function OrderPreview({ order, navigation }: Props) {
                     <View style={{ flex: 1 / 3.25 }}>
                         <CustomButton
                             title='Đánh giá'
-                            outlineStyle
+                            outline
                             onPress={() => { }}
                         />
                     </View>
@@ -101,7 +101,7 @@ export default function OrderPreview({ order, navigation }: Props) {
                     <View style={{ flex: 1 / 3.25 }}>
                         <CustomButton
                             title='Huỷ đơn'
-                            outlineStyle
+                            outline
                             onPress={() => { }}
                         />
                     </View>

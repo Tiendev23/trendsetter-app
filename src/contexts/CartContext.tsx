@@ -1,121 +1,164 @@
-import { createContext, useState, ReactNode, useContext } from "react";
-import { CartItem, Product } from "../types/models";
+import { createContext, useState, ReactNode, useContext, useEffect } from "react";
+import { CartItem, ObjectId } from "@/types";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { useAuthContext } from "./AuthContext";
+import { clearCart, removeManyCartItem, resetCartsState } from "@/redux/features/cart/cartsSlice";
+import { showErrorToast, showSuccessToast } from "@/utils/toast";
+import * as Storage from "@/services/asyncStorage.service";
+import { addCartItem, removeCartItem, resetCartState, updateCartItem } from "@/redux/features/cart/cartSlice";
+import { debounce } from 'lodash';
 
-type CartContextType = {
+export type CartContextType = {
     items: CartItem[];
 
-    status: string;
+    addToCart: (item: CartItem) => void;
 
-    setStatus: (value: string) => void;
-
-    // getCartItem: (
-    //     item: CartItem
-    // ) => CartItem;
-    getSubtotal: () => number;
-
-    addToCart: (
-        variantId: string,
-        sizeId: string,
-        quantity: number
-    ) => void;
-
-    deleteCartItem: (
-        item: CartItem
-    ) => void;
-
-    updateCartItem: (
-        item: CartItem,
+    updateItem: (
+        sizeId: ObjectId,
         newQuantity: number
     ) => void;
 
-    clearCart: () => void;
+    removeItem: (
+        sizeId: ObjectId
+    ) => void;
+
+    removeManyItem: (
+        sizeIds: ObjectId[]
+    ) => void;
+
+    clearAllItems: () => void;
 };
 
 export const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: ReactNode }) {
-    const [cart, setCart] = useState<CartItem[]>([
-        // {
-        //     name: "Nike Air Zoom Pegasus 40",
-        //     product: "685bee08c9c6ffe04f185a3d",
-        //     quantity: 1,
-        //     price: 35000,
-        //     size: "XL",
-        //     color: "Xanh",
-        // }
-    ]);
-    const [status, setStatus] = useState('idle');
-    // const getCartItem = (item: CartItem) => {
-    //     return cart.find(
-    //         (obj) =>
-    //             obj.product === item.product &&
-    //             obj.size === item.size &&
-    //             obj.color === item.color
-    //     );
-    // };
+    const { user } = useAuthContext();
+    const dispatch = useAppDispatch();
+    const { data, status, error } = useAppSelector(state => state.carts);
+    const { status: updateStatus, error: updateError } = useAppSelector(state => state.cart);
+    const [cart, setCart] = useState<CartItem[]>([]);
 
-    const getSubtotal = () => {
-        return 0 // cart.reduce((subtotal, obj) => subtotal + (obj.price * obj.quantity), 0);
-    };
-
-    const addToCart = (variantId: string, sizeId: string, quantity: number) => {
-        setCart((prev) => {
-            const existingItem = prev.find(
-                (item) =>
-                    item.variantId === variantId &&
-                    item.sizeId === sizeId
-            );
-
-            if (existingItem) {
-                return prev.map((item) =>
-                    item.variantId === variantId &&
-                        item.sizeId === sizeId
-                        ? { ...item, quantity: item.quantity + quantity }
-                        : item
-                );
-            } else {
-                return [
-                    ...prev,
-                    {
-                        variantId: variantId,
-                        sizeId: sizeId,
-                        quantity: quantity
-                    },
-                ];
-            }
+    useEffect(() => {
+        Storage.getItem("@cart").then((storedCart) => {
+            if (Array.isArray(storedCart))
+                setCart(storedCart);
         });
+    }, []);
+
+    useEffect(() => {
+        if (status === "succeeded") {
+            if (Array.isArray(data?.data))
+                setCart(data?.data);
+            dispatch(resetCartsState());
+        }
+        if (status === 'failed') {
+            showErrorToast({
+                title: `Lỗi ${error?.code}`,
+                message: error?.message
+            });
+            dispatch(resetCartsState())
+        }
+    }, [status]);
+
+    useEffect(() => {
+        if (updateStatus === 'succeeded') {
+            dispatch(resetCartState())
+        }
+        if (updateStatus === 'failed') {
+            showErrorToast({
+                title: `Lỗi ${updateError?.code}`,
+                message: updateError?.message
+            })
+            dispatch(resetCartState())
+        }
+    }, [updateStatus]);
+
+    async function updateCartStorage(updatedCart: CartItem[]) {
+        await Storage.removeItem("@cart");
+        await Storage.saveItem("@cart", updatedCart);
+    }
+
+    const addToCart = async (newItem: CartItem) => {
+        const exists = cart.find(item => item.size._id === newItem.size._id);
+        let updatedCart;
+        if (exists) {
+            updatedCart = cart.map(item =>
+                item.size._id === newItem.size._id
+                    ? { ...item, quantity: item.quantity + newItem.quantity }
+                    : item
+            );
+        } else {
+            updatedCart = [...cart, newItem];
+        }
+
+        if (user) {
+            dispatch(addCartItem({ userId: user._id, body: { sizeId: newItem.size._id, quantity: newItem.quantity } }));
+        } else {
+            await updateCartStorage(updatedCart);
+        }
+        setCart(updatedCart);
+        showSuccessToast({
+            title: "Đã thêm vào giỏ hàng"
+        })
     };
 
-    const updateCartItem = (item: CartItem, newQuantity: number) => {
-        // setCart((prev) =>
-        //     prev.map((obj) =>
-        //         obj.product === item.product &&
-        //             obj.size === item.size &&
-        //             obj.color === item.color
-        //             ? { ...obj, quantity: Math.max(newQuantity, 1) } // Không cho giảm dưới 1
-        //             : obj
+    const debouncedUpdateItem = debounce(
+        (sizeId: ObjectId, quantity: number) => {
+            const updatedCart = cart.map(
+                (item) =>
+                    item.size._id === sizeId
+                        ? { ...item, quantity }
+                        : item
+            );
+            if (user) {
+                dispatch(updateCartItem({ userId: user._id, sizeId, body: { quantity } }));
+            } else {
+                updateCartStorage(updatedCart);
+            }
+            setCart(updatedCart);
+        },
+        300 // thời gian chờ (ms)
+    );
 
-        //     )
-        // );
+    const updateItem = (sizeId: ObjectId, newQuantity: number) => {
+        const quantity = Math.max(newQuantity, 1);
+        debouncedUpdateItem(sizeId, quantity);
     };
 
-    const deleteCartItem = (item: CartItem) => {
-        // setCart((prev) =>
-        //     prev.filter(
-        //         (obj) =>
-        //             !(obj.product === item.product &&
-        //                 obj.size === item.size &&
-        //                 obj.color === item.color)
-        //     )
-        // );
+    const removeItem = async (sizeId: ObjectId) => {
+        const updatedCart = cart.filter(item => item.size._id !== sizeId);
+
+        if (user) {
+            dispatch(removeCartItem({ userId: user._id, sizeId }))
+        } else {
+            await updateCartStorage(updatedCart);
+        }
+        setCart(updatedCart);
     };
 
-    const clearCart = () => {
+    const removeManyItem = async (sizeIds: ObjectId[]) => {
+        const sizeIdSet = new Set(sizeIds);
+        const updatedCart = cart.filter(item => !sizeIdSet.has(item.size._id));
+
+        if (user) {
+            dispatch(removeManyCartItem({ userId: user._id, body: sizeIds }))
+        } else {
+            await updateCartStorage(updatedCart);
+        }
+        setCart(updatedCart);
+    }
+
+    const clearAllItems = async () => {
+        if (user) {
+            dispatch(clearCart(user._id))
+        } else {
+            await updateCartStorage([]);
+        }
         setCart([]);
     };
 
     return (
-        <CartContext.Provider value={{ items: cart, status, setStatus, getSubtotal, addToCart, updateCartItem, deleteCartItem, clearCart }}>
+        <CartContext.Provider value={{ items: cart, addToCart, updateItem, removeItem, removeManyItem, clearAllItems }}>
             {children}
         </CartContext.Provider>
     );

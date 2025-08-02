@@ -6,7 +6,7 @@ import { createOrder, refresh as refreshOrder } from '../../redux/features/order
 import { refresh as refreshPayos } from '../../redux/features/payment/payosSlice';
 import { AuthContext } from '../../contexts/AuthContext';
 import { CreateOrderReq } from '../../types/models';
-import { CheckoutNav } from '../../navigation/NavigationTypes';
+import { CheckoutNav } from '../../types/navigation';
 import { CartContext } from '../../contexts/CartContext';
 
 type Props = {
@@ -75,11 +75,11 @@ export default function PayosWebView({ navigation, orderData, setPaymentStatus, 
         setUrlResult(url);
         if (isPaid) return
         if (url.includes('/succeeded')) {
-            cart.clearCart();
+            cart.clearAllItems();
             setPaid(true);
             createOrderWithStatus(true);
         } else if (url.includes('/cancelled')) {
-            cart.clearCart();
+            cart.clearAllItems();
             setPaid(true);
             createOrderWithStatus(false);
         }

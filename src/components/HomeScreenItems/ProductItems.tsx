@@ -1,25 +1,24 @@
 import React, { useContext, useMemo } from 'react';
 import {
-  Dimensions,
-  FlatList,
-  Image,
-  StyleSheet,
-  Text,
-  Pressable,
-  View,
+    Dimensions,
+    FlatList,
+    Image,
+    StyleSheet,
+    Text,
+    Pressable,
+    View,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { formatCurrency } from '../../utils/formatForm';
-import { ProductsItem } from '../../navigation/NavigationTypes';
+import { ProductsItem } from '@/types';
 import { IMAGE_NOT_FOUND } from '@/types/Products/products';
 import { ProductVariant } from '@/types/Products/productVariant';
 import { AppDispatch, RootState } from '@/redux/store';
 import { AuthContext } from '@/contexts/AuthContext';
 import { FavoriteContext } from '@/contexts/FavoriteContext';
 
-// CHANGED: Import thêm các actions "lạc quan"
 import {
   addFavorite,
   removeFavorite,
@@ -35,9 +34,9 @@ const ITEM_HEIGHT = Math.round((ITEM_WIDTH * 4) / 3);
 
 // Hàm chuyển đổi giới tính sản phẩm
 export const getGender = (gender?: string) => {
-  if (gender === 'male') return 'Nam';
-  if (gender === 'female') return 'Nữ';
-  return '';
+    if (gender === 'male') return 'Nam';
+    if (gender === 'female') return 'Nữ';
+    return '';
 };
 
 // Component chính

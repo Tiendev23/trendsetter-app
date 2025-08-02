@@ -1,10 +1,10 @@
 import { Dimensions, Image, StyleSheet, Text, Pressable, View } from 'react-native';
-import React, { useContext } from 'react'; // Bỏ useState
+import React, { useContext } from 'react'; 
 import { FlatList } from 'react-native-gesture-handler';
 import { Ionicons } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { ProductsItem } from '../../navigation/NavigationTypes';
+import { ProductsItem } from '@/types';
 import { IMAGE_NOT_FOUND, Product } from '../../types/Products/products';
 import { getGender } from './ProductItems';
 import { AppDispatch, RootState } from '@/redux/store';

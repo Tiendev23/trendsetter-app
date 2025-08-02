@@ -19,7 +19,7 @@ const LocationScreen = ({ navigation, route }) => {
         selectedProvince, setSelectedProvince,
         selectedDistrict, setSelectedDistrict,
         selectedWard, setSelectedWard
-    } = useContext(AddressContext);
+    } = useContext(AddressContext)!;
     const isLocationValid = selectedProvince && selectedDistrict && selectedWard;
 
     const {

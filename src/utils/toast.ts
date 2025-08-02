@@ -26,8 +26,8 @@ export const showSuccessToast = ({ title, message }: Props) => {
         type: "success",
         text1: title,
         text2: message,
-        position: "bottom",
-        visibilityTime: 3000,
+        position: "top",
+        visibilityTime: 1000,
     });
 };
 

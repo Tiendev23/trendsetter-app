@@ -1,7 +1,7 @@
 import MaskedView from '@react-native-masked-view/masked-view';
 import React from 'react';
 import { FlatList, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { BannerItem } from '../../navigation/NavigationTypes';
+import { BannerItem } from '../../types/navigation';
 
 
 

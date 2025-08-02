@@ -2,23 +2,21 @@ import { Gender, ObjectId } from "../common";
 
 type Role = "customer" | "admin";
 
-export type ShippingAddress = {
+export interface ShippingAddress {
     fullName: string;
     phone: string;
-    streetDetails: string;
+    street: string;
     ward: string;
-    district: string;
-    city: string;
+    province: string;
     isDefault: boolean;
     _id: ObjectId;
-};
+}
 
-export type User = {
+export interface User {
     _id: ObjectId;
     username: string; // "sang";
     fullName: string; // "sang";
     email: string; // "sang@gmail.com";
-    password?: string; // "$2b$10$/PBtiNqDLaGrJ.H0Pc2Y..LMLMV.kXYV1ltm43oJO1pvQT2Me3TVC";
     gender: Gender; // "unisex";
     birthday: string | null;
     role: Role; // "customer";
@@ -28,4 +26,4 @@ export type User = {
     createdAt: string; // "2025-07-18T08:57:33.439Z";
     updatedAt: string; // "2025-07-18T08:57:33.439Z";
     __v?: number;
-};
+}

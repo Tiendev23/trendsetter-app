@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
 import { AppProviders as ContextProvider } from './src/contexts';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { default as AppNavigation } from './src/navigation/StackNavigator';
@@ -21,22 +21,22 @@ const linking = {
 export default function App() {
     return (
         <SafeAreaProvider>
-            <GestureHandlerRootView style={{ flex: 1 }}>
-                <SafeAreaView style={{ flex: 1 }} edges={['top']}>
-                    <ContextProvider>
-                            <KeyboardAvoidingView
-                                style={{ flex: 1 }}
-                                behavior={'padding'}
-                                keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : -45} // điều chỉnh nếu bạn có header
-                            >
-                                <NavigationContainer linking={linking}>
-                                    <AppNavigation />
-                                    <Toast />
-                                </NavigationContainer>
-                            </KeyboardAvoidingView>
-                    </ContextProvider>
-                </SafeAreaView>
-            </GestureHandlerRootView>
+            <ContextProvider>
+                <GestureHandlerRootView style={{ flex: 1 }}>
+                    <SafeAreaView style={{ flex: 1 }} edges={['top']}>
+                        <KeyboardAvoidingView
+                            style={{ flex: 1 }}
+                            behavior={'padding'}
+                            keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : -45} // điều chỉnh nếu bạn có header
+                        >
+                            <NavigationContainer linking={linking}>
+                                <AppNavigation />
+                                <Toast />
+                            </NavigationContainer>
+                        </KeyboardAvoidingView>
+                    </SafeAreaView>
+                </GestureHandlerRootView>
+            </ContextProvider>
         </SafeAreaProvider >
     );
 }

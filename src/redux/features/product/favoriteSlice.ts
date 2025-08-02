@@ -20,9 +20,9 @@ export const addFavorite = createAsyncThunk(
     async ({ _id, variantId }: { _id: string, variantId: string }, { rejectWithValue }) => {
         try {
             const res = await apiClient.post(`users/${_id}/favorites`, { variantId });
-            return res.data; 
-        } catch (error: any) {
-            return rejectWithValue(error.response.data.message);
+            return res.data;
+        } catch (err: any) {
+            return rejectWithValue(err.response.data.message);
         }
     }
 );
@@ -33,8 +33,8 @@ export const removeFavorite = createAsyncThunk(
         try {
             await apiClient.delete(`users/${_id}/favorites/${variantId}`);
             return variantId;
-        } catch (error: any) {
-            return rejectWithValue(error.response.data.message);
+        } catch (err: any) {
+            return rejectWithValue(err.response.data.message);
         }
     }
 );
@@ -89,7 +89,7 @@ const favoritesSlice = createSlice({
                 state.favorites = state.favorites.filter(v => v._id !== variantId);
             })
             .addCase(removeFavorite.rejected, (state, action) => {
-                 console.error("Rollback: Failed to remove favorite", action.error);
+                console.error("Rollback: Failed to remove favorite", action.error);
             });
     },
 });

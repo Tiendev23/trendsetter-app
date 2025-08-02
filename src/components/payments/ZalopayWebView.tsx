@@ -6,7 +6,7 @@ import { createOrder, refresh as refreshOrder } from '../../redux/features/order
 import { refresh as refreshZalopay } from '../../redux/features/payment/zalopaySlice';
 import { AuthContext } from '../../contexts/AuthContext';
 import { CreateOrderReq } from '../../types/models';
-import { CheckoutNav } from '../../navigation/NavigationTypes';
+import { CheckoutNav } from '../../types/navigation';
 import { CartContext } from '../../contexts/CartContext';
 import * as Linking from 'expo-linking';
 import { showSuccessToast } from '../../utils/toast';
@@ -70,7 +70,7 @@ export default function ZalopayWebView({ navigation, orderData, setPaymentStatus
                 setPaid(true);
                 createOrderWithStatus(true);
             }
-            cart.clearCart();
+            cart.clearAllItems();
             setHandled(true);
         }
         console.log('you here 3');

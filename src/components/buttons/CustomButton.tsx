@@ -1,22 +1,32 @@
 import React from 'react';
-import { TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { TouchableOpacity, Text, StyleSheet, ColorValue } from 'react-native';
 
 type Props = {
     title: string;
-    outlineStyle?: boolean;
+    outline?: boolean;
+    theme?: "green" | "red";
     onPress?: () => void;
     onLongPress?: () => void;
 };
 
-export default function CustomButton({ title, outlineStyle, onPress, onLongPress }: Props) {
+export default function CustomButton({ title, outline = false, theme = "green", onPress, onLongPress }: Props) {
+    const buttonStyle =
+        (theme === "green") ?
+            outline ? styles.greenWithOutline : styles.greenWithoutOutline
+            :
+            outline ? styles.redWithOutline : styles.redWithoutOutline;
+
+    const textColor = outline ?
+        (theme === "green") ? "#006340" : "#C21E0C" : "#FFFFFF"
+
     return (
         <TouchableOpacity
-            style={[styles.btn, { backgroundColor: outlineStyle ? 'white' : '#006340' }]}
+            style={[styles.btn, buttonStyle]}
             onPress={onPress}
             onLongPress={onLongPress}
         >
             <Text
-                style={[styles.text, { color: outlineStyle ? '#006340' : 'white' }]}
+                style={[styles.text, { color: textColor }]}
             >
                 {title}
             </Text>
@@ -39,5 +49,21 @@ const styles = StyleSheet.create({
         fontWeight: '700',
         fontSize: 16,
         textAlign: 'center'
+    },
+    greenWithoutOutline: {
+        borderColor: '#006340',
+        backgroundColor: '#006340'
+    },
+    greenWithOutline: {
+        borderColor: '#006340',
+        backgroundColor: '#FFFFFF'
+    },
+    redWithoutOutline: {
+        borderColor: '#C21E0C',
+        backgroundColor: '#C21E0C'
+    },
+    redWithOutline: {
+        borderColor: '#C21E0C',
+        backgroundColor: '#FFFFFF'
     },
 });
