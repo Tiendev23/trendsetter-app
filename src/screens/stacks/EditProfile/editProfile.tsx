@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../../redux/store';
 import { updateProfile } from '../../../redux/features/User/userSlice';
 
-export default function ProfileEdit({ navigation }:{navigation:any}) {
+export default function ProfileEdit({ navigation }: { navigation: any }) {
     const { user, setUser } = useContext(AuthContext);
 
     const [name, setName] = useState(user?.fullName || '');
@@ -20,7 +20,7 @@ export default function ProfileEdit({ navigation }:{navigation:any}) {
     const [dob, setDob] = useState(user?.birthday ? new Date(user.birthday) : new Date());
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [avatar, setAvatar] = useState<string | null>(user?.avatar || null);
-    console.log('Gender from user:', user?.gender);
+console.log("tui ne",user.avatar);
 
     const dispatch = useDispatch<AppDispatch>();
     const loading = useSelector((state: RootState) => state.user.status);
@@ -129,10 +129,14 @@ export default function ProfileEdit({ navigation }:{navigation:any}) {
                     value={dob}
                     mode="date"
                     display="spinner"
-                    onChange={(_, selectedDate) => {
+                    onChange={(event, selectedDate) => {
+                        if (event.type === 'set' && selectedDate) {
+                            setDob(selectedDate); 
+                        }
                         setShowDatePicker(false);
-                        if (selectedDate) setDob(selectedDate);
                     }}
+                    maximumDate={new Date()} 
+                    minimumDate={new Date(1900, 0, 1)}
                 />
             )}
 
