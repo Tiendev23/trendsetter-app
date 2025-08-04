@@ -11,7 +11,7 @@ import { AppDispatch, RootState } from '../../../redux/store';
 import { updateProfile } from '../../../redux/features/User/userSlice';
 
 export default function ProfileEdit({ navigation }: { navigation: any }) {
-    const { user, setUser } = useContext(AuthContext);
+    const { user, setUser } = useContext(AuthContext)!;
 
     const [name, setName] = useState(user?.fullName || '');
     const [gender, setGender] = useState<'male' | 'female'>(
@@ -20,7 +20,6 @@ export default function ProfileEdit({ navigation }: { navigation: any }) {
     const [dob, setDob] = useState(user?.birthday ? new Date(user.birthday) : new Date());
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [avatar, setAvatar] = useState<string | null>(user?.avatar || null);
-console.log("tui ne",user.avatar);
 
     const dispatch = useDispatch<AppDispatch>();
     const loading = useSelector((state: RootState) => state.user.status);
@@ -98,7 +97,7 @@ console.log("tui ne",user.avatar);
 
             <Text style={styles.label}>Email</Text>
             <TextInput
-                value={user.email}
+                value={user?.email}
                 editable={false}
                 style={[styles.input, { backgroundColor: '#EEE' }]}
                 keyboardType="email-address"

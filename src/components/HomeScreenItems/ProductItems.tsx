@@ -259,6 +259,7 @@ const styles = StyleSheet.create({
     color: '#006340',
   },
   product: {
-    marginTop: 10,
+    marginVertical: 10,
+
   },
 });

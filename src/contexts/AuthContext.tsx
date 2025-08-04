@@ -11,6 +11,7 @@ export type AuthContextType = {
     setUser: (user: User | null) => void;
 
     // ??? Làm vậy chi, lấy email thì trong user có rồi?
+    // để khi forgotpass thành công thì input email sẽ được nhập luôn
     email: string;
     setEmail: (email: string) => void;
 };

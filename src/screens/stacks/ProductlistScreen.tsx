@@ -141,7 +141,7 @@ const ProductlistScreen: React.FC<Props> = ({ navigation, route }) => {
                 <View style={styles.headerActions}>
                     <ChevronButton direction="back" onPress={() => navigation.goBack()} />
                     <Text style={styles.headerTitle}>{brandId?.name || title}</Text>
-                    <ToCartButton navigation={navigation} />
+                    <ToCartButton onPress={() => navigation.navigate("Cart")} />
                 </View>
             </View>
 
@@ -158,7 +158,7 @@ const ProductlistScreen: React.FC<Props> = ({ navigation, route }) => {
                 !refreshing && (
                     <FlatList
                         data={dataToRender}
-                        extraData={favorites} 
+                        extraData={favorites}
                         keyExtractor={(item) => item._id}
                         numColumns={2}
                         columnWrapperStyle={styles.row}
