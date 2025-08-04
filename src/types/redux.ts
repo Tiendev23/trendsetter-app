@@ -15,6 +15,7 @@ export type BaseState<T> = {
 
 export type BaseResponse<T> = {
     data: T | null;
+    message?: string;
 };
 
 // Mở rộng từ BaseState

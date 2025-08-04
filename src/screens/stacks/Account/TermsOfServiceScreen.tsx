@@ -17,6 +17,9 @@ interface SectionProps {
   title: string;
   children: React.ReactNode;
 }
+type Props = {
+  navigation: any;
+};
 
 const Section: React.FC<SectionProps> = ({ iconName, title, children }) => (
   <View style={styles.section}>
@@ -29,7 +32,7 @@ const Section: React.FC<SectionProps> = ({ iconName, title, children }) => (
 );
 
 // Màn hình chính
-const TermsOfServiceScreen: React.FC = () => {
+const TermsOfServiceScreen = ({ navigation }: { navigation: any }) => {
   const contactEmail = 'support@trendsetter.com';
   const websiteUrl = 'https://trendsetter.com/contact';
 
@@ -37,8 +40,16 @@ const TermsOfServiceScreen: React.FC = () => {
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="dark-content" />
       <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.mainTitle}>Điều khoản Dịch vụ</Text>
-        <Text style={styles.lastUpdated}>Cập nhật lần cuối: 24 tháng 10, 2023</Text>
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+
+            <Text style={{ fontSize: 28 }}>←</Text>
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Điều khoản Dịch vụ</Text>
+          <View style={{ width: 40 }} />
+        </View>
+        {/* <Text style={styles.mainTitle}>Điều khoản Dịch vụ</Text> */}
+        <Text style={styles.lastUpdated}>Cập nhật lần cuối: 24 tháng 10, 202</Text>
 
         <Section iconName="award" title="1. Chào mừng đến với Trendsetter!">
           Trendsetter ("Chúng tôi") là nền tảng nơi bạn có thể chia sẻ phong cách cá nhân, khám phá xu hướng thời trang và kết nối với một cộng đồng sáng tạo. Bằng việc sử dụng ứng dụng, bạn đồng ý với các điều khoản này.
@@ -55,7 +66,7 @@ const TermsOfServiceScreen: React.FC = () => {
         <Section iconName="heart" title="4. Quy tắc Cộng đồng Trendsetter">
           Chúng tôi mong muốn xây dựng một không gian an toàn và tích cực. Vui lòng không đăng tải nội dung bạo lực, thù địch, khiêu dâm, hoặc vi phạm bản quyền. Hãy tôn trọng các thành viên khác.
         </Section>
-        
+
         <Section iconName="shield" title="5. Sở hữu Trí tuệ">
           Logo, thương hiệu, và giao diện của Trendsetter là tài sản của chúng tôi. Vui lòng không sao chép hoặc sử dụng mà không có sự cho phép. Hãy tôn trọng quyền sở hữu trí tuệ của người khác khi đăng tải Nội dung.
         </Section>
@@ -67,7 +78,7 @@ const TermsOfServiceScreen: React.FC = () => {
         <Section iconName="slash" title="7. Chấm dứt tài khoản">
           Chúng tôi có quyền tạm ngưng hoặc chấm dứt vĩnh viễn tài khoản của bạn nếu bạn vi phạm nghiêm trọng hoặc nhiều lần các điều khoản và quy tắc cộng đồng của chúng tôi mà không cần báo trước.
         </Section>
-        
+
         <Section iconName="alert-triangle" title="8. Giới hạn Trách nhiệm">
           Dịch vụ được cung cấp "nguyên trạng". Trendsetter không đảm bảo ứng dụng sẽ luôn hoạt động hoàn hảo và không chịu trách nhiệm cho bất kỳ tổn thất gián tiếp nào phát sinh từ việc sử dụng ứng dụng.
         </Section>
@@ -102,6 +113,23 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 24,
   },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f0f0f0',
+  },
+  backButton: {
+    padding: 5,
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#111',
+  },
   mainTitle: {
     fontSize: 32,
     fontWeight: 'bold',
@@ -130,15 +158,15 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: '600',
     color: '#1D1D1F',
-    flex: 1, 
+    flex: 1,
   },
   paragraph: {
     fontSize: 16,
-    lineHeight: 26, 
+    lineHeight: 26,
     color: '#333333',
   },
   link: {
-    color: '#006340', 
+    color: '#006340',
     textDecorationLine: 'underline',
   },
 });

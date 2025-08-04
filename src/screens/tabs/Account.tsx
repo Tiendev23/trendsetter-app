@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from 'rea
 import { AuthContext, useAuthContext, } from '../../contexts/AuthContext';
 import { useAppDispatch } from '../../redux/hooks';
 import { refresh } from '../../redux/features/auth/loginSlice';
-import { TabsNav } from '../../navigation/NavigationTypes';
+import { TabsNav } from '../../types/navigation';
 import CustomButton from '../../components/buttons/CustomButton';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { User } from '../../types/models';
@@ -32,7 +32,7 @@ const purchaseItems = [
 // --- REUSABLE LOCAL COMPONENTS ---
 // Component con chỉ dùng trong file này
 
-const UserProfileHeader = ({ user }: { user: User }) => {
+const UserProfileHeader = ({ user,navigation }: { user: User, navigation:TabsNav }) => {
     const getRole = (role: string) => {
         switch (role) {
             case 'admin':
@@ -42,7 +42,12 @@ const UserProfileHeader = ({ user }: { user: User }) => {
         }
     }
     return (
-        <View style={styles.headerContainer}>
+        <View style={styles.headerContainer} 
+        onStartShouldSetResponder={()=>true}
+        onResponderEnd={()=>{
+            navigation.navigate('editProfile')
+        }}
+        >
             <Image
                 source={user?.avatar ? { uri: user.avatar } : { uri: 'https://i.pravatar.cc/150' }}
                 style={styles.headerAvatar}
@@ -67,7 +72,7 @@ const MyPurchasesSection = ({ onViewAll }: { onViewAll: () => void }) => (
         </View>
         <View style={styles.purchasesItemsWrapper}>
             {purchaseItems.map(item => (
-                <TouchableOpacity key={item.name} style={styles.purchaseItemContainer}>
+                <TouchableOpacity key={item.name} style={styles.purchaseItemContainer} onPress={onViewAll}>
                     <Icon name={item.icon} size={24} color="#555" />
                     <Text style={styles.purchaseItemText}>{item.name}</Text>
                 </TouchableOpacity>
@@ -132,7 +137,7 @@ export default function AccountScreen({ navigation }: { navigation: TabsNav }) {
     if (user) {
         return (
             <ScrollView style={styles.screenContainer}>
-                <UserProfileHeader user={user} />
+                <UserProfileHeader user={user}navigation={navigation} />
                 <MyPurchasesSection
                     onViewAll={() => navigation.navigate('OrderHistory')}
                 />

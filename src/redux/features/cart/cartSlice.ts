@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import apiClient from "@/api/apiClient";
 import {
     BaseItemProps,
@@ -8,7 +8,7 @@ import {
     ObjectId,
     BaseResponse,
 } from "@/types";
-import { addAsyncThunkCases, makeApiThunk } from "@/utils/reduxHelpers";
+import { addAsyncThunkCases, makeApiThunk } from "@/utils/reduxHelper";
 
 export const addCartItem = makeApiThunk<
     BaseResponse<CartItemDB>,

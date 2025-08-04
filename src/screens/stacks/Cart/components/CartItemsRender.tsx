@@ -1,21 +1,22 @@
 import { FlatList, View } from 'react-native';
 import React from 'react';
-import { CartItem as Item, ObjectId } from '@/types';
-import CartItem from './CartItem';
+import { CartItem, ObjectId } from '@/types';
+import { default as CartItemRender } from './CartItem';
 
 type Props = {
-    data: Item[];
+    data: CartItem[];
     isEditable: boolean;
-    checkedItems: Item[];
-    onSelect: (sizeId: ObjectId) => void;
-    onUpdateItem: (sizeId: ObjectId, newQuantity: number) => void;
-    onDeleteItem: (sizeId: ObjectId) => void;
+    checkedItems: CartItem[];
+    handleOnClicked: (item: CartItem) => void;
+    handleOnSelect: (sizeId: ObjectId) => void;
+    handleOnUpdate: (sizeId: ObjectId, newQuantity: number) => void;
+    handleOnDelete: (sizeId: ObjectId) => void;
 };
 export default function CartItemsRender({
     data, checkedItems, isEditable,
-    onSelect, onUpdateItem, onDeleteItem
+    handleOnClicked, handleOnSelect, handleOnUpdate, handleOnDelete
 }: Props) {
-    
+
     return (
         <View style={{ flex: 1 }}>
             <FlatList
@@ -23,13 +24,14 @@ export default function CartItemsRender({
                 renderItem={({ item }) => {
                     const isSelected = checkedItems.some(i => i.size._id === item.size._id);
                     return (
-                        <CartItem
+                        <CartItemRender
                             item={item}
-                            onSelect={onSelect}
                             isEditable={isEditable}
                             isSelected={isSelected}
-                            onUpdateItem={onUpdateItem}
-                            onDeleteItem={onDeleteItem}
+                            onItemClicked={handleOnClicked}
+                            onSelectItem={handleOnSelect}
+                            onUpdateItem={handleOnUpdate}
+                            onDeleteItem={handleOnDelete}
                         />
                     );
                 }}

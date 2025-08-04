@@ -1,7 +1,7 @@
 import { StyleSheet, View } from 'react-native'
 import React, { useEffect, useMemo, useState } from 'react'
-import { CartNav } from '@/navigation/NavigationTypes';
-import { CartItem as CartItem, ObjectId, User } from '@/types';
+import { CartNav } from '@/types';
+import { CartItem, ObjectId, User } from '@/types';
 import { CartItemsRender, ConfirmDeleteModal, ConfirmLoginModal, DeletionCountPanel, PricingPanel } from './components';
 import { CartContextType } from '@/contexts/CartContext';
 
@@ -31,20 +31,6 @@ export default function CartContent({ navigation, cartContext, isEditable, user,
         [cart.items, checkedIds]
     );
 
-    function handleUpdateItem(sizeId: ObjectId, newQuantity: number) {
-        cart.updateItem(sizeId, newQuantity)
-    };
-
-    function handleDeleteItem(sizeId: ObjectId) {
-        cart.removeItem(sizeId);
-    };
-
-    function toggleCheckItem(sizeId: ObjectId) {
-        setCheckedIds(prev =>
-            prev.includes(sizeId) ? prev.filter(id => id !== sizeId) : [...prev, sizeId]
-        );
-    };
-
     function toggleCheckAll() {
         if (isCheckedAll) {
             setCheckedIds([]);
@@ -66,16 +52,18 @@ export default function CartContent({ navigation, cartContext, isEditable, user,
 
     function handleOnBuying() {
         if (user) {
-            navigation.navigate({
-                name: "Checkout",
-                params: {
-                    items: checkedItems,
-                }
-            });
+            navigation.navigate("Checkout", { items: checkedItems });
         } else {
             setModalVisible(true);
         }
     };
+
+    function handleOnClickedItem(item: CartItem) {
+        navigation.navigate("ProductDetail", {
+            productId: item.product,
+            variantId: item.variant,
+        }, { merge: true });
+    }
 
     const isCartEmpty = cart.items.length === 0;
     const isCheckedEmpty = checkedItems.length === 0;
@@ -85,10 +73,16 @@ export default function CartContent({ navigation, cartContext, isEditable, user,
             <CartItemsRender
                 data={cart.items}
                 checkedItems={checkedItems}
-                onSelect={toggleCheckItem}
                 isEditable={isEditable}
-                onUpdateItem={handleUpdateItem}
-                onDeleteItem={handleDeleteItem}
+                handleOnClicked={handleOnClickedItem}
+                handleOnSelect={(sizeId: ObjectId) =>
+                    setCheckedIds(prev => prev.includes(sizeId)
+                        ? prev.filter(id => id !== sizeId)
+                        : [...prev, sizeId]
+                    )
+                }
+                handleOnUpdate={(sizeId: ObjectId, newQuantity: number) => cart.updateItem(sizeId, newQuantity)}
+                handleOnDelete={(sizeId: ObjectId) => cart.removeItem(sizeId)}
             />
 
             {
@@ -113,10 +107,7 @@ export default function CartContent({ navigation, cartContext, isEditable, user,
                 onClose={() => setModalVisible(false)}
                 onLogin={() => {
                     setModalVisible(false);
-                    navigation.navigate({
-                        name: "Login",
-                        params: {}
-                    });
+                    navigation.navigate("Login", {});
                 }}
             />
 

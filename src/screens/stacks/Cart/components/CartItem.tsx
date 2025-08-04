@@ -2,16 +2,15 @@ import React, { useMemo, useState } from 'react';
 import { Text, StyleSheet, View, Image, TouchableOpacity } from 'react-native';
 import ReanimatedSwipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
 import Reanimated, { SharedValue, useAnimatedStyle } from 'react-native-reanimated';
-import { CartItem as Item } from '@/types/models';
+import { CartItem as CartItemType } from '@/types/models';
 import { formatCurrency } from '@/utils/formatForm';
-import { useCartContext } from '@/contexts/CartContext';
 import { FontAwesome5 } from '@expo/vector-icons';
 import Skeleton from '@/components/loaders/Skeleton';
 import { ObjectId } from '@/types';
 import { RectButton } from 'react-native-gesture-handler';
 
 type BaseActionProps = {
-    item: Item;
+    item: CartItemType;
     drag: SharedValue<number>;
 }
 
@@ -91,31 +90,35 @@ function RightAction({ item, drag, onDelete }: RightProps) {
  */
 
 type Props = {
-    item: Item;
+    item: CartItemType;
     isSelected: boolean;
     isEditable: boolean;
-    onSelect: (sizeId: ObjectId) => void;
+    onItemClicked: (item: CartItemType) => void;
+    onSelectItem: (sizeId: ObjectId) => void;
     onUpdateItem: (sizeId: ObjectId, newQuantity: number) => void;
     onDeleteItem: (sizeId: ObjectId) => void
 }
 export default function CartItem({
-    item, onSelect, isSelected,
-    isEditable, onUpdateItem, onDeleteItem
+    item, isSelected, isEditable,
+    onItemClicked, onSelectItem, onUpdateItem, onDeleteItem
 }: Props) {
 
-    const CheckedButton = () => {
-        const buttonStyle = useMemo(() => {
-            if (isEditable)
-                return isSelected ? styles.selectedEditableStyle : styles.unselectedEditableStyle;
-            else
-                return isSelected ? styles.selectedUneditableStyle : styles.unselectedUneditableStyle;
-        }, [isEditable, isSelected]);
-        const iconColor = isSelected ? "#FFFFFF"
-            : isEditable ? "#C21E0C" : "#006340";
+    const buttonStyle = useMemo(() => {
+        if (isEditable)
+            return isSelected
+                ? styles.selectedEditableStyle : styles.unselectedEditableStyle;
+        else
+            return isSelected
+                ? styles.selectedUneditableStyle : styles.unselectedUneditableStyle;
+    }, [isEditable, isSelected]);
+    const iconColor = isSelected ? "#FFFFFF"
+        : isEditable ? "#C21E0C" : "#006340";
+
+    const CheckButton = () => {
         return (
             <TouchableOpacity
                 style={[styles.checkButton, buttonStyle]}
-                onPress={() => onSelect(item.size._id)}
+                onPress={() => onSelectItem(item.size._id)}
             >
                 <FontAwesome5 name="check" size={40}
                     color={iconColor} />
@@ -142,50 +145,54 @@ export default function CartItem({
                 />
             )}
         >
-            {
-                (item != null) ?
-                    <View style={styles.contentContainer}>
-                        <View style={styles.image}>
-                            <Image
-                                source={{ uri: item.imageUrl }}
-                                style={styles.image}
-                            />
-                        </View>
-                        <View style={styles.infoWrapper}>
-                            <Text
-                                numberOfLines={2}
-                                ellipsizeMode='tail'
-                                style={styles.itemName}
-                            >
-                                {item.name}
+            <View style={[styles.contentContainer, styles.contentWrapper]}>
+                <TouchableOpacity
+                    style={styles.contentWrapper}
+                    onPress={() => onItemClicked(item)}
+                >
+                    <View style={styles.image}>
+                        <Image
+                            source={{ uri: item.imageUrl }}
+                            style={styles.image}
+                        />
+                    </View>
+                    <View style={styles.infoWrapper}>
+                        <Text
+                            numberOfLines={2}
+                            ellipsizeMode='tail'
+                            style={styles.itemName}
+                        >
+                            {item.name}
+                        </Text>
+                        <View style={{ gap: 6 }}>
+                            <Text>
+                                Size {item.size.size} - Màu {item.color}
                             </Text>
-                            <View style={{ gap: 6 }}>
-                                <Text>
-                                    Size {item.size.size} - Màu {item.color}
-                                </Text>
-                                <Text style={styles.itemPrice}>
-                                    {formatCurrency(item.finalPrice)}
-                                </Text>
-                            </View>
+                            <Text style={styles.itemPrice}>
+                                {formatCurrency(item.finalPrice)}
+                            </Text>
                         </View>
+                    </View>
+                </TouchableOpacity>
 
-                        <CheckedButton />
-                    </View>
-                    :
-                    <View style={styles.contentContainer}>
-                        <View style={styles.image}>
-                            <Skeleton width={'100%'} height={"100%"} />
-                        </View>
-                        <View style={styles.infoWrapper}>
-                            <Skeleton width={200} height={20} />
-                            <Skeleton width={150} height={20} />
-                            <Skeleton width={100} height={20} />
-                        </View>
-                    </View>
-            }
+                <CheckButton />
+            </View>
         </ReanimatedSwipeable>
     );
-}
+};
+
+const LoadingItemRender = () => (
+    <View style={[styles.contentContainer, styles.contentWrapper]}>
+        <View style={styles.image}>
+            <Skeleton width={'100%'} height={"100%"} />
+        </View>
+        <View style={styles.infoWrapper}>
+            <Skeleton width={200} height={20} />
+            <Skeleton width={150} height={20} />
+            <Skeleton width={100} height={20} />
+        </View>
+    </View>
+)
 
 const styles = StyleSheet.create({
     checkButton: {
@@ -199,6 +206,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderWidth: 1
+    },
+    contentWrapper: {
+        flexDirection: 'row',
+        alignItems: 'center',
     },
     selectedUneditableStyle: {
         borderColor: '#006340',
@@ -237,10 +248,8 @@ const styles = StyleSheet.create({
     contentContainer: {
         marginHorizontal: 18,
         backgroundColor: '#FFFFFF',
-        flexDirection: 'row',
         padding: 18,
         gap: 18,
-        alignItems: 'center',
         borderRadius: 8,
     },
     image: {

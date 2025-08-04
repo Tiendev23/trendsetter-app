@@ -4,7 +4,7 @@ import { Image, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, 
 import WinterBanner from '../../components/HomeScreenItems/Banner'
 import Menubar from '../../components/HomeScreenItems/Menubar'
 import ProductItem from '../../components/HomeScreenItems/ProductItems'
-import { HomeNav, TabsNav } from '../../navigation/NavigationTypes'
+import { HomeNav, TabsNav } from '../../types/navigation'
 import eventBus from '../../utils/Evenbus'
 import { getAllProducts, getAllRating, getBrand, getCampaigns } from '../../redux/features/product/productsSlice'
 import { useDispatch, useSelector } from 'react-redux'
@@ -14,40 +14,7 @@ import ToCartButton from '../../components/ToCartButton'
 import ProductItemsbyRating from '../../components/HomeScreenItems/ProductItemsbyRating'
 import { FlatList } from 'react-native-gesture-handler'
 import { Campaign, ProductWithCampaign } from '../../types/Campaign'
-export const useCampaignProducts = (): ProductWithCampaign[] => {
-    const campaigns = useSelector((state: RootState) => state.products.campaigns);
-    const variants = useSelector((state: RootState) => state.products.items);
 
-    // Sử dụng Map để đảm bảo mỗi sản phẩm chỉ xuất hiện một lần
-    const matchedVariantsMap = new Map<string, ProductWithCampaign>();
-
-    campaigns.forEach((campaign) => {
-        const matched = variants.filter((variant) => {
-            const matchByBrand = campaign.brands?.some((b) => b._id === variant.product?.brand?._id);
-            const matchByCategory = campaign.categories?.some((c) => c._id === variant.product?.category?._id);
-            const matchByProduct = campaign.products?.some((p) => p._id === variant.product?._id);
-
-            return matchByBrand || matchByCategory || matchByProduct;
-        });
-
-        matched.forEach((v) => {
-            // Dùng ID của variant làm key cho Map.
-            // Nếu một sản phẩm đã có trong Map, nó sẽ được ghi đè.
-            matchedVariantsMap.set(v._id, {
-                ...v,
-                discountValue: campaign.value,
-                discountType:
-                    campaign.type === 'percentage' || campaign.type === 'fixed'
-                        ? campaign.type
-                        : 'percentage',
-                campaignId: campaign._id,
-            });
-        });
-    });
-
-    // Chuyển Map về lại thành mảng
-    return Array.from(matchedVariantsMap.values());
-};
 
 
 export default function HomeScreen({ navigation }: { navigation: any }) {
@@ -59,7 +26,7 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
     const isLoading = loading === 'loading' || brandLoading === 'loading'
     const isFailed = loading === 'failed' || brandLoading === 'failed';
     const errorMassage = loading === 'failed' ? error : brandLoading === 'failed' ? "lỗi tải brand" : null
-    const campaignProducts = useCampaignProducts();
+    //const campaignProducts = useCampaignProducts();
 
     //api
     const dispatch = useDispatch<AppDispatch>();
@@ -80,8 +47,8 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
         eventBus.emit('REFRESH_ALL');
         dispatch(getAllProducts()).finally(() => setRefreshing(false));
     }
-    // rootstate product
-
+    //
+    const ProductRating = productsRating.filter(p => Number(p.rating?.average || 0) >= 4);
 
     return (
         <View style={styles.container}>
@@ -96,7 +63,7 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
                     <Image source={require('../../../assets/images/logo.jpg')} style={styles.logo} resizeMode='contain' />
                 }
                 rightButton={
-                    <ToCartButton navigation={navigation} />
+                    <ToCartButton onPress={() => navigation.navigate("Cart")} />
                 }
             />
             <ScrollView showsHorizontalScrollIndicator={false}
@@ -140,7 +107,7 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
                             </TouchableOpacity>
                         </View>
                         {/* Flatlist Product */}
-                        <ProductItem navigation={stackNav} items={productsRating} />
+                        <ProductItem navigation={stackNav} items={items} />
 
                         <View style={styles.recommend}>
                             <Text style={styles.textRecommend}>Thương hiệu yêu thích </Text>
@@ -156,7 +123,7 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
                                 <Text style={styles.textRecommend}>Xem Thêm</Text>
                             </TouchableOpacity>
                         </View>
-                        <ProductItemsbyRating navigation={stackNav} items={productsRating} />
+                        <ProductItemsbyRating navigation={stackNav} items={ProductRating} />
                         <View style={styles.recommend}>
                             <Text style={styles.textRecommend}>Sản phẩm tiêu biểu</Text>
                             <TouchableOpacity
@@ -167,7 +134,7 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
                                 <Text style={styles.textRecommend}>Xem Thêm</Text>
                             </TouchableOpacity>
                         </View>
-                        <ProductItem navigation={stackNav} items={productsRating} />
+                        <ProductItem navigation={stackNav} items={items} />
                         <WinterBanner navigation={stackNav} items={campaigns} />
                         <View style={styles.recommend}>
                             <Text style={styles.textRecommend}>Sản Phẩm giảm giá</Text>
@@ -180,11 +147,7 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
                             </TouchableOpacity>
                         </View>
                         <ProductItem
-                            navigation={stackNav}
-                            items={
-                                productsRating
-                            }
-                        />
+                            navigation={stackNav}items={items} />
 
 
 

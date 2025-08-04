@@ -4,13 +4,14 @@ import { showErrorToast } from "@/utils/toast";
 import * as Storage from "@/services/asyncStorage.service";
 
 // Định nghĩa kiểu cho Context
-type AuthContextType = {
+export type AuthContextType = {
     user: User | null;
     login: (userData: User) => void;
     logout: () => void;
     setUser: (user: User | null) => void;
 
     // ??? Làm vậy chi, lấy email thì trong user có rồi?
+    // để khi forgotpass thành công thì input email sẽ được nhập luôn
     email: string;
     setEmail: (email: string) => void;
 };
@@ -23,6 +24,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const login = async (userData: User) => {
         setUser(userData);
+
     };
 
     // Hàm đăng xuất

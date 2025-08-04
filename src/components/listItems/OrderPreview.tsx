@@ -4,7 +4,7 @@ import { IMAGE_NOT_FOUND, Order, OrderItem, User } from '../../types/models';
 import { formatCurrency, formatDate, formatOrderStatus } from '../../utils/formatForm';
 import ChevronButton from '../buttons/ChevronButton';
 import CustomButton from '../buttons/CustomButton';
-import { OrderNav } from '../../navigation/NavigationTypes';
+import { OrderNav } from '../../types/navigation';
 
 
 type Props = {

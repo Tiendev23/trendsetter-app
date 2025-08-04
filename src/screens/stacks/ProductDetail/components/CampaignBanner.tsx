@@ -56,11 +56,14 @@ const ActiveBanner = ({ campaign, countdown }: ActiveProps) => (
         style={styles.banner}
     >
         <View style={[styles.contentWrapper, styles.contentSpacing]}>
-            <Text style={styles.subtextCountdownLeft}>
-                Giảm giá trực tiếp {campaign.value}{campaign.type === 'percentage' ? '%\n' : 'đ\n'}
-                trong thời gian có hạn!
-            </Text>
-            <View>
+            <View style={{ flexShrink: 1, width: '50%' }}>
+                <Text style={styles.subtextCountdownLeft}>
+                    {/* Giảm giá trực tiếp {campaign.value}{campaign.type === 'percentage' ? '%\n' : 'đ\n'}
+                trong thời gian có hạn! */}
+                    {campaign.title}
+                </Text>
+            </View>
+            <View style={{ flex: 1 }}>
                 <Text style={styles.subtextCountdownRight}>
                     Kết thúc trong
                 </Text>
@@ -111,7 +114,7 @@ const styles = StyleSheet.create({
     banner: {
         alignItems: 'center',
         paddingVertical: 14,
-        paddingHorizontal: 14,
+        paddingHorizontal: 14
     },
     contentWrapper: {
         flexDirection: 'row',
@@ -154,6 +157,7 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontWeight: '700',
         fontSize: 16,
+        lineHeight: 20
     },
     subtextCountdownRight: {
         textAlign: 'right',

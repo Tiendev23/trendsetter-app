@@ -3,15 +3,18 @@ import { TouchableOpacity, Text, StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useCartContext } from '../contexts/CartContext';
 
+type Props = {
+    onPress: () => void;
+}
 
-export default function ToCartButton({ navigation }: { navigation: any }) {
+export default function ToCartButton({ onPress }: Props) {
     const { items } = useCartContext();
     return (
         <TouchableOpacity
             style={{
                 padding: 10,
             }}
-            onPress={() => navigation.navigate('Cart')}
+            onPress={onPress}
         >
             <Ionicons name="cart-outline" size={33} color="black" />
             {items.length > 0 && <View style={styles.dot} />}

@@ -1,6 +1,6 @@
 import { StyleSheet, useWindowDimensions, View } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
-import { OrderNav } from '../../navigation/NavigationTypes';
+import { OrderNav } from '../../types/navigation';
 import ScreenHeader from '../../components/ScreenHeader';
 import { TabBar, TabView } from 'react-native-tab-view';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
