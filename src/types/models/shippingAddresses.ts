@@ -4,7 +4,6 @@ export type Addresses ={
     phone: string,
     streetDetails: string,
     ward: string,
-    district: string,
     city: string,
     isDefault: boolean,
 }
