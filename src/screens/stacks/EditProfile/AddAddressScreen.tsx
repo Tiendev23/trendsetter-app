@@ -56,7 +56,6 @@ const AddAddressScreen = ({ navigation, route }) => {
             fullName,
             phone,
             city,
-            district,
             ward,
             streetDetails,
             isDefault: isEnabled,
@@ -99,21 +98,19 @@ const AddAddressScreen = ({ navigation, route }) => {
 
                 <AddressCard title="Địa chỉ giao hàng">
                     <View style={styles.labelValueBox}>
-                        <Text style={styles.label}>Tỉnh / Thành, Quận / Huyện, Phường / Xã</Text>
-                        <TouchableOpacity style={{ marginTop: 4, gap: 8 }}   onPress={() => {
+                        <Text style={styles.label}>Tỉnh / Thành, Phường / Xã</Text>
+                        <TouchableOpacity style={{ marginTop: 4, gap: 8 }} onPress={() => {
                             navigation.navigate('LocationScreen', {
                                 currentData: { city, district, ward, streetDetails },
                                 onSelectLocation: (newLocation: any) => {
                                     setCity(newLocation.city);
-                                    setDistrict(newLocation.district);
                                     setWard(newLocation.ward);
                                     setStreetDetails(newLocation.streetDetails);
                                 }
                             });
                         }}>
-                            <Text style={styles.infoText}>{city || 'Chọn thành phố'}</Text>
                             <View style={styles.rowWithIcon}>
-                                <Text style={styles.infoText}>{district || 'Chọn quận/huyện'}</Text>
+                                <Text style={styles.infoText}>{city || 'Chọn thành phố'}</Text>
                                 <Ionicons name="chevron-forward-outline" size={22} color="#C7C7CC" />
                             </View>
                             <Text style={styles.infoText}>{ward || 'Chọn phường/xã'}</Text>
