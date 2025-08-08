@@ -7,6 +7,7 @@ import { createAddress, fetchAddress } from '../../../redux/features/addresses/a
 import { AppDispatch } from '../../../redux/store';
 import { styles as Styles } from '../Account/AddressListScreen';
 import { SwitchRow } from '../Account/Profile';
+import Toast from 'react-native-toast-message';
 
 
 export const AddressCard = ({ title, children }: { title: string, children: React.ReactNode }) => {
@@ -51,30 +52,58 @@ const AddAddressScreen = ({ navigation, route }) => {
     const dispatch = useDispatch<AppDispatch>();
     const [showSuccess, setShowSuccess] = useState(false);
 
-    const handleAddAddress = async () => {
-        const newAddressData = {
-            fullName,
-            phone,
-            city,
-            ward,
-            streetDetails,
-            isDefault: isEnabled,
-        };
-
-        try {
-            await dispatch(createAddress({
-                userId: _id,
-                addressData: newAddressData
-            })).unwrap();
-            setShowSuccess(true);
-            setTimeout(() => {
-                dispatch(fetchAddress({ _id }));
-                navigation.goBack();
-            }, 2000);
-        } catch (error) {
-            console.error("Lỗi thêm địa chỉ:", error);
-        }
+    const isValidPhoneNumber = (phone: string): boolean => {
+        const phoneRegex = /^(0|\+84)(\d{9})$/;
+        return phoneRegex.test(phone);
     };
+
+    const handleAddAddress = async () => {
+        if (!fullName || !phone || !city || !ward || !streetDetails) {
+    Toast.show({
+      type: 'error',
+      text1: 'Thiếu thông tin',
+      text2: 'Vui lòng điền đầy đủ các trường bắt buộc.',
+    });
+    return;
+  }
+
+  if (!isValidPhoneNumber(phone)) {
+    Toast.show({
+      type: 'error',
+      text1: 'Số điện thoại sai định dạng',
+      text2: 'Vui lòng kiểm tra lại số điện thoại.',
+    });
+    return;
+  }
+
+  const newAddressData = {
+    fullName,
+    phone,
+    city,
+    ward,
+    streetDetails,
+    isDefault: isEnabled,
+  };
+
+  try {
+    await dispatch(createAddress({
+      userId: _id,
+      addressData: newAddressData
+    })).unwrap();
+    setShowSuccess(true);
+    setTimeout(() => {
+      dispatch(fetchAddress({ _id }));
+      navigation.goBack();
+    }, 2000);
+  } catch (error) {
+    Toast.show({
+      type: 'error',
+      text1: 'Lỗi hệ thống',
+      text2: 'Không thể thêm địa chỉ. Vui lòng thử lại.',
+    });
+    console.error("Lỗi thêm địa chỉ:", error);
+  }
+};
 
     if (showSuccess) {
         return (
