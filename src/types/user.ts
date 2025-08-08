@@ -1,4 +1,4 @@
-import { Addresses } from "./models/shippingAddresses";
+import { ShippingAddress } from "./models/address";
 
 export type User = {
     _id: string;
@@ -11,7 +11,7 @@ export type User = {
     avatar?: string;
     role?: "customer" | "admin";
     favorites?: string[];
-    shippingAddresses?: Addresses[];
+    addresses?: ShippingAddress[];
     createdAt?: string;
     updatedAt?: string;
     __v?: number;

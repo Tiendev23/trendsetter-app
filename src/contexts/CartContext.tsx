@@ -27,6 +27,8 @@ export type CartContextType = {
     ) => void;
 
     clearAllItems: () => void;
+
+    clearCartUI: (sizeIds: ObjectId[]) => void;
 };
 
 export const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -96,6 +98,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         } else {
             await updateCartStorage(updatedCart);
         }
+
         setCart(updatedCart);
         showSuccessToast({
             title: "Đã thêm vào giỏ hàng"
@@ -157,8 +160,18 @@ export function CartProvider({ children }: { children: ReactNode }) {
         setCart([]);
     };
 
+    const clearCartUI = (sizeIds: ObjectId[]) => {
+        const sizeIdSet = new Set(sizeIds);
+        const updatedCart = cart.filter(item => !sizeIdSet.has(item.size._id));
+        setCart(updatedCart);
+    }
+
     return (
-        <CartContext.Provider value={{ items: cart, addToCart, updateItem, removeItem, removeManyItem, clearAllItems }}>
+        <CartContext.Provider value={{
+            items: cart, addToCart, updateItem,
+            removeItem, removeManyItem, clearAllItems,
+            clearCartUI
+        }}>
             {children}
         </CartContext.Provider>
     );

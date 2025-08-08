@@ -4,13 +4,18 @@ import { Product } from "./product";
 import { User } from "./user";
 
 export type OrderItem = {
-    product: Product;
-    name: string;
-    quantity: number;
-    price: number;
-    size: string;
-    color: string;
     _id: ObjectId;
+    order: ObjectId;
+    campaign: ObjectId;
+    variant: ObjectId;
+    size: string;
+    name: string;
+    color: string;
+    basePrice: number;
+    finalPrice: number;
+    imageUrl: string;
+    quantity: number;
+    __v?: number;
 };
 
 type OrderStatus =
@@ -38,19 +43,4 @@ export type OrderBody = {
     totalPrice: number;
     shippingAddress: string;
     status?: string;
-};
-
-export type OrderDetail = {
-    _id: ObjectId;
-    order: ObjectId;
-    campaign: ObjectId;
-    productVariant: ObjectId;
-    productName: string;
-    productQuantity: number;
-    productSize: string;
-    productColor: string;
-    productBasePrice: number;
-    productFinalPrice: number;
-    productImageUrl: string;
-    __v?: number;
 };

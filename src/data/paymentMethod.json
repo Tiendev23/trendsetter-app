@@ -1,0 +1,17 @@
+[
+    {
+        "provider": "cod",
+        "name": "Thanh toán khi nhận hàng",
+        "desc": "require('@/assets/payos.png')"
+    },
+    {
+        "provider": "payos",
+        "name": "Chuyển khoản ngân hàng",
+        "desc": "@/asse0ts/payos.png"
+    },
+    {
+        "provider": "zalopay",
+        "name": "Zalopay",
+        "desc": "@/assets/payos.png"
+    }
+]

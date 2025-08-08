@@ -1,5 +1,5 @@
 import { User } from "./models";
-type Status = "idle" | "loading" | "succeeded" | "failed";
+export type Status = "idle" | "loading" | "succeeded" | "failed";
 
 export type APIError = {
     message: string;
@@ -14,7 +14,7 @@ export type BaseState<T> = {
 };
 
 export type BaseResponse<T> = {
-    data: T | null;
+    data?: T;
     message?: string;
 };
 

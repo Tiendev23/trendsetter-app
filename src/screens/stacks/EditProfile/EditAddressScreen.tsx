@@ -7,9 +7,9 @@ import { WebView } from 'react-native-webview';
 import { styles as Styles } from '../Account/AddressListScreen';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../../redux/store';
-import { deleteAddress, fetchAddress } from '../../../redux/features/addresses/addressesSlice';
+import { deleteAddress, fetchAddress } from '../../../redux/features/address/addressSlice';
 import { useFocusEffect } from '@react-navigation/native';
-import { updateAddress } from '../../../redux/features/addresses/addressesSlice';
+import { updateAddress } from '../../../redux/features/address/addressSlice';
 import { Alert } from 'react-native';
 
 
@@ -42,7 +42,7 @@ export const LabelValueBox: React.FC<LabelValueProps> = ({ label, value, onChang
     );
 };
 
-const EditAddressScreen = ({ navigation, route }:{navigation:any,route:any}) => {
+const EditAddressScreen = ({ navigation, route }: { navigation: any, route: any }) => {
     const { item, _id } = route.params;
     const [fullName, setFullName] = useState(item.fullName || '');
     const [phone, setPhone] = useState(item.phone || '');

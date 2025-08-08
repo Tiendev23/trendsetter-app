@@ -123,7 +123,7 @@ const productsSlice = createSlice({
             })
             .addCase(getAllRating.fulfilled, (state, action) => {
                 state.productsRatingLoading = 'succeeded';
-                state.productsRating = action.payload;
+                state.productsRating = action.payload.data;
             })
             .addCase(getAllRating.rejected, (state, action) => {
                 state.productsRatingLoading = 'failed';

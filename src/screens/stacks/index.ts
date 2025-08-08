@@ -1,12 +1,15 @@
+export { default as ProductDetail } from "./ProductDetail";
+export { default as Cart } from "./Cart";
+export { default as SelectAddress } from "./SelectAddress";
+export { default as SelectProvider } from "./SelectProvider";
+export { default as AddressModify } from "./AddressModify";
+
 import Login from "./Login";
 import SignUp from "./SignUp";
 import ForgotPasswordScreen from "./PassWord/ForgotPasswordScreen";
 import ChangePasswordScreen from "./PassWord/ChangePasswordScreen";
 import VerifyOtp from "./PassWord/VerifyOtpScreen";
-import ProductDetail from "./ProductDetail";
-import Cart from "./Cart";
 import Checkout from "./Checkout";
-import MethodSelection from "./MethodSelection";
 import OrderHistory from "./OrderHistory";
 
 import ProductlistScreen from "./ProductlistScreen";
@@ -19,9 +22,9 @@ import TermsOfServiceScreen from "./Account/TermsOfServiceScreen";
 import LocationScreen from "./EditProfile/Map/LocationScreen";
 import AddAddressScreen from "./EditProfile/AddAddressScreen";
 import FavoritesScreen from "../stacks/Account/FavoritesScreen";
-import WalletScreen from '../stacks/Account/WalletScreen'
+import WalletScreen from "../stacks/Account/WalletScreen";
 import PaymentMethodsScreen from "./Account/PaymentMethodsScreen";
-import PrivacyPolicyScreen from './Account/PrivacyPolicyScreen';
+import PrivacyPolicyScreen from "./Account/PrivacyPolicyScreen";
 import HelpCenterScreen from "./Account/HelpCenterScreen";
 export {
     ForgotPasswordScreen,
@@ -29,11 +32,8 @@ export {
     VerifyOtp,
     Login,
     SignUp,
-    ProductDetail,
-    Cart,
     Checkout,
     OrderHistory,
-    MethodSelection,
     ProductlistScreen,
     Profile,
     OrderStatus,

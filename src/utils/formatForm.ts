@@ -1,4 +1,4 @@
-import { Gender } from "../types";
+import { BaseAddressProps, Gender } from "../types";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
@@ -56,4 +56,11 @@ export function formatVietnameseDate(
     return showTime
         ? base.format("DD [Thg] MM YYYY  HH:mm")
         : base.format("DD [Thg] MM YYYY");
+}
+
+export function getAddressDetail(
+    address: Pick<BaseAddressProps, "street" | "ward" | "province">
+) {
+    const parts = [address.street, address.ward, address.province];
+    return parts.filter(Boolean).join(", ");
 }

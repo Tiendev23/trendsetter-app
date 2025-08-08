@@ -2,14 +2,15 @@ import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-nativ
 import React, { useState } from 'react';
 import { FontAwesome5 } from '@expo/vector-icons';
 import CustomButton from '@/components/buttons/CustomButton';
-import { formatCurrency } from '@/utils/formatForm';
-import { CampaignLite, CartItem, CartItemDemo, CartItemLite, ObjectId, VariantSize } from '@/types';
+import { formatCurrency, getGenderLabel } from '@/utils/formatForm';
+import { CampaignLite, CartItem, Gender, ObjectId, VariantSize } from '@/types';
 
 type Props = {
     product: {
         _id: ObjectId;
         campaign: CampaignLite | null;
         name: string;
+        gender: Gender;
     };
     variant: {
         _id: ObjectId;
@@ -23,8 +24,8 @@ type Props = {
 };
 
 export default function PriceDisplay({ product, variant, selectedSize, onAddToCart, }: Props) {
-    if (!selectedSize) return;
-    const { _id: productId, campaign, name } = product;
+    if (!selectedSize) return null;
+    const { _id: productId, campaign, name, gender } = product;
     const { _id: variantId, color, basePrice, finalPrice, images } = variant;
     const [quantity, setQuantity] = useState<number>(1);
     const subtotal = finalPrice * quantity;
@@ -81,11 +82,12 @@ export default function PriceDisplay({ product, variant, selectedSize, onAddToCa
                             size: selectedSize.size,
                         },
                         campaign: campaign?._id || null,
-                        name,
+                        name: `${name} ${getGenderLabel(gender)} Màu ${color}`,
                         color,
                         basePrice,
                         finalPrice,
                         imageUrl: images[0],
+                        active: selectedSize.active,
                         quantity,
                     });
                 }}

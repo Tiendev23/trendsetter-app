@@ -9,9 +9,9 @@ type Props = {
     onClick: () => void;
 };
 export default function ReviewForm({ review, onClick }: Props) {
-    const { user, orderDetail, content, rating, createdAt, updatedAt } = review;
+    const { user, orderItem, content, rating, createdAt, updatedAt } = review;
     const { avatar, username } = user;
-    const { productColor, productSize } = orderDetail;
+    const { color, size } = orderItem;
     const isFixed = createdAt !== updatedAt;
     const dateCreated = formatVietnameseDate(createdAt);
 
@@ -32,7 +32,7 @@ export default function ReviewForm({ review, onClick }: Props) {
                     <RatingStars rating={rating} />
                 </View>
             </View>
-            <Text>Màu: {productColor} — Size: {productSize}</Text>
+            <Text>Màu: {color} — Size: {size}</Text>
             {content.trim().length > 0 && <Text>{content}</Text>}
             <Text style={styles.date}>
                 {dateCreated}{isFixed && " - Đã chỉnh sửa"}

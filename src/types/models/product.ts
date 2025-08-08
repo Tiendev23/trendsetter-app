@@ -2,7 +2,7 @@ import { Gender, ObjectId } from "../common";
 import { Brand } from "./brand";
 import { Campaign } from "./campaign";
 import { Category } from "./category";
-import { OrderDetail } from "./order";
+import { OrderItem } from "./order";
 import { User } from "./user";
 
 export type Product = {
@@ -76,15 +76,12 @@ export interface ProductDetails {
 
 type UserLite = Pick<User, "_id" | "username" | "fullName" | "avatar">;
 
-type OrderDetailLite = Pick<
-    OrderDetail,
-    "_id" | "productSize" | "productColor"
->;
+type OrderItemLite = Pick<OrderItem, "_id" | "size" | "color">;
 
 export interface Review {
     _id: ObjectId;
     user: UserLite;
-    orderDetail: OrderDetailLite;
+    orderItem: OrderItemLite;
     rating: number;
     content: string;
     createdAt: string;

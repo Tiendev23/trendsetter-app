@@ -5,7 +5,6 @@ import {
     Draft,
 } from "@reduxjs/toolkit";
 import type { AxiosResponse, AxiosError } from "axios";
-import apiClient from "@/api/apiClient";
 import { APIError, AsyncState, BaseResponse } from "@/types";
 
 /**
@@ -78,7 +77,7 @@ export function makeApiThunk<ReturnedType, ArgumentType>(
  */
 export function addAsyncThunkCases<
     StateType,
-    ReturnedType extends Draft<StateType> | null,
+    ReturnedType extends Draft<StateType>,
 >(
     builder: ActionReducerMapBuilder<AsyncState<StateType>>,
     thunk: AsyncThunk<
@@ -96,6 +95,7 @@ export function addAsyncThunkCases<
             state.status = "succeeded";
             state.data = {
                 data: action.payload.data,
+                message: action.payload.message
             };
         })
         .addCase(thunk.rejected, (state, action) => {
