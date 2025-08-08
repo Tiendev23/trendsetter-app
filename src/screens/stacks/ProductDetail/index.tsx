@@ -7,7 +7,7 @@ import { fetchProductById } from "@/redux/features/product/productSlice";
 import { BlurView } from "expo-blur";
 import { showErrorToast } from "@/utils/toast";
 import ProductDetailContent from "./ProductDetailContent";
-import { useNavigation } from "@react-navigation/native";
+import { useRefresh } from "@/hooks/useRefresh";
 
 type Props = {
     navigation: ProDetailNav;
@@ -16,8 +16,9 @@ type Props = {
 export default function ProductDetail({ navigation, route }: Props) {
     const { productId, variantId } = route.params;
     const dispatch = useAppDispatch();
-    const { data, status, error } = useAppSelector(state => state.product);
-    const product = data?.data;
+    const { status, error } = useAppSelector(state => state.product);
+    const product = useAppSelector(state => state.product.data?.data);
+    const { refreshing, onRefresh } = useRefresh(() => fetchProductById(productId));
 
     useEffect(() => {
         dispatch(fetchProductById(productId));
@@ -48,9 +49,12 @@ export default function ProductDetail({ navigation, route }: Props) {
                     } />
                 }
             />
+
             <ProductDetailContent
                 product={product}
                 initialVariantId={variantId}
+                refreshing={refreshing}
+                onRefresh={onRefresh}
             />
         </View>
     )

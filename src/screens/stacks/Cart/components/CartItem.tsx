@@ -5,7 +5,7 @@ import Reanimated, { SharedValue, useAnimatedStyle } from 'react-native-reanimat
 import { CartItem as CartItemType } from '@/types/models';
 import { formatCurrency } from '@/utils/formatForm';
 import { FontAwesome5 } from '@expo/vector-icons';
-import Skeleton from '@/components/loaders/Skeleton';
+import Skeleton from '@/components/Loaders/Skeleton';
 import { RectButton } from 'react-native-gesture-handler';
 
 type BaseActionProps = {
@@ -92,7 +92,6 @@ export default function CartItem({
     item, isSelected, isEditable,
     handleCartItemClick, handleSelectItem, handleUpdateItem, handleDeleteItem
 }: Props) {
-
     const buttonStyle = useMemo(() => {
         if (isEditable)
             return isSelected
@@ -105,6 +104,7 @@ export default function CartItem({
         : isEditable ? "#C21E0C" : "#006340";
 
     const CheckButton = () => {
+        if (!isEditable && !item.active) return null;
         return (
             <TouchableOpacity
                 style={[styles.checkButton, buttonStyle]}
@@ -116,20 +116,23 @@ export default function CartItem({
         )
     }
 
+    const isDiscounted = (item.basePrice != item.finalPrice);
+
     return (
         <ReanimatedSwipeable
             enabled
             friction={3}
             enableTrackpadTwoFingerGesture
             rightThreshold={80}
-            renderLeftActions={(progress, drag) => (
-                <LeftAction drag={drag} itemQuantity={item.quantity} handleQuantityChange={handleUpdateItem} />
-            )}
+            renderLeftActions={(progress, drag) => {
+                if (!item.active) return undefined;
+                return <LeftAction drag={drag} itemQuantity={item.quantity} handleQuantityChange={handleUpdateItem} />
+            }}
             renderRightActions={(progress, drag) => (
                 <RightAction drag={drag} handleDelete={handleDeleteItem} />
             )}
         >
-            <View style={[styles.contentContainer, styles.contentWrapper]}>
+            <View style={[styles.contentContainer]}>
                 <TouchableOpacity
                     style={styles.contentWrapper}
                     onPress={() => handleCartItemClick()}
@@ -152,9 +155,24 @@ export default function CartItem({
                             <Text>
                                 Size {item.size.size} - Màu {item.color}
                             </Text>
-                            <Text style={styles.itemPrice}>
-                                {formatCurrency(item.finalPrice)}
-                            </Text>
+                            {
+                                item.active ?
+                                    <View style={styles.priceWrapper}>
+                                        <Text style={[styles.price, styles.finalPrice]}>
+                                            {formatCurrency(item.finalPrice)}
+                                        </Text>
+                                        {
+                                            (isDiscounted) &&
+                                            <Text style={[styles.price, styles.subText, styles.basePriceDecor]}>
+                                                {formatCurrency(item.basePrice)}
+                                            </Text>
+                                        }
+                                    </View>
+                                    :
+                                    <Text style={styles.subText}>
+                                        Hết hàng
+                                    </Text>
+                            }
                         </View>
                     </View>
                 </TouchableOpacity>
@@ -181,6 +199,7 @@ const styles = StyleSheet.create({
     contentWrapper: {
         flexDirection: 'row',
         alignItems: 'center',
+        columnGap: 14
     },
     selectedUneditableStyle: {
         borderColor: '#006340',
@@ -244,10 +263,24 @@ const styles = StyleSheet.create({
         color: '#1A2530',
         lineHeight: 20
     },
-    itemPrice: {
+    priceWrapper: {
+        flexDirection: 'row',
+        columnGap: 4,
+    },
+    price: {
         fontFamily: 'Raleway',
         fontWeight: '600',
+    },
+    finalPrice: {
         fontSize: 16,
         color: '#006340',
+    },
+    subText: {
+        color: '#707B81',
+        textAlignVertical: "bottom",
+    },
+    basePriceDecor: {
+        fontSize: 12,
+        textDecorationLine: "line-through",
     }
 });

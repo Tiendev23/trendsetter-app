@@ -4,6 +4,8 @@ import { CartNav } from '@/types';
 import { CartItem, ObjectId, User } from '@/types';
 import { CartItemsRender, ConfirmDeleteModal, ConfirmLoginModal, DeletionCountPanel, PricingPanel } from './components';
 import { CartContextType } from '@/contexts/CartContext';
+import { useRefresh } from '@/hooks/useRefresh';
+import { fetchCart } from '@/redux/features/cart/cartsSlice';
 
 type Props = {
     navigation: CartNav;
@@ -15,6 +17,7 @@ type Props = {
 
 export default function CartContent({ navigation, cartContext, isEditable, user, onDelete }: Props) {
     const cart = cartContext;
+    const { onRefresh, refreshing } = useRefresh(user ? () => fetchCart(user._id) : undefined);
     const [checkedIds, setCheckedIds] = useState<string[]>([]);
     const [modalVisible, setModalVisible] = useState<boolean>(false);
 
@@ -74,6 +77,8 @@ export default function CartContent({ navigation, cartContext, isEditable, user,
                 data={cart.items}
                 selectedItemIds={checkedIds}
                 isEditable={isEditable}
+                onRefresh={onRefresh}
+                refreshing={refreshing}
                 handleOnClicked={handleOnClickedItem}
                 handleOnSelect={(sizeId: ObjectId) =>
                     setCheckedIds(prev => prev.includes(sizeId)

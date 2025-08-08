@@ -1,4 +1,4 @@
-import { FlatList, View } from 'react-native';
+import { FlatList, RefreshControl, View } from 'react-native';
 import React from 'react';
 import { CartItem, ObjectId } from '@/types';
 import { default as CartItemRender } from './CartItem';
@@ -11,9 +11,11 @@ type Props = {
     handleOnSelect: (sizeId: ObjectId) => void;
     handleOnUpdate: (sizeId: ObjectId, newQuantity: number) => void;
     handleOnDelete: (sizeId: ObjectId) => void;
+    refreshing: boolean;
+    onRefresh: () => Promise<void>;
 };
 export default function CartItemsRender({
-    data, selectedItemIds, isEditable,
+    data, selectedItemIds, isEditable, refreshing, onRefresh,
     handleOnClicked, handleOnSelect, handleOnUpdate, handleOnDelete
 }: Props) {
 
@@ -21,6 +23,9 @@ export default function CartItemsRender({
         <View style={{ flex: 1 }}>
             <FlatList
                 data={data}
+                refreshControl={
+                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                }
                 renderItem={({ item }) => {
                     const isSelected = selectedItemIds.some(id => id === item.size._id);
                     return (

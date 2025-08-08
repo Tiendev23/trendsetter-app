@@ -6,13 +6,13 @@ import { ObjectId, Rating } from '@/types';
 import { RatingStars, ReviewForm } from '@/components';
 import { showErrorToast } from '@/utils/toast';
 import ChevronButton from '@/components/buttons/ChevronButton';
-import Skeleton from '@/components/loaders/Skeleton';
+import Skeleton from '@/components/Loaders/Skeleton';
 
 type HeaderProps = {
     rating: Rating;
-    onClick: () => void;
+    handleOnClick: () => void;
 }
-export function ReviewHeader({ rating, onClick }: HeaderProps) {
+export function ReviewHeader({ rating, handleOnClick }: HeaderProps) {
     return (
         <View style={styles.reviewHeader}>
             <View>
@@ -22,7 +22,7 @@ export function ReviewHeader({ rating, onClick }: HeaderProps) {
             </View>
             <TouchableOpacity
                 style={styles.reviewScoreWrapper}
-                onPress={onClick}
+                onPress={handleOnClick}
             >
                 <Text>{rating.average}</Text>
                 <RatingStars rating={Number.parseInt(rating.average || '0')} />
@@ -32,11 +32,11 @@ export function ReviewHeader({ rating, onClick }: HeaderProps) {
     )
 };
 
-type Props = {
+type ContentProps = {
     productId: ObjectId;
     handleOnClick: () => void;
 }
-export function ReviewsRender({ productId, handleOnClick }: Props) {
+export function ReviewsRender({ productId, handleOnClick }: ContentProps) {
     const dispatch = useAppDispatch();
     const { data, status, error } = useAppSelector(state => state.reviews);
 
@@ -71,17 +71,43 @@ export function ReviewsRender({ productId, handleOnClick }: Props) {
     return (
         <FlatList
             data={data.data.slice(0, 3)}
+            keyExtractor={item => item._id}
             renderItem={({ item }) => (
                 <ReviewForm review={item} onClick={handleOnClick} />
             )}
             scrollEnabled={false} // Tắt cuộn riêng của FlatList
             nestedScrollEnabled={true} // Cho phép cuộn bên trong ScrollView
-            contentContainerStyle={{ gap: 10 }}
+            ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+        // initialNumToRender={3}
+        // maxToRenderPerBatch={3}
+        // windowSize={5}
+        // removeClippedSubviews={true}
         />
     );
 };
 
+type Props = HeaderProps & ContentProps;
+
+export default function ReviewSection({ rating, productId, handleOnClick }: Props) {
+    if (rating.count == 0) return null;
+    return (
+        <View style={styles.container}>
+            <ReviewHeader
+                rating={rating}
+                handleOnClick={handleOnClick}
+            />
+            <ReviewsRender
+                productId={productId}
+                handleOnClick={handleOnClick}
+            />
+        </View>
+    )
+};
 const styles = StyleSheet.create({
+    container: {
+        gap: 10,
+        marginBottom: 16,
+    },
     reviewHeader: {
         flexDirection: 'row',
         alignItems: 'center',

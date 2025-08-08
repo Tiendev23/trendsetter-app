@@ -35,9 +35,9 @@ const ProductlistScreen: React.FC<Props> = ({ navigation, route }) => {
         setRefreshing(true);
         dispatch(getAllProducts()).finally(() => setRefreshing(false));
     };
-const dataToRender: ProductVariant[] = brandId?._id
-    ? items.filter((product) => product.product?.brand?._id === brandId._id)
-    : items;
+    const dataToRender: ProductVariant[] = brandId?._id
+        ? items.filter((product) => product.product?.brand?._id === brandId._id)
+        : items;
     if (brandId?._id && dataToRender.length === 0) {
         return (
             <View style={styles.center}>
@@ -54,7 +54,10 @@ const dataToRender: ProductVariant[] = brandId?._id
         return (
             <TouchableOpacity
                 style={styles.card}
-                onPress={() => navigation.navigate('ProductDetail', { item })}
+                onPress={() => navigation.navigate('ProductDetail', {
+                    productId: item.product._id,
+                    variantId: item._id
+                })}
             >
                 <Image
                     source={{ uri: item.images?.[0] || IMAGE_NOT_FOUND }}

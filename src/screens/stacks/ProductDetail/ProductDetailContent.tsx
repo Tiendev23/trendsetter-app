@@ -1,17 +1,26 @@
-import { Animated, ScrollView, StyleSheet, Text, View } from "react-native";
-import { useEffect, useRef, useState } from "react";
-import { CampaignBanner, DescRender, ImageSlider, PriceDisplay, ReviewHeader, ReviewsRender, SizeSelector, VariantSelector } from "./components";
+import { Animated, InteractionManager, ScrollView, StyleSheet, Text, View } from "react-native";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { CampaignBanner, DescRender, ImageSlider, PriceDisplay, ReviewSection, SizeSelector, VariantSelector } from "./components";
 import { useCartContext } from "@/contexts/CartContext";
 import { CartItem, ObjectId, ProductDetails, Variant, VariantSize } from "@/types";
 import { Dimensions } from 'react-native';
 import { showInfoToast } from "@/utils/toast";
+import { formatCurrency } from "@/utils/formatForm";
+import { RefreshControl } from "react-native-gesture-handler";
+
 const screenHeight = Dimensions.get('window').height;
+const SizeSelectorMemo = React.memo(SizeSelector);
+const VariantSelectorMemo = React.memo(VariantSelector);
+const ReviewSectionMemo = React.memo(ReviewSection);
 
 type Props = {
     product: ProductDetails;
     initialVariantId: ObjectId;
+    refreshing: boolean;
+    onRefresh: () => Promise<void>;
+
 };
-export default function ProductDetailContent({ product, initialVariantId }: Props) {
+export default function ProductDetailContent({ product, initialVariantId, onRefresh, refreshing }: Props) {
     const { brand, name, campaign, description, gender, rating, variants } = product;
     const [selectedVariant, setSelectedVariant] = useState<Variant>(
         variants.find(v => v._id === initialVariantId) || variants[0]
@@ -19,12 +28,24 @@ export default function ProductDetailContent({ product, initialVariantId }: Prop
     const [inventories, setInventories] = useState<VariantSize[]>(selectedVariant.inventories);
     const [selectedSize, setSelectedSize] = useState<VariantSize | null>(null);
     const { addToCart } = useCartContext();
-    const [paddingBottom, setPaddingBottom] = useState<number>(0);
+
+    const animatedPadding = useRef(new Animated.Value(0)).current;
+
+    const animatePadding = useCallback((toValue: number) => {
+        Animated.timing(animatedPadding, {
+            toValue,
+            duration: 300,
+            useNativeDriver: false,
+        }).start();
+    }, [animatedPadding]);
+
 
     useEffect(() => {
         setInventories(selectedVariant.inventories);
         setSelectedSize(null);
     }, [selectedVariant]);
+
+    const isDiscounted = (selectedVariant.basePrice != selectedVariant.finalPrice);
 
     const scrollRef = useRef<ScrollView>(null);
     const sizesViewRef = useRef<View>(null);
@@ -33,70 +54,83 @@ export default function ProductDetailContent({ product, initialVariantId }: Prop
     function handleSelectVariantSize(item: VariantSize) {
         if (selectedSize?._id === item._id) {
             setSelectedSize(null);
-            setPaddingBottom(0);
+            animatePadding(0);
             prevOffsetRef.current = -1;
-        } else {
-            setSelectedSize(item);
-            setTimeout(() => {
-                setPaddingBottom(175);
-            }, 300);
-            setTimeout(() => {
-                if (sizesViewRef.current && scrollRef.current) {
-                    sizesViewRef.current.measureLayout(
-                        scrollRef.current as unknown as View,
-                        (x, y, width, height) => {
-                            const offset = Math.max(y + height / 2 - screenHeight / 2, 0);
-                            if (Math.abs(offset - prevOffsetRef.current) > 1) {
-                                scrollRef.current?.scrollTo({ y: offset, animated: true });
-                                prevOffsetRef.current = offset;
-                            };
-                        }
-                    );
-                };
-            }, 150);
+            return;
         }
+
+        setSelectedSize(item);
+        animatePadding(200);
+
+        InteractionManager.runAfterInteractions(() => {
+            if (sizesViewRef.current && scrollRef.current) {
+                sizesViewRef.current.measureLayout(
+                    scrollRef.current as unknown as View,
+                    (x, y, width, height) => {
+                        const offset = Math.max(y + height / 2 - screenHeight / 2, 0);
+                        if (Math.abs(offset - prevOffsetRef.current) > 1) {
+                            scrollRef.current?.scrollTo({ y: offset, animated: true });
+                            prevOffsetRef.current = offset;
+                        }
+                    }
+                );
+            }
+
+        });
     };
 
     function handleAddToCart(item: CartItem) {
         addToCart(item);
         setSelectedSize(null);
-        setPaddingBottom(0);
+        animatePadding(0);
     };
 
-    function handleOnClick() {
+    function handleReviewClick() {
         showInfoToast({
             title: "Thông báo",
             message: "Tính năng đang được phát triển"
         })
     }
 
-    const ReviewSection = () => {
-        if (rating.count == 0) return null;
-        return (
-            <View style={styles.contentWrapper}>
-                <ReviewHeader
-                    rating={rating}
-                    onClick={handleOnClick}
-                />
-                <ReviewsRender
-                    productId={product._id}
-                    handleOnClick={handleOnClick}
-                />
-            </View>
-        )
-    };
+
+    const onSelectVariant = useCallback((v: Variant) => {
+        setSelectedVariant(v);
+        animatePadding(0);
+        prevOffsetRef.current = -1;
+    }, []);
 
     return (
         <View style={styles.container}>
-            <Animated.ScrollView ref={scrollRef}>
-                <View style={{ paddingBottom: paddingBottom }}>
+            <Animated.ScrollView
+                ref={scrollRef}
+                refreshControl={
+                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                }
+                style={styles.container}
+                nestedScrollEnabled={true}
+                scrollEventThrottle={16}
+            >
+                <Animated.View style={{ paddingBottom: animatedPadding }}>
                     <View style={styles.sliderWrapper}>
                         <ImageSlider
                             images={selectedVariant.images}
                         />
                         <CampaignBanner campaign={campaign} price={selectedVariant.basePrice} />
                     </View>
+
                     <View style={styles.contentContainer}>
+                        <View style={[styles.contentWrapper, styles.priceWrapper]}>
+                            <Text style={[styles.finalPrice, styles.price]}>
+                                {formatCurrency(selectedVariant.finalPrice)}
+                            </Text>
+                            {
+                                (isDiscounted) &&
+                                <Text style={[styles.basePrice, styles.price]}>
+                                    {formatCurrency(selectedVariant.basePrice)}
+                                </Text>
+                            }
+                        </View>
+
                         <View style={styles.contentWrapper}>
                             <Text style={styles.brandName}>
                                 {brand.name}
@@ -111,14 +145,10 @@ export default function ProductDetailContent({ product, initialVariantId }: Prop
                             <Text style={styles.contentLabel}>
                                 Biến thể
                             </Text>
-                            <VariantSelector
+                            <VariantSelectorMemo
                                 data={product.variants}
                                 selectedVariant={selectedVariant}
-                                onSelectVariant={(item: Variant) => {
-                                    setSelectedVariant(item);
-                                    setPaddingBottom(0);
-                                    prevOffsetRef.current = -1;
-                                }}
+                                onSelectVariant={onSelectVariant}
                             />
                         </View>
 
@@ -129,16 +159,20 @@ export default function ProductDetailContent({ product, initialVariantId }: Prop
                             <Text style={styles.contentLabel}>
                                 Kích cỡ
                             </Text>
-                            <SizeSelector
+                            <SizeSelectorMemo
                                 data={inventories}
                                 selectedSize={selectedSize}
                                 onSelectSize={handleSelectVariantSize}
                             />
                         </View>
 
-                        <ReviewSection />
+                        <ReviewSectionMemo
+                            rating={rating}
+                            productId={product._id}
+                            handleOnClick={handleReviewClick}
+                        />
                     </View>
-                </View>
+                </Animated.View>
             </Animated.ScrollView>
 
             <PriceDisplay
@@ -160,6 +194,7 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingHorizontal: 18,
         paddingBottom: 18,
+        gap: 16,
     },
     sliderWrapper: {
         width: '100%',
@@ -168,7 +203,23 @@ const styles = StyleSheet.create({
     },
     contentWrapper: {
         gap: 10,
-        marginBottom: 16,
+    },
+    priceWrapper: {
+        flexDirection: 'row',
+    },
+    price: {
+        fontFamily: 'Raleway',
+        fontWeight: '700',
+    },
+    finalPrice: {
+        fontSize: 24,
+        color: '#006340',
+    },
+    basePrice: {
+        fontSize: 16,
+        color: '#707B81',
+        textAlignVertical: "bottom",
+        textDecorationLine: "line-through",
     },
     brandName: {
         color: '#006340',
