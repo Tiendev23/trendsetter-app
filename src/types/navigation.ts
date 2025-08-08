@@ -1,6 +1,6 @@
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RouteProp } from "@react-navigation/native";
-import { CartItem, Payment, Product } from "./models";
+import { CartItem, BaseMethodProps, Product, ShippingAddress } from "./models";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { ObjectId } from ".";
 // Danh sách màn hình
@@ -13,13 +13,16 @@ export type RootStackParamList = {
         productId: ObjectId;
         variantId: ObjectId;
     };
+    Profile: { title?: string };
+    OrderHistory: undefined;
+
     Cart: undefined;
     Checkout: {
         items: CartItem[];
     };
-    Profile: { title?: string };
-    OrderHistory: undefined;
-    MethodSelection: { method?: Payment; paymentMethods: Payment[] };
+    SelectAddress: undefined;
+    SelectProvider: undefined;
+    AddressModify: { address?: ShippingAddress | undefined };
 };
 
 export type BottomTabParamList = {
@@ -62,6 +65,22 @@ export type CheckoutNav = NativeStackNavigationProp<
 >;
 export type CheckoutRoute = RouteProp<RootStackParamList, "Checkout">;
 
+export type SelectAddressNav = NativeStackNavigationProp<
+    RootStackParamList,
+    "SelectAddress"
+>;
+
+export type AddressModifyNav = NativeStackNavigationProp<
+    RootStackParamList,
+    "AddressModify"
+>;
+export type AddressModifyRoute = RouteProp<RootStackParamList, "AddressModify">;
+
+export type SelectProviderNav = NativeStackNavigationProp<
+    RootStackParamList,
+    "SelectProvider"
+>;
+
 export type ProfileNav = NativeStackNavigationProp<
     RootStackParamList,
     "Profile"
@@ -70,15 +89,6 @@ export type ProfileNav = NativeStackNavigationProp<
 export type OrderNav = NativeStackNavigationProp<
     RootStackParamList,
     "OrderHistory"
->;
-
-export type MethodSelectionNav = NativeStackNavigationProp<
-    RootStackParamList,
-    "MethodSelection"
->;
-export type MethodSelectionRoute = RouteProp<
-    RootStackParamList,
-    "MethodSelection"
 >;
 
 export type TabsNav = NativeStackNavigationProp<RootStackParamList, "Tabs">;
