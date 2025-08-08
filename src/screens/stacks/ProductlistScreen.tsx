@@ -1,19 +1,22 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList, ActivityIndicator, Dimensions, RefreshControl } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList, ActivityIndicator, Dimensions, RefreshControl, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '../../redux/store';
 import { formatCurrency } from '../../utils/formatForm';
 import ChevronButton from '../../components/buttons/ChevronButton';
 import ToCartButton from '../../components/ToCartButton';
 import { getAllProducts } from '../../redux/features/product/productsSlice';
-import eventBus from '../../utils/Evenbus';
+import { FavoriteContext } from '@/contexts/FavoriteContext';
 
 const { width } = Dimensions.get("window");
 import { Brand } from '../../types';
 import { IMAGE_NOT_FOUND } from '@/types/Products/products';
 import { ProductVariant } from '../../types/Products/productVariant';
 import { Props } from './Account/Profile';
+import { AuthContext } from '@/contexts/AuthContext';
+import { addFavorite, removeFavorite, optimisticAddFavorite, optimisticRemoveFavorite } from '@/redux/features/product/favoriteSlice';
+
 const getGender = (gender?: string) => {
     if (gender === 'male') return 'Nam';
     if (gender === 'female') return 'Nữ';
@@ -21,10 +24,13 @@ const getGender = (gender?: string) => {
 };
 
 const ProductlistScreen: React.FC<Props> = ({ navigation, route }) => {
-    const { brandId, title }: { brandId?: Brand; title?: string } = route.params;
+    const { brandId, title, BannerId }: { brandId?: Brand; title?: string, BannerId: string } = route.params;
     const dispatch = useDispatch<AppDispatch>();
     const { items, loading, error } = useSelector((state: RootState) => state.products);
+    const { favorites } = useSelector((state: RootState) => state.favorite);
 
+    const { isLiked, toggleLike: toggleLikeGuest } = useContext(FavoriteContext)!;
+    const { user } = useContext(AuthContext)!;
     const [refreshing, setRefreshing] = useState(false);
 
     useEffect(() => {
@@ -35,9 +41,31 @@ const ProductlistScreen: React.FC<Props> = ({ navigation, route }) => {
         setRefreshing(true);
         dispatch(getAllProducts()).finally(() => setRefreshing(false));
     };
+
+    //  Cập nhật logic handleToggleLike
+    const handleToggleLike = (variant: ProductVariant) => { // Nhận vào cả object variant
+        if (user?._id) {
+            const { _id: variantId } = variant;
+            const isAlreadyLiked = favorites.some((f) => f._id === variantId);
+
+            if (isAlreadyLiked) {
+                dispatch(optimisticRemoveFavorite({ variantId }));
+                dispatch(removeFavorite({ _id: user._id, variantId }));
+            } else {
+                dispatch(optimisticAddFavorite(variant));
+                dispatch(addFavorite({ _id: user._id, variantId }));
+            }
+        } else {
+            toggleLikeGuest(variant._id);
+        }
+    };
+
     const dataToRender: ProductVariant[] = brandId?._id
         ? items.filter((product) => product.product?.brand?._id === brandId._id)
-        : items;
+        : BannerId && BannerId.length > 0
+            ? items.filter((product) => BannerId.includes(product.product?._id))
+            : items;
+
     if (brandId?._id && dataToRender.length === 0) {
         return (
             <View style={styles.center}>
@@ -51,12 +79,16 @@ const ProductlistScreen: React.FC<Props> = ({ navigation, route }) => {
         const gender = getGender(item.product?.gender);
         const ProductName = `${item.product?.name || 'Sản phẩm'}${gender ? `-${gender}` : ''} ${item.color}`;
 
+        const liked = user?._id
+            ? favorites.some((f) => f._id === item._id)
+            : isLiked(item._id);
+
         return (
             <TouchableOpacity
                 style={styles.card}
                 onPress={() => navigation.navigate('ProductDetail', {
                     productId: item.product._id,
-                    variantId: item._id
+                    variantId: item._id,
                 })}
             >
                 <Image
@@ -69,9 +101,23 @@ const ProductlistScreen: React.FC<Props> = ({ navigation, route }) => {
                         <Text style={styles.unavailableText}>Tạm hết hàng</Text>
                     </View>
                 )}
-                <TouchableOpacity style={styles.heartIcon}>
-                    <Ionicons name="heart-outline" size={20} color="white" />
-                </TouchableOpacity>
+
+                <Pressable
+                    style={({ pressed }) => [
+                        styles.heartIcon,
+                        pressed && styles.heartIconPressed,
+                    ]}
+                    onPress={(e) => {
+                        e.stopPropagation();
+                        handleToggleLike(item);
+                    }}
+                >
+                    <Ionicons
+                        name={liked ? 'heart' : 'heart-outline'}
+                        size={24}
+                        color={liked ? '#ff0000' : '#006340'}
+                    />
+                </Pressable>
                 <View style={styles.infoContainer}>
                     <Text numberOfLines={2} style={styles.name}>
                         {ProductName}
@@ -95,7 +141,7 @@ const ProductlistScreen: React.FC<Props> = ({ navigation, route }) => {
                 <View style={styles.headerActions}>
                     <ChevronButton direction="back" onPress={() => navigation.goBack()} />
                     <Text style={styles.headerTitle}>{brandId?.name || title}</Text>
-                    <ToCartButton navigation={navigation} />
+                    <ToCartButton onPress={() => navigation.navigate("Cart")} />
                 </View>
             </View>
 
@@ -112,6 +158,7 @@ const ProductlistScreen: React.FC<Props> = ({ navigation, route }) => {
                 !refreshing && (
                     <FlatList
                         data={dataToRender}
+                        extraData={favorites}
                         keyExtractor={(item) => item._id}
                         numColumns={2}
                         columnWrapperStyle={styles.row}
@@ -148,7 +195,6 @@ const styles = StyleSheet.create({
     },
     headerTitle: {
         fontWeight: '600',
-        fontStyle: 'italic',
         fontSize: 20,
         color: '#006340',
         textAlign: 'center',
@@ -173,8 +219,11 @@ const styles = StyleSheet.create({
     card: {
         width: (width - 36) / 2,
         backgroundColor: '#f9f9f9',
-        borderRadius: 10,
+        borderRadius: 17,
         overflow: 'hidden',
+        marginTop: 8,
+        borderWidth: 0.1,
+
     },
     unavailableOverlay: {
         position: 'absolute',
@@ -206,6 +255,9 @@ const styles = StyleSheet.create({
         padding: 5,
         borderRadius: 20,
         backgroundColor: '#E0E0E0',
+    },
+    heartIconPressed: {
+        backgroundColor: '#00634020',
     },
     infoContainer: {
         padding: 8,

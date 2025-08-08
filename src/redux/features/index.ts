@@ -8,13 +8,14 @@ import sendEmailReducer from "./forgotPassword/sendEmailSlice";
 import addressReducer from "./address/addressSlice";
 import LocationReducer from "./addresses/locationSlice";
 import updateProfileReducer from "./User/userSlice";
+import FavoriteReducer from "./product/favoriteSlice";
 
 export { default as productReducer } from "./product/productSlice";
 export { default as reviewReducer } from "./product/reviewsSlice";
 export { default as cartsReducer } from "./cart/cartsSlice";
 export { default as cartReducer } from "./cart/cartSlice";
 export { default as addressesReducer } from "./address/addressesSlice";
-export { default as methodReducer } from "./payment/methodSlice";
+export { default as providerReducer } from "./payment/providerSlice";
 export { default as transactionReducer } from "./payment/transactionSlice";
 
 export {
@@ -28,4 +29,5 @@ export {
     addressReducer,
     LocationReducer,
     updateProfileReducer,
+    FavoriteReducer,
 };

@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, FlatList, Image, } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Backnav from '../../../components/Tabbar/Backnav';
-import { Addresses } from '../../../types/models';
+import { Addresses } from '@/types/models/shippingAddresses';
 import { useDispatch, useSelector, UseSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../../redux/store';
 import { fetchAddress } from '../../../redux/features/address/addressSlice';
@@ -14,7 +14,7 @@ export interface Props {
 }
 
 const AddressCard = ({ address, onEdit }: { address: Addresses, onEdit: () => void }) => {
-    const fullAddress: string = `${address.streetDetails}, ${address.ward}, ${address.district}, ${address.city}`;
+    const fullAddress: string = `${address.streetDetails}, ${address.ward}, ${address.city}`;
 
     return (
         <View style={styles.card}>
@@ -62,25 +62,25 @@ const EmptyState = ({ onAdd }: { onAdd: () => void }) => (
 
 const AddressListScreen: React.FC<Props> = ({ navigation, route }) => {
     const { loading, error, addressList } = useSelector((state: RootState) => state.address)
-    const { user } = useContext(AuthContext)
+    const { user } = useContext(AuthContext)!;
     const dispatch = useDispatch<AppDispatch>();
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
-            dispatch(fetchAddress({ _id: user._id }));
+            dispatch(fetchAddress({ _id: user?._id ?? '' }));
         });
 
         return unsubscribe; // cleanup khi component unmount
     }, [navigation]);
     const handleEditAddress = (item: Addresses) => {
-        navigation.navigate('EditAddress', { item, _id: user._id });
+        navigation.navigate('EditAddress', { item, _id: user?._id ?? ''});
     };
     const handleAddAddress = () => {
-        navigation.navigate('AddAddressScreen', { _id: user._id });
+        navigation.navigate('AddAddressScreen', { _id: user?._id ?? ''});
         console.log('Add new address');
     };
 
-    const renderAddress = ({ item }) => (
+    const renderAddress = ({ item }:{item:Addresses}) => (
         <AddressCard address={item} onEdit={() => handleEditAddress(item)} />
     );
 

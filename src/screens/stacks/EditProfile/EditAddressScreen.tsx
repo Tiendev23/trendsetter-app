@@ -65,7 +65,6 @@ const EditAddressScreen = ({ navigation, route }: { navigation: any, route: any 
             fullName,
             phone,
             city,
-            district,
             ward,
             streetDetails,
             isDefault: isEnabled,
@@ -153,19 +152,19 @@ const EditAddressScreen = ({ navigation, route }: { navigation: any, route: any 
 
                     <View style={styles.labelValueBox}>
                         <Text style={styles.label}>
-                            Tỉnh / Thành, Quận / Huyện, Phường / Xã
+                            Tỉnh / Thành, Phường / Xã
                         </Text>
                         <TouchableOpacity style={{ marginTop: 4, gap: 8 }} onPress={() => {
                             navigation.navigate('LocationScreen', {
                                 currentData: {
                                     city,
-                                    district,
+                                    //district,
                                     ward,
                                     streetDetails,
                                 },
                                 onSelectLocation: (newLocation: any) => {
                                     setCity(newLocation.city);
-                                    setDistrict(newLocation.district);
+                                    //setDistrict(newLocation.district);
                                     setWard(newLocation.ward);
                                     setStreetDetails(newLocation.streetDetails);
                                     setIsManuallyUpdated(true); //  Đánh dấu là user đã chỉnh
@@ -176,9 +175,9 @@ const EditAddressScreen = ({ navigation, route }: { navigation: any, route: any 
 
                         >
 
-                            <Text style={styles.infoText}>{city}</Text>
                             <View style={styles.rowWithIcon}>
-                                <Text style={styles.infoText}>{district}</Text>
+                            <Text style={styles.infoText}>{city}</Text>
+                                {/* <Text style={styles.infoText}>{district}</Text> */}
                                 <Ionicons name="chevron-forward-outline" size={22} color="#C7C7CC" />
                             </View>
                             <Text style={styles.infoText}>{ward}</Text>

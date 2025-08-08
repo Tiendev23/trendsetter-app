@@ -16,6 +16,7 @@ export const store = configureStore({
 
         product: Reducer.productReducer,
         reviews: Reducer.reviewReducer,
+        favorite: Reducer.FavoriteReducer,
         carts: Reducer.cartsReducer,
         cart: Reducer.cartReducer,
         addresses: Reducer.addressesReducer,
