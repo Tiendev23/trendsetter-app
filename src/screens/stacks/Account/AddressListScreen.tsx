@@ -5,7 +5,7 @@ import Backnav from '../../../components/Tabbar/Backnav';
 import { Addresses } from '../../../types/models';
 import { useDispatch, useSelector, UseSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../../redux/store';
-import { fetchAddress } from '../../../redux/features/addresses/addressesSlice';
+import { fetchAddress } from '../../../redux/features/address/addressSlice';
 import { AuthContext } from '../../../contexts/AuthContext';
 
 export interface Props {
