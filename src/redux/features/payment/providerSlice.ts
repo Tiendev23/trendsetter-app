@@ -10,7 +10,7 @@ const initialState: ProviderState = {
     method: getAllMethods()[0],
 };
 
-const methodSlice = createSlice({
+const providerSlice = createSlice({
     name: "provider",
     initialState,
     reducers: {
@@ -20,5 +20,5 @@ const methodSlice = createSlice({
     },
 });
 
-export const { setSelectedMethod } = methodSlice.actions;
-export default methodSlice.reducer;
+export const { setSelectedMethod } = providerSlice.actions;
+export default providerSlice.reducer;

@@ -5,7 +5,7 @@ import { FlatList } from 'react-native-gesture-handler';
 import { PaymentMethod } from '@/types/models';
 import { PaymentMethodItem } from './components';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { setSelectedMethod } from '@/redux/features/payment/methodSlice';
+import { setSelectedMethod } from '@/redux/features/payment/providerSlice';
 
 type Props = {
     navigation: SelectProviderNav;

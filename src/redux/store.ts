@@ -20,7 +20,7 @@ export const store = configureStore({
         carts: Reducer.cartsReducer,
         cart: Reducer.cartReducer,
         addresses: Reducer.addressesReducer,
-        method: Reducer.methodReducer,
+        method: Reducer.providerReducer,
         transaction: Reducer.transactionReducer,
     },
 });
