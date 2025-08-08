@@ -1,4 +1,4 @@
-import { Addresses } from "@/types/models/shippingAddresses";
+import { ShippingAddress } from "@/types/models/address";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import apiClient from "../../../api/apiClient";
 
@@ -9,8 +9,8 @@ type SelectedLocation = {
     streetDetails: string;
 };
 type AddressState = {
-    addressList: Addresses[];
-    selectedAddress: Addresses | null; // dùng cho 1 địa chỉ
+    addressList: ShippingAddress[];
+    selectedAddress: ShippingAddress | null; // dùng cho 1 địa chỉ
     loading: "idle" | "loading" | "succeeded" | "failed";
     error: string | null;
     selectedLocation: SelectedLocation | null;
@@ -19,8 +19,8 @@ const initialState: AddressState = {
     selectedAddress: null,
     addressList: [],
     selectedLocation: null,
-    loading: 'idle',
-    error: null
+    loading: "idle",
+    error: null,
 };
 
 // lay danh sach dia chi
@@ -35,15 +35,22 @@ export const fetchAddress = createAsyncThunk(
         }
     }
 );
-// update 
+// update
 
 export const updateAddress = createAsyncThunk(
     "address/updateAddress",
     async (
-        { userId, addressId, addressData, }: {
-            userId: string; addressId: string; addressData: any;
-        }, { rejectWithValue }) => {
-
+        {
+            userId,
+            addressId,
+            addressData,
+        }: {
+            userId: string;
+            addressId: string;
+            addressData: any;
+        },
+        { rejectWithValue }
+    ) => {
         try {
             const { _id, ...cleanedAddressData } = addressData;
             const res = await apiClient.patch(
@@ -65,7 +72,9 @@ export const deleteAddress = createAsyncThunk(
         { rejectWithValue }
     ) => {
         try {
-            const res = await apiClient.delete(`/users/${userId}/addresses/${addressId}`);
+            const res = await apiClient.delete(
+                `/users/${userId}/addresses/${addressId}`
+            );
             return { addressId }; // Trả lại id để xóa trong store
         } catch (error: any) {
             return rejectWithValue(error.response?.data?.message);
@@ -75,9 +84,15 @@ export const deleteAddress = createAsyncThunk(
 // creat
 export const createAddress = createAsyncThunk(
     "address/createAddress",
-    async ({ userId, addressData }: { userId: string, addressData: any }, { rejectWithValue }) => {
+    async (
+        { userId, addressData }: { userId: string; addressData: any },
+        { rejectWithValue }
+    ) => {
         try {
-            const res = await apiClient.post(`/users/${userId}/addresses`, addressData);
+            const res = await apiClient.post(
+                `/users/${userId}/addresses`,
+                addressData
+            );
             return res.data;
         } catch (error: any) {
             return rejectWithValue(error.response?.data?.message);
@@ -85,14 +100,14 @@ export const createAddress = createAsyncThunk(
     }
 );
 
-// 
+//
 const addressSlice = createSlice({
     name: "address",
     initialState,
     reducers: {
         setSelectedLocation: (state, action) => {
             state.selectedLocation = action.payload;
-        }
+        },
     },
     extraReducers(builder) {
         builder
@@ -122,9 +137,8 @@ const addressSlice = createSlice({
             })
             .addCase(deleteAddress.rejected, (state, action) => {
                 state.error = action.payload as string;
-            })
+            });
     },
-
 });
 export const { setSelectedLocation } = addressSlice.actions;
 
