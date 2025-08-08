@@ -1,7 +1,7 @@
 [
     {
         "provider": "cod",
-        "name": "Tiền mặt",
+        "name": "Thanh toán khi nhận hàng",
         "desc": "require('@/assets/payos.png')"
     },
     {
