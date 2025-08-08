@@ -41,9 +41,8 @@ export function ReviewsRender({ productId, handleOnClick }: ContentProps) {
     const { data, status, error } = useAppSelector(state => state.reviews);
 
     useEffect(() => {
-        if (status === 'idle')
-            dispatch(fetchReviewsByProductId(productId));
-    }, [dispatch, productId, status]);
+        dispatch(fetchReviewsByProductId(productId));
+    }, []);
 
     if (status === 'loading' || status === 'failed' || !data?.data) {
         if (error) {
@@ -90,6 +89,7 @@ type Props = HeaderProps & ContentProps;
 
 export default function ReviewSection({ rating, productId, handleOnClick }: Props) {
     if (rating.count == 0) return null;
+
     return (
         <View style={styles.container}>
             <ReviewHeader

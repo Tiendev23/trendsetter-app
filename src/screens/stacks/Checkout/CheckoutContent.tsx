@@ -28,7 +28,7 @@ export default function CheckoutContent({ navigation, items, handleCheckout }: P
         })
     }, []);
 
-    const pmtMethod = useAppSelector(state => state.method.method);
+    const pmtMethod = useAppSelector(state => state.provider.method);
     const shippingFee: number = useMemo(() => {
         return calculateShippingFee(address);
     }, [address]);
