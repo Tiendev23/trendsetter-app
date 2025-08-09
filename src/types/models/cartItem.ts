@@ -10,15 +10,14 @@ export interface CartItemLite extends BaseItemProps {
 
 // Data server trả về trực tiếp từ DB sau POST/PUT
 export interface CartItemDB extends BaseItemProps {
-    _id?: ObjectId;
+    _id: ObjectId;
     user: ObjectId;
     variantSize: ObjectId;
-    __v?: number;
+    __v: number;
 }
 
 // Data dùng để hiển thị lên front-end
 export interface CartItem extends BaseItemProps {
-    _id?: ObjectId;
     product: ObjectId;
     variant: ObjectId;
     size: {
@@ -31,6 +30,5 @@ export interface CartItem extends BaseItemProps {
     basePrice: number;
     finalPrice: number;
     imageUrl: string;
+    active: boolean;
 }
-
-export type CartItemDemo = Omit<CartItem, "_id">;

@@ -12,7 +12,14 @@ export interface Province {
     wards: Ward[];
 }
 
+export type LocationBaseProps = {
+    province: string;
+    ward: string;
+}
+
 export type ProvinceLite = Pick<Province, "provinceCode" | "name">;
 
-export type AddressSelection = Pick<Province, "provinceCode"> &
-    Pick<Ward, "wardCode">;
+export type AddressLocate = {
+    province: ProvinceLite;
+    ward: Ward;
+};

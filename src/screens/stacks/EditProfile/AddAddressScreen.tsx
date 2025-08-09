@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import ScreenHeader from '../../../components/ScreenHeader';
-import { createAddress, fetchAddress } from '../../../redux/features/addresses/addressesSlice';
+import { createAddress, fetchAddress } from '../../../redux/features/address/addressSlice';
 import { AppDispatch } from '../../../redux/store';
 import { styles as Styles } from '../Account/AddressListScreen';
 import { SwitchRow } from '../Account/Profile';
@@ -100,7 +100,7 @@ const AddAddressScreen = ({ navigation, route }) => {
                 <AddressCard title="Địa chỉ giao hàng">
                     <View style={styles.labelValueBox}>
                         <Text style={styles.label}>Tỉnh / Thành, Quận / Huyện, Phường / Xã</Text>
-                        <TouchableOpacity style={{ marginTop: 4, gap: 8 }}   onPress={() => {
+                        <TouchableOpacity style={{ marginTop: 4, gap: 8 }} onPress={() => {
                             navigation.navigate('LocationScreen', {
                                 currentData: { city, district, ward, streetDetails },
                                 onSelectLocation: (newLocation: any) => {

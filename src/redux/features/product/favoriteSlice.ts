@@ -77,7 +77,7 @@ const favoritesSlice = createSlice({
             })
             .addCase(getFavorites.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                state.favorites = action.payload;
+                state.favorites = action.payload.data;
             })
             .addCase(getFavorites.rejected, (state, action) => {
                 state.status = 'failed';

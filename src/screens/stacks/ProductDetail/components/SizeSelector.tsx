@@ -1,5 +1,5 @@
-import { ObjectId, VariantSize } from "@/types";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { VariantSize } from "@/types";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 type Props = {
     data: VariantSize[];
@@ -15,14 +15,18 @@ export default function SizeSelector({ data, selectedSize, onSelectSize }: Props
                     <TouchableOpacity
                         key={item._id}
                         onPress={() => onSelectSize(item)}
-                        style={[styles.button, {
-                            backgroundColor:
-                                selectedSize?._id === item._id ? '#006340' : '#F8F9FA',
-                        }]}
+                        style={[
+                            styles.button,
+                            (selectedSize?._id === item._id) && styles.selected,
+                            (!item.active) && styles.buttonDisabled
+                        ]}
+                        disabled={!item.active}
                     >
-                        <Text style={{
-                            color: selectedSize?._id === item._id ? '#FFFFFF' : '#707B81'
-                        }}>
+                        <Text style={[
+                            styles.label,
+                            (selectedSize?._id === item._id) && styles.highlight,
+                            (!item.active) && styles.labelDisabled
+                        ]}>
                             {item.size}
                         </Text>
                     </TouchableOpacity>
@@ -44,6 +48,23 @@ const styles = StyleSheet.create({
         aspectRatio: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        backgroundColor: "#F8F9FA"
     },
+    buttonDisabled: {
+        backgroundColor: '#E0E0E0', // màu xám nhạt
+        opacity: 0.6, // làm mờ để thể hiện không tương tác
+    },
+    label: {
+        color: "#707B81"
+    },
+    labelDisabled: {
+        color: '#A0A0A0', // màu chữ xám nhạt hơn
+    },
+    selected: {
+        backgroundColor: "#006340"
+    },
+    highlight: {
+        color: "#FFFFFF"
+    }
 })

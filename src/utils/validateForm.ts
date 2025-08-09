@@ -36,3 +36,11 @@ export const validatePhoneNumber = (phone: string): boolean => {
     regex = vietnamPhoneRegex;
     return regex.test(phone.trim());
 };
+
+export const validateAddressStreet = (address: string): boolean => {
+    const trimmed = address.trim();
+    if (trimmed.length < 10 || trimmed.length > 100) return false;
+    // Regex: cho phép chữ, số, dấu cách, dấu phẩy, gạch ngang, chấm
+    const addressRegex = /^[a-zA-Z0-9\s,.-À-ỹà-ỹ]+$/u;
+    return addressRegex.test(trimmed);
+};
