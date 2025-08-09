@@ -15,7 +15,7 @@ export interface Props {
 
 const AddressCard = ({ address, onEdit }: { address: Addresses, onEdit: () => void }) => {
     const fullAddress: string = `${address.street}, ${address.ward}, ${address.province}`;
-console.log("tui ne", address);
+    console.log("tui ne", address);
 
     return (
         <View style={styles.card}>
@@ -73,15 +73,15 @@ const AddressListScreen: React.FC<Props> = ({ navigation, route }) => {
 
         return unsubscribe; // cleanup khi component unmount
     }, [navigation]);
-    const handleEditAddress = (item: Addresses) => {
-        navigation.navigate('EditAddress', { item, _id: user?._id ?? ''});
+    const handleEditAddress = (item) => {
+        navigation.navigate('EditAddress', { item, _id: user?._id ?? '' });
     };
     const handleAddAddress = () => {
-        navigation.navigate('AddAddressScreen', { _id: user?._id ?? ''});
+        navigation.navigate('AddAddressScreen', { _id: user?._id ?? '' });
         console.log('Add new address');
     };
 
-    const renderAddress = ({ item }:{item:Addresses}) => (
+    const renderAddress = ({ item }) => (
         <AddressCard address={item} onEdit={() => handleEditAddress(item)} />
     );
 
