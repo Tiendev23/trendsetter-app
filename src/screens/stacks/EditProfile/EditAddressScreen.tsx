@@ -46,10 +46,10 @@ const EditAddressScreen = ({ navigation, route }: { navigation: any, route: any 
     const { item, _id } = route.params;
     const [fullName, setFullName] = useState(item.fullName || '');
     const [phone, setPhone] = useState(item.phone || '');
-    const [city, setCity] = useState(item.city || '');
+    const [province, setprovince] = useState(item.province || '');
     const [district, setDistrict] = useState(item.district || '');
     const [ward, setWard] = useState(item.ward || '');
-    const [streetDetails, setStreetDetails] = useState(item.streetDetails || '');
+    const [street, setStreet] = useState(item.streetDetails || '');
     const [isEnabled, setIsEnabled] = useState(item.isDefault || false);
 
     const [isManuallyUpdated, setIsManuallyUpdated] = useState(false);
@@ -64,9 +64,9 @@ const EditAddressScreen = ({ navigation, route }: { navigation: any, route: any 
         const updatedData = {
             fullName,
             phone,
-            city,
+            province,
             ward,
-            streetDetails,
+            street,
             isDefault: isEnabled,
         };
 
@@ -157,16 +157,16 @@ const EditAddressScreen = ({ navigation, route }: { navigation: any, route: any 
                         <TouchableOpacity style={{ marginTop: 4, gap: 8 }} onPress={() => {
                             navigation.navigate('LocationScreen', {
                                 currentData: {
-                                    city,
+                                    province,
                                     //district,
                                     ward,
-                                    streetDetails,
+                                    street,
                                 },
                                 onSelectLocation: (newLocation: any) => {
-                                    setCity(newLocation.city);
+                                    setprovince(newLocation.province);
                                     //setDistrict(newLocation.district);
                                     setWard(newLocation.ward);
-                                    setStreetDetails(newLocation.streetDetails);
+                                    setStreet(newLocation.street);
                                     setIsManuallyUpdated(true); //  Đánh dấu là user đã chỉnh
                                 }
 
@@ -176,7 +176,7 @@ const EditAddressScreen = ({ navigation, route }: { navigation: any, route: any 
                         >
 
                             <View style={styles.rowWithIcon}>
-                            <Text style={styles.infoText}>{city}</Text>
+                            <Text style={styles.infoText}>{province}</Text>
                                 {/* <Text style={styles.infoText}>{district}</Text> */}
                                 <Ionicons name="chevron-forward-outline" size={22} color="#C7C7CC" />
                             </View>
@@ -185,7 +185,7 @@ const EditAddressScreen = ({ navigation, route }: { navigation: any, route: any 
                         </TouchableOpacity>
                         <View style={{ marginTop: 4, gap: 5, }}>
                             <Text style={styles.label}>Tên đường, Tòa nhà, Số nhà</Text>
-                            <Text style={styles.infoText}>{streetDetails}</Text>
+                            <Text style={styles.infoText}>{street}</Text>
                         </View>
 
                     </View>

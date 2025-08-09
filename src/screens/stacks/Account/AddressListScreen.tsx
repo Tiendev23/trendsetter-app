@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, FlatList, Image, } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Backnav from '../../../components/Tabbar/Backnav';
-import { Addresses } from '@/types/models/shippingAddresses';
+import { BaseAddressProps as Addresses } from '@/types';
 import { useDispatch, useSelector, UseSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../../redux/store';
 import { fetchAddress } from '../../../redux/features/address/addressSlice';
@@ -14,7 +14,8 @@ export interface Props {
 }
 
 const AddressCard = ({ address, onEdit }: { address: Addresses, onEdit: () => void }) => {
-    const fullAddress: string = `${address.streetDetails}, ${address.ward}, ${address.city}`;
+    const fullAddress: string = `${address.street}, ${address.ward}, ${address.province}`;
+console.log("tui ne", address);
 
     return (
         <View style={styles.card}>
