@@ -28,7 +28,7 @@ export const fetchAddress = createAsyncThunk(
     " address/fetchAddress",
     async ({ _id }: { _id: string }, { rejectWithValue }) => {
         try {
-            const res = await apiClient.get(`/users/${_id}/addresses`);
+            const res = await apiClient.get(`/users/${_id}/addresses`);            
             return res.data;
         } catch (error: any) {
             return rejectWithValue(error.response?.data?.message);

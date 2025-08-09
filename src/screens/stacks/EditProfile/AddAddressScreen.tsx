@@ -7,6 +7,7 @@ import { createAddress, fetchAddress } from '../../../redux/features/address/add
 import { AppDispatch } from '../../../redux/store';
 import { styles as Styles } from '../Account/AddressListScreen';
 import { SwitchRow } from '../Account/Profile';
+import { BaseAddressProps } from '@/types';
 
 
 export const AddressCard = ({ title, children }: { title: string, children: React.ReactNode }) => {
@@ -42,23 +43,22 @@ const AddAddressScreen = ({ navigation, route }) => {
 
     const [fullName, setFullName] = useState('');
     const [phone, setPhone] = useState('');
-    const [city, setCity] = useState('');
+    const [province, setprovince] = useState('');
     const [district, setDistrict] = useState('');
     const [ward, setWard] = useState('');
-    const [streetDetails, setStreetDetails] = useState('');
+    const [street, setstreet] = useState('');
     const [isEnabled, setIsEnabled] = useState(false);
 
     const dispatch = useDispatch<AppDispatch>();
     const [showSuccess, setShowSuccess] = useState(false);
 
     const handleAddAddress = async () => {
-        const newAddressData = {
+        const newAddressData: BaseAddressProps = {
             fullName,
             phone,
-            city,
-            district,
+            province,
             ward,
-            streetDetails,
+            street,
             isDefault: isEnabled,
         };
 
@@ -102,25 +102,25 @@ const AddAddressScreen = ({ navigation, route }) => {
                         <Text style={styles.label}>Tỉnh / Thành, Quận / Huyện, Phường / Xã</Text>
                         <TouchableOpacity style={{ marginTop: 4, gap: 8 }} onPress={() => {
                             navigation.navigate('LocationScreen', {
-                                currentData: { city, district, ward, streetDetails },
+                                currentData: { province, district, ward, street },
                                 onSelectLocation: (newLocation: any) => {
-                                    setCity(newLocation.city);
-                                    setDistrict(newLocation.district);
+                                    setprovince(newLocation.province);
+                                    //setDistrict(newLocation.district);
                                     setWard(newLocation.ward);
-                                    setStreetDetails(newLocation.streetDetails);
+                                    setstreet(newLocation.street);
                                 }
                             });
                         }}>
-                            <Text style={styles.infoText}>{city || 'Chọn thành phố'}</Text>
                             <View style={styles.rowWithIcon}>
-                                <Text style={styles.infoText}>{district || 'Chọn quận/huyện'}</Text>
+                                <Text style={styles.infoText}>{province || 'Chọn thành phố'}</Text>
+                                {/* <Text style={styles.infoText}>{district || 'Chọn quận/huyện'}</Text> */}
                                 <Ionicons name="chevron-forward-outline" size={22} color="#C7C7CC" />
                             </View>
                             <Text style={styles.infoText}>{ward || 'Chọn phường/xã'}</Text>
                         </TouchableOpacity>
                         <View style={{ marginTop: 4, gap: 5 }}>
                             <Text style={styles.label}>Tên đường, Tòa nhà, Số nhà</Text>
-                            <Text style={styles.infoText}>{streetDetails}</Text>
+                            <Text style={styles.infoText}>{street}</Text>
                         </View>
                     </View>
 
