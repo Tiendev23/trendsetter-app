@@ -17,6 +17,7 @@ export { default as cartReducer } from "./cart/cartSlice";
 export { default as addressesReducer } from "./address/addressesSlice";
 export { default as providerReducer } from "./payment/providerSlice";
 export { default as transactionReducer } from "./payment/transactionSlice";
+export { default as ordersReducer } from "./order/ordersSlice";
 
 export {
     navigationReducer,

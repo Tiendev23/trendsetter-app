@@ -5,9 +5,11 @@ import ScreenHeader from '../../components/ScreenHeader';
 import { TabBar, TabView } from 'react-native-tab-view';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import OrderScene from '../../components/OrderScene';
-import { fetchOrdersByUser, refresh } from '../../redux/features/order/ordersSlice';
+import { fetchOrdersByUser, refreshOrdersState } from '../../redux/features/order/ordersSlice';
 import { Order } from '../../types/models';
-import { AuthContext } from '../../contexts/AuthContext';
+import { AuthContext, useRequireAuth } from '../../contexts/AuthContext';
+import { showErrorToast } from '@/utils/toast';
+import { OnLoading } from '@/components';
 
 const routes = [
     { key: 'all', title: 'Tất cả' },
@@ -20,24 +22,26 @@ const routes = [
 
 export default function OrderHistory({ navigation }: { navigation: OrderNav }) {
     const layout = useWindowDimensions();
+    const userId = useRequireAuth()._id;
     const [index, setIndex] = useState(0);
-    const { user } = useContext(AuthContext);
     const dispatch = useAppDispatch();
-    const { data, status, error } = useAppSelector(state => state.orders);
-    const [orders, setOrders] = useState<Order[]>([]);
-    useEffect(() => {
-        dispatch(fetchOrdersByUser(user._id));
-    }, [])
+    const { status, error } = useAppSelector(state => state.orders);
+    const orders = useAppSelector(state => state.orders.data?.data);
 
     useEffect(() => {
-        if (status === 'succeeded') {
-            setOrders(data);
+        dispatch(fetchOrdersByUser(userId));
+    }, [])
+
+    if (status === 'loading' || status === 'failed' || !orders) {
+        if (error) {
+            showErrorToast({
+                title: `Lỗi ${error.code}`,
+                message: error.message
+            });
+            dispatch(fetchOrdersByUser(userId));
         }
-        if (status === 'failed') {
-            console.log('Order > error', error);
-            dispatch(refresh())
-        }
-    }, [status]);
+        return (<OnLoading />)
+    };
 
     const filterOrdersByRouteKey = (key: string, data: Order[]): Order[] => {
         if (key === 'all') return data;

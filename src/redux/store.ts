@@ -22,6 +22,7 @@ export const store = configureStore({
         addresses: Reducer.addressesReducer,
         provider: Reducer.providerReducer,
         transaction: Reducer.transactionReducer,
+        orders: Reducer.ordersReducer,
     },
 });
 

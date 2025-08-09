@@ -66,3 +66,15 @@ export type ProviderData = {
     checkoutUrl: string;
     transId: string;
 };
+
+export type TransStatus = "pending" | "completed" | "cancelled" | "refunded";
+
+export interface Transaction {
+    _id: ObjectId;
+    order: ObjectId;
+    user: ObjectId;
+    amount: number;
+    paymentMethod: string;
+    providerTransactionId: string;
+    status: TransStatus;
+}

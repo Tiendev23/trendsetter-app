@@ -1,10 +1,11 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, { useState } from 'react';
-import { IMAGE_NOT_FOUND, Order, OrderItem, User } from '../../types/models';
+import { Order, OrderItem, User } from '../../types/models';
 import { formatCurrency, formatDate, formatOrderStatus } from '../../utils/formatForm';
 import ChevronButton from '../buttons/ChevronButton';
 import CustomButton from '../buttons/CustomButton';
 import { OrderNav } from '../../types/navigation';
+import { showInfoToast } from '@/utils/toast';
 
 
 type Props = {
@@ -13,17 +14,20 @@ type Props = {
 };
 
 export default function OrderPreview({ order, navigation }: Props) {
-    const items = order.items as OrderItem[];
-    const subtotal = items.reduce((subtotal, obj) => subtotal + (obj.price * obj.quantity), 0);
-    const { label, color } = formatOrderStatus(order.status);
-    const cancelable = order.status !== 'delivered' && order.status !== 'cancelled';
-    const reviewable = order.status === 'delivered' && true;
-    const buyable = !cancelable;
+    const { transaction, items, status } = order
+    const { label, color } = formatOrderStatus(status);
+    const cancelable = status !== 'delivered' && status !== 'cancelled';
+    const reviewable = status === 'delivered' && true;
     return (
         <View style={styles.container}>
             <TouchableOpacity
                 style={styles.contentContainer}
-                onPress={() => { }}
+                onPress={() => {
+                    showInfoToast({
+                        title: "Thông báo",
+                        message: "Tính năng đang được phát triển"
+                    })
+                }}
             >
                 <View style={styles.rowWrapper}>
                     <Text>
@@ -37,7 +41,7 @@ export default function OrderPreview({ order, navigation }: Props) {
                 <View style={[styles.rowWrapper, styles.itemWrapper]}>
                     <View style={styles.imageWrapper}>
                         <Image
-                            source={{ uri: items[0].product?.image || IMAGE_NOT_FOUND }}
+                            source={{ uri: items[0].imageUrl }}
                             style={{ flex: 1 }}
                         />
                     </View>
@@ -69,7 +73,7 @@ export default function OrderPreview({ order, navigation }: Props) {
                     <View>
                         <Text>
                             Tổng tiền:  <Text style={styles.itemPrice}>
-                                {formatCurrency(subtotal)}
+                                {formatCurrency(transaction.amount)}
                             </Text>
                         </Text>
                     </View>
@@ -78,11 +82,16 @@ export default function OrderPreview({ order, navigation }: Props) {
             <View style={styles.separatorLine} />
             <View style={{ flexDirection: 'row-reverse', gap: 16 }}>
                 {
-                    buyable &&
+                    !cancelable &&
                     <View style={{ flex: 1 / 3.25 }}>
                         <CustomButton
                             title='Mua lại'
-                            onPress={() => { }}
+                            onPress={() => {
+                                showInfoToast({
+                                    title: "Thông báo",
+                                    message: "Tính năng đang được phát triển"
+                                })
+                            }}
                         />
                     </View>
                 }
@@ -92,7 +101,12 @@ export default function OrderPreview({ order, navigation }: Props) {
                         <CustomButton
                             title='Đánh giá'
                             outline
-                            onPress={() => { }}
+                            onPress={() => {
+                                showInfoToast({
+                                    title: "Thông báo",
+                                    message: "Tính năng đang được phát triển"
+                                })
+                            }}
                         />
                     </View>
                 }
@@ -102,7 +116,12 @@ export default function OrderPreview({ order, navigation }: Props) {
                         <CustomButton
                             title='Huỷ đơn'
                             outline
-                            onPress={() => { }}
+                            onPress={() => {
+                                showInfoToast({
+                                    title: "Thông báo",
+                                    message: "Tính năng đang được phát triển"
+                                })
+                            }}
                         />
                     </View>
                 }
