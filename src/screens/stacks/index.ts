@@ -26,6 +26,8 @@ import WalletScreen from "../stacks/Account/WalletScreen";
 import PaymentMethodsScreen from "./Account/PaymentMethodsScreen";
 import PrivacyPolicyScreen from "./Account/PrivacyPolicyScreen";
 import HelpCenterScreen from "./Account/HelpCenterScreen";
+import ProductNotificationScreen from "./Notification/ProductNotificationScreen";
+import ActivityNotificationScreen from "./Notification/ActivityNotificationScreen";
 export {
     ForgotPasswordScreen,
     ChangePasswordScreen,
@@ -48,4 +50,6 @@ export {
     PaymentMethodsScreen,
     PrivacyPolicyScreen,
     HelpCenterScreen,
+    ProductNotificationScreen,
+    ActivityNotificationScreen
 };

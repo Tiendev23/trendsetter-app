@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import TabNavigator from './TabNavigator';
 import * as Stacks from '../screens/stacks'
-import ChatScreen from '../screens/stacks/ChatScreen';
 import Onboarding from '../screens/tabs/Onboarding';
 import { RootStackParamList } from '@/types';
 import { useAuthContext } from '@/contexts/AuthContext';
@@ -20,6 +19,8 @@ export default function StackNavigator() {
             <Stack.Screen name="SelectAddress" component={Stacks.SelectAddress} />
             <Stack.Screen name="SelectProvider" component={Stacks.SelectProvider} />
             <Stack.Screen name="AddressModify" component={Stacks.AddressModify} />
+            <Stack.Screen name="ProductNotification" component={Stacks.ProductNotificationScreen}/>
+            <Stack.Screen name="ActivityNotification" component={Stacks.ActivityNotificationScreen}/>
 
             <Stack.Screen name="Onboarding" component={Onboarding} />
             <Stack.Screen name="Tabs" component={TabNavigator} />
@@ -35,8 +36,7 @@ export default function StackNavigator() {
             <Stack.Screen name="editProfile" component={Stacks.ProfileEdit} />
             <Stack.Screen name="addr" component={Stacks.AddressListScreen} />
             <Stack.Screen name="ChangePasswordScreen" component={Stacks.ChangePasswordScreen} />
-            <Stack.Screen name="ForgotPasswordScreen" component={Stacks.ForgotPasswordScreen} />
-            <Stack.Screen name="Chat" component={ChatScreen} />
+            <Stack.Screen name="ForgotPasswordScreen" component={Stacks.ForgotPasswordScreen} />    
             <Stack.Screen name="EditAddress" component={Stacks.EditAddress} />
             <Stack.Screen name="LocationScreen" component={Stacks.LocationScreen} />
             <Stack.Screen name="AddAddressScreen" component={Stacks.AddAddressScreen} />
@@ -45,7 +45,6 @@ export default function StackNavigator() {
             <Stack.Screen name="FavoritesScreen" component={Stacks.FavoritesScreen} />
             <Stack.Screen name="PrivacyPolicyScreen" component={Stacks.PrivacyPolicyScreen} />
             <Stack.Screen name="HelpCenterScreen" component={Stacks.HelpCenterScreen} />
-
 
 
         </Stack.Navigator>
