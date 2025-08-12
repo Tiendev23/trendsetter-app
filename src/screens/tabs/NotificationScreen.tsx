@@ -14,7 +14,7 @@ import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 export default function NotificationScreen({ navigation }) {
     const { user } = useContext(AuthContext);
 
-    // Số lượng thông báo (demo)
+    
     const productCount = 2;
     const activityCount = 3;
 
