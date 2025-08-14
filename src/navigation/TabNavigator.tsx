@@ -4,7 +4,9 @@ import { Ionicons } from '@expo/vector-icons';
 import { Home, Search, Notification, Account } from '../screens/tabs';
 import { StyleSheet } from 'react-native';
 import NotificationScreen from '../screens/tabs/NotificationScreen';
-const Tab = createBottomTabNavigator();
+import { BottomTabParamList } from '@/types';
+
+const Tab = createBottomTabNavigator<BottomTabParamList>();
 
 export default function TabNavigator() {
 

@@ -20,6 +20,8 @@ export default function StackNavigator() {
             <Stack.Screen name="SelectAddress" component={Stacks.SelectAddress} />
             <Stack.Screen name="SelectProvider" component={Stacks.SelectProvider} />
             <Stack.Screen name="AddressModify" component={Stacks.AddressModify} />
+            <Stack.Screen name="ReviewWriting" component={Stacks.ReviewWriting} />
+            <Stack.Screen name="OrderDetail" component={Stacks.OrderDetail} />
 
             <Stack.Screen name="Onboarding" component={Onboarding} />
             <Stack.Screen name="Tabs" component={TabNavigator} />

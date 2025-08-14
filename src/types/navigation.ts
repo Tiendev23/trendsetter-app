@@ -5,6 +5,7 @@ import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { ObjectId } from ".";
 // Danh sách màn hình
 export type RootStackParamList = {
+    Onboarding: undefined;
     Tabs: undefined;
     Login: { email?: string }; // Có thể nhận email từ bất kỳ màn hình nào
     SignUp: undefined;
@@ -25,6 +26,7 @@ export type RootStackParamList = {
     SelectProvider: undefined;
     AddressModify: { address?: ShippingAddress };
     ReviewWriting: { items: OrderItem[] };
+    OrderDetail: { orderId: ObjectId };
 };
 
 export type BottomTabParamList = {

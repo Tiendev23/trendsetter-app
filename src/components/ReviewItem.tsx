@@ -10,9 +10,6 @@ type Props = {
 };
 export default function ReviewItem({ review, onClick }: Props) {
     const { user, orderItem, content, rating, createdAt, updatedAt, __v } = review;
-    console.log(review);
-    
-
     const { avatar, username } = user;
     const { color, size } = orderItem;
     const isFixed = __v !== 0;
