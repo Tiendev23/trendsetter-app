@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import apiClient from "@/api/apiClient";
 import {
     AsyncState,
@@ -64,7 +64,10 @@ const addressesSlice = createSlice({
             state.status = "idle";
             state.error = null;
         },
-        setSelectedAddress: (state, action) => {
+        setSelectedAddress: (
+            state,
+            action: PayloadAction<AddressSelection | null>
+        ) => {
             state.address = action.payload;
         },
     },

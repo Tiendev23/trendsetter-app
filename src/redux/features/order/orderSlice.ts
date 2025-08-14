@@ -1,51 +1,35 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import apiClient from "../../../api/apiClient";
-import { OrderBody } from "../../../types/models";
+import { BaseResponse, AsyncState } from "@/types/redux";
+import { createSlice } from "@reduxjs/toolkit";
+import apiClient from "@/api/apiClient";
+import { addAsyncThunkCases, makeApiThunk } from "@/utils/reduxHelper";
+import { ObjectId } from "@/types";
 
-export const createOrder = createAsyncThunk(
-    "order/create",
-    async (body: OrderBody, { rejectWithValue }) => {
-        try {
-            const response = await apiClient.post("/orders", body);
-            console.log("response.data:", response.data);
-
-            return response.data;
-        } catch (error) {
-            console.log("orderSlice > error", error);
-            return rejectWithValue(error.response?.data?.message);
-        }
-    }
+export const cancelOrder = makeApiThunk<BaseResponse<undefined>, ObjectId>(
+    "order/cancel",
+    (orderId) =>
+        apiClient.patch<BaseResponse<undefined>>(`/orders/${orderId}/cancel`)
 );
 
+const initialState: AsyncState<undefined> = {
+    data: null,
+    status: "idle",
+    error: null,
+};
+
 const orderSlice = createSlice({
-    name: "orders",
-    initialState: {
-        data: null,
-        status: "idle",
-        error: null,
-    },
+    name: "order",
+    initialState,
     reducers: {
-        refresh: (state) => {
+        refreshOrderState: (state) => {
             state.data = null;
             state.status = "idle";
             state.error = null;
         },
     },
     extraReducers: (builder) => {
-        builder
-            .addCase(createOrder.pending, (state) => {
-                state.status = "loading";
-            })
-            .addCase(createOrder.fulfilled, (state, action) => {
-                state.status = "succeeded";
-                state.data = action.payload;
-            })
-            .addCase(createOrder.rejected, (state, action) => {
-                state.status = "failed";
-                state.error = action.payload || "Đã xảy ra lỗi";
-            });
+        addAsyncThunkCases<undefined, undefined>(builder, cancelOrder);
     },
 });
 
-export const { refresh } = orderSlice.actions;
+export const { refreshOrderState } = orderSlice.actions;
 export default orderSlice.reducer;

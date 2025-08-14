@@ -15,14 +15,17 @@ export const store = configureStore({
         user: Reducer.updateProfileReducer,
 
         product: Reducer.productReducer,
-        reviews: Reducer.reviewReducer,
-        favorite: Reducer.FavoriteReducer,
+        reviews: Reducer.reviewsReducer,
+        favorites: Reducer.favoritesReducer,
         carts: Reducer.cartsReducer,
         cart: Reducer.cartReducer,
         addresses: Reducer.addressesReducer,
         provider: Reducer.providerReducer,
         transaction: Reducer.transactionReducer,
         orders: Reducer.ordersReducer,
+        order: Reducer.orderReducer,
+        favorite: Reducer.favoriteReducer,
+        review: Reducer.reviewReducer,
     },
 });
 

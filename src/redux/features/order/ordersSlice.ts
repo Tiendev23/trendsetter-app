@@ -21,8 +21,8 @@ import { ObjectId } from "@/types";
 //         );
 //     }
 // });
-export const fetchOrdersByUser = makeApiThunk<BaseResponse<Order[]>, ObjectId>(
-    "order/fetchByUser",
+export const fetchUserOrders = makeApiThunk<BaseResponse<Order[]>, ObjectId>(
+    "order/fetchAll",
     (userId) => apiClient.get<BaseResponse<Order[]>>(`/users/${userId}/orders`)
 );
 
@@ -43,7 +43,7 @@ const ordersSlice = createSlice({
         },
     },
     extraReducers: (builder) => {
-        addAsyncThunkCases<Order[], Order[]>(builder, fetchOrdersByUser);
+        addAsyncThunkCases<Order[], Order[]>(builder, fetchUserOrders);
     },
 });
 

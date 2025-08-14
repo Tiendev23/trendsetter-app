@@ -11,13 +11,16 @@ import updateProfileReducer from "./User/userSlice";
 import FavoriteReducer from "./product/favoriteSlice";
 
 export { default as productReducer } from "./product/productSlice";
-export { default as reviewReducer } from "./product/reviewsSlice";
+export { default as reviewsReducer } from "./review/reviewsSlice";
 export { default as cartsReducer } from "./cart/cartsSlice";
 export { default as cartReducer } from "./cart/cartSlice";
 export { default as addressesReducer } from "./address/addressesSlice";
 export { default as providerReducer } from "./payment/providerSlice";
 export { default as transactionReducer } from "./payment/transactionSlice";
 export { default as ordersReducer } from "./order/ordersSlice";
+export { default as orderReducer } from "./order/orderSlice";
+export { default as favoriteReducer } from "./favorite/favoriteSlice";
+export { default as reviewReducer } from "./review/reviewSlice";
 
 export {
     navigationReducer,
@@ -30,5 +33,5 @@ export {
     addressReducer,
     LocationReducer,
     updateProfileReducer,
-    FavoriteReducer,
+    FavoriteReducer as favoritesReducer,
 };

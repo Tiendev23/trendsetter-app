@@ -2,8 +2,9 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import apiClient from "../../../api/apiClient";
 import { BaseState, APIError, LoginResponse, User } from "@/types";
 import { AxiosError } from "axios";
-import { getItem, removeItem, saveItem } from "@/services/asyncStorage.service";
+import * as Storage from "@/services/asyncStorage.service";
 import { fetchCart, syncCart } from "../cart/cartsSlice";
+import { KEY } from "@/constants";
 
 type LoginDataType = {
     emailOrUsername: string;
@@ -21,9 +22,11 @@ export const login = createAsyncThunk<
             body
         );
         const { user, token } = response.data;
-        await saveItem("@token", token);
 
-        const storedCart = await getItem("@cart");
+        Storage.removeItem(KEY.TOKEN);
+        await Storage.saveItem(KEY.TOKEN, token);
+
+        const storedCart = await Storage.getItem(KEY.CART);
         if (Array.isArray(storedCart) && storedCart.length > 0) {
             const cartItems = storedCart.map((item: any) => ({
                 sizeId: item.size._id,
@@ -33,7 +36,7 @@ export const login = createAsyncThunk<
             await dispatch(
                 syncCart({ userId: user._id, body: cartItems })
             ).unwrap();
-            await removeItem("@cart");
+            await Storage.removeItem(KEY.CART);
         } else {
             await dispatch(fetchCart(user._id)).unwrap();
         }
