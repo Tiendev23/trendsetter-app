@@ -26,7 +26,7 @@ const FavoritesScreen: React.FC<Props> = ({ navigation }) => {
     const { user } = useContext(AuthContext)!;
 
    
-    const { favorites, status } = useSelector((state: RootState) => state.favorite);
+    const { favorites, status } = useSelector((state: RootState) => state.favorites);
 
     const [refreshing, setRefreshing] = useState(false);
     const [likingId, setLikingId] = useState<string | null>(null);

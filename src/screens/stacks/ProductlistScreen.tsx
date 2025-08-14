@@ -27,7 +27,7 @@ const ProductlistScreen: React.FC<Props> = ({ navigation, route }) => {
     const { brandId, title, BannerId }: { brandId?: Brand; title?: string, BannerId: string } = route.params;
     const dispatch = useDispatch<AppDispatch>();
     const { items, loading, error } = useSelector((state: RootState) => state.products);
-    const { favorites } = useSelector((state: RootState) => state.favorite);
+    const { favorites } = useSelector((state: RootState) => state.favorites);
 
     const { isLiked, toggleLike: toggleLikeGuest } = useContext(FavoriteContext)!;
     const { user } = useContext(AuthContext)!;

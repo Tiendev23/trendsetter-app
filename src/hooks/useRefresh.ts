@@ -6,10 +6,15 @@ export const useRefresh = (action: any) => {
     const [refreshing, setRefreshing] = useState(false);
 
     const onRefresh = useCallback(async () => {
-        if(!action) return;
+        if (!action) return;
         setRefreshing(true);
-        await dispatch(action());
-        setRefreshing(false);
+        try {
+            await dispatch(action());
+        } catch (error) {
+            console.error("Refresh error:", error);
+        } finally {
+            setRefreshing(false);
+        }
     }, [dispatch, action]);
 
     return { refreshing, onRefresh };

@@ -54,7 +54,7 @@ export default function SearchScreen() {
   // Context cho favorite
   const { user } = useContext(AuthContext)!;
   const { isLiked, toggleLike: toggleLikeGuest } = useContext(FavoriteContext)!;
-  const { favorites } = useAppSelector((state) => state.favorite);
+  const { favorites } = useAppSelector((state) => state.favorites);
 
   const priceFilters = [
     { label: "Tất cả", min: 0, max: Infinity },

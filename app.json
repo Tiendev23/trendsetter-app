@@ -36,6 +36,15 @@
                 {
                     "launchMode": "most-recent"
                 }
+            ],
+            [
+                "expo-image-picker",
+                {
+                    "photosPermission": "custom photos permission",
+                    "cameraPermission": "Allow Trendsetter to open the camera",
+                    "//": "Disables the microphone permission",
+                    "microphonePermission": false
+                }
             ]
         ]
     }
