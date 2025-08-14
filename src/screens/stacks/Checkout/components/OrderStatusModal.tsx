@@ -2,10 +2,8 @@ import { ActivityIndicator, Image, StyleSheet, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import CustomButton from '../../../../components/buttons/CustomButton';
 import { BlurView } from 'expo-blur';
-import { Status } from '@/types';
-import { getItem, removeItem } from '@/services/asyncStorage.service';
-import { useAppDispatch } from '@/redux/hooks';
-import { setSelectedAddress } from '@/redux/features/address/addressesSlice';
+import { Status, TransStatus } from '@/types';
+import { OnLoading } from '@/components';
 
 const OrderPlaced = () => (
     <View style={styles.wrapper}>
@@ -32,46 +30,27 @@ const OrderCanceled = () => (
         </View>
 
         <Text style={styles.description}>
-            Tạo đơn hàng thất bại
+            Đã huỷ đơn hàng
         </Text>
     </View>
 )
 
-const Content = ({ status }: { status: Status }) => {
-    if (status === "succeeded") return <OrderPlaced />
+const Content = ({ status }: { status: TransStatus }) => {
+    if (status === "completed") return <OrderPlaced />
 
     return <OrderCanceled />
 }
 
 type Props = {
-    status: Status;
+    status: TransStatus;
     handleContinueShopping: () => void
 };
 
 export default function OrderStatusModal({
     status, handleContinueShopping
 }: Props) {
-    const [shouldRender, setShouldRender] = useState(false);
 
-    useEffect(() => {
-        if (status === 'idle') {
-            setShouldRender(false); // reset nếu status quay về idle/loading
-        } else {
-            const timeout = setTimeout(() => {
-                setShouldRender(true);
-            }, 1000); // Delay 3 giây
-
-            return () => clearTimeout(timeout); // cleanup nếu status thay đổi
-        }
-    }, [status]);
-
-    if (status === 'idle' || !shouldRender) return null;
-
-    if (status === "loading") return (
-        <BlurView intensity={10} tint='systemChromeMaterialDark' style={styles.blurBackground}>
-            <ActivityIndicator color="#006340" size={"large"} />
-        </BlurView>
-    )
+    if (status === "pending") return null;
 
     return (
         <BlurView intensity={10} tint='systemChromeMaterialDark' style={styles.blurBackground}>
