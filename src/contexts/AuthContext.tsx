@@ -1,16 +1,19 @@
-import { createContext, useState, ReactNode, useContext } from "react";
+import { createContext, useState, ReactNode, useContext, useEffect } from "react";
 import { User } from "../types/models";
 import { showErrorToast } from "@/utils/toast";
 import * as Storage from "@/services/asyncStorage.service";
 import { useAppDispatch } from "@/redux/hooks";
 import { setSelectedAddress } from "@/redux/features/address/addressesSlice";
+import { KEY } from "@/constants";
 
 // Định nghĩa kiểu cho Context
 export type AuthContextType = {
     user: User | null;
-    login: (userData: User) => void;
-    logout: () => void;
     setUser: (user: User | null) => void;
+
+    login: (userData: User) => void;
+
+    logout: () => void;
 
     // ??? Làm vậy chi, lấy email thì trong user có rồi?
     // để khi forgotpass thành công thì input email sẽ được nhập luôn
@@ -24,9 +27,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const dispatch = useAppDispatch();
     const [user, setUser] = useState<User | null>(
         null
-        // { "__v": 28, "_id": "686f6fc68e86e6e10dfc27b7", "addresses": [{ "__v": 0, "_id": "6890515745e7109087f1edc8", "fullName": "Trịnh Quốc Tiến", "isDefault": true, "phone": "0938428870", "province": "Thành phố Hồ Chí Minh", "street": "262 Đề Thám", "user": "686f6fc68e86e6e10dfc27b7", "ward": "Phường Sài Gòn" }], "avatar": "https://res.cloudinary.com/trendsetter/image/upload/v1752313240/avatars/1752313235559-zjy5zdu4.jpg", "birthday": "1995-07-09T00:00:00.000Z", "createdAt": "2025-07-10T07:07:57.557Z", "email": "tientq.dev.it@gmail.com", "favorites": ["686e65c09d70cd16504feeab", "68710372d1feb9e62d8e1b51"], "fullName": "Thái Luân", "gender": "male", "role": "customer", "updatedAt": "2025-07-31T15:19:00.818Z", "username": "TienTrinh" }
     );
     const [email, setEmail] = useState<string>('')
+
+    // useEffect(() => {
+    //     Storage.removeItem(KEY.TOKEN);
+    //     const token = (
+    //         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODZmNmZjNjhlODZlNmUxMGRmYzI3YjciLCJwdXJwb3NlIjoibG9naW4iLCJpYXQiOjE3NTUwMTU5MzgsImV4cCI6MTc1NTAyMzEzOH0.qxozzvaIJCtYkiSv0ritRzNmWXTLf-ZBovlXPIH1y3M"
+    //     );
+    //     Storage.saveItem(KEY.TOKEN, token)
+    // }, []);
 
     const login = async (userData: User) => {
         setUser(userData);
@@ -38,8 +48,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Hàm đăng xuất
     const logout = async () => {
         setUser(null);
-        await Storage.removeItem("@token");
-        await Storage.removeItem("@cart");
+        await Storage.removeItem(KEY.TOKEN);
+        await Storage.removeItem(KEY.CART);
     };
 
     return (

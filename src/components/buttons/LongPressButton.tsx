@@ -1,6 +1,5 @@
-import { Animated, TouchableOpacity, Text, View, StyleSheet } from 'react-native';
-import React, { useEffect, useRef } from 'react';
-import { showInfoToast } from '@/utils/toast';
+import { Animated, TouchableOpacity, Text, View, StyleSheet, Platform } from 'react-native';
+import React, { useRef } from 'react';
 
 type Props = {
     label: string;
@@ -136,11 +135,15 @@ const styles = StyleSheet.create({
     },
 });
 
+
+const isIOS = Platform.OS === 'ios';
 const BUTTON_THEMES = {
     "green-filled": {
         container: styles.greenFilled,
         label: styles.greenFilledLabel,
-        overlay: "rgba(0, 99, 64, 0.3)",
+        overlay: isIOS
+            ? "rgba(51, 204, 51, 0.4)"
+            : "rgba(0, 99, 64, 0.3)",
     },
     "green-outline": {
         container: styles.greenOutline,
@@ -150,12 +153,13 @@ const BUTTON_THEMES = {
     "red-filled": {
         container: styles.redFilled,
         label: styles.redFilledLabel,
-        overlay: "rgba(194, 30, 12, 0.3)",
+        overlay: isIOS
+            ? "rgba(204, 153, 0, 0.4)"
+            : "rgba(194, 30, 12, 0.3)",
     },
     "red-outline": {
         container: styles.redOutline,
         label: styles.redOutlineLabel,
         overlay: "rgba(194, 30, 12, 0.3)",
     },
-    // thêm theme khác nếu cần
 };

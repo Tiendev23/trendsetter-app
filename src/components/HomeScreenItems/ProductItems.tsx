@@ -20,10 +20,10 @@ import { AuthContext } from '@/contexts/AuthContext';
 import { FavoriteContext } from '@/contexts/FavoriteContext';
 
 import {
-  addFavorite,
-  removeFavorite,
-  optimisticAddFavorite,
-  optimisticRemoveFavorite
+    addFavorite,
+    removeFavorite,
+    optimisticAddFavorite,
+    optimisticRemoveFavorite
 } from '@/redux/features/product/favoriteSlice';
 
 
@@ -41,225 +41,241 @@ export const getGender = (gender?: string) => {
 
 // Component chính
 const ProductItem: React.FC<ProductsItem> = ({ navigation, items }) => {
-  const dispatch = useDispatch<AppDispatch>();
-  const { user } = useContext(AuthContext)!;
-  const { isLiked, toggleLike: toggleLikeGuest } = useContext(FavoriteContext)!;
+    const dispatch = useDispatch<AppDispatch>();
+    //   const { user } = useContext(AuthContext)!;
+    const { user, setUser } = useContext(AuthContext)!;
+    const { isLiked, toggleLike: toggleLikeGuest } = useContext(FavoriteContext)!;
 
-  const { favorites } = useSelector((state: RootState) => state.favorite);
+    const { favorites } = useSelector((state: RootState) => state.favorites);
 
-  const shuffle = useMemo(() => {
-    if (!Array.isArray(items)) return [];
-    return [...items].sort(() => Math.random() - 0.5);
-  }, [items]);
+    const shuffle = useMemo(() => {
+        if (!Array.isArray(items)) return [];
+        return [...items].sort(() => Math.random() - 0.5);
+    }, [items]);
 
 
-  const handleToggleLike = (variant: ProductVariant) => { 
-    if (user?._id) {
-      const { _id: variantId } = variant;
-      const isAlreadyLiked = favorites.some((f) => f._id === variantId);
+    const handleToggleLike = (variant: ProductVariant) => {
+        if (user?._id) {
+            const { _id: variantId } = variant;
+            //   const isAlreadyLiked = favorites.some((f) => f._id === variantId);
+            /**
+             * Sau khi login user sẽ có favorites là mảng ObjectId
+             * tiếp theo chỉ cần thao tác với mảng đó bằng setUser
+             * isAlreadyLiked sẽ kiểm tra trong fav của người dùng đã có id variantId chưa để hiển thị trên UI
+             */
+            const isAlreadyLiked = user.favorites.some((id) => id === variantId);
 
-      if (isAlreadyLiked) {
-        dispatch(optimisticRemoveFavorite({ variantId }));
-        dispatch(removeFavorite({ _id: user._id, variantId }));
-      } else {
-        dispatch(optimisticAddFavorite(variant));
-        dispatch(addFavorite({ _id: user._id, variantId }));
-      }
-    } else {
-      toggleLikeGuest(variant._id);
-    }
-  };
+            if (isAlreadyLiked) {
+                dispatch(optimisticRemoveFavorite({ variantId }));
+                /**
+                 * Nếu đã có sẽ filter bỏ nó ra và thực hiện request bỏ nó trên server
+                 */
+                dispatch(removeFavorite({ _id: user._id, variantId }));
+                setUser({ ...user, favorites: user.favorites.filter((id) => id !== variantId) });
+            } else {
+                dispatch(optimisticAddFavorite(variant));
+                /**
+                 * Nếu chưa sẽ thêm vào bằng cách lấy lại mảng favorites bằng ... sau đó thêm variantId vào
+                 */
+                dispatch(addFavorite({ _id: user._id, variantId }));
+                setUser({ ...user, favorites: [...user.favorites, variantId] });
+            }
+        } else {
+            toggleLikeGuest(variant._id);
+        }
+    };
 
-  const renderProduct = ({ item }: { item: ProductVariant }) => {
-    const isUnavailable = item.active === false;
-    const gender = getGender(item.product?.gender);
-    const ProductName = `${item.product?.name}${gender ? `-${gender}` : ``}`;
+    const renderProduct = ({ item }: { item: ProductVariant }) => {
+        const isUnavailable = item.active === false;
+        const gender = getGender(item.product?.gender);
+        const ProductName = `${item.product?.name}${gender ? `-${gender}` : ``}`;
 
-    const liked = user?._id
-      ? favorites.some((f) => f._id === item._id)
-      : isLiked(item._id);
+        // const liked = user?._id
+        //     ? favorites.some((f) => f._id === item._id)
+        //     : isLiked(item._id);
+        const liked = user?.favorites.some((id) => id === item._id) || false;
 
+
+        return (
+            <Pressable
+                style={[styles.card, isUnavailable && styles.unavailableCard]}
+                onPress={() =>
+                    navigation.navigate('ProductDetail', {
+                        productId: item.product._id,
+                        variantId: item._id,
+                    })
+                }
+            >
+                <Image
+                    source={{ uri: item.images?.[0] || IMAGE_NOT_FOUND }}
+                    style={styles.image}
+                />
+
+                {isUnavailable && (
+                    <View style={styles.unavailableOverlay}>
+                        <Text style={styles.unavailableText}>Tạm hết hàng</Text>
+                    </View>
+                )}
+
+                <Pressable
+                    style={({ pressed }) => [
+                        styles.heartIcon,
+                        pressed && styles.heartIconPressed,
+                    ]}
+                    onPress={(e) => {
+                        e.stopPropagation(); // Ngăn sự kiện press lan ra card bên ngoài
+                        handleToggleLike(item);
+                    }}
+                >
+                    <Ionicons
+                        name={liked ? 'heart' : 'heart-outline'}
+                        size={24}
+                        color={liked ? '#ff0000' : '#006340'}
+                    />
+                </Pressable>
+
+                <View style={styles.infoContainer}>
+                    <Text numberOfLines={2} style={styles.name}>
+                        {ProductName}
+                    </Text>
+                </View>
+
+                <View style={styles.priceAndShip}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        {item.basePrice > item.finalPrice && (
+                            <Text
+                                style={[
+                                    styles.price,
+                                    {
+                                        marginRight: 5,
+                                        textDecorationLine: 'line-through',
+                                        color: 'rgba(24, 99, 19, 0.5)',
+                                    },
+                                ]}
+                            >
+                                {formatCurrency(item.basePrice)}
+                            </Text>
+                        )}
+                        <Text style={styles.price}>{formatCurrency(item.finalPrice)}</Text>
+                    </View>
+
+                    <View style={styles.shipTag}>
+                        <Ionicons name="rocket-outline" size={14} color="#000" />
+                        <Text style={styles.shipText}>Xpress Ship</Text>
+                    </View>
+                </View>
+            </Pressable>
+        );
+    };
 
     return (
-      <Pressable
-        style={[styles.card, isUnavailable && styles.unavailableCard]}
-        onPress={() =>
-          navigation.navigate('ProductDetail', {
-            productId: item.product._id,
-            variantId: item._id,
-          })
-        }
-      >
-        <Image
-          source={{ uri: item.images?.[0] || IMAGE_NOT_FOUND }}
-          style={styles.image}
-        />
-
-        {isUnavailable && (
-          <View style={styles.unavailableOverlay}>
-            <Text style={styles.unavailableText}>Tạm hết hàng</Text>
-          </View>
-        )}
-
-        <Pressable
-          style={({ pressed }) => [
-            styles.heartIcon,
-            pressed && styles.heartIconPressed,
-          ]}
-          onPress={(e) => {
-            e.stopPropagation(); // Ngăn sự kiện press lan ra card bên ngoài
-            handleToggleLike(item);
-          }}
-        >
-          <Ionicons
-            name={liked ? 'heart' : 'heart-outline'}
-            size={24}
-            color={liked ? '#ff0000' : '#006340'}
-          />
-        </Pressable>
-
-        <View style={styles.infoContainer}>
-          <Text numberOfLines={2} style={styles.name}>
-            {ProductName}
-          </Text>
+        <View style={styles.product}>
+            <FlatList
+                data={shuffle.slice(0, 5)}
+                renderItem={renderProduct}
+                keyExtractor={(item) => item._id}
+                initialNumToRender={8}
+                maxToRenderPerBatch={16}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                extraData={favorites}
+            />
         </View>
-
-        <View style={styles.priceAndShip}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            {item.basePrice > item.finalPrice && (
-              <Text
-                style={[
-                  styles.price,
-                  {
-                    marginRight: 5,
-                    textDecorationLine: 'line-through',
-                    color: 'rgba(24, 99, 19, 0.5)',
-                  },
-                ]}
-              >
-                {formatCurrency(item.basePrice)}
-              </Text>
-            )}
-            <Text style={styles.price}>{formatCurrency(item.finalPrice)}</Text>
-          </View>
-
-          <View style={styles.shipTag}>
-            <Ionicons name="rocket-outline" size={14} color="#000" />
-            <Text style={styles.shipText}>Xpress Ship</Text>
-          </View>
-        </View>
-      </Pressable>
     );
-  };
-
-  return (
-    <View style={styles.product}>
-      <FlatList
-        data={shuffle.slice(0, 5)}
-        renderItem={renderProduct}
-        keyExtractor={(item) => item._id}
-        initialNumToRender={8}
-        maxToRenderPerBatch={16}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        extraData={favorites}
-      />
-    </View>
-  );
 };
 
 export default ProductItem;
 
 // Styles
 const styles = StyleSheet.create({
-  card: {
-    width: ITEM_WIDTH,
-    height: ITEM_HEIGHT,
-    backgroundColor: '#f9f9f9',
-    borderRadius: 20,
-    marginRight: 12,
-    overflow: 'hidden',
-    position: 'relative',
-    borderWidth:0.1
-  },
-  unavailableCard: {
-    opacity: 0.6,
-  },
-  unavailableOverlay: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: 140,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-  },
-  unavailableText: {
-    color: '#FFFFFF',
-    fontWeight: 'bold',
-    fontSize: 18,
-  },
-  image: {
-    width: '100%',
-    height: 140,
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-  },
-  heartIcon: {
-    position: 'absolute',
-    top: 7,
-    right: 10,
-    padding: 3,
-    borderRadius: 20,
-    backgroundColor: '#E0E0E0',
+    card: {
+        width: ITEM_WIDTH,
+        height: ITEM_HEIGHT,
+        backgroundColor: '#f9f9f9',
+        borderRadius: 20,
+        marginRight: 12,
+        overflow: 'hidden',
+        position: 'relative',
+        borderWidth: 0.1
+    },
+    unavailableCard: {
+        opacity: 0.6,
+    },
+    unavailableOverlay: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: 140,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderTopLeftRadius: 10,
+        borderTopRightRadius: 10,
+    },
+    unavailableText: {
+        color: '#FFFFFF',
+        fontWeight: 'bold',
+        fontSize: 18,
+    },
+    image: {
+        width: '100%',
+        height: 140,
+        borderTopLeftRadius: 10,
+        borderTopRightRadius: 10,
+    },
+    heartIcon: {
+        position: 'absolute',
+        top: 7,
+        right: 10,
+        padding: 3,
+        borderRadius: 20,
+        backgroundColor: '#E0E0E0',
 
-  },
-  heartIconPressed: {
-    backgroundColor: '#00634020',
-  },
-  infoContainer: {
-    padding: 8,
-    flexDirection: 'column',
-  },
-  name: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: '#333',
-    marginBottom: 6,
-  },
-  priceAndShip: {
-    position: 'absolute',
-    right: 10,
-    bottom: 10,
-    alignItems: 'flex-end',
-  },
-  price: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: '#006340',
-    marginBottom: 4,
-    marginLeft: 5,
-  },
-  shipTag: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    borderWidth: 1,
-    borderColor: '#006340',
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 5,
-  },
-  shipText: {
-    marginLeft: 4,
-    fontSize: 12,
-    color: '#006340',
-  },
-  product: {
-    marginVertical: 10,
+    },
+    heartIconPressed: {
+        backgroundColor: '#00634020',
+    },
+    infoContainer: {
+        padding: 8,
+        flexDirection: 'column',
+    },
+    name: {
+        fontSize: 14,
+        fontWeight: '500',
+        color: '#333',
+        marginBottom: 6,
+    },
+    priceAndShip: {
+        position: 'absolute',
+        right: 10,
+        bottom: 10,
+        alignItems: 'flex-end',
+    },
+    price: {
+        fontSize: 14,
+        fontWeight: 'bold',
+        color: '#006340',
+        marginBottom: 4,
+        marginLeft: 5,
+    },
+    shipTag: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#fff',
+        borderWidth: 1,
+        borderColor: '#006340',
+        paddingHorizontal: 6,
+        paddingVertical: 2,
+        borderRadius: 5,
+    },
+    shipText: {
+        marginLeft: 4,
+        fontSize: 12,
+        color: '#006340',
+    },
+    product: {
+        marginVertical: 10,
 
-  },
+    },
 });

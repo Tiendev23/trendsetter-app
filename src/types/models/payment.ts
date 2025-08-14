@@ -33,7 +33,7 @@ export type ProviderData = {
 
 export type TransStatus = "pending" | "completed" | "cancelled" | "refunded";
 
-export interface % {
+export interface Transaction {
     _id: ObjectId;
     order: ObjectId;
     user: ObjectId;

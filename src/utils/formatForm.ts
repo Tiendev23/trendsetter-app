@@ -52,7 +52,7 @@ export function formatVietnameseDate(
     dateStr: string,
     showTime: boolean = false
 ): string {
-    const base = dayjs.utc(dateStr).tz("Asia/Ho_Chi_Minh").locale("vi");
+    const base = dayjs.utc(dateStr).add(7, 'hour').locale("vi");
     return showTime
         ? base.format("DD [Thg] MM YYYY  HH:mm")
         : base.format("DD [Thg] MM YYYY");
