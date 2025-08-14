@@ -1,6 +1,6 @@
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RouteProp } from "@react-navigation/native";
-import { CartItem, BaseMethodProps, Product, ShippingAddress } from "./models";
+import { CartItem, ShippingAddress, OrderItem, ProviderData } from "./models";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { ObjectId } from ".";
 // Danh sách màn hình
@@ -19,10 +19,12 @@ export type RootStackParamList = {
     Cart: undefined;
     Checkout: {
         items: CartItem[];
+        transactionData?: ProviderData;
     };
     SelectAddress: undefined;
     SelectProvider: undefined;
-    AddressModify: { address?: ShippingAddress | undefined };
+    AddressModify: { address?: ShippingAddress };
+    ReviewWriting: { items: OrderItem[] };
 };
 
 export type BottomTabParamList = {
@@ -80,15 +82,20 @@ export type SelectProviderNav = NativeStackNavigationProp<
     RootStackParamList,
     "SelectProvider"
 >;
+export type OrdHistNav = NativeStackNavigationProp<
+    RootStackParamList,
+    "OrderHistory"
+>;
+
+export type RvwWritingNav = NativeStackNavigationProp<
+    RootStackParamList,
+    "ReviewWriting"
+>;
+export type RvwWritingRoute = RouteProp<RootStackParamList, "ReviewWriting">;
 
 export type ProfileNav = NativeStackNavigationProp<
     RootStackParamList,
     "Profile"
->;
-
-export type OrderNav = NativeStackNavigationProp<
-    RootStackParamList,
-    "OrderHistory"
 >;
 
 export type TabsNav = NativeStackNavigationProp<RootStackParamList, "Tabs">;
