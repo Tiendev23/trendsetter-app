@@ -2,6 +2,7 @@ import { saveItem } from '@/services/asyncStorage.service';
 import { createSlice, createAsyncThunk, } from "@reduxjs/toolkit";
 import apiClient from "../../../api/apiClient";
 import * as Storage from "@/services/asyncStorage.service";
+import { KEY } from '@/constants';
 
 export const sendEmail = createAsyncThunk(
     'sendEmail/sendEmail',
@@ -66,7 +67,7 @@ export const sendEmailSlice = createSlice({
                 state.data = action.payload;
                 const token = action.payload?.token;
                 if (token) {
-                    Storage.saveItem("@token", token);                    
+                    Storage.saveItem(KEY.TOKEN, token);                    
                 }
             })
             .addCase(verifyOtp.rejected, (state, action) => {

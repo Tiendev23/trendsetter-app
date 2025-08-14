@@ -35,7 +35,6 @@ export default function ProductDetailContent({ product, initialVariantId, onRefr
     const [selectedSize, setSelectedSize] = useState<VariantSize | null>(null);
     const { user, setUser } = useAuthContext();
     const { addToCart } = useCartContext();
-    const { favorites } = useAppSelector(state => state.favorites);
     const [isLiked, setIsLiked] = useState(false);
 
     useEffect(() => {
@@ -51,8 +50,8 @@ export default function ProductDetailContent({ product, initialVariantId, onRefr
     useEffect(() => {
         setInventories(selectedVariant.inventories);
         setSelectedSize(null);
-        const liked = favorites.some((v) => v._id === selectedVariant._id) || false;
-        setIsLiked(liked);
+        const isExist = user?.favorites.some((id) => id === selectedVariant._id) || false;
+        setIsLiked(isExist);
     }, [selectedVariant]);
 
     const animatedPadding = useRef(new Animated.Value(0)).current;
