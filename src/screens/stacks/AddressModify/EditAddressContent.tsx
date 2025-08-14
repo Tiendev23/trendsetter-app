@@ -9,7 +9,8 @@ import { deleteShippingAddress, resetAddressesState, setSelectedAddress, updateS
 import { validateAddressStreet, validateFullName, validatePhoneNumber } from '@/utils/validateForm';
 import { getAddress } from './hooks';
 import { mapAddressToCode } from '@/services/location.service';
-import { saveItem } from '@/services/asyncStorage.service';
+import * as Storage from '@/services/asyncStorage.service';
+import { KEY } from '@/constants';
 
 type Props = {
     navigation: AddressModifyNav;
@@ -43,7 +44,10 @@ export default function EditAddressContent({ navigation, userId, address }: Prop
 
     useEffect(() => {
         if (status === "succeeded" && updatedAddress) {
-            if (updatedAddress.isDefault) saveItem("@Address", updatedAddress);
+            if (updatedAddress.isDefault) {
+                Storage.removeItem(KEY.ADDR);
+                Storage.saveItem(KEY.ADDR, updatedAddress);
+            }
             dispatch(setSelectedAddress(updatedAddress));
             navigation.goBack();
         }

@@ -2,8 +2,6 @@ import { Gender, ObjectId } from "../common";
 import { Brand } from "./brand";
 import { Campaign } from "./campaign";
 import { Category } from "./category";
-import { OrderItem } from "./order";
-import { User } from "./user";
 
 export type Product = {
     _id: string;
@@ -72,19 +70,4 @@ export interface ProductDetails {
     campaign: CampaignLite | null;
     variants: Variant[];
     rating: Rating;
-}
-
-type UserLite = Pick<User, "_id" | "username" | "fullName" | "avatar">;
-
-type OrderItemLite = Pick<OrderItem, "_id" | "size" | "color">;
-
-export interface Review {
-    _id: ObjectId;
-    user: UserLite;
-    orderItem: OrderItemLite;
-    rating: number;
-    content: string;
-    createdAt: string;
-    updatedAt: string;
-    __v?: number;
 }

@@ -1,14 +1,15 @@
 import axios from "axios";
 import * as Storage from "@/services/asyncStorage.service";
+import { KEY } from '@/constants';
 
-//const API_URL = "https://trendsetter-backend.onrender.com/api";
-const API_URL = 'http://192.168.2.7:5000/api';
+const API_URL = "https://trendsetter-backend.onrender.com/api";
+// const API_URL = 'http://192.168.2.7:5000/api';
 
 /** localhost:5000 cho máy ảo
  *  <IPv4 Address>:5000 khi chạy máy thật
  */
 
-// const API_URL = 'https://baeeb75b68e3.ngrok-free.app/api';
+// const API_URL = 'https://0ade2e367965.ngrok-free.app/api';
 
 const apiClient = axios.create({
   baseURL: API_URL,
@@ -37,14 +38,14 @@ apiClient.interceptors.response.use(
 
 // Thêm token vào request nếu có
 apiClient.interceptors.request.use(async (config) => {
-  const token = await Storage.getItem("@token");
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  if (config.data instanceof FormData) {
-    config.headers["Content-Type"] = "multipart/form-data";
-  }
-  return config;
+    const token = await Storage.getItem(KEY.TOKEN);
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    if (config.data instanceof FormData) {
+        config.headers['Content-Type'] = 'multipart/form-data';
+    }
+    return config;
 });
 
 export default apiClient;

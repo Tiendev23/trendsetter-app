@@ -30,7 +30,7 @@ import { addAsyncThunkCases, makeApiThunk } from "@/utils/reduxHelper";
 //     }
 // });
 export const fetchCart = makeApiThunk<BaseResponse<CartItem[]>, ObjectId>(
-    "cart/fetchCart",
+    "cart/fetchAllItem",
     (userId) => apiClient.get<BaseResponse<CartItem[]>>(`/users/${userId}/cart`)
 );
 

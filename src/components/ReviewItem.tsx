@@ -8,11 +8,11 @@ type Props = {
     review: Review;
     onClick: () => void;
 };
-export default function ReviewForm({ review, onClick }: Props) {
-    const { user, orderItem, content, rating, createdAt, updatedAt } = review;
+export default function ReviewItem({ review, onClick }: Props) {
+    const { user, orderItem, content, rating, createdAt, updatedAt, __v } = review;
     const { avatar, username } = user;
     const { color, size } = orderItem;
-    const isFixed = createdAt !== updatedAt;
+    const isFixed = __v !== 0;
     const dateCreated = formatVietnameseDate(createdAt);
 
     return (
@@ -32,7 +32,7 @@ export default function ReviewForm({ review, onClick }: Props) {
                     <RatingStars rating={rating} />
                 </View>
             </View>
-            <Text>Màu: {color} — Size: {size}</Text>
+            <Text>Màu: {color} — Size: {size.size}</Text>
             {content.trim().length > 0 && <Text>{content}</Text>}
             <Text style={styles.date}>
                 {dateCreated}{isFixed && " - Đã chỉnh sửa"}

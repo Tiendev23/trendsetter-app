@@ -8,6 +8,7 @@ import { getAddressDetail } from '@/utils/formatForm';
 import { showErrorToast } from '@/utils/toast';
 import { getItem, removeItem } from '@/services/asyncStorage.service';
 import { setSelectedAddress } from '@/redux/features/address/addressesSlice';
+import { KEY } from '@/constants';
 
 type Props = {
     navigation: CheckoutNav;
@@ -20,10 +21,10 @@ export default function CheckoutContent({ navigation, items, handleCheckout }: P
     const dispatch = useAppDispatch();
     const address = useAppSelector(state => state.addresses.address);
     useEffect(() => {
-        getItem("@Address").then((storedAddr) => {
+        getItem(KEY.ADDR).then((storedAddr) => {
             if (storedAddr) {
                 dispatch(setSelectedAddress(storedAddr));
-                removeItem("@Address");
+                removeItem(KEY.ADDR);
             }
         })
     }, []);
@@ -33,7 +34,7 @@ export default function CheckoutContent({ navigation, items, handleCheckout }: P
         return calculateShippingFee(address);
     }, [address]);
 
-    const subtotal: number = items.reduce((sum, item) => sum + item.finalPrice, 0);
+    const subtotal: number = items.reduce((sum, item) => sum + (item.finalPrice * item.quantity), 0);
     const discountAmount: number = -items.reduce((sum, item) => sum + (item.basePrice - item.finalPrice), 0) || 0;
 
     function handleItemClick(item: CartItem) {
@@ -49,18 +50,19 @@ export default function CheckoutContent({ navigation, items, handleCheckout }: P
                 title: "Không thể đặt hàng",
                 message: "Vui lòng nhập địa chỉ giao hàng trước khi đặt hàng"
             })
-        } else {
-            handleCheckout(
-                {
-                    amount: (subtotal + shippingFee),
-                    shippingFee: shippingFee,
-                    recipientName: address.fullName,
-                    recipientPhone: address.phone,
-                    shippingAddress: getAddressDetail(address),
-                },
-                pmtMethod.provider
-            )
+            return;
         }
+        handleCheckout(
+            {
+                amount: (subtotal + shippingFee),
+                shippingFee: shippingFee,
+                recipientName: address.fullName,
+                recipientPhone: address.phone,
+                shippingAddress: getAddressDetail(address),
+            },
+            pmtMethod.provider
+        )
+
     }
 
     return (
@@ -86,12 +88,10 @@ export default function CheckoutContent({ navigation, items, handleCheckout }: P
 
                     <View style={[styles.contentContainer, styles.wrapper]}>
                         <Text style={styles.contentLabel}>Phương thức thanh toán</Text>
-                        <View >
-                            <ProviderView
-                                method={pmtMethod}
-                                openMethodSelection={() => navigation.navigate("SelectProvider")}
-                            />
-                        </View>
+                        <ProviderView
+                            method={pmtMethod}
+                            openMethodSelection={() => navigation.navigate("SelectProvider")}
+                        />
                     </View>
                 </View>
             </ScrollView >

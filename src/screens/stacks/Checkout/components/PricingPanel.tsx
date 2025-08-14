@@ -1,7 +1,8 @@
 import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { formatCurrency } from '@/utils/formatForm';
-import CheckoutButton from './CheckoutButton';
+import { LongPressButton } from '@/components';
+import { showInfoToast } from '@/utils/toast';
 
 type Props = {
     subtotal: number;
@@ -38,8 +39,14 @@ export default function PricingPanel({
                 </Text>
             </View>
 
-            <CheckoutButton
-                handleCheckout={handleCheckout}
+            <LongPressButton
+                label='Đặt hàng'
+                onPressIn={handleCheckout}
+                onCancelPress={() => {
+                    showInfoToast({
+                        title: "Nhấn và giữ nút để đặt hàng"
+                    })
+                }}
             />
         </View>
     );

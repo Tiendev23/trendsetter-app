@@ -36,8 +36,7 @@ export const removeCartItem = makeApiThunk<
     )
 );
 
-type StateType = CartItemDB;
-const initialState: AsyncState<StateType> = {
+const initialState: AsyncState<CartItemDB> = {
     data: null,
     status: "idle",
     error: null,
@@ -55,11 +54,11 @@ const cartSlice = createSlice({
     },
     extraReducers: (builder) => {
         // ADD_ITEM
-        addAsyncThunkCases<StateType, CartItemDB>(builder, addCartItem);
+        addAsyncThunkCases<CartItemDB, CartItemDB>(builder, addCartItem);
         // UPDATE_ITEM
-        addAsyncThunkCases<StateType, CartItemDB>(builder, updateCartItem);
+        addAsyncThunkCases<CartItemDB, CartItemDB>(builder, updateCartItem);
         // REMOVE_ITEM
-        addAsyncThunkCases<StateType, CartItemDB>(builder, removeCartItem);
+        addAsyncThunkCases<CartItemDB, CartItemDB>(builder, removeCartItem);
     },
 });
 

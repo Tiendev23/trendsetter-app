@@ -14,7 +14,7 @@ type Props = {
 
 export default function SelectProviderContent({ navigation, methods }: Props) {
     const dispatch = useAppDispatch();
-    const selectedMethod = useAppSelector(state => state.method.method)
+    const selectedMethod = useAppSelector(state => state.provider.method)
 
     return (
         <View style={styles.container}>

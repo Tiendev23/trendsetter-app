@@ -1,11 +1,10 @@
 import React, { useMemo, useState } from 'react';
-import { Text, StyleSheet, View, Image, TouchableOpacity } from 'react-native';
+import { Text, StyleSheet, View, Image, TouchableOpacity, Pressable } from 'react-native';
 import ReanimatedSwipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
 import Reanimated, { SharedValue, useAnimatedStyle } from 'react-native-reanimated';
 import { ShippingAddress } from '@/types/models';
-import { formatCurrency, getAddressDetail as getFullAddress } from '@/utils/formatForm';
+import { getAddressDetail } from '@/utils/formatForm';
 import { FontAwesome5, Fontisto } from '@expo/vector-icons';
-import { Pressable, RectButton } from 'react-native-gesture-handler';
 
 
 type TagProps = {
@@ -87,7 +86,7 @@ export default function AddressItem({
     handleSelectAddress,
     handleEditAddress
 }: Props) {
-    const fullAddress = getFullAddress(address);
+    const fullAddress = getAddressDetail(address);
 
     return (
         <ReanimatedSwipeable
@@ -128,7 +127,10 @@ export default function AddressItem({
                     <View style={[styles.contentWrapper]}>
                         <Tag isDefault={address.isDefault} />
                         <Pressable
-                            onPress={handleEditAddress}
+                            onPress={(e) => {
+                                e.stopPropagation();
+                                handleEditAddress();
+                            }}
                             onStartShouldSetResponder={() => true}
                             style={styles.buttonLink}
                         >

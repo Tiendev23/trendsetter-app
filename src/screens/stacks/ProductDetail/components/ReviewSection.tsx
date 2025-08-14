@@ -1,9 +1,9 @@
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { fetchReviewsByProductId } from '@/redux/features/product/reviewsSlice';
+import { fetchReviewsByProductId } from '@/redux/features/review/reviewsSlice';
 import { ObjectId, Rating } from '@/types';
-import { RatingStars, ReviewForm } from '@/components';
+import { RatingStars, ReviewItem } from '@/components';
 import { showErrorToast } from '@/utils/toast';
 import ChevronButton from '@/components/buttons/ChevronButton';
 import Skeleton from '@/components/Loaders/Skeleton';
@@ -47,7 +47,7 @@ export function ReviewsRender({ productId, handleOnClick }: ContentProps) {
     if (status === 'loading' || status === 'failed' || !data?.data) {
         if (error) {
             showErrorToast({
-                title: `Lỗi hiển thị đánh giá ${error.code}`,
+                title: `Lỗi ${error.code}`,
                 message: error.message
             });
             dispatch(fetchReviewsByProductId(productId));
@@ -72,15 +72,11 @@ export function ReviewsRender({ productId, handleOnClick }: ContentProps) {
             data={data.data.slice(0, 3)}
             keyExtractor={item => item._id}
             renderItem={({ item }) => (
-                <ReviewForm review={item} onClick={handleOnClick} />
+                <ReviewItem review={item} onClick={handleOnClick} />
             )}
-            scrollEnabled={false} // Tắt cuộn riêng của FlatList
-            nestedScrollEnabled={true} // Cho phép cuộn bên trong ScrollView
             ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
-        // initialNumToRender={3}
-        // maxToRenderPerBatch={3}
-        // windowSize={5}
-        // removeClippedSubviews={true}
+            nestedScrollEnabled={true}
+            scrollEnabled={false}
         />
     );
 };

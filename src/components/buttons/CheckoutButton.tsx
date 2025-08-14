@@ -5,7 +5,10 @@ import { showInfoToast } from '@/utils/toast';
 type Props = {
     handleCheckout: () => void;
 }
-
+/**
+ * Bản gốc của LongPressButton
+ * @param handleCheckout xử lý khi người dùng giữ đủ thời gian (delay)
+ */
 export default function CheckoutButton({ handleCheckout }: Props) {
     const animation = useRef(new Animated.Value(0)).current;
     const longPressTimeout = useRef<NodeJS.Timeout | null>(null);

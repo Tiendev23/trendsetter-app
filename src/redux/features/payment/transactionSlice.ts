@@ -1,38 +1,43 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import apiClient from "@/api/apiClient";
 import {
     AsyncState,
     BaseResponse,
-    PayOSResponse,
-    ZaloPayResponse,
     Provider,
     TransactionRequest,
+    TransStatus,
+    ProviderData,
 } from "@/types";
 import { addAsyncThunkCases, makeApiThunk } from "@/utils/reduxHelper";
 
 export const createTransaction = makeApiThunk<
-    BaseResponse<PayOSResponse | ZaloPayResponse>,
+    BaseResponse<ProviderData>,
     { provider: Provider; body: TransactionRequest }
 >("transaction/create", ({ provider, body }) =>
-    apiClient.post<BaseResponse<PayOSResponse | ZaloPayResponse>>(
+    apiClient.post<BaseResponse<ProviderData>>(
         `/transactions/${provider}`,
         body
     )
 );
 
 export const cancelTransaction = makeApiThunk<
-    BaseResponse<PayOSResponse | ZaloPayResponse>,
+    BaseResponse<ProviderData>,
     { provider: Provider; orderId: string | number }
 >("transaction/cancel", ({ provider, orderId }) =>
-    apiClient.put<BaseResponse<PayOSResponse | ZaloPayResponse>>(
+    apiClient.put<BaseResponse<ProviderData>>(
         `/transactions/${provider}/${orderId}`
     )
 );
 
-const initialState: AsyncState<PayOSResponse | ZaloPayResponse> = {
+type TransType = AsyncState<ProviderData> & {
+    transStatus: TransStatus;
+};
+
+const initialState: TransType = {
     data: null,
     status: "idle",
     error: null,
+    transStatus: "pending",
 };
 
 const transactionSlice = createSlice({
@@ -44,19 +49,23 @@ const transactionSlice = createSlice({
             state.status = "idle";
             state.error = null;
         },
+        setTransStatus(state, action: PayloadAction<TransStatus>) {
+            state.transStatus = action.payload;
+        },
     },
     extraReducers: (builder) => {
-        addAsyncThunkCases<
-            PayOSResponse | ZaloPayResponse,
-            PayOSResponse | ZaloPayResponse
-        >(builder, createTransaction);
+        addAsyncThunkCases<ProviderData, ProviderData>(
+            builder,
+            createTransaction
+        );
 
-        addAsyncThunkCases<
-            PayOSResponse | ZaloPayResponse,
-            PayOSResponse | ZaloPayResponse
-        >(builder, cancelTransaction);
+        addAsyncThunkCases<ProviderData, ProviderData>(
+            builder,
+            cancelTransaction
+        );
     },
 });
 
-export const { resetTransactionState } = transactionSlice.actions;
+export const { resetTransactionState, setTransStatus } =
+    transactionSlice.actions;
 export default transactionSlice.reducer;

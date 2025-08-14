@@ -13,7 +13,6 @@ const { width } = Dimensions.get('window');
 export default function ImageSlider({ images }: Props) {
     const listRef = useRef<FlatList<any>>(null);
     const [index, setIndex] = useState(0);
-
     useEffect(() => {
         const interval = setInterval(() => {
             const nextIndex = (index + 1) % images.length;

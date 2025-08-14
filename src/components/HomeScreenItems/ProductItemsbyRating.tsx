@@ -28,7 +28,7 @@ const ProductItemsbyRating: React.FC<ProductsItem> = ({ navigation, items }) => 
     const dispatch = useDispatch<AppDispatch>();
     const { user } = useContext(AuthContext)!;
     const { isLiked, toggleLike: toggleLikeGuest } = useContext(FavoriteContext)!;
-    const { favorites } = useSelector((state: RootState) => state.favorite);
+    const { favorites } = useSelector((state: RootState) => state.favorites);
 
     const handleToggleLike = (variant: ProductVariant) => {
         if (!variant) return;

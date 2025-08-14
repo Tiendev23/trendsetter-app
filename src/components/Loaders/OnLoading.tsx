@@ -2,9 +2,14 @@ import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { BlurView } from 'expo-blur';
 
-type Props = {};
-
-export default function OnLoading(props: Props) {
+/**
+ *  Component màn hình loading với kích thước của (View) cha
+ *  @example
+ *  <View style={StyleSheet.absoluteFill}>
+ *      <OnLoading />
+ *  </View>
+ */
+export default function OnLoading() {
     return (
         <View style={styles.container}>
             <BlurView intensity={10} style={styles.blurBackground}>
@@ -18,12 +23,11 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         overflow: 'hidden',
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        zIndex: 10
     },
     blurBackground: {
-        position: 'absolute',
-        width: '100%',
-        height: '100%',
+        flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
     },

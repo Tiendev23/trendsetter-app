@@ -8,7 +8,8 @@ import { ProvincePicker, UnderlinedInput, WardPicker } from './components';
 import { addShippingAddress, resetAddressesState, setSelectedAddress } from '@/redux/features/address/addressesSlice';
 import { validateAddressStreet, validateFullName, validatePhoneNumber } from '@/utils/validateForm';
 import { getAddress } from './hooks';
-import { saveItem } from '@/services/asyncStorage.service';
+import * as Storage from '@/services/asyncStorage.service';
+import { KEY } from '@/constants';
 
 type Props = {
     navigation: AddressModifyNav;
@@ -37,7 +38,10 @@ export default function AddAddressContent({ navigation, userId }: Props) {
 
     useEffect(() => {
         if (status === "succeeded" && newAddress) {
-            if (newAddress.isDefault) saveItem("@Address", newAddress);
+            if (newAddress.isDefault) {
+                Storage.removeItem(KEY.ADDR);
+                Storage.saveItem(KEY.ADDR, newAddress);
+            }
             dispatch(setSelectedAddress(newAddress));
             navigation.goBack();
         }

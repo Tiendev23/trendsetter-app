@@ -5,9 +5,11 @@ import { Ionicons } from '@expo/vector-icons';
 import { Home, Search, Account } from '../screens/tabs';
 import { StyleSheet } from 'react-native';
 import NotificationScreen from '../screens/tabs/NotificationScreen';
+import { BottomTabParamList } from '@/types';
+
 import eventBus from '../utils/Evenbus';
 
-const Tab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator<BottomTabParamList>();
 
 export default function TabNavigator() {
     const homeTabPressTime = useRef(0);
