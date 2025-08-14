@@ -1,12 +1,16 @@
 import { Animated, InteractionManager, ScrollView, StyleSheet, Text, View } from "react-native";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { CampaignBanner, DescRender, ImageSlider, PriceDisplay, ReviewSection, SizeSelector, VariantSelector } from "./components";
+import { CampaignBanner, DescRender, FavoriteButton, ImageSlider, PriceDisplay, ReviewSection, SizeSelector, VariantSelector } from "./components";
 import { useCartContext } from "@/contexts/CartContext";
 import { CartItem, ObjectId, ProductDetails, Variant, VariantSize } from "@/types";
 import { Dimensions } from 'react-native';
-import { showInfoToast } from "@/utils/toast";
+import { showErrorToast, showInfoToast } from "@/utils/toast";
 import { formatCurrency } from "@/utils/formatForm";
 import { RefreshControl } from "react-native-gesture-handler";
+import { useAuthContext } from "@/contexts/AuthContext";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { addFavItem, removeFavItem, resetFavState } from "@/redux/features/favorite/favoriteSlice";
+import { debounce } from "lodash";
 
 const screenHeight = Dimensions.get('window').height;
 const SizeSelectorMemo = React.memo(SizeSelector);
@@ -21,16 +25,37 @@ type Props = {
 
 };
 export default function ProductDetailContent({ product, initialVariantId, onRefresh, refreshing }: Props) {
+    const dispatch = useAppDispatch();
+    const { status, error } = useAppSelector(state => state.favorite);
     const { brand, name, campaign, description, gender, rating, variants } = product;
     const [selectedVariant, setSelectedVariant] = useState<Variant>(
         variants.find(v => v._id === initialVariantId) || variants[0]
     );
     const [inventories, setInventories] = useState<VariantSize[]>(selectedVariant.inventories);
     const [selectedSize, setSelectedSize] = useState<VariantSize | null>(null);
+    const { user, setUser } = useAuthContext();
     const { addToCart } = useCartContext();
+    const { favorites } = useAppSelector(state => state.favorites);
+    const [isLiked, setIsLiked] = useState(false);
+
+    useEffect(() => {
+        if (status === 'failed' && error) {
+            showErrorToast({
+                title: `Lỗi ${error.code}`,
+                message: error.message
+            });
+            dispatch(resetFavState());
+        }
+    }, [status])
+
+    useEffect(() => {
+        setInventories(selectedVariant.inventories);
+        setSelectedSize(null);
+        const liked = favorites.some((v) => v._id === selectedVariant._id) || false;
+        setIsLiked(liked);
+    }, [selectedVariant]);
 
     const animatedPadding = useRef(new Animated.Value(0)).current;
-
     const animatePadding = useCallback((toValue: number) => {
         Animated.timing(animatedPadding, {
             toValue,
@@ -39,13 +64,6 @@ export default function ProductDetailContent({ product, initialVariantId, onRefr
         }).start();
     }, [animatedPadding]);
 
-
-    useEffect(() => {
-        setInventories(selectedVariant.inventories);
-        setSelectedSize(null);
-    }, [selectedVariant]);
-
-    const isDiscounted = (selectedVariant.basePrice != selectedVariant.finalPrice);
 
     const scrollRef = useRef<ScrollView>(null);
     const sizesViewRef = useRef<View>(null);
@@ -75,7 +93,6 @@ export default function ProductDetailContent({ product, initialVariantId, onRefr
                     }
                 );
             }
-
         });
     };
 
@@ -92,12 +109,26 @@ export default function ProductDetailContent({ product, initialVariantId, onRefr
         })
     }
 
-
-    const onSelectVariant = useCallback((v: Variant) => {
+    function handleVariantSelect(v: Variant) {
         setSelectedVariant(v);
         animatePadding(0);
         prevOffsetRef.current = -1;
-    }, []);
+    };
+
+    const handleToggleLike = debounce(() => {
+        if (!user) return;
+        const variantId = selectedVariant._id;
+        if (isLiked) {
+            dispatch(removeFavItem({ userId: user._id, variantId }));
+            setUser({ ...user, favorites: user.favorites.filter((id) => id !== variantId) });
+            setIsLiked(false);
+        } else {
+            dispatch(addFavItem({ userId: user._id, body: { variantId } }));
+            setUser({ ...user, favorites: [...user.favorites, variantId] });
+            setIsLiked(true);
+        }
+        dispatch(resetFavState());
+    }, 300);
 
     return (
         <View style={styles.container}>
@@ -124,11 +155,16 @@ export default function ProductDetailContent({ product, initialVariantId, onRefr
                                 {formatCurrency(selectedVariant.finalPrice)}
                             </Text>
                             {
-                                (isDiscounted) &&
+                                (selectedVariant.basePrice != selectedVariant.finalPrice) &&
                                 <Text style={[styles.basePrice, styles.price]}>
                                     {formatCurrency(selectedVariant.basePrice)}
                                 </Text>
                             }
+                            <FavoriteButton
+                                user={user}
+                                isLiked={isLiked}
+                                handleToggleLike={handleToggleLike}
+                            />
                         </View>
 
                         <View style={styles.contentWrapper}>
@@ -148,7 +184,7 @@ export default function ProductDetailContent({ product, initialVariantId, onRefr
                             <VariantSelectorMemo
                                 data={product.variants}
                                 selectedVariant={selectedVariant}
-                                onSelectVariant={onSelectVariant}
+                                onSelectVariant={handleVariantSelect}
                             />
                         </View>
 
