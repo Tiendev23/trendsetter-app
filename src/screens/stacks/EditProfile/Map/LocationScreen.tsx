@@ -47,10 +47,10 @@ const LocationScreen = ({ navigation, route }:{navigation:any,route:any}) => {
 
   const handleConfirm = () => {
     const locationData = {
-      city: selectedProvince?.name || '',
+      province: selectedProvince?.name || '',
       district: '', // Không còn cấp quận/huyện
       ward: selectedWard?.name || '',
-      streetDetails: street,
+      street: street,
     };
     route.params?.onSelectLocation?.(locationData);
     navigation.goBack();

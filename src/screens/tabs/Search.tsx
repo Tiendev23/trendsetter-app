@@ -10,6 +10,7 @@ import {
   Modal,
   Dimensions,
   Pressable,
+  ScrollView,
 } from "react-native";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { getAllProducts } from "../../redux/features/product/productsSlice";
@@ -57,11 +58,9 @@ export default function SearchScreen() {
   const { favorites } = useAppSelector((state) => state.favorites);
 
   const priceFilters = [
-    { label: "Tất cả", min: 0, max: Infinity },
-    { label: "0 - 100 ngàn", min: 0, max: 100_000 },
-    { label: "110 ngàn - 120 ngàn", min: 110_000, max: 120_000 },
-
-    // Giá cao nhất sẽ được cập nhật động phía dưới
+    { label: "Tất cả", min: 0, max: Infinity, icon: "grid-outline" },
+    { label: "100k - 600k", min: 110_000, max: 600_000, icon: "cash-outline" },
+    { label: "400k - 910k", min: 400_000, max: 910_000, icon: "card-outline" },
   ];
   const [activePriceFilter, setActivePriceFilter] = useState(priceFilters[0]);
 
@@ -132,7 +131,6 @@ export default function SearchScreen() {
         <Image
           source={{ uri: item.images?.[0] || IMAGE_NOT_FOUND }}
           style={styles.productImage}
-          resizeMode="contain"
         />
 
         {isUnavailable && (
@@ -199,6 +197,12 @@ export default function SearchScreen() {
     <View style={styles.container}>
       {/* Search */}
       <View style={styles.searchContainer}>
+        <Ionicons
+          name="search"
+          size={20}
+          color="#666"
+          style={styles.searchIcon}
+        />
         <TextInput
           style={styles.searchInput}
           placeholder="Tìm kiếm theo tên hoặc thương hiệu"
@@ -206,119 +210,170 @@ export default function SearchScreen() {
           value={searchQuery}
           onChangeText={setSearchQuery}
         />
+        {searchQuery.length > 0 && (
+          <TouchableOpacity onPress={() => setSearchQuery("")}>
+            <Ionicons name="close-circle" size={20} color="#666" />
+          </TouchableOpacity>
+        )}
       </View>
 
-      {/* Dropdown danh mục */}
-      <View style={styles.dropdownWrapper}>
-        <TouchableOpacity
-          style={styles.dropdownHeader}
-          onPress={() => setDropdownVisible(!dropdownVisible)}
-        >
-          <Text style={styles.dropdownHeaderText}>{activeCategory}</Text>
-          <Text style={styles.dropdownArrow}>
-            {dropdownVisible ? "▲" : "▼"}
-          </Text>
-        </TouchableOpacity>
+      {/* Filter Section */}
+      <View style={styles.filterSection}>
+        <Text style={styles.filterTitle}>Bộ lọc</Text>
 
-        <Modal
-          transparent
-          visible={dropdownVisible}
-          animationType="fade"
-          onRequestClose={() => setDropdownVisible(false)}
-        >
+        {/* Category Filter */}
+        <View style={styles.filterRow}>
+          <View style={styles.filterLabelContainer}>
+            <Ionicons name="list-outline" size={18} color="#006340" />
+            <Text style={styles.filterLabel}>Danh mục</Text>
+          </View>
           <TouchableOpacity
-            style={styles.dropdownOverlay}
-            activeOpacity={1}
-            onPress={() => setDropdownVisible(false)}
+            style={styles.filterButton}
+            onPress={() => setDropdownVisible(!dropdownVisible)}
           >
-            <View style={styles.dropdownMenu}>
-              <FlatList
-                data={categories}
-                keyExtractor={(item) => item}
-                renderItem={({ item }) => (
-                  <TouchableOpacity
+            <Text style={styles.filterButtonText}>{activeCategory}</Text>
+            <Ionicons
+              name={dropdownVisible ? "chevron-up" : "chevron-down"}
+              size={16}
+              color="#006340"
+            />
+          </TouchableOpacity>
+        </View>
+
+        {/* Price Filter */}
+        <View style={styles.filterRow}>
+          <View style={styles.filterLabelContainer}>
+            <Ionicons name="cash-outline" size={18} color="#006340" />
+            <Text style={styles.filterLabel}>Khoảng giá</Text>
+          </View>
+          <TouchableOpacity
+            style={styles.filterButton}
+            onPress={() => setDropdownVisiblePrice(!dropdownVisiblePrice)}
+          >
+            <Text style={styles.filterButtonText}>
+              {activePriceFilter.label}
+            </Text>
+            <Ionicons
+              name={dropdownVisiblePrice ? "chevron-up" : "chevron-down"}
+              size={16}
+              color="#006340"
+            />
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      {/* Category Dropdown Modal */}
+      <Modal
+        transparent
+        visible={dropdownVisible}
+        animationType="fade"
+        onRequestClose={() => setDropdownVisible(false)}
+      >
+        <TouchableOpacity
+          style={styles.modalOverlay}
+          activeOpacity={1}
+          onPress={() => setDropdownVisible(false)}
+        >
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>Chọn danh mục</Text>
+              <TouchableOpacity onPress={() => setDropdownVisible(false)}>
+                <Ionicons name="close" size={24} color="#666" />
+              </TouchableOpacity>
+            </View>
+            <ScrollView style={styles.modalScrollView}>
+              {categories.map((category) => (
+                <TouchableOpacity
+                  key={category}
+                  style={[
+                    styles.modalItem,
+                    activeCategory === category && styles.activeModalItem,
+                  ]}
+                  onPress={() => {
+                    setActiveCategory(category);
+                    setDropdownVisible(false);
+                  }}
+                >
+                  <Text
                     style={[
-                      styles.dropdownItem,
-                      activeCategory === item && styles.activeDropdownItem,
+                      styles.modalItemText,
+                      activeCategory === category && styles.activeModalItemText,
                     ]}
-                    onPress={() => {
-                      setActiveCategory(item);
-                      setDropdownVisible(false);
-                    }}
                   >
+                    {category}
+                  </Text>
+                  {activeCategory === category && (
+                    <Ionicons name="checkmark" size={20} color="#006340" />
+                  )}
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </View>
+        </TouchableOpacity>
+      </Modal>
+
+      {/* Price Filter Dropdown Modal */}
+      <Modal
+        transparent
+        visible={dropdownVisiblePrice}
+        animationType="fade"
+        onRequestClose={() => setDropdownVisiblePrice(false)}
+      >
+        <TouchableOpacity
+          style={styles.modalOverlay}
+          activeOpacity={1}
+          onPress={() => setDropdownVisiblePrice(false)}
+        >
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>Chọn khoảng giá</Text>
+              <TouchableOpacity onPress={() => setDropdownVisiblePrice(false)}>
+                <Ionicons name="close" size={24} color="#666" />
+              </TouchableOpacity>
+            </View>
+            <ScrollView style={styles.modalScrollView}>
+              {dynamicPriceFilters.map((filter) => (
+                <TouchableOpacity
+                  key={filter.label}
+                  style={[
+                    styles.modalItem,
+                    activePriceFilter.label === filter.label &&
+                      styles.activeModalItem,
+                  ]}
+                  onPress={() => {
+                    setActivePriceFilter(filter);
+                    setDropdownVisiblePrice(false);
+                  }}
+                >
+                  <View style={styles.modalItemContent}>
+                    <Ionicons
+                      name={filter.icon as any}
+                      size={20}
+                      color={
+                        activePriceFilter.label === filter.label
+                          ? "#006340"
+                          : "#666"
+                      }
+                    />
                     <Text
                       style={[
-                        styles.dropdownItemText,
-                        activeCategory === item &&
-                          styles.activeDropdownItemText,
+                        styles.modalItemText,
+                        activePriceFilter.label === filter.label &&
+                          styles.activeModalItemText,
                       ]}
                     >
-                      {item}
+                      {filter.label}
                     </Text>
-                  </TouchableOpacity>
-                )}
-              />
-            </View>
-          </TouchableOpacity>
-        </Modal>
-      </View>
-
-      {/* Dropdown filter giá - dùng cùng style với filter danh mục */}
-      <View style={styles.dropdownWrapper}>
-        <TouchableOpacity
-          style={styles.dropdownHeader}
-          onPress={() => setDropdownVisiblePrice(!dropdownVisiblePrice)}
-        >
-          <Text style={styles.dropdownHeaderText}>
-            {activePriceFilter.label}
-          </Text>
-          <Text style={styles.dropdownArrow}>
-            {dropdownVisiblePrice ? "▲" : "▼"}
-          </Text>
+                  </View>
+                  {activePriceFilter.label === filter.label && (
+                    <Ionicons name="checkmark" size={20} color="#006340" />
+                  )}
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </View>
         </TouchableOpacity>
-        <Modal
-          transparent
-          visible={dropdownVisiblePrice}
-          animationType="fade"
-          onRequestClose={() => setDropdownVisiblePrice(false)}
-        >
-          <TouchableOpacity
-            style={styles.dropdownOverlay}
-            activeOpacity={1}
-            onPress={() => setDropdownVisiblePrice(false)}
-          >
-            <View style={styles.dropdownMenu}>
-              <FlatList
-                data={dynamicPriceFilters}
-                keyExtractor={(item) => item.label}
-                renderItem={({ item }) => (
-                  <TouchableOpacity
-                    style={[
-                      styles.dropdownItem,
-                      activePriceFilter.label === item.label &&
-                        styles.activeDropdownItem,
-                    ]}
-                    onPress={() => {
-                      setActivePriceFilter(item);
-                      setDropdownVisiblePrice(false);
-                    }}
-                  >
-                    <Text
-                      style={[
-                        styles.dropdownItemText,
-                        activePriceFilter.label === item.label &&
-                          styles.activeDropdownItemText,
-                      ]}
-                    >
-                      {item.label}
-                    </Text>
-                  </TouchableOpacity>
-                )}
-              />
-            </View>
-          </TouchableOpacity>
-        </Modal>
-      </View>
+      </Modal>
 
       {/* Loading state */}
       {loading === "loading" && (
@@ -359,84 +414,138 @@ export default function SearchScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#f8f9fa",
     padding: 16,
   },
   searchContainer: {
-    backgroundColor: "#f5f5f5",
-    borderRadius: 8,
+    backgroundColor: "#fff",
+    borderRadius: 12,
     paddingHorizontal: 16,
-    marginBottom: 16,
+    marginBottom: 20,
     height: 50,
-    justifyContent: "center",
+    flexDirection: "row",
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  searchIcon: {
+    marginRight: 12,
   },
   searchInput: {
     fontSize: 16,
     color: "#333",
+    flex: 1,
     height: "100%",
   },
-  dropdownWrapper: {
-    marginBottom: 18,
+  filterSection: {
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
-  dropdownHeader: {
+  filterTitle: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: "#333",
+    marginBottom: 16,
+  },
+  filterRow: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    backgroundColor: "#f5f5f5",
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: "#DDD",
-    paddingHorizontal: 18,
-    paddingVertical: 14,
-    marginBottom: 0,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
-    shadowRadius: 4,
-    elevation: 2,
+    marginBottom: 12,
   },
-  dropdownHeaderText: {
+  filterLabelContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    flex: 1,
+  },
+  filterLabel: {
     fontSize: 16,
     fontWeight: "500",
-    color: "#222",
+    color: "#333",
+    marginLeft: 8,
   },
-  dropdownArrow: {
+  filterButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#f8f9fa",
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderWidth: 1,
+    borderColor: "#e9ecef",
+  },
+  filterButtonText: {
     fontSize: 14,
-    color: "#666",
-    marginLeft: 10,
+    color: "#006340",
+    fontWeight: "500",
+    marginRight: 8,
   },
-  dropdownOverlay: {
+  modalOverlay: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.3)",
+    backgroundColor: "rgba(0,0,0,0.5)",
     justifyContent: "center",
     alignItems: "center",
   },
-  dropdownMenu: {
-    width: width * 0.8,
+  modalContent: {
+    width: width * 0.85,
     backgroundColor: "white",
-    borderRadius: 8,
-    paddingVertical: 8,
+    borderRadius: 16,
+    maxHeight: 400,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-    maxHeight: 300,
+    shadowRadius: 8,
+    elevation: 8,
   },
-  dropdownItem: {
-    paddingHorizontal: 20,
-    paddingVertical: 12,
+  modalHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: "#e9ecef",
   },
-  activeDropdownItem: {
-    backgroundColor: "#f0f0f0",
-  },
-  dropdownItemText: {
-    fontSize: 16,
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "600",
     color: "#333",
   },
-  activeDropdownItemText: {
-    fontWeight: "bold",
-    color: "#000",
+  modalScrollView: {
+    paddingVertical: 8,
+  },
+  modalItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+  },
+  modalItemContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    flex: 1,
+  },
+  activeModalItem: {
+    backgroundColor: "#f0f8f0",
+  },
+  modalItemText: {
+    fontSize: 16,
+    color: "#333",
+    marginLeft: 12,
+  },
+  activeModalItemText: {
+    fontWeight: "600",
+    color: "#006340",
   },
   productList: {
     paddingBottom: 20,
@@ -448,7 +557,7 @@ const styles = StyleSheet.create({
   productCard: {
     width: "48%",
     backgroundColor: "#fff",
-    borderRadius: 8,
+    borderRadius: 12,
     padding: 12,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
@@ -469,8 +578,8 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.5)",
     justifyContent: "center",
     alignItems: "center",
-    borderTopLeftRadius: 8,
-    borderTopRightRadius: 8,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
   },
   unavailableText: {
     color: "#FFFFFF",
@@ -491,7 +600,8 @@ const styles = StyleSheet.create({
   productImage: {
     width: "100%",
     height: 120,
-    borderRadius: 8,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
     marginBottom: 8,
     backgroundColor: "#f9f9f9",
   },

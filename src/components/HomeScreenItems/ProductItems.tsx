@@ -1,12 +1,12 @@
 import React, { useContext, useMemo } from 'react';
 import {
-    Dimensions,
-    FlatList,
-    Image,
-    StyleSheet,
-    Text,
-    Pressable,
-    View,
+  Dimensions,
+  FlatList,
+  Image,
+  StyleSheet,
+  Text,
+  Pressable,
+  View,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
@@ -34,9 +34,9 @@ const ITEM_HEIGHT = Math.round((ITEM_WIDTH * 4) / 3);
 
 // Hàm chuyển đổi giới tính sản phẩm
 export const getGender = (gender?: string) => {
-    if (gender === 'male') return 'Nam';
-    if (gender === 'female') return 'Nữ';
-    return '';
+  if (gender === 'male') return 'Nam';
+  if (gender === 'female') return 'Nữ';
+  return '';
 };
 
 // Component chính
@@ -117,22 +117,25 @@ const ProductItem: React.FC<ProductsItem> = ({ navigation, items }) => {
                     </View>
                 )}
 
-                <Pressable
-                    style={({ pressed }) => [
-                        styles.heartIcon,
-                        pressed && styles.heartIconPressed,
-                    ]}
-                    onPress={(e) => {
-                        e.stopPropagation(); // Ngăn sự kiện press lan ra card bên ngoài
-                        handleToggleLike(item);
-                    }}
-                >
-                    <Ionicons
-                        name={liked ? 'heart' : 'heart-outline'}
-                        size={24}
-                        color={liked ? '#ff0000' : '#006340'}
-                    />
-                </Pressable>
+        {user?._id && (
+                  <Pressable
+                      style={({ pressed }) => [
+                          styles.heartIcon,
+                          pressed && styles.heartIconPressed,
+                      ]}
+                      onPress={(e) => {
+                          e.stopPropagation();
+                          handleToggleLike(item);
+                      }}
+                  >
+                      <Ionicons
+                          name={liked ? 'heart' : 'heart-outline'}
+                          size={24}
+                          color={liked ? '#ff0000' : '#006340'}
+                      />
+                  </Pressable>
+        )}
+
 
                 <View style={styles.infoContainer}>
                     <Text numberOfLines={2} style={styles.name}>
@@ -188,49 +191,48 @@ export default ProductItem;
 
 // Styles
 const styles = StyleSheet.create({
-    card: {
-        width: ITEM_WIDTH,
-        height: ITEM_HEIGHT,
-        backgroundColor: '#f9f9f9',
-        borderRadius: 20,
-        marginRight: 12,
-        overflow: 'hidden',
-        position: 'relative',
-        borderWidth: 0.1
-    },
-    unavailableCard: {
-        opacity: 0.6,
-    },
-    unavailableOverlay: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: 140,
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderTopLeftRadius: 10,
-        borderTopRightRadius: 10,
-    },
-    unavailableText: {
-        color: '#FFFFFF',
-        fontWeight: 'bold',
-        fontSize: 18,
-    },
-    image: {
-        width: '100%',
-        height: 140,
-        borderTopLeftRadius: 10,
-        borderTopRightRadius: 10,
-    },
-    heartIcon: {
-        position: 'absolute',
-        top: 7,
-        right: 10,
-        padding: 3,
-        borderRadius: 20,
-        backgroundColor: '#E0E0E0',
+  card: {
+    width: ITEM_WIDTH,
+    height: ITEM_HEIGHT,
+    backgroundColor: '#f9f9f9',
+    borderRadius: 20,
+    marginRight: 12,
+    overflow: 'hidden',
+    position: 'relative',
+    borderWidth: 0.1
+  },
+  unavailableCard: {
+    opacity: 0.6,
+  },
+  unavailableOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: 140,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+  },
+  unavailableText: {
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+    fontSize: 18,
+  },
+  image: {
+    width: '100%',
+    height: 140,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+  },
+  heartIcon: {
+    position: 'absolute',
+    top: 7,
+    right: 10,
+    padding: 3,
+    borderRadius: 20,
 
     },
     heartIconPressed: {

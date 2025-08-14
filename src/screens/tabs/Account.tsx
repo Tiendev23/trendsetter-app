@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { AuthContext, useAuthContext, } from '../../contexts/AuthContext';
 import { useAppDispatch } from '../../redux/hooks';
 import { refresh } from '../../redux/features/auth/loginSlice';
@@ -32,7 +32,7 @@ const purchaseItems = [
 // --- REUSABLE LOCAL COMPONENTS ---
 // Component con chỉ dùng trong file này
 
-const UserProfileHeader = ({ user,navigation }: { user: User, navigation:TabsNav }) => {
+const UserProfileHeader = ({ user, navigation }: { user: User, navigation: TabsNav }) => {
     const getRole = (role: string) => {
         switch (role) {
             case 'admin':
@@ -42,14 +42,14 @@ const UserProfileHeader = ({ user,navigation }: { user: User, navigation:TabsNav
         }
     }
     return (
-        <View style={styles.headerContainer} 
-        onStartShouldSetResponder={()=>true}
-        onResponderEnd={()=>{
-            navigation.navigate('editProfile')
-        }}
+        <View style={styles.headerContainer}
+            onStartShouldSetResponder={() => true}
+            onResponderEnd={() => {
+                navigation.navigate('editProfile')
+            }}
         >
             <Image
-                source={user?.avatar ? { uri: user.avatar } : { uri: 'https://i.pravatar.cc/150' }}
+                source={user.avatar ? { uri: user.avatar } : { uri: 'https://i.pravatar.cc/150' }}
                 style={styles.headerAvatar}
             />
             <View>
@@ -127,6 +127,12 @@ export default function AccountScreen({ navigation }: { navigation: TabsNav }) {
     };
 
     const handleNavigation = (item: { screen: string | null, title?: string }) => {
+        const underDevelopment = ['Settings', 'HelpCenter'];
+
+        if (underDevelopment.includes(item.screen || '')) {
+            Alert.alert('Thông báo', 'Tính năng này hiện chưa phát triển');
+            return;
+        }
         if (item.screen) {
             navigation.navigate(item.screen as any, { title: item.title });
         } else {
@@ -137,7 +143,7 @@ export default function AccountScreen({ navigation }: { navigation: TabsNav }) {
     if (user) {
         return (
             <ScrollView style={styles.screenContainer}>
-                <UserProfileHeader user={user}navigation={navigation} />
+                <UserProfileHeader user={user} navigation={navigation} />
                 <MyPurchasesSection
                     onViewAll={() => navigation.navigate('OrderHistory')}
                 />

@@ -33,9 +33,6 @@ const ProductlistScreen: React.FC<Props> = ({ navigation, route }) => {
     const { user } = useContext(AuthContext)!;
     const [refreshing, setRefreshing] = useState(false);
 
-    useEffect(() => {
-        dispatch(getAllProducts());
-    }, [dispatch]);
 
     const onRefresh = () => {
         setRefreshing(true);
@@ -102,22 +99,24 @@ const ProductlistScreen: React.FC<Props> = ({ navigation, route }) => {
                     </View>
                 )}
 
-                <Pressable
-                    style={({ pressed }) => [
-                        styles.heartIcon,
-                        pressed && styles.heartIconPressed,
-                    ]}
-                    onPress={(e) => {
-                        e.stopPropagation();
-                        handleToggleLike(item);
-                    }}
-                >
-                    <Ionicons
-                        name={liked ? 'heart' : 'heart-outline'}
-                        size={24}
-                        color={liked ? '#ff0000' : '#006340'}
-                    />
-                </Pressable>
+                {user?._id && (
+                    <Pressable
+                        style={({ pressed }) => [
+                            styles.heartIcon,
+                            pressed && styles.heartIconPressed,
+                        ]}
+                        onPress={(e) => {
+                            e.stopPropagation();
+                            handleToggleLike(item);
+                        }}
+                    >
+                        <Ionicons
+                            name={liked ? 'heart' : 'heart-outline'}
+                            size={24}
+                            color={liked ? '#ff0000' : '#006340'}
+                        />
+                    </Pressable>
+                )}
                 <View style={styles.infoContainer}>
                     <Text numberOfLines={2} style={styles.name}>
                         {ProductName}
@@ -145,7 +144,7 @@ const ProductlistScreen: React.FC<Props> = ({ navigation, route }) => {
                 </View>
             </View>
 
-            {loading === 'loading' && !refreshing ? (
+            {loading === 'loading' && refreshing ? (
                 <View style={styles.center}>
                     <ActivityIndicator size="large" color="#006340" />
                     <Text>Đang tải sản phẩm...</Text>
@@ -254,7 +253,6 @@ const styles = StyleSheet.create({
         right: 10,
         padding: 5,
         borderRadius: 20,
-        backgroundColor: '#E0E0E0',
     },
     heartIconPressed: {
         backgroundColor: '#00634020',

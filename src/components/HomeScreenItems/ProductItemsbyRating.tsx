@@ -1,5 +1,5 @@
 import { Dimensions, Image, StyleSheet, Text, Pressable, View } from 'react-native';
-import React, { useContext } from 'react'; 
+import React, { useContext } from 'react';
 import { FlatList } from 'react-native-gesture-handler';
 import { Ionicons } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
@@ -31,7 +31,7 @@ const ProductItemsbyRating: React.FC<ProductsItem> = ({ navigation, items }) => 
     const { favorites } = useSelector((state: RootState) => state.favorites);
 
     const handleToggleLike = (variant: ProductVariant) => {
-        if (!variant) return; 
+        if (!variant) return;
 
         if (user?._id) {
             const { _id: variantId } = variant;
@@ -51,7 +51,7 @@ const ProductItemsbyRating: React.FC<ProductsItem> = ({ navigation, items }) => 
 
 
     const renderItem = ({ item }: { item: Product }) => {
-       
+
         const firstVariant = item.variants?.[0];
         if (!firstVariant) {
             return null;
@@ -72,7 +72,7 @@ const ProductItemsbyRating: React.FC<ProductsItem> = ({ navigation, items }) => 
                 onPress={() => {
                     navigation.navigate('ProductDetail', {
                         productId: item._id,
-                        variantId: firstVariant._id 
+                        variantId: firstVariant._id
                     });
                 }}
             >
@@ -86,22 +86,24 @@ const ProductItemsbyRating: React.FC<ProductsItem> = ({ navigation, items }) => 
                     </View>
                 )}
 
-                <Pressable
-                    style={({ pressed }) => [
-                        styles.heartIcon,
-                        pressed && styles.heartIconPressed,
-                    ]}
-                    onPress={e => {
-                        e.stopPropagation();
-                        handleToggleLike(firstVariant);
-                    }}
-                >
-                    <Ionicons
-                        name={liked ? 'heart' : 'heart-outline'}
-                        size={24}
-                        color={liked ? '#ff0000' : '#006340'}
-                    />
-                </Pressable>
+                {user?._id && (
+                    <Pressable
+                        style={({ pressed }) => [
+                            styles.heartIcon,
+                            pressed && styles.heartIconPressed,
+                        ]}
+                        onPress={e => {
+                            e.stopPropagation();
+                            handleToggleLike(firstVariant);
+                        }}
+                    >
+                        <Ionicons
+                            name={liked ? 'heart' : 'heart-outline'}
+                            size={24}
+                            color={liked ? '#ff0000' : '#006340'}
+                        />
+                    </Pressable>
+                )}
 
                 <View style={styles.infoContainer}>
                     <Text numberOfLines={3} style={styles.name}>{ProductName}</Text>
