@@ -1,12 +1,12 @@
 import React, { useContext, useMemo } from 'react';
 import {
-    Dimensions,
-    FlatList,
-    Image,
-    StyleSheet,
-    Text,
-    Pressable,
-    View,
+  Dimensions,
+  FlatList,
+  Image,
+  StyleSheet,
+  Text,
+  Pressable,
+  View,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
@@ -34,9 +34,9 @@ const ITEM_HEIGHT = Math.round((ITEM_WIDTH * 4) / 3);
 
 // Hàm chuyển đổi giới tính sản phẩm
 export const getGender = (gender?: string) => {
-    if (gender === 'male') return 'Nam';
-    if (gender === 'female') return 'Nữ';
-    return '';
+  if (gender === 'male') return 'Nam';
+  if (gender === 'female') return 'Nữ';
+  return '';
 };
 
 // Component chính
@@ -53,7 +53,7 @@ const ProductItem: React.FC<ProductsItem> = ({ navigation, items }) => {
   }, [items]);
 
 
-  const handleToggleLike = (variant: ProductVariant) => { 
+  const handleToggleLike = (variant: ProductVariant) => {
     if (user?._id) {
       const { _id: variantId } = variant;
       const isAlreadyLiked = favorites.some((f) => f._id === variantId);
@@ -101,22 +101,25 @@ const ProductItem: React.FC<ProductsItem> = ({ navigation, items }) => {
           </View>
         )}
 
-        <Pressable
-          style={({ pressed }) => [
-            styles.heartIcon,
-            pressed && styles.heartIconPressed,
-          ]}
-          onPress={(e) => {
-            e.stopPropagation(); // Ngăn sự kiện press lan ra card bên ngoài
-            handleToggleLike(item);
-          }}
-        >
-          <Ionicons
-            name={liked ? 'heart' : 'heart-outline'}
-            size={24}
-            color={liked ? '#ff0000' : '#006340'}
-          />
-        </Pressable>
+        {user?._id && (
+          <Pressable
+            style={({ pressed }) => [
+              styles.heartIcon,
+              pressed && styles.heartIconPressed,
+            ]}
+            onPress={(e) => {
+              e.stopPropagation();
+              handleToggleLike(item);
+            }}
+          >
+            <Ionicons
+              name={liked ? 'heart' : 'heart-outline'}
+              size={24}
+              color={liked ? '#ff0000' : '#006340'}
+            />
+          </Pressable>
+        )}
+
 
         <View style={styles.infoContainer}>
           <Text numberOfLines={2} style={styles.name}>
@@ -180,7 +183,7 @@ const styles = StyleSheet.create({
     marginRight: 12,
     overflow: 'hidden',
     position: 'relative',
-    borderWidth:0.1
+    borderWidth: 0.1
   },
   unavailableCard: {
     opacity: 0.6,
@@ -214,7 +217,6 @@ const styles = StyleSheet.create({
     right: 10,
     padding: 3,
     borderRadius: 20,
-    backgroundColor: '#E0E0E0',
 
   },
   heartIconPressed: {
