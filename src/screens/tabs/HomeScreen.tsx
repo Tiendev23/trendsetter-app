@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState, useRef, useCallback } from 'react'
 import { Image, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View, ActivityIndicator } from 'react-native'
 import WinterBanner from '../../components/HomeScreenItems/Banner'
 import Menubar from '../../components/HomeScreenItems/Menubar'
@@ -15,61 +15,68 @@ import ProductItemsbyRating from '../../components/HomeScreenItems/ProductItemsb
 import { FlatList } from 'react-native-gesture-handler'
 import { Campaign, ProductWithCampaign } from '../../types/Campaign'
 
-
-
 export default function HomeScreen({ navigation }: { navigation: any }) {
     const tabNav = useNavigation<HomeNav>();
     const stackNav = useNavigation<TabsNav>();
     const [refreshing, setRefreshing] = useState(false);
     const { items, loading, error, brands, brandLoading, productsRatingLoading, productsRating, campaignsLoading, campaigns } = useSelector((state: RootState) => state.products);
-    //rootstate
     const isLoading = loading === 'loading' || brandLoading === 'loading'
     const isFailed = loading === 'failed' || brandLoading === 'failed';
     const errorMassage = loading === 'failed' ? error : brandLoading === 'failed' ? "lỗi tải brand" : null
-    //const campaignProducts = useCampaignProducts();
-
-    //api
     const dispatch = useDispatch<AppDispatch>();
 
+    // Tạo  ref cho ScrollView
+    const scrollViewRef = useRef<ScrollView>(null);
+
     useEffect(() => {
-        //api product
         dispatch(getAllProducts());
-        //api brand
         dispatch(getBrand());
         dispatch(getCampaigns());
-
         dispatch(getAllRating());
     }, [dispatch]);
 
-    // refreshing 
-    const onRefresh = () => {
+    //
+    const onRefresh = useCallback(() => {
         setRefreshing(true);
         eventBus.emit('REFRESH_ALL');
         dispatch(getAllProducts()).finally(() => setRefreshing(false));
-    }
-    //
+    }, [dispatch]);
+
+    // lắng nghe các sự kiện từ TabNavigator
+    useEffect(() => {
+        const handleScrollToTop = () => {
+            scrollViewRef.current?.scrollTo({ y: 0, animated: true });
+        };
+
+        // Cuộn lên đầu trước khi làm mới 
+        const handleRefresh = () => {
+            scrollViewRef.current?.scrollTo({ y: 0, animated: false });
+            onRefresh();
+        };
+
+        eventBus.on('SCROLL_HOME_TOP', handleScrollToTop);
+        eventBus.on('REFRESH_HOME', handleRefresh);
+        return () => {
+            eventBus.off('SCROLL_HOME_TOP', handleScrollToTop);
+            eventBus.off('REFRESH_HOME', handleRefresh);
+        };
+    }, [onRefresh]);
+
     const ProductRating = productsRating.filter(p => Number(p.rating?.average || 0) >= 4);
 
     return (
         <View style={styles.container}>
             <ScreenHeader
                 title='Trendsetter'
-                titleStyle={{
-                    fontStyle: 'italic',
-                    fontWeight: 'bold',
-                    letterSpacing: 1
-                }}
-                leftButton={
-                    <Image source={require('../../../assets/images/logo.jpg')} style={styles.logo} resizeMode='contain' />
-                }
-                rightButton={
-                    <ToCartButton onPress={() => navigation.navigate("Cart")} />
-                }
+                titleStyle={{ fontStyle: 'italic', fontWeight: 'bold', letterSpacing: 1 }}
+                leftButton={<Image source={require('../../../assets/images/logo.jpg')} style={styles.logo} resizeMode='contain' />}
+                rightButton={<ToCartButton onPress={() => navigation.navigate("Cart")} />}
             />
-            <ScrollView showsHorizontalScrollIndicator={false}
+            <ScrollView
+                ref={scrollViewRef}
+                showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={isLoading || isFailed ? styles.centeredScroll : undefined}
-
                 refreshControl={
                     <RefreshControl
                         refreshing={refreshing}
@@ -83,11 +90,7 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
                 {isLoading && !refreshing ? (
                     <View style={styles.centered}>
                         <ActivityIndicator size="large" color="#006340" />
-                        <Text>
-                            {loading === 'loading'
-                                ? 'Đang tải sản phẩm...'
-                                : 'Đang tải thương hiệu...'}
-                        </Text>
+                        <Text>{loading === 'loading' ? 'Đang tải sản phẩm...' : 'Đang tải thương hiệu...'}</Text>
                     </View>
                 ) : isFailed ? (
                     <View style={styles.centered}>
@@ -98,15 +101,10 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
                         <WinterBanner navigation={stackNav} items={campaigns} />
                         <View style={styles.recommend}>
                             <Text style={styles.textRecommend}>Gợi Ý Cho Bạn</Text>
-                            <TouchableOpacity
-                                onPress={() => {
-                                    navigation.navigate('ProductlistScreen', { title: 'Gợi ý Cho bạn' })
-                                }}
-                            >
+                            <TouchableOpacity onPress={() => { navigation.navigate('ProductlistScreen', { title: 'Gợi ý Cho bạn' }) }}>
                                 <Text style={styles.textRecommend}>Xem Thêm</Text>
                             </TouchableOpacity>
                         </View>
-                        {/* Flatlist Product */}
                         <ProductItem navigation={stackNav} items={items} />
 
                         <View style={styles.recommend}>
@@ -115,22 +113,14 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
                         <Menubar navigation={stackNav} brands={brands} />
                         <View style={styles.recommend}>
                             <Text style={styles.textRecommend}>Phổ Biến Nhất</Text>
-                            <TouchableOpacity
-                                onPress={() => {
-                                    navigation.navigate('ProductlistScreen', { title: 'Phổ biến nhất' })
-                                }}
-                            >
+                            <TouchableOpacity onPress={() => { navigation.navigate('ProductlistScreen', { title: 'Phổ biến nhất' }) }}>
                                 <Text style={styles.textRecommend}>Xem Thêm</Text>
                             </TouchableOpacity>
                         </View>
                         <ProductItemsbyRating navigation={stackNav} items={ProductRating} />
                         <View style={styles.recommend}>
                             <Text style={styles.textRecommend}>Sản phẩm tiêu biểu</Text>
-                            <TouchableOpacity
-                                onPress={() => {
-                                    navigation.navigate('ProductlistScreen', { title: 'Sản phẩm quần áo tiêu biểu' })
-                                }}
-                            >
+                            <TouchableOpacity onPress={() => { navigation.navigate('ProductlistScreen', { title: 'Sản phẩm quần áo tiêu biểu' }) }}>
                                 <Text style={styles.textRecommend}>Xem Thêm</Text>
                             </TouchableOpacity>
                         </View>
@@ -138,30 +128,17 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
                         <WinterBanner navigation={stackNav} items={campaigns} />
                         <View style={styles.recommend}>
                             <Text style={styles.textRecommend}>Sản Phẩm giảm giá</Text>
-                            <TouchableOpacity
-                                onPress={() => {
-                                    navigation.navigate('ProductlistScreen', { title: 'Sản phẩm giảm giá' })
-                                }}
-                            >
+                            <TouchableOpacity onPress={() => { navigation.navigate('ProductlistScreen', { title: 'Sản phẩm giảm giá' }) }}>
                                 <Text style={styles.textRecommend}>Xem Thêm</Text>
                             </TouchableOpacity>
                         </View>
-                        <ProductItem
-                            navigation={stackNav}items={items} />
-
-
-
+                        <ProductItem navigation={stackNav} items={items} />
                     </>
                 ))}
-
-
             </ScrollView >
-
-
         </View >
     )
 }
-
 
 const styles = StyleSheet.create({
     container: {
@@ -219,9 +196,8 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        minHeight: 600, // hoặc Dimensions.get('window').height
+        minHeight: 600,
     },
-
     centeredScroll: {
         flexGrow: 1,
         justifyContent: 'center',
