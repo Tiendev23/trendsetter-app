@@ -38,35 +38,18 @@ export default function DeletionCountPanel({ invisible, checkedIds, isCheckedAll
 
     return (
         <View style={[styles.container, styles.wrapper]}>
-            <View style={styles.contentWrapper}>
-                <View style={[styles.contentWrapper, styles.checkButtonWrapper]}>
-                    <TouchableOpacity
-                        style={styles.contentWrapper}
-                        onPress={onCheckedAll}
-                    >
-                        <View
-                            style={[styles.checkButton, buttonStyle]}
-                        >
-                            <FontAwesome5 name="check" size={15}
-                                color="#FFFFFF" />
-                        </View>
-                        <Text style={styles.label}>Chọn tất cả</Text>
-                    </TouchableOpacity>
+            <TouchableOpacity
+                style={styles.contentWrapper}
+                onPress={onCheckedAll}
+            >
+                <Text style={styles.label}>Chọn tất cả</Text>
+                <View
+                    style={[styles.checkButton, buttonStyle]}
+                >
+                    <FontAwesome5 name="check" size={15}
+                        color="#FFFFFF" />
                 </View>
-                <View style={[styles.contentWrapper]}>
-                    <TouchableOpacity
-                        style={[styles.favSaveButton, { opacity: 0.5 }]}
-                        onPress={() => {
-                            showInfoToast({
-                                title: "Thông báo",
-                                message: "Tính năng đang được phát triển"
-                            })
-                        }}
-                    >
-                        <Text style={styles.buttonLabel}>Lưu vào Yêu thích</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
+            </TouchableOpacity>
 
             <DeletionHandler />
         </View>
@@ -86,8 +69,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        flexShrink: 1,
-        columnGap: 12,
+        flexGrow: 1,
+        marginHorizontal: '10%',
     },
     label: {
         fontWeight: '500',
@@ -115,19 +98,5 @@ const styles = StyleSheet.create({
     },
     unchecked: {
         backgroundColor: '#FFFFFF'
-    },
-    buttonLabel: {
-        fontSize: 16,
-        fontWeight: "bold",
-        textAlign: 'center',
-        color: "#006340",
-        letterSpacing: 0.2
-    },
-    favSaveButton: {
-        borderColor: "#006340",
-        borderWidth: 2,
-        paddingVertical: 8,
-        paddingHorizontal: 16,
-        borderRadius: 8
     },
 });

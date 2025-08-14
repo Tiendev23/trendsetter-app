@@ -66,7 +66,7 @@ export default function CartContent({ navigation, cartContext, isEditable, user,
             productId: item.product,
             variantId: item.variant,
         }, { merge: true });
-    }
+    };
 
     const isCartEmpty = cart.items.length === 0;
     const isNoCheckedItems = checkedItems.length === 0;
