@@ -8,7 +8,8 @@ import { deleteShippingAddress, fetchAllAddresses, setSelectedAddress, updateShi
 import { showErrorToast } from '@/utils/toast';
 import { OnLoading } from '@/components';
 import { useRefresh } from '@/hooks/useRefresh';
-import { saveItem } from '@/services/asyncStorage.service';
+import * as Storage from '@/services/asyncStorage.service';
+import { KEY } from '@/constants';
 
 type Props = {
     navigation: SelectAddressNav;
@@ -45,7 +46,8 @@ export default function SelectAddressContent({ navigation, userId }: Props) {
     };
 
     function handleSetDefault(addressId: ObjectId, address: BaseAddressProps) {
-        saveItem("@Address", address);
+        Storage.removeItem(KEY.ADDR);
+        Storage.saveItem(KEY.ADDR, address);
         dispatch(updateShippingAddress({
             userId,
             addressId,
@@ -67,16 +69,16 @@ export default function SelectAddressContent({ navigation, userId }: Props) {
     }
 
     const AddAddressButton = () => {
-        if (addresses.length >= 5)  
-        return (
-            <View style={styles.buttonWrapper}>
-                <CustomButton
-                    title='THÊM ĐỊA CHỈ'
-                    outline
-                    onPress={() => navigation.navigate("AddressModify", {})}
-                />
-            </View>
-        )
+        if (addresses.length >= 5)
+            return (
+                <View style={styles.buttonWrapper}>
+                    <CustomButton
+                        title='THÊM ĐỊA CHỈ'
+                        outline
+                        onPress={() => navigation.navigate("AddressModify", {})}
+                    />
+                </View>
+            )
     }
 
     return (
