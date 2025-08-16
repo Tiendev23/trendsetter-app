@@ -137,11 +137,11 @@ const Profile: React.FC<Props> = ({ navigation, route }) => {
                 </SettingsCard>
 
                 <View style={styles.dangerZone}>
-                    <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+                    {/* <TouchableOpacity onPress={handleLogout}>
                         <Text style={styles.logoutButtonText}>Đăng xuất</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={handleDeleteAccount} disabled={isDeleting}>
-                        <Text style={[styles.deleteAccountText, isDeleting && { opacity: 0.5 }]}>
+                    </TouchableOpacity> */}
+                    <TouchableOpacity style={styles.logoutButton} onPress={handleDeleteAccount} disabled={isDeleting}>
+                        <Text style={[styles.logoutButtonText, isDeleting && { opacity: 0.5 }]}>
                             {isDeleting ? 'Đang xoá...' : 'Xoá tài khoản'}
                         </Text>
                     </TouchableOpacity>
