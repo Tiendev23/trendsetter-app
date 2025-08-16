@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: "#fff" },
     headerContainer: { paddingVertical: 22, paddingHorizontal: 18 },
     headerTitle: {
-        fontWeight: "600",
+        fontWeight: "bold",
         fontStyle: "italic",
         fontSize: 20,
         color: "#006340",
