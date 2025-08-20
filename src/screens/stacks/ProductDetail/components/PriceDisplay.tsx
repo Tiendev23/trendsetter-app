@@ -1,9 +1,10 @@
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import React, { useState } from 'react';
 import { FontAwesome5 } from '@expo/vector-icons';
-import CustomButton from '@/components/buttons/CustomButton';
 import { formatCurrency, getGenderLabel } from '@/utils/formatForm';
 import { CampaignLite, CartItem, Gender, ObjectId, VariantSize } from '@/types';
+import AddToCartButton from './AddToCartButton';
+import { showInfoToast } from '@/utils/toast';
 
 type Props = {
     product: {
@@ -20,15 +21,32 @@ type Props = {
         images: string[];
     };
     selectedSize: VariantSize | null;
-    onAddToCart: (item: CartItem) => void;
+    onAddToCart: (item: CartItem, stock: number) => void;
 };
 
 export default function PriceDisplay({ product, variant, selectedSize, onAddToCart, }: Props) {
     if (!selectedSize) return null;
     const { _id: productId, campaign, name, gender } = product;
     const { _id: variantId, color, basePrice, finalPrice, images } = variant;
-    const [quantity, setQuantity] = useState<number>(1);
-    const subtotal = finalPrice * quantity;
+    const stock = selectedSize.stock;
+    const [quantity, setQuantity] = useState(1);
+    const [inputQtt, setInputQtt] = useState(quantity.toString());
+    const subtotal = finalPrice * quantity || finalPrice;
+
+    const increaseQuantity = () => {
+        const current = Number.parseInt(inputQtt);
+        if (current === stock) showInfoToast({ title: `Số lượng tối đa là ${stock}` })
+        const next = isNaN(current) ? 1 : Math.min(current + 1, stock);
+        setQuantity(next);
+        setInputQtt(next.toString());
+    };
+
+    const decreaseQuantity = () => {
+        const current = Number.parseInt(inputQtt);
+        const next = Math.max(current - 1, 1);
+        setQuantity(next);
+        setInputQtt(next.toString());
+    };
 
     return (
         <View style={[styles.subtotalPopup, styles.shadow]}>
@@ -37,7 +55,7 @@ export default function PriceDisplay({ product, variant, selectedSize, onAddToCa
             }}>
                 <View style={styles.subtotalTextContainer}>
                     <Text style={styles.subtotalTitle}>
-                        Kho: {selectedSize.stock}
+                        Kho: {stock}
                     </Text>
                     <View>
                         <Text style={styles.subtotalTitle}>Giá</Text>
@@ -46,14 +64,14 @@ export default function PriceDisplay({ product, variant, selectedSize, onAddToCa
                 </View>
                 <View style={[styles.quantityWrapper, styles.buttonOutline]}>
                     <TouchableOpacity style={styles.quantityWrapper}
-                        disabled={quantity === 1}
-                        onPress={() => { setQuantity(quantity - 1) }}
+                        disabled={quantity <= 1 || isNaN(quantity)}
+                        onPress={decreaseQuantity}
                     >
                         <FontAwesome5 name="minus" size={24} color="#006340" />
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.quantityWrapper}
-                        onPress={() => { setQuantity(quantity + 1) }}
+                        onPress={increaseQuantity}
                     >
                         <FontAwesome5 name="plus" size={24} color="#006340" />
                     </TouchableOpacity>
@@ -61,19 +79,27 @@ export default function PriceDisplay({ product, variant, selectedSize, onAddToCa
                     <View style={styles.quantity}>
                         <TextInput
                             style={styles.quantityInput}
-                            value={quantity.toString()}
+                            value={inputQtt.toString()}
                             keyboardType="numeric"
-                            onChangeText={text => setQuantity(
-                                Number.parseInt(text) || 1
-                            )}
+                            onChangeText={text => {
+                                setInputQtt(text.trim());
+                                const parsed = Number.parseInt(text);
+                                if (isNaN(parsed)) {
+                                    setQuantity(NaN);
+                                    return;
+                                }
+                                const clamped = Math.max(1, Math.min(parsed, stock));
+                                setQuantity(clamped);
+                                setInputQtt(clamped.toString());
+                            }}
                         />
                     </View>
                 </View>
             </View>
 
-            <CustomButton
-                title="Thêm vào giỏ hàng"
-                onPress={() => {
+            <AddToCartButton
+                disableTrigger={isNaN(quantity)}
+                onPress={() =>
                     onAddToCart({
                         product: productId,
                         variant: variantId,
@@ -89,8 +115,8 @@ export default function PriceDisplay({ product, variant, selectedSize, onAddToCa
                         imageUrl: images[0],
                         active: selectedSize.active,
                         quantity,
-                    });
-                }}
+                    }, stock)
+                }
             />
         </View>
     );
