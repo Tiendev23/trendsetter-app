@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import CustomInput from '../../components/CustomInput';
-import CustomButton from '../../components/buttons/CustomButton';
+import CustomButton from '../../components/button/CustomButton';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { refresh, register } from '../../redux/features/auth/registerSlice';

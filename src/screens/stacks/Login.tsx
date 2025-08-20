@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import CustomInput from '../../components/CustomInput';
-import CustomButton from '../../components/buttons/CustomButton';
+import CustomButton from '../../components/button/CustomButton';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { login, refresh } from '../../redux/features/auth/loginSlice';
@@ -11,7 +11,7 @@ import ErrorWarnBox from '../../components/ErrorWarnBox';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import ScreenHeader from '../../components/ScreenHeader';
 import { resetPreRoute, setPrevRoute } from '../../redux/features/navigation/navigateSlice';
-import ChevronButton from '../../components/buttons/ChevronButton';
+import ChevronButton from '../../components/button/ChevronButton';
 
 export default function Login({ navigation, route }: { navigation: LoginNav; route: LoginRoute }) {
     const { email } = route.params || {};
@@ -122,7 +122,7 @@ export default function Login({ navigation, route }: { navigation: LoginNav; rou
                     <CustomButton title="Đăng nhập" onPress={handleLogin} />
                 </View>
 
-                <View style={styles.socialContainer}>
+                {/* <View style={styles.socialContainer}>
                     <TouchableOpacity
                         style={styles.socialWrapper}
                         onPress={() => console.log('Login with Google')}
@@ -144,7 +144,7 @@ export default function Login({ navigation, route }: { navigation: LoginNav; rou
                     >
                         <FontAwesome6 name="x-twitter" size={30} color="black" />
                     </TouchableOpacity>
-                </View>
+                </View> */}
                 <Text style={styles.textRegister}>
                     Bạn chưa có tài khoản?{' '}
                     <Text style={styles.link}

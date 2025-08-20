@@ -2,7 +2,7 @@ import { Feather } from '@expo/vector-icons';
 import React, { useContext } from 'react';
 import { ActivityIndicator, Alert, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import ChevronButton from '../../../components/buttons/ChevronButton';
+import ChevronButton from '../../../components/button/ChevronButton';
 import { AuthContext } from '../../../contexts/AuthContext';
 import { sendEmail } from '../../../redux/features/forgotPassword/sendEmailSlice';
 import { AppDispatch, RootState } from '../../../redux/store';

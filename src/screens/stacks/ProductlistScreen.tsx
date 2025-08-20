@@ -4,8 +4,8 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '../../redux/store';
 import { formatCurrency } from '../../utils/formatForm';
-import ChevronButton from '../../components/buttons/ChevronButton';
-import ToCartButton from '../../components/ToCartButton';
+import ChevronButton from '../../components/button/ChevronButton';
+import ToCartButton from '../../components/button/ToCartButton';
 import { getAllProducts } from '../../redux/features/product/productsSlice';
 import { FavoriteContext } from '@/contexts/FavoriteContext';
 

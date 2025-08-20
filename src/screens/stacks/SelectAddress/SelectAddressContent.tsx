@@ -1,6 +1,6 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import React, { useEffect } from 'react';
-import CustomButton from '@/components/buttons/CustomButton';
+import CustomButton from '@/components/button/CustomButton';
 import { AddressList } from './components';
 import { AddressSelection, BaseAddressProps, ObjectId, SelectAddressNav, ShippingAddress } from '@/types';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';

@@ -10,7 +10,7 @@ import { getAllProducts, getAllRating, getBrand, getCampaigns } from '../../redu
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../../redux/store'
 import ScreenHeader from '../../components/ScreenHeader'
-import ToCartButton from '../../components/ToCartButton'
+import ToCartButton from '../../components/button/ToCartButton'
 import ProductItemsbyRating from '../../components/HomeScreenItems/ProductItemsbyRating'
 import { FlatList } from 'react-native-gesture-handler'
 import { Campaign, ProductWithCampaign } from '../../types/Campaign'
