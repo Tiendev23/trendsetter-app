@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import ChevronButton from '../buttons/ChevronButton';
+import ChevronButton from '../button/ChevronButton';
 import { Props } from '../../screens/stacks/Account/Profile';
 
 const Backnav = ({ navigation, route }: Props) => {

@@ -1,8 +1,9 @@
-import { BaseAddressProps, Gender } from "../types";
+import { BaseAddressProps, Gender, OrderStatus, TransStatus } from "@/types";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import "dayjs/locale/vi";
+import { ColorValue } from "react-native";
 
 export const formatCurrency = (value: number) => {
     return new Intl.NumberFormat("vi-VN", {
@@ -22,19 +23,17 @@ export const formatDate = (dateStr: string) => {
 
 type StatusMeta = {
     label: string;
-    color: string;
+    color: ColorValue;
 };
-const orderStatusMap: Record<string, StatusMeta> = {
+const orderStatusMap: Record<OrderStatus, StatusMeta> = {
     pending: { label: "Đang xử lý", color: "#FFA500" },
     confirmed: { label: "Đã xác nhận", color: "#FFA500" },
     shipping: { label: "Đang giao", color: "#FFA500" },
     delivered: { label: "Đã giao", color: "#28A745" },
     cancelled: { label: "Đã huỷ", color: "#DC3545" },
 };
-export const formatOrderStatus = (status: string): StatusMeta => {
-    return (
-        orderStatusMap[status] || { label: "Không xác định", color: "#6C757D" }
-    );
+export const formatOrderStatus = (status: OrderStatus): StatusMeta => {
+    return orderStatusMap[status];
 };
 
 const genderLabelMap: Record<Gender, string> = {
@@ -52,7 +51,7 @@ export function formatVietnameseDate(
     dateStr: string,
     showTime: boolean = false
 ): string {
-    const base = dayjs.utc(dateStr).add(7, 'hour').locale("vi");
+    const base = dayjs.utc(dateStr).add(7, "hour").locale("vi");
     return showTime
         ? base.format("DD [Thg] MM YYYY  HH:mm")
         : base.format("DD [Thg] MM YYYY");
@@ -63,4 +62,14 @@ export function getAddressDetail(
 ) {
     const parts = [address.street, address.ward, address.province];
     return parts.filter(Boolean).join(", ");
+}
+
+const statusLabelMap: Record<TransStatus, string> = {
+    pending: "Chưa thanh toán",
+    completed: "Đã thanh toán",
+    cancelled: "Chưa thanh toán",
+    refunded: "Đã hoàn tiền",
+};
+export function getTransStatusLabel(status: TransStatus): string {
+    return statusLabelMap[status];
 }

@@ -35,11 +35,11 @@ export type TransStatus = "pending" | "completed" | "cancelled" | "refunded";
 
 export interface Transaction {
     _id: ObjectId;
-    order: ObjectId;
-    user: ObjectId;
     amount: number;
-    paymentMethod: string;
+    paymentMethod: Provider;
     providerTransactionId: string;
     providerPayLink?: string;
     status: TransStatus;
+    createdAt: string;
+    updatedAt: string;
 }

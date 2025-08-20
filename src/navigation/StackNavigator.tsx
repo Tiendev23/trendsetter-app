@@ -14,14 +14,15 @@ export default function StackNavigator() {
 
     return (
         <Stack.Navigator initialRouteName="Onboarding" screenOptions={{ headerShown: false }} id={undefined}>
-            <Stack.Screen name="ProductDetail" component={Stacks.ProductDetail} />
-            <Stack.Screen name="Cart" component={Stacks.Cart} />
-            <Stack.Screen name="Checkout" component={Stacks.Checkout} />
-            <Stack.Screen name="SelectAddress" component={Stacks.SelectAddress} />
+            <Stack.Screen name="ProductDetail"  component={Stacks.ProductDetail} />
+            <Stack.Screen name="Cart"           component={Stacks.Cart} />
+            <Stack.Screen name="Checkout"       component={Stacks.Checkout} />
+            <Stack.Screen name="SelectAddress"  component={Stacks.SelectAddress} />
             <Stack.Screen name="SelectProvider" component={Stacks.SelectProvider} />
-            <Stack.Screen name="AddressModify" component={Stacks.AddressModify} />
-            <Stack.Screen name="ReviewWriting" component={Stacks.ReviewWriting} />
-            <Stack.Screen name="OrderDetail" component={Stacks.OrderDetail} />
+            <Stack.Screen name="AddressModify"  component={Stacks.AddressModify} />
+            <Stack.Screen name="ReviewWriting"  component={Stacks.ReviewWriting} />
+            <Stack.Screen name="OrderHistory"   component={Stacks.OrderHistory} />
+            <Stack.Screen name="OrderDetail"    component={Stacks.OrderDetail} />
 
             <Stack.Screen name="Onboarding" component={Onboarding} />
             <Stack.Screen name="Tabs" component={TabNavigator} />
@@ -31,7 +32,6 @@ export default function StackNavigator() {
             <Stack.Screen name="VerifyOtp" component={Stacks.VerifyOtp} />
             <Stack.Screen name="TermsOfServiceScreen" component={Stacks.TermsOfServiceScreen} />
 
-            <Stack.Screen name="OrderHistory" component={Stacks.OrderHistory} />
             <Stack.Screen name="Profile" component={Stacks.Profile} />
             <Stack.Screen name='OrderStatus' component={Stacks.OrderStatus} />
             <Stack.Screen name="editProfile" component={Stacks.ProfileEdit} />
