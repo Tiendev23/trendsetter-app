@@ -1,6 +1,6 @@
 import { ActivityIndicator, Image, StyleSheet, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import CustomButton from '../../../../components/buttons/CustomButton';
+import CustomButton from '../../../../components/button/CustomButton';
 import { BlurView } from 'expo-blur';
 import { Status, TransStatus } from '@/types';
 import { OnLoading } from '@/components';

@@ -14,7 +14,7 @@ type Props = {
 export default function PricingPanel({
     subtotal, shippingFee, discountAmount, handleCheckout
 }: Props) {
-
+    const shipF = shippingFee ? formatCurrency(shippingFee) : "Miễn phí";
     return (
         <View style={styles.pricingPanel} >
             <View style={{ gap: 10 }}>
@@ -28,7 +28,7 @@ export default function PricingPanel({
                 </View>
                 <View style={styles.rowWrapper}>
                     <Text style={[styles.label, styles.gray]}>Phí giao hàng</Text>
-                    <Text style={styles.label}>{formatCurrency(shippingFee)}</Text>
+                    <Text style={[styles.label, shippingFee == 0 && styles.green]}>{shipF}</Text>
                 </View>
             </View>
             <View style={styles.dashedLine} />

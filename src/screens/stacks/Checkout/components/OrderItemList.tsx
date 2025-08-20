@@ -1,7 +1,7 @@
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { CartItem } from '@/types';
-import OrderItem from './OrderItem';
+import { OrderItem } from '@/components';
 
 type Props = {
     items: CartItem[];
@@ -12,7 +12,7 @@ export default function OrderItemList({
 }: Props) {
 
     return (
-        <View style={{ flex: 1 }}>
+        <View style={styles.container}>
             <FlatList
                 data={items}
                 renderItem={({ item }) =>
@@ -30,6 +30,7 @@ export default function OrderItemList({
 }
 
 const styles = StyleSheet.create({
+    container: { flex: 1 },
     itemSeparator: {
         width: "100%",
         height: 1,

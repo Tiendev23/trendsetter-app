@@ -49,12 +49,12 @@ export default function Checkout({ navigation, route }: Props) {
     };
 
     useEffect(() => {
-        if (status === "succeeded" && data?.data) {
-            if (provider === "cod") {
+        if (status === "succeeded") {
+            if (provider === "cod")
                 dispatch(setTransStatus("completed"))
-            } else {
+            if (data?.data)
                 setProviderData(data.data);
-            }
+
             removeManyItem(items.map((i) => (i.size._id)));
             dispatch(resetTransactionState());
         }

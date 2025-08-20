@@ -2,7 +2,7 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import { AddressSelection } from '@/types';
 import { getAddressDetail } from '@/utils/formatForm';
-import CustomButton from '@/components/buttons/CustomButton';
+import CustomButton from '@/components/button/CustomButton';
 
 type Props = {
     address: AddressSelection | null;
