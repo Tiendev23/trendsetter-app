@@ -139,22 +139,24 @@ export default function SearchScreen() {
           </View>
         )}
 
-        <Pressable
-          style={({ pressed }) => [
-            styles.heartIcon,
-            pressed && styles.heartIconPressed,
-          ]}
-          onPress={(e) => {
-            e.stopPropagation(); // Ngăn sự kiện press lan ra card bên ngoài
-            handleToggleLike(item);
-          }}
-        >
-          <Ionicons
-            name={liked ? "heart" : "heart-outline"}
-            size={24}
-            color={liked ? "#ff0000" : "#006340"}
-          />
-        </Pressable>
+        {user && (
+          <Pressable
+            style={({ pressed }) => [
+              styles.heartIcon,
+              pressed && styles.heartIconPressed,
+            ]}
+            onPress={(e) => {
+              e.stopPropagation(); // Ngăn sự kiện press lan ra card bên ngoài
+              handleToggleLike(item);
+            }}
+          >
+            <Ionicons
+              name={liked ? "heart" : "heart-outline"}
+              size={24}
+              color={liked ? "#ff0000" : "#006340"}
+            />
+          </Pressable>
+        )}
 
         <View style={styles.productInfo}>
           <Text numberOfLines={1} style={styles.productName}>
