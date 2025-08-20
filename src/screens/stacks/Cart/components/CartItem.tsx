@@ -5,7 +5,6 @@ import Reanimated, { SharedValue, useAnimatedStyle } from 'react-native-reanimat
 import { CartItem as CartItemType } from '@/types/models';
 import { formatCurrency } from '@/utils/formatForm';
 import { FontAwesome5 } from '@expo/vector-icons';
-import Skeleton from '@/components/Loaders/Skeleton';
 import { RectButton } from 'react-native-gesture-handler';
 
 type BaseActionProps = {
@@ -133,6 +132,8 @@ export default function CartItem({
             )}
         >
             <View style={[styles.contentContainer]}>
+                <CheckButton />
+
                 <TouchableOpacity
                     style={styles.contentWrapper}
                     onPress={() => handleCartItemClick()}
@@ -176,8 +177,6 @@ export default function CartItem({
                         </View>
                     </View>
                 </TouchableOpacity>
-
-                <CheckButton />
             </View>
         </ReanimatedSwipeable>
     );
@@ -186,12 +185,10 @@ export default function CartItem({
 const styles = StyleSheet.create({
     checkButton: {
         width: 60,
-        borderTopEndRadius: 8,
-        borderBottomEndRadius: 8,
-        position: 'absolute',
-        end: 0,
         top: 0,
         bottom: 0,
+        borderTopStartRadius: 8,
+        borderBottomStartRadius: 8,
         alignItems: 'center',
         justifyContent: 'center',
         borderWidth: 1
@@ -199,7 +196,9 @@ const styles = StyleSheet.create({
     contentWrapper: {
         flexDirection: 'row',
         alignItems: 'center',
-        columnGap: 14
+        columnGap: 14,
+        padding: 18,
+        flexGrow: 1,
     },
     selectedUneditableStyle: {
         borderColor: '#006340',
@@ -238,9 +237,8 @@ const styles = StyleSheet.create({
     contentContainer: {
         marginHorizontal: 18,
         backgroundColor: '#FFFFFF',
-        padding: 18,
-        gap: 18,
         borderRadius: 8,
+        flexDirection: 'row',
     },
     image: {
         width: 100,
@@ -254,7 +252,6 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         height: 100,
         justifyContent: 'space-between',
-        marginEnd: 50,
     },
     itemName: {
         fontFamily: 'Raleway',

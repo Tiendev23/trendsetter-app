@@ -5,7 +5,10 @@ import CartContent from "./CartContent";
 import { useAuthContext } from "@/contexts/AuthContext";
 import { useCartContext } from "@/contexts/CartContext";
 import { FontAwesome5 } from "@expo/vector-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { GuideModal } from "./components";
+import * as Storage from "@/services/asyncStorage.service"
+import { KEY } from "@/constants";
 
 type Props = {
     visible: boolean;
@@ -29,25 +32,50 @@ export default function Cart({ navigation }: { navigation: CartNav }) {
     const { user } = useAuthContext();
     const cart = useCartContext();
     const [isEditable, setIsEditable] = useState<boolean>(false);
+    const [visible, setGuideVisible] = useState(false);
+
+    useEffect(() => {
+        Storage.getItem(KEY.C_GUIDE).then((value) => {
+            if (!value) {
+                setGuideVisible(true);
+                Storage.saveItem(KEY.C_GUIDE, true);
+            }
+        })
+    }, [])
+
 
     return (
         <View style={styles.container}>
             <ScreenHeader
                 title={"Giỏ Hàng"}
                 rightButton={
-                    <RightButton
-                        visible={cart.items.length > 0}
-                        isEditable={isEditable}
-                        onVisible={() => setIsEditable(prev => !prev)}
-                    />
+                    <View style={{ flexDirection: 'row' }}>
+                        <TouchableOpacity
+                            style={{ padding: 10 }}
+                            onPress={() => setGuideVisible(true)}
+                        >
+                            <FontAwesome5 name="question-circle" size={24} color="#006340" />
+                        </TouchableOpacity>
+                        <RightButton
+                            visible={cart.items.length > 0}
+                            isEditable={isEditable}
+                            onVisible={() => setIsEditable(prev => !prev)}
+                        />
+                    </View>
                 }
             />
+
             <CartContent
                 navigation={navigation}
                 isEditable={isEditable}
                 cartContext={cart}
                 user={user}
                 onDelete={() => setIsEditable(false)}
+            />
+
+            <GuideModal
+                visible={visible}
+                handleCloseGuide={() => setGuideVisible(false)}
             />
         </View>
     )

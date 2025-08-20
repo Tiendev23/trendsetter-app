@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { formatCurrency } from '@/utils/formatForm';
-import CustomButton from '@/components/buttons/CustomButton';
+import CustomButton from '@/components/button/CustomButton';
 import { CartItem } from '@/types';
 
 type Props = {
