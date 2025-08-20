@@ -1,7 +1,7 @@
 import { BaseResponse, AsyncState } from "@/types/redux";
 import { createSlice } from "@reduxjs/toolkit";
 import apiClient from "@/api/apiClient";
-import { Order } from "@/types/models";
+import { OrderPreview } from "@/types/models";
 import { addAsyncThunkCases, makeApiThunk } from "@/utils/reduxHelper";
 import { ObjectId } from "@/types";
 
@@ -21,12 +21,14 @@ import { ObjectId } from "@/types";
 //         );
 //     }
 // });
-export const fetchUserOrders = makeApiThunk<BaseResponse<Order[]>, ObjectId>(
-    "order/fetchAll",
-    (userId) => apiClient.get<BaseResponse<Order[]>>(`/users/${userId}/orders`)
+export const fetchUserOrders = makeApiThunk<
+    BaseResponse<OrderPreview[]>,
+    ObjectId
+>("order/fetchAll", (userId) =>
+    apiClient.get<BaseResponse<OrderPreview[]>>(`/users/${userId}/orders`)
 );
 
-const initialState: AsyncState<Order[]> = {
+const initialState: AsyncState<OrderPreview[]> = {
     data: null,
     status: "idle",
     error: null,
@@ -43,7 +45,10 @@ const ordersSlice = createSlice({
         },
     },
     extraReducers: (builder) => {
-        addAsyncThunkCases<Order[], Order[]>(builder, fetchUserOrders);
+        addAsyncThunkCases<OrderPreview[], OrderPreview[]>(
+            builder,
+            fetchUserOrders
+        );
     },
 });
 

@@ -2,7 +2,7 @@ import { BaseResponse, AsyncState } from "@/types/redux";
 import { createSlice } from "@reduxjs/toolkit";
 import apiClient from "@/api/apiClient";
 import { addAsyncThunkCases, makeApiThunk } from "@/utils/reduxHelper";
-import { ObjectId } from "@/types";
+import { ObjectId, Order } from "@/types";
 
 export const cancelOrder = makeApiThunk<BaseResponse<undefined>, ObjectId>(
     "order/cancel",
@@ -10,7 +10,12 @@ export const cancelOrder = makeApiThunk<BaseResponse<undefined>, ObjectId>(
         apiClient.patch<BaseResponse<undefined>>(`/orders/${orderId}/cancel`)
 );
 
-const initialState: AsyncState<undefined> = {
+export const fetchOrderById = makeApiThunk<BaseResponse<Order>, ObjectId>(
+    "order/fetchById",
+    (orderId) => apiClient.get<BaseResponse<Order>>(`/orders/${orderId}`)
+);
+
+const initialState: AsyncState<Order> = {
     data: null,
     status: "idle",
     error: null,
@@ -27,7 +32,10 @@ const orderSlice = createSlice({
         },
     },
     extraReducers: (builder) => {
-        addAsyncThunkCases<undefined, undefined>(builder, cancelOrder);
+        // CANCEL
+        addAsyncThunkCases<Order | undefined, undefined>(builder, cancelOrder);
+        // FETCH_ORDER
+        addAsyncThunkCases<Order | undefined, Order>(builder, fetchOrderById);
     },
 });
 
