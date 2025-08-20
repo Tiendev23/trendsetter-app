@@ -1,13 +1,14 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
-import { Order } from '@/types/models';
+import { OrderPreview } from '@/types/models';
 import { formatCurrency, formatOrderStatus, formatVietnameseDate } from '@/utils/formatForm';
 import { showInfoToast } from '@/utils/toast';
 import { Ionicons } from '@expo/vector-icons';
 import ActionButton from './ActionButton';
 
 type Props = {
-    order: Order;
+    order: OrderPreview;
+    onOrderPressed: () => void;
     onRvwBtnPressed: () => void;
     onRepurchasePressed: () => void;
     onRepayPressed: () => void;
@@ -15,13 +16,14 @@ type Props = {
 };
 const A_DAY = 1000 * 60 * 60 * 24;
 export default function OrderPrwItem({
-    order, onRvwBtnPressed, onRepurchasePressed, onRepayPressed, onCancelPressed,
+    order, onOrderPressed, onRvwBtnPressed, onRepurchasePressed, onRepayPressed, onCancelPressed,
 }: Props) {
-    const now = Date.now();
     const { transaction, items, status, allReviewed, createdAt, updatedAt } = order;
     const { label, color } = formatOrderStatus(status);
-    const isRepayable = status === 'pending';
-    const isCancelable = ['pending', 'confirmed', 'shipping'].includes(order.status) && now <= new Date(createdAt).getTime() + A_DAY;
+    const now = Date.now();
+    const expiration = new Date(createdAt).getTime() + A_DAY;
+    const isRepayable = transaction.paymentMethod !== "cod" && transaction.status === "pending";
+    const isCancelable = ['pending', 'confirmed', 'shipping'].includes(order.status) && now <= expiration;
     const isRebuyable = status === 'delivered' || status === 'cancelled';
     const isExpired = now > new Date(updatedAt).getTime() + (A_DAY * 30);
     const isReviewable = status === 'delivered' && !isExpired && !allReviewed;
@@ -30,12 +32,7 @@ export default function OrderPrwItem({
         <View style={styles.container}>
             <TouchableOpacity
                 style={styles.contentContainer}
-                onPress={() => {
-                    showInfoToast({
-                        title: "Thông báo",
-                        message: "Tính năng Xem chi tiết đang được phát triển"
-                    })
-                }}
+                onPress={onOrderPressed}
             >
                 <View style={styles.rowWrapper}>
                     <Text style={{ color: "#707B81" }}>
@@ -126,6 +123,13 @@ export default function OrderPrwItem({
                     }
                 </View>
             }
+            {
+                isRepayable && (
+                    <Text style={[styles.separatorLine, styles.warn]}>
+                        Vui lòng thanh toán trước {formatVietnameseDate(new Date(expiration).toISOString(), true)}
+                    </Text>
+                )
+            }
         </View>
     );
 }
@@ -144,6 +148,11 @@ const styles = StyleSheet.create({
     separatorLine: {
         borderTopWidth: 1,
         borderColor: '#D0D3D5',
+    },
+    warn: {
+        color: '#FF6600',
+        fontWeight: '600',
+        paddingTop: 10
     },
     buttonContainer: {
         flexDirection: 'row-reverse',
