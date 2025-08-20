@@ -10,7 +10,7 @@ import {
 import { useState } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
 import { useMessages } from "../../contexts/ChatDataContext";
-import CustomButton from "../../components/buttons/CustomButton";
+import CustomButton from "../../components/button/CustomButton";
 
 export default function NotificationScreen({ navigation }) {
     const { user } = useContext(AuthContext);

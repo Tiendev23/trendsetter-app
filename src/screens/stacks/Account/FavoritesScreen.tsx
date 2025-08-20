@@ -5,13 +5,13 @@ import { useFocusEffect } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '../../../redux/store';
 import { formatCurrency } from '../../../utils/formatForm';
-import ChevronButton from '../../../components/buttons/ChevronButton';
-import ToCartButton from '../../../components/ToCartButton';
+import ChevronButton from '../../../components/button/ChevronButton';
+import ToCartButton from '../../../components/button/ToCartButton';
 
 const { width } = Dimensions.get("window");
 import { IMAGE_NOT_FOUND } from '@/types/Products/products';
 import { ProductVariant } from '../../../types/Products/productVariant';
-import { Props } from './../Account/Profile'; 
+import { Props } from './../Account/Profile';
 import { AuthContext } from '@/contexts/AuthContext';
 import { addFavorite, removeFavorite, getFavorites } from '@/redux/features/product/favoriteSlice';
 
@@ -25,7 +25,7 @@ const FavoritesScreen: React.FC<Props> = ({ navigation }) => {
     const dispatch = useDispatch<AppDispatch>();
     const { user } = useContext(AuthContext)!;
 
-   
+
     const { favorites, status } = useSelector((state: RootState) => state.favorites);
 
     const [refreshing, setRefreshing] = useState(false);
@@ -110,12 +110,12 @@ const FavoritesScreen: React.FC<Props> = ({ navigation }) => {
                     disabled={isLiking}
                 >
                     {isLiking ? (
-                         <ActivityIndicator size="small" color="#006340" />
+                        <ActivityIndicator size="small" color="#006340" />
                     ) : (
                         <Ionicons
-                            name={'heart'} 
+                            name={'heart'}
                             size={24}
-                            color={'#ff0000'} 
+                            color={'#ff0000'}
                         />
                     )}
                 </Pressable>
@@ -149,9 +149,9 @@ const FavoritesScreen: React.FC<Props> = ({ navigation }) => {
 
         if (status === 'failed') {
             return (
-                 <View style={styles.center}>
-                    <Text style={{color: 'red'}}>Lỗi khi tải dữ liệu.</Text>
-                    <TouchableOpacity onPress={onRefresh}><Text style={{color: '#006340'}}>Thử lại</Text></TouchableOpacity>
+                <View style={styles.center}>
+                    <Text style={{ color: 'red' }}>Lỗi khi tải dữ liệu.</Text>
+                    <TouchableOpacity onPress={onRefresh}><Text style={{ color: '#006340' }}>Thử lại</Text></TouchableOpacity>
                 </View>
             );
         }
@@ -168,7 +168,7 @@ const FavoritesScreen: React.FC<Props> = ({ navigation }) => {
 
         return (
             <FlatList
-                data={favorites} 
+                data={favorites}
                 extraData={{ favorites, likingId }}
                 keyExtractor={(item) => item._id}
                 numColumns={2}
@@ -206,7 +206,7 @@ export default FavoritesScreen;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff', 
+        backgroundColor: '#fff',
     },
     headerContainer: {
         backgroundColor: '#FFF',
@@ -257,7 +257,7 @@ const styles = StyleSheet.create({
         right: 10,
         padding: 5,
         borderRadius: 20,
-        backgroundColor: '#FFFFFF', 
+        backgroundColor: '#FFFFFF',
         elevation: 2, //  shadow cho Android
         shadowColor: '#000', //  shadow cho iOS
         shadowOffset: { width: 0, height: 1 },
@@ -274,7 +274,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: '500',
         color: '#333',
-        height: 34, 
+        height: 34,
     },
     priceContainer: {
         marginTop: 6,

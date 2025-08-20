@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 import { store } from './src/redux/store';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Toast from 'react-native-toast-message';
-import { Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback } from 'react-native';
+import { KeyboardAvoidingView, Platform } from 'react-native';
 import { enableScreens } from 'react-native-screens';
 
 const linking = {
@@ -27,18 +27,18 @@ export default function App() {
             <Provider store={store}>
                 <ContextProvider>
                     <GestureHandlerRootView style={{ flex: 1 }}>
-                            <SafeAreaView style={{ flex: 1 }} edges={['top']}>
-                                <KeyboardAvoidingView
-                                    style={{ flex: 1 }}
-                                    behavior={'padding'}
-                                    keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : -45} // điều chỉnh nếu bạn có header
-                                >
-                                    <NavigationContainer linking={linking}>
-                                        <AppNavigation />
-                                        <Toast />
-                                    </NavigationContainer>
-                                </KeyboardAvoidingView>
-                            </SafeAreaView>
+                        <SafeAreaView style={{ flex: 1 }} edges={['top']}>
+                            <KeyboardAvoidingView
+                                style={{ flex: 1 }}
+                                behavior={'padding'}
+                                keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : -45} // điều chỉnh nếu bạn có header
+                            >
+                                <NavigationContainer linking={linking}>
+                                    <AppNavigation />
+                                    <Toast />
+                                </NavigationContainer>
+                            </KeyboardAvoidingView>
+                        </SafeAreaView>
                     </GestureHandlerRootView>
                 </ContextProvider>
             </Provider>

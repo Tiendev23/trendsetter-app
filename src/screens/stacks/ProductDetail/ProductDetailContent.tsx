@@ -34,7 +34,7 @@ export default function ProductDetailContent({ product, initialVariantId, onRefr
     const [inventories, setInventories] = useState<VariantSize[]>(selectedVariant.inventories);
     const [selectedSize, setSelectedSize] = useState<VariantSize | null>(null);
     const { user, setUser } = useAuthContext();
-    const { addToCart } = useCartContext();
+    const { addToCart, items } = useCartContext();
     const [isLiked, setIsLiked] = useState(false);
 
     useEffect(() => {
@@ -95,7 +95,16 @@ export default function ProductDetailContent({ product, initialVariantId, onRefr
         });
     };
 
-    function handleAddToCart(item: CartItem) {
+    function handleAddToCart(item: CartItem, stock: number) {
+        const inCart = items.find(i => i.size._id === item.size._id);
+        if (inCart && (inCart.quantity + item.quantity) > stock) {
+            if (inCart.quantity >= stock)
+                showInfoToast({ title: `Số lượng sản phẩm trong giỏ hàng đã đạt tối đa` });
+            else
+                showInfoToast({ title: `Bạn chỉ có thể thêm tối đa ${stock - inCart.quantity} sản phẩm nữa` });
+
+            return;
+        }
         addToCart(item);
         setSelectedSize(null);
         animatePadding(0);
@@ -181,7 +190,7 @@ export default function ProductDetailContent({ product, initialVariantId, onRefr
                                 Biến thể
                             </Text>
                             <VariantSelectorMemo
-                                data={product.variants}
+                                variants={product.variants}
                                 selectedVariant={selectedVariant}
                                 onSelectVariant={handleVariantSelect}
                             />

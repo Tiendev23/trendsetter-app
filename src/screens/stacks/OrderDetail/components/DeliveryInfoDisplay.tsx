@@ -1,62 +1,50 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import { AddressSelection } from '@/types';
-import { getAddressDetail } from '@/utils/formatForm';
-import CustomButton from '@/components/button/CustomButton';
 
 type Props = {
-    address: AddressSelection | null;
-    openAddressSelector: () => void;
-    navToAddAddress: () => void;
+    recipientName: string;
+    recipientPhone: string;
+    shippingAddress: string;
 };
 
-export default function AddressView({
-    address, openAddressSelector, navToAddAddress
+export default function DeliveryInfoDisplay({
+    recipientName, recipientPhone, shippingAddress
 }: Props) {
-
-    if (!address) return (
-        <CustomButton
-            title='THÊM ĐỊA CHỈ'
-            outline
-            onPress={navToAddAddress}
-        />
-    )
-
-    const addressDetail = getAddressDetail(address);
     return (
-        <TouchableOpacity
-            style={[styles.contentWrapper]}
-            onPress={openAddressSelector}
-        >
+        <View style={[styles.addrContainer, styles.contentWrapper]}>
             <View style={styles.iconWrapper}>
                 <Image source={require('@/../assets/icons/address_icon.png')} style={styles.icon} />
             </View>
-            <View style={styles.col}>
-                <View style={styles.contentWrapper}>
+            <View style={styles.addrWrapper}>
+                <View style={styles.addrContainer}>
                     <Text style={styles.name}>
-                        {address.fullName}
+                        {recipientName}
                     </Text>
                     <Text style={styles.phone}>
-                        {address.phone}
+                        {recipientPhone}
                     </Text>
                 </View>
                 <View>
                     <Text style={styles.address}>
-                        {addressDetail}
+                        {shippingAddress}
                     </Text>
                 </View>
             </View>
-        </TouchableOpacity>
+        </View>
     );
 }
 
 const styles = StyleSheet.create({
     contentWrapper: {
+        paddingTop: 4,
+        paddingHorizontal: 12,
+    },
+    addrContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         gap: 8,
     },
-    col: {
+    addrWrapper: {
         flexShrink: 1,
         rowGap: 6,
     },

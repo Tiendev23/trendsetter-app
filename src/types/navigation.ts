@@ -89,6 +89,12 @@ export type OrdHistNav = NativeStackNavigationProp<
     "OrderHistory"
 >;
 
+export type OrdDetailNav = NativeStackNavigationProp<
+    RootStackParamList,
+    "OrderDetail"
+>;
+export type OrdDetailRoute = RouteProp<RootStackParamList, "OrderDetail">;
+
 export type RvwWritingNav = NativeStackNavigationProp<
     RootStackParamList,
     "ReviewWriting"

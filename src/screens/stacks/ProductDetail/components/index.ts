@@ -6,3 +6,4 @@ export { default as ReviewSection } from "./ReviewSection";
 export { default as PriceDisplay } from "./PriceDisplay";
 export { default as CampaignBanner } from "./CampaignBanner";
 export { default as FavoriteButton } from "./FavoriteButton";
+export { default as AddToCartButton } from "./AddToCartButton";

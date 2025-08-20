@@ -58,7 +58,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         gap: 16,
         paddingHorizontal: 8,
-        paddingVertical: 10,
     },
     priceWrapper: {
         flexDirection: 'row',
@@ -80,7 +79,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Raleway',
         fontWeight: 'medium',
         fontSize: 16,
-        color: '#1A2530',
+        color: '#707B81',
         lineHeight: 20,
         marginBottom: 'auto',
     },

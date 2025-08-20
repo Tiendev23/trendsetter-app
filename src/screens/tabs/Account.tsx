@@ -4,7 +4,7 @@ import { AuthContext, useAuthContext, } from '../../contexts/AuthContext';
 import { useAppDispatch } from '../../redux/hooks';
 import { refresh } from '../../redux/features/auth/loginSlice';
 import { TabsNav } from '../../types/navigation';
-import CustomButton from '../../components/buttons/CustomButton';
+import CustomButton from '../../components/button/CustomButton';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { User } from '../../types/models';
 import { useCartContext } from '@/contexts/CartContext';

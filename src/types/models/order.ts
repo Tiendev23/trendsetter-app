@@ -9,48 +9,29 @@ export interface OrderItem extends CartItem {
     isReviewed: boolean;
 }
 
-type UserLite = Pick<User, "_id" | "username" | "fullName" | "email">;
-
-type TransLite = Pick<
-    Transaction,
-    | "_id"
-    | "amount"
-    | "paymentMethod"
-    | "providerTransactionId"
-    | "status"
-    | "providerPayLink"
->;
-
-type PickupMethod = "delivery";
-
-type OrderStatus =
+export type OrderStatus =
     | "pending"
     | "confirmed"
     | "shipping"
     | "delivered"
     | "cancelled";
 
-export interface Order {
+export interface OrderPreview {
     _id: ObjectId; // "6895f034ab81889c80ec2d08";
-    user: UserLite;
-    transaction: TransLite;
-    pickupMethod: PickupMethod; // "delivery";
-    shippingAddress: string; // "22 Hồng Hà, Phường Hồng Hà, Thành phố Hà Nội";
-    recipientName: string; // "Thái Luân";
-    recipientPhone: string; // "0938428870";
-    shippingFee: number;
+    transaction: Transaction;
     status: OrderStatus; // "delivered";
+    items: OrderItem[];
     createdAt: string; // "2025-08-06T12:40:20.236Z";
     updatedAt: string; // "2025-08-08T12:40:20.236Z";
-    __v: number;
-    items: OrderItem[];
     allReviewed: boolean;
 }
 
-export type OrderBody = {
-    user: ObjectId;
-    items: CartItem[];
-    totalPrice: number;
+export type PickupMethod = "delivery" | "in-store";
+export interface Order extends OrderPreview {
+    pickupMethod: PickupMethod;
     shippingAddress: string;
-    status?: string;
-};
+    recipientName: string;
+    recipientPhone: string;
+    shippingFee: number;
+    __v: number;
+}

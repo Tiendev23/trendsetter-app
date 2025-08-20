@@ -1,4 +1,4 @@
-import RatingStars from './RatingStars';
+import RatingStars from '../RatingStars';
 import { Review } from '@/types';
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
@@ -26,6 +26,7 @@ export default function ReviewItem({ review, onClick }: Props) {
                     width={35}
                     height={35}
                     borderRadius={35}
+                    style={{ backgroundColor: '#707B81'}}
                 />
                 <View style={styles.column}>
                     <Text>{username}</Text>

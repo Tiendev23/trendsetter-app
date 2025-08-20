@@ -1,21 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
-import CustomInput from "../../components/CustomInput";
-import CustomButton from "../../components/buttons/CustomButton";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
-import { refresh, register } from "../../redux/features/auth/registerSlice";
-import { SignUpNav } from "../../types/navigation";
-import ErrorWarnBox from "../../components/ErrorWarnBox";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import {
-  validateEmail,
-  validateFullName,
-  validatePassword,
-  validateUsername,
-} from "../../utils/validateForm";
-import ScreenHeader from "../../components/ScreenHeader";
-import { setPrevRoute } from "../../redux/features/navigation/navigateSlice";
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import CustomInput from '../../components/CustomInput';
+import CustomButton from '../../components/button/CustomButton';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import { refresh, register } from '../../redux/features/auth/registerSlice';
+import { SignUpNav } from '../../types/navigation';
+import ErrorWarnBox from '../../components/ErrorWarnBox';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { validateEmail, validateFullName, validatePassword, validateUsername } from '../../utils/validateForm';
+import ScreenHeader from '../../components/ScreenHeader';
+import { setPrevRoute } from '../../redux/features/navigation/navigateSlice';
 
 export default function SignUp({ navigation }: { navigation: SignUpNav }) {
   const [username, setUsername] = useState("");

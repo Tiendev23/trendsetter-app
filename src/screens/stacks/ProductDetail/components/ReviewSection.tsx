@@ -5,7 +5,7 @@ import { fetchReviewsByProductId } from '@/redux/features/review/reviewsSlice';
 import { ObjectId, Rating } from '@/types';
 import { RatingStars, ReviewItem } from '@/components';
 import { showErrorToast } from '@/utils/toast';
-import ChevronButton from '@/components/buttons/ChevronButton';
+import ChevronButton from '@/components/button/ChevronButton';
 import Skeleton from '@/components/Loaders/Skeleton';
 
 type HeaderProps = {

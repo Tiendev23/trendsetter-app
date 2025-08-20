@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { TouchableOpacity, Text, StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useCartContext } from '../contexts/CartContext';
+import { useCartContext } from '../../contexts/CartContext';
 
 type Props = {
     onPress: () => void;

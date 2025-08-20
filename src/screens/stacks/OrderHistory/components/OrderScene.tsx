@@ -1,6 +1,6 @@
 import { FlatList, RefreshControl, StyleSheet, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { Order, OrderItem } from '@/types/models';
+import { OrderPreview, OrderItem } from '@/types/models';
 import { OrdHistNav } from '@/types/navigation';
 import OrderPrwItem from './OrderPrwItem';
 import { useRefresh } from '@/hooks/useRefresh';
@@ -12,7 +12,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { cancelOrder, refreshOrderState } from '@/redux/features/order/orderSlice';
 
 type Props = {
-    orders: Order[];
+    orders: OrderPreview[];
     navigation: OrdHistNav;
     userId: ObjectId;
 };
@@ -34,11 +34,6 @@ export default function OrderScene({ orders, navigation, userId }: Props) {
         }
     }, [status])
 
-
-    function handleNav2RvwWriting(items: OrderItem[]) {
-        navigation.navigate("ReviewWriting", { items: items.filter(item => !item.isReviewed) })
-    };
-
     function handleRepurchase(ordItems: OrderItem[]) {
         const items = ordItems.filter(item => item.active);
         if (items.length === 0) {
@@ -51,7 +46,7 @@ export default function OrderScene({ orders, navigation, userId }: Props) {
         navigation.navigate("Checkout", { items })
     };
 
-    function handleRepay(order: Order) {
+    function handleRepay(order: OrderPreview) {
         const items = order.items.filter(item => item.active);
         if (items.length === 0) {
             showInfoToast({
@@ -96,7 +91,10 @@ export default function OrderScene({ orders, navigation, userId }: Props) {
                 renderItem={({ item }) => (
                     <OrderPrwItem
                         order={item}
-                        onRvwBtnPressed={() => handleNav2RvwWriting(item.items)}
+                        onOrderPressed={() => navigation.navigate("OrderDetail", { orderId: item._id })}
+                        onRvwBtnPressed={() => navigation.navigate("ReviewWriting", {
+                            items: item.items.filter(item => !item.isReviewed)
+                        })}
                         onRepurchasePressed={() => handleRepurchase(item.items)}
                         onRepayPressed={() => handleRepay(item)}
                         onCancelPressed={() => {

@@ -5,4 +5,5 @@ export const KEY = {
     CART: "@cart",
     TOKEN: "@token",
     ADDR: "@address",
+    C_GUIDE: "@cart_guide",
 };

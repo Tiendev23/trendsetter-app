@@ -1,34 +1,23 @@
-import React, { useState, useContext, useEffect } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
-import CustomInput from "../../components/CustomInput";
-import CustomButton from "../../components/buttons/CustomButton";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
-import { login, refresh } from "../../redux/features/auth/loginSlice";
-import { AuthContext, useAuthContext } from "../../contexts/AuthContext";
-import { LoginNav, LoginRoute } from "../../types/navigation";
-import ErrorWarnBox from "../../components/ErrorWarnBox";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import ScreenHeader from "../../components/ScreenHeader";
-import {
-  resetPreRoute,
-  setPrevRoute,
-} from "../../redux/features/navigation/navigateSlice";
-import ChevronButton from "../../components/buttons/ChevronButton";
+import React, { useState, useContext, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import CustomInput from '../../components/CustomInput';
+import CustomButton from '../../components/button/CustomButton';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import { login, refresh } from '../../redux/features/auth/loginSlice';
+import { AuthContext, useAuthContext } from '../../contexts/AuthContext';
+import { LoginNav, LoginRoute } from '../../types/navigation';
+import ErrorWarnBox from '../../components/ErrorWarnBox';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import ScreenHeader from '../../components/ScreenHeader';
+import { resetPreRoute, setPrevRoute } from '../../redux/features/navigation/navigateSlice';
+import ChevronButton from '../../components/button/ChevronButton';
 
-export default function Login({
-  navigation,
-  route,
-}: {
-  navigation: LoginNav;
-  route: LoginRoute;
-}) {
-  const { email } = route.params || {};
-  const [emailOrUsername, setEmailOrUsername] = useState(
-    route.params?.email || ""
-  );
-  const [password, setPassword] = useState("");
-  const [errorMess, setErrorMess] = useState("");
+export default function Login({ navigation, route }: { navigation: LoginNav; route: LoginRoute }) {
+    const { email } = route.params || {};
+    const [emailOrUsername, setEmailOrUsername] = useState(route.params?.email || '');
+    const [password, setPassword] = useState('');
+    const [errorMess, setErrorMess] = useState('');
 
   const auth = useAuthContext();
   const dispatch = useAppDispatch();
@@ -129,7 +118,7 @@ export default function Login({
           <CustomButton title="Đăng nhập" onPress={handleLogin} />
         </View>
 
-        {/* <View style={styles.socialContainer}>
+                {/* <View style={styles.socialContainer}>
                     <TouchableOpacity
                         style={styles.socialWrapper}
                         onPress={() => console.log('Login with Google')}
@@ -152,20 +141,19 @@ export default function Login({
                         <FontAwesome6 name="x-twitter" size={30} color="black" />
                     </TouchableOpacity>
                 </View> */}
-        <Text style={styles.textRegister}>
-          Bạn chưa có tài khoản?{" "}
-          <Text
-            style={styles.link}
-            onPress={() => {
-              navigation.navigate("SignUp");
-            }}
-          >
-            Đăng ký
-          </Text>
-        </Text>
-      </View>
-    </View>
-  );
+                <Text style={styles.textRegister}>
+                    Bạn chưa có tài khoản?{' '}
+                    <Text style={styles.link}
+                        onPress={() => {
+                            navigation.navigate('SignUp')
+                        }}
+                    >
+                        Đăng ký
+                    </Text>
+                </Text>
+            </View>
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({

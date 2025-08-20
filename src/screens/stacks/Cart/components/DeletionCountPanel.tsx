@@ -1,6 +1,6 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, { useState } from 'react';
-import CustomButton from '@/components/buttons/CustomButton';
+import CustomButton from '@/components/button/CustomButton';
 import { ObjectId } from '@/types';
 import { showInfoToast } from '@/utils/toast';
 import { FontAwesome5 } from '@expo/vector-icons';

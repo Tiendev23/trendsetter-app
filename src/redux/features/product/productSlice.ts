@@ -1,12 +1,8 @@
 import {
     createSlice,
-    createAsyncThunk,
-    createEntityAdapter,
 } from "@reduxjs/toolkit";
 import apiClient from "../../../api/apiClient";
 import {
-    BaseState,
-    APIError,
     ProductDetails,
     AsyncState,
     BaseResponse,

@@ -1,6 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, View, StyleProp, TextStyle } from 'react-native';
-import ChevronButton from './buttons/ChevronButton';
+import ChevronButton from './button/ChevronButton';
 import { useNavigation } from '@react-navigation/native';
 
 type Props = {

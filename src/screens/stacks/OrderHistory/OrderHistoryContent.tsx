@@ -1,12 +1,15 @@
-import { Dimensions, StyleSheet, View } from 'react-native'
+import { Dimensions, Pressable, StyleSheet, View } from 'react-native'
 import React, { useState } from 'react'
 import { OrdHistNav } from '@/types/navigation';
 import { TabBar, TabView } from 'react-native-tab-view';
 import { useAppSelector } from '@/redux/hooks';
-import { Order } from '@/types/models';
+import { OrderPreview } from '@/types/models';
 import { OnLoading } from '@/components';
-import { OrderScene } from './components';
+import { OrderScene, SearchBar } from './components';
 import { ObjectId } from '@/types';
+import CustomInput from '@/components/CustomInput';
+import { Ionicons } from '@expo/vector-icons';
+import { toNumber } from 'lodash';
 
 const routes = [
     { key: 'all', title: 'Tất cả' },
@@ -20,12 +23,14 @@ const routes = [
 type Props = {
     navigation: OrdHistNav;
     userId: ObjectId;
+    visibleSearchBar: boolean;
 }
 
 const { width } = Dimensions.get('window');
-export default function OrderHistoryContent({ navigation, userId }: Props) {
+export default function OrderHistoryContent({ navigation, userId, visibleSearchBar }: Props) {
     const [index, setIndex] = useState(0);
     const orders = useAppSelector(state => state.orders.data?.data);
+    const [filterValue, setFilterValue] = useState("");
 
     if (!orders) {
         return (
@@ -37,14 +42,24 @@ export default function OrderHistoryContent({ navigation, userId }: Props) {
         )
     };
 
-    const filterOrdersByRouteKey = (key: string, data: Order[]): Order[] => {
+    const filterOrdersByRouteKey = (key: string, data: OrderPreview[]): OrderPreview[] => {
+        const orders = data.filter(order => (
+            order.transaction.providerTransactionId === filterValue
+            || order.transaction.amount.toString().match(filterValue)
+            || order.items.some(item => item.name.toLowerCase().match(filterValue.toLowerCase()))
+        ));
         return (key === 'all')
-            ? data
-            : data.filter(order => order.status === key);
+            ? orders
+            : orders.filter(order => (order.status === key));
     };
 
     return (
         <View style={styles.container}>
+            <SearchBar
+                visible={visibleSearchBar}
+                filterValue={filterValue}
+                setFilterValue={setFilterValue}
+            />
             <TabView
                 navigationState={{ index, routes }}
                 onIndexChange={setIndex}

@@ -1,5 +1,5 @@
-import { StyleSheet, View } from 'react-native'
-import React, { useEffect } from 'react'
+import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { OrdHistNav } from '@/types/navigation';
 import { ScreenHeader } from '@/components';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
@@ -7,11 +7,13 @@ import { fetchUserOrders } from '@/redux/features/order/ordersSlice';
 import { useRequireAuth } from '@/contexts/AuthContext';
 import OrderHistoryContent from './OrderHistoryContent';
 import { showErrorToast } from '@/utils/toast';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function OrderHistory({ navigation }: { navigation: OrdHistNav }) {
     const dispatch = useAppDispatch();
     const { status, error } = useAppSelector(state => state.orders);
     const userId = useRequireAuth()._id;
+    const [visibleSearchBar, setVisibleSearchBar] = useState(false);
 
     useEffect(() => {
         dispatch(fetchUserOrders(userId));
@@ -31,11 +33,25 @@ export default function OrderHistory({ navigation }: { navigation: OrdHistNav })
         <View style={styles.container}>
             <ScreenHeader
                 title='Đơn Hàng'
+                rightButton={
+                    <TouchableOpacity
+                        style={{ padding: 10 }}
+                        onPress={() => setVisibleSearchBar(prev => !prev)}
+                    >
+                        <Ionicons
+                            name='search'
+                            color='#006340'
+                            size={24}
+                        />
+                    </TouchableOpacity>
+
+                }
             />
 
             <OrderHistoryContent
                 navigation={navigation}
                 userId={userId}
+                visibleSearchBar={visibleSearchBar}
             />
         </View>
     )

@@ -1,7 +1,7 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useMemo, useState } from 'react'
 import { AddressView, OrderItemList, PricingPanel, ProviderView } from './components';
-import { CheckoutNav, CartItem, User, BaseTransactionProps, Provider, AddressSelection } from '@/types';
+import { CheckoutNav, CartItem, User, BaseTransactionProps, Provider } from '@/types';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { calculateShippingFee } from '@/services/location.service';
 import { getAddressDetail } from '@/utils/formatForm';
@@ -62,8 +62,7 @@ export default function CheckoutContent({ navigation, items, handleCheckout }: P
             },
             pmtMethod.provider
         )
-
-    }
+    };
 
     return (
         <View style={styles.container}>
@@ -87,7 +86,6 @@ export default function CheckoutContent({ navigation, items, handleCheckout }: P
                     </View>
 
                     <View style={[styles.contentContainer, styles.wrapper]}>
-                        <Text style={styles.contentLabel}>Phương thức thanh toán</Text>
                         <ProviderView
                             method={pmtMethod}
                             openMethodSelection={() => navigation.navigate("SelectProvider")}
@@ -123,6 +121,6 @@ const styles = StyleSheet.create({
     contentLabel: {
         fontWeight: '500',
         fontSize: 16,
-        color: "#707B81"
+        color: "#000"
     },
 })

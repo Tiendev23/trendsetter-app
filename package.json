@@ -24,6 +24,7 @@
         "events": "^3.3.0",
         "expo": "^53.0.17",
         "expo-blur": "^14.1.5",
+        "expo-clipboard": "~7.1.5",
         "expo-dev-client": "~5.2.2",
         "expo-image-picker": "~16.1.4",
         "expo-linear-gradient": "~14.1.5",

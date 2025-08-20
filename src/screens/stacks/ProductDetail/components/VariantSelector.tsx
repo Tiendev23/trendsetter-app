@@ -2,26 +2,26 @@ import { ObjectId, Variant } from "@/types";
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 
 type Props = {
-    data: Variant[];
+    variants: Variant[];
     selectedVariant: Variant;
     onSelectVariant: (variant: Variant) => void;
 };
 
-export default function VariantSelector({ data, selectedVariant, onSelectVariant }: Props) {
+export default function VariantSelector({ variants, selectedVariant, onSelectVariant }: Props) {
     return (
         <View style={styles.container}>
             {
-                data.map(variant => (
+                variants.flat().map(variant => (
                     <TouchableOpacity
                         key={variant._id}
                         onPress={() => onSelectVariant(variant)}
                         style={[styles.button,
-                        (variant._id === selectedVariant._id) && styles.shadow
+                        (variant._id === selectedVariant._id) && [styles.scale, styles.shadow]
                         ]}
                     >
                         <Image
                             source={{ uri: variant.images[0] }}
-                            style={[styles.image]}
+                            style={styles.image}
                         />
                     </TouchableOpacity>
                 ))
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
         gap: 20
     },
     button: {
-        width: 70,
+        width: 60,
         borderRadius: 140,
         aspectRatio: 1,
         justifyContent: 'center',
@@ -45,15 +45,21 @@ const styles = StyleSheet.create({
     image: {
         flex: 1,
         width: '100%',
-        borderRadius: 140,
+        borderRadius: 999,
     },
     shadow: {
+        shadowColor: '#006340', // Màu bóng
         // shadow cho Android
-        elevation: 5,
+        elevation: 8,
         // shadow cho IOS
-        shadowColor: '#000', // Màu bóng
         shadowOffset: { width: 5, height: 5 }, // Độ lệch của bóng
-        shadowOpacity: 0.3, // Độ trong suốt của bóng
-        shadowRadius: 3, // Độ rộng của bóng
+        shadowOpacity: 0.6, // Độ trong suốt của bóng
+        shadowRadius: 6, // Độ rộng của bóng
     },
+    scale: {
+        borderWidth: 1,
+        borderColor: '#006340',
+        transform: [{ scale: 1.25 }],
+        marginHorizontal: 6,
+    }
 })

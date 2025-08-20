@@ -1,14 +1,15 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import { PaymentMethod } from '@/types';
-import ChevronButton from '@/components/buttons/ChevronButton';
+import ChevronButton from '@/components/button/ChevronButton';
+import { Ionicons } from '@expo/vector-icons';
 
 type BaseProps = {
     method: PaymentMethod;
 };
 
 const PaymentMethodItem = ({ method }: BaseProps) => (
-    <View style={[styles.container, styles.methodWrapper]}>
+    <View style={[styles.methodWrapper, styles.row]}>
         <View style={styles.logoWrapper}>
             <Image source={method.logo} style={styles.logo} />
         </View>
@@ -25,24 +26,33 @@ type ViewProps = BaseProps & {
 export default function ProviderView({ method, openMethodSelection }: ViewProps) {
     return (
         <TouchableOpacity
-            style={[styles.container]}
             onPress={openMethodSelection}
         >
+            <View style={[styles.labelWrapper, styles.row]}>
+                <Text style={styles.contentLabel}>Phương thức thanh toán</Text>
+                <View style={styles.row}>
+                    <Text style={styles.moreText}>Xem tất cả</Text>
+                    <Ionicons
+                        name='chevron-forward'
+                        size={16}
+                        color={"#707B81"}
+                    />
+                </View>
+            </View>
             <PaymentMethodItem method={method} />
-            <ChevronButton
-                direction='forward'
-                disabled
-                color={"#707B81"}
-            />
         </TouchableOpacity>
     );
 }
 
 const styles = StyleSheet.create({
-    container: {
+    labelWrapper: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 12,
+    },
+    row: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between',
     },
     methodWrapper: {
         gap: 20,
@@ -64,5 +74,14 @@ const styles = StyleSheet.create({
     },
     methodName: {
         flexShrink: 1,
-    }
+    },
+    contentLabel: {
+        fontWeight: '500',
+        fontSize: 16,
+        color: "#000"
+    },
+    moreText: {
+        fontSize: 12,
+        color: "#707B81"
+    },
 });
